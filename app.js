@@ -21,7 +21,8 @@ var createError = require('http-errors'),
     path = require('path'),
     logger = require('morgan'),
     swaggerJSDoc = require('swagger-jsdoc'),
-    cors = require('cors');
+    cors = require('cors'),
+    log4js = require('log4js');
 
 var indexRouter = require('./routes/index');
 var app = express();
