@@ -1,17 +1,19 @@
-var con = require('../mysql_connection/dbConfig.js');
+var con = require('../mysql_connection/dbConfig');
 var dbFunc = require('../mysql_connection/connection.js');
 var registerform = require('../daos/aregisterDao.js');
 var otpfun = require('../utils/otp.js');
 var emailotpfun = require('../utils/email');
 const SendOtp = require('sendotp');
 const sendOtp = new SendOtp('254625AbVGrmks5c2c92bd');
-var bcSdk = require('../fabric_SDK/invoke');
+//var bcSdk = require('../Fabric_SDK/invoke');
+var bc = require('../fabcar/javascript/invoke');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 
 function aregister(registerobject){
     return new Promise( async (resolve, reject)=>{
         var email_id = registerobject.email;
+       
         console.log("hai");
         console.log(!email_id)
         if(!email_id){
@@ -46,13 +48,14 @@ function aregister(registerobject){
           await emailotpfun.emailotp(email_id,otp)
       
            var result =  await registerform.insert_user(registerobject,otp)
-          let id = email_id;
-           var userdetails = {
-               "userId" : id,
-                "transactionstring" : registerobject 
+           let id = email_id;
+           var params = {
+               id : id,
+               fun:"create",
+               data: registerobject 
            }
-
-           bcSdk.updatetransaction({ updatedetails: userdetails})
+        //    bcSdk.updatetransaction({ updatedetails: userdetails})
+        bc.main(params)
         console.log(result,"inserted.......")
        return resolve({
            Message:"Registration successfull"

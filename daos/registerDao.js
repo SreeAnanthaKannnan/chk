@@ -3,7 +3,7 @@ var dbFunc = require('../mysql_connection/connection.js');
 var translate = require('../utils/translate.js');
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
-const langdetect = require('langdetect');
+const langdetect = require('../utils/languagedetect');
 let now = new Date();
 //const moment =require("moment");
 let date = require('date-and-time');
@@ -53,15 +53,15 @@ function insert_user(registerobject,otp){
   let password = cryptr.encrypt(registerobject.password);
         var sql = "SELECT  * FROM Residents where email_id ='" + email_id + "'";
         dbFunc.connectionRelease;
-        value = langdetect.detect(name)
+        value = await langdetect.languageDetect(name)
     
         if(name ==""){
           name_ar = name;
           name_en = name;
         }
         else{
-        console.log(value,"value")
-        if(value[0].lang=="ar"){
+        console.log(value.result,"value")
+        if(value.result=="ar"){
         var temp =await translate.translate_en(name)
         name_en =temp.result;
         console.log(name_en,"name_en")
@@ -76,7 +76,7 @@ function insert_user(registerobject,otp){
           address_ar = address;
         }
         else{
-     if(value[0].lang=="ar"){   
+     if(value.result=="ar"){   
     var temp =await translate.translate_en(address)
     console.log(temp,"999999999999999")
     address_en =temp.result
@@ -94,7 +94,7 @@ function insert_user(registerobject,otp){
       company_en = company;
     }
     else{
-    if(value[0].lang=="ar"){
+    if(value.result=="ar"){
     var temp =await translate.translate_en(company)
     company_en =temp.result
     }
@@ -110,7 +110,7 @@ function insert_user(registerobject,otp){
       nationality_en = nationality
     }
     else{
-    if(value[0].lang=="ar"){
+    if(value.result=="ar"){
     
     var temp =await translate.translate_en(nationality)
     nationality_en =temp.result;
@@ -121,6 +121,7 @@ function insert_user(registerobject,otp){
       console.log(temp,"999999999999999")
     nationality_ar = temp.result}
     }
+    console.log(name_en,name_ar,"test 124")
   var sql = "INSERT INTO Residents (name_en, name_ar,company_en,company_ar,nationality_en,nationality_ar,phone_nmuber,address_en,address_ar,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ('" + name_en + "','" + name_ar + "','" +company_en + "','" + company_ar + "','" + nationality_en + "','" + nationality_ar + "','" + phone_nmuber + "','" + address_en + "','" + address_ar + "', '" + po_box + "', '" + mobile_number + "', '" + email_id + "', '" + password + "','" + verify_mobile + "','" + verify_email + "', '" + language + "', '" + newsletter + "','" + user_type + "','" + date.format(now, 'YYYY/MM/DD HH:mm:ss') +"','" + otp + "')";
   con.query(sql,function(err,result){
     if(err) { console.log("something",err)

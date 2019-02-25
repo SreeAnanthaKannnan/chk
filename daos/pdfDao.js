@@ -1,4 +1,5 @@
-const con = require('../Mysql_config/DBConfig');
+var con = require('../mysql_connection/dbConfig.js');
+var dbFunc = require('../mysql_connection/connection.js');
 
 
 function pdf_insert(path,email) {

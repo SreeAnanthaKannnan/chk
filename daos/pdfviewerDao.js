@@ -1,5 +1,5 @@
-var con = require('../Mysql_config/DBConfig.js');
-var dbFunc = require('../Mysql_config/Connection.js');
+var con = require('../mysql_connection/dbConfig.js');
+var dbFunc = require('../mysql_connection/connection.js');
 
 function pdf1(email){
   return new Promise((resolve, reject)=>{

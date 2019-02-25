@@ -3,7 +3,7 @@ var dbFunc = require('../mysql_connection/connection.js');
 var translate = require('../utils/translate.js');
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
-const langdetect = require('langdetect');
+const langdetect = require('../utils/languagedetect');
 let now = new Date();
 //const moment =require("moment");
 let date = require('date-and-time');
@@ -51,8 +51,8 @@ function insert_user(registerobject,otp){
   var verify_mobile ="N";
   let password = cryptr.encrypt(registerobject.password);
   let confirmpassword = cryptr.encrypt(registerobject.confirmpassword);   
-        value = langdetect.detect(name)
-    
+        value = langdetect.languageDetect(name)
+      console.log(value);
         if(name ==""){
           name_ar = name;
           name_en = name;

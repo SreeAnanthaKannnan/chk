@@ -24,6 +24,7 @@ var con = require('../mysql_connection/dbConfig.js'),
     consentform = require('../core/consentform.js'),
     register = require('../core/register.js'),
     aregister = require('../core/aregister.js'),
+    cregister = require('../core/cregister.js'),
     history = require('../core/history'),
     building = require('../core/building'),
     assesserview = require('../core/assesserview'),
@@ -101,7 +102,22 @@ router.post('/admin-register', cors(), function(req, res){
         message: err.message
     }))
     })     
-    //====================================consentform==================================================   
+     //=========================citizen-registration-start===========================================
+  router.post('/citizen-register', cors(), function(req, res){
+    var registerobject= req.body;
+    console.log(registerobject,"registerobject");
+    cregister.cregister(registerobject)
+    .then(result=>{
+             res.send({
+                 result:result,
+           
+        })
+      })
+    .catch(err => res.status(err.status).json({
+        message: err.message
+    }))
+  }) 
+//========================================citizen-registration-end=====================================
     //=====================================emailotpverification========================================
     router.post("/emailotpverification", cors(), async function(req, res){
     //var id = await check.checkToken(req);
