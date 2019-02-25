@@ -565,46 +565,46 @@ router.post('/getBuildings', cors(), async function(req, res){
 
     //==========================forgetotpend===================================//
     //================================pdf===========================================//
-    router.post('/Convert_Pdf', cors(), async function (req, res) {
-    //    var id = await check.checkToken(req);
-    //  if(id.status==400 || id.status==403){
-    //    res.send({
-    //      result:id
-    // })
-    //}
+    // router.post('/Convert_Pdf', cors(), async function (req, res) {
+    // //    var id = await check.checkToken(req);
+    // //  if(id.status==400 || id.status==403){
+    // //    res.send({
+    // //      result:id
+    // // })
+    // //}
+    // // else{
+    // console.log(req.body);
+    // let checked1=req.body.SelectedValues1;
+    // let checked2=req.body.SelectedValues2;
+    // //let email=id.result;
+    // // let checked3=req.body.SelectedValues3;
+    // if(checked1=="1"){
+    //     yesvalue1="checked";
+    //     novalue1="unchecked"
+    // }
     // else{
-    console.log(req.body);
-    let checked1=req.body.SelectedValues1;
-    let checked2=req.body.SelectedValues2;
-    //let email=id.result;
-    // let checked3=req.body.SelectedValues3;
-    if(checked1=="1"){
-        yesvalue1="checked";
-        novalue1="unchecked"
-    }
-    else{
-        yesvalue1="unchecked";
-        novalue1="checked"
-    }
-    if(checked2=="1"){
-        yesvalue2="checked";
-        novalue2="unchecked"
-    }
-    else{
-        yesvalue2="unchecked";
-        novalue2="checked"
-    }
-    //    var yesvalue3="checked";
+    //     yesvalue1="unchecked";
+    //     novalue1="checked"
+    // }
+    // if(checked2=="1"){
+    //     yesvalue2="checked";
+    //     novalue2="unchecked"
+    // }
+    // else{
+    //     yesvalue2="unchecked";
+    //     novalue2="checked"
+    // }
+    // //    var yesvalue3="checked";
 
-    var email = req.body.email_id;
-    //console.log("All data=====>>", checked1,checked2,checked3);
-    pdf.Pdf(yesvalue1,novalue1,yesvalue2,novalue2)
-    pdf.mail(email)
-    res.send({
-        "message":"success"
-    })
-    //}
-    })
+    // var email = req.body.email_id;
+    // //console.log("All data=====>>", checked1,checked2,checked3);
+    // pdf.Pdf(yesvalue1,novalue1,yesvalue2,novalue2)
+    // pdf.mail(email)
+    // res.send({
+    //     "message":"success"
+    // })
+    // //}
+    // })
     //===============================pdfend==========================================//
     router.post('/schedules', cors(),async function(req, res){
     console.log(req.body);
@@ -627,5 +627,160 @@ router.post('/getBuildings', cors(), async function(req, res){
     }))
     //}
     })
+    //============================================convert pdf===================================================//
+
+  router.post('/Convert_Pdf', cors(), async function (req, res) {
+    let checked1=req.body.SelectedValues1;
+    let checked2=req.body.SelectedValues2;
+    let checked3=req.body.SelectedValues3;
+    let checked4=req.body.SelectedValues4;
+    let checked5=req.body.SelectedValues5;
+    let checked6=req.body.SelectedValues6;
+    let checked7=req.body.SelectedValues7;
+    let checked8=req.body.SelectedValues8;
+    let checked9=req.body.SelectedValues9;
+    let email=req.body.email;
+   // let checked3=req.body.SelectedValues3;
+    if(checked1=="yes"){
+        yesvalue1="checked";
+        novalue1="unchecked"
+    }
+    else{
+        yesvalue1="unchecked";
+        novalue1="checked"
+    }
+    if(checked2=="yes"){
+        yesvalue2="checked";
+        novalue2="unchecked"
+    }
+    else{
+        yesvalue2="unchecked";
+        novalue2="checked"
+    }
+    if(checked3=="yes"){
+        yesvalue3="checked";
+        novalue3="unchecked"
+    }
+    else{
+        yesvalue3="unchecked";
+        novalue3="checked"
+    }
+    if(checked4=="yes"){
+        yesvalue4="checked";
+        novalue4="unchecked"
+    }
+    else{
+        yesvalue4="unchecked";
+        novalue4="checked"
+    }
+    if(checked5=="yes"){
+        yesvalue5="checked";
+        novalue5="unchecked"
+    }
+    else{
+        yesvalue5="unchecked";
+        novalue5="checked"
+    }
+    if(checked6=="yes"){
+        yesvalue6="checked";
+        novalue6="unchecked"
+    }
+    else{
+        yesvalue6="unchecked";
+        novalue6="checked"
+    }
+    if(checked7=="yes"){
+        yesvalue7="checked";
+        novalue7="unchecked"
+    }
+    else{
+        yesvalue7="unchecked";
+        novalue7="checked"
+    }
+    if(checked8=="yes"){
+        yesvalue8="checked";
+        novalue8="unchecked"
+    }
+    else{
+        yesvalue8="unchecked";
+        novalue8="checked"
+    }
+    if(checked9=="yes"){
+        yesvalue9="checked";
+        novalue9="unchecked"
+    }
+    else{
+        yesvalue9="unchecked";
+        novalue9="checked"
+    }
+//    var yesvalue3="checked";
+
+   
+    //console.log("All data=====>>", checked1,checked2,checked3);
+   pdf.Pdf(yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,email)
+      // pdf.mail(email)
+       res.send({
+           "message":"success"
+       })
+})
+//=========================================BulkBooking=============================================
+// router.post('/BulkBooking', cors(), async function(req, res){
+//     var id = await check.checkToken(req);
+//     console.log(id);
+//     if(id.status == 400 && id.status == 403){
+//         res.send({
+//             result:id
+//         })
+//     }
+//     else{
+//         var email_id = id.email_id;
+//     var buildingobject= req.body;
+ 
+//     building.buildings(buildingobject,email_id)
+//     .then(result=>{
+//              res.send({
+//                  result:result,
+//             message: "mock mock"
+//         })
+//       })
+//     .catch(err => res.status(err.status).json({
+//         message: err.message
+//     }))
+
+//     }
+
+// });
+//=========================================pdfviewer=============================================
+
+router.post('/pdfviewer', cors(),async function (req, res){
+//     var id = await check.checkToken(req);
+
+// if(id.status==400 || id.status==403){
+//     res.send({
+//         result:id
+//     })
+// }
+//else{
+    const email = req.body.email;
+    pdf1.pdf1(email)
+            .then(result => {
+                console.log(result)
+                res
+                    .status(result.status)
+                    .json({
+                        message: result,
+                     });
+
+            })
+            .catch(err => res.status(err.status).json({
+                message: err.message
+            }).json({
+                status: err.status
+            }));
+        // }
+    
+});
+
+
 
 module.exports = router;
