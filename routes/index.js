@@ -808,18 +808,18 @@ router.post('/installationdetails', cors(), function(req, res){
   })  
 //==================================bulkschedules============================================//
   router.post('/BulkSchedules', cors(),async function(req, res){
-    logger.fatal(req.body);
+    console.log(req.body);
 
    var schedules=req.body;
-    logger.fatal("schedules",schedules);
-    logger.fatal("length",schedules.schedule.length);
-    logger.fatal("reqdate",schedules.schedule[0].selectedStartDate);
-    for(let i=0;i<schedules.schedule.length;i++){
-        logger.fatal(i,"i")
-    let uidate = schedules.schedule[i].selectedStartDate;
+    console.log("schedules",schedules.schedule.schedule);
+    console.log("length",schedules.schedule.schedule.length);
+    console.log("reqdate",schedules.schedule.schedule[0].selectedStartDate);
+    for(let i=0;i<schedules.schedule.schedule.length;i++){
+        console.log(i,"i")
+    let uidate = schedules.schedule.schedule[i].selectedStartDate;
    var date =  moment(new Date(uidate.substr(0, 16)));
    var rdate=  date.format("YYYY-MM-DD");
-  await schedulefun.sup(schedules.schedule[i].time,rdate,schedules.schedule[i].building_id)
+  await schedulefun.sup(schedules.schedule.schedule[i].time,rdate,schedules.schedule.schedule[i].building_id)
     
     }
     
