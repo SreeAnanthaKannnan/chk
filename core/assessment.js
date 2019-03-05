@@ -19,15 +19,15 @@ var bcSdk = require('../fabric_SDK/invoke')
         //    let schedule_date = moment(today).format("YYYY/MM/DD HH:mm:ss");
             let data ={id,status}
 
-            console.log(id,"query")
-            console.log(data,"assessment")
+            logger.fatal(id,"query")
+            logger.fatal(data,"assessment")
             let query= await insertquery.assessment_insert(data)
-               console.log(query !=0,"data inserted")
+               logger.fatal(query !=0,"data inserted")
                var data1={
                    "userId":id,
             "transactionstring":status       
         }
-        console.log(data1,"data1")
+        logger.fatal(data1,"data1")
         bcSdk.savetransaction({ TransactionDetails: data1})
 
             

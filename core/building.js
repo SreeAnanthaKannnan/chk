@@ -5,12 +5,12 @@ module.exports={
     buildings:buildings
 }
 function buildings(buildingobject,email_id) {
-    console.log(buildingobject,"buildingobject")
+    logger.fatal(buildingobject,"buildingobject")
    return new Promise(async (resolve, reject) => {
        var responseObj = {};
 
        var user = building.building(buildingobject,email_id).then((data) => {
-           console.log(user, "user")
+           logger.fatal(user, "user")
            responseObj.data = data;
            responseObj.errors = [];
            responseObj.meta = {};

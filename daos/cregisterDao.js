@@ -17,14 +17,14 @@ module.exports={
 }
  function verify_user(registerobject){
   return new Promise( async function (resolve,reject){
-   console.log("i am in daos of verifyuser")
+   logger.fatal("i am in daos of verifyuser")
   var email_id= registerobject.email;
   var sql = "SELECT  * FROM citizens where email_id ='" + email_id + "'";
   con.query(sql,function(err,result){
     if(err) { logger.fatal("something",err)
         return reject({ "status": 400, "body": 'Cannot fetch the data' })}
         else{
-              console.log(result,"achieved")
+              logger.fatal(result,"achieved")
         return resolve({ result});
         }
         
@@ -62,15 +62,15 @@ function insert_user(registerobject,otp){
           firstname_en = firstname;
         }
         else{
-        console.log(value.result,"value")
+        logger.fatal(value.result,"value")
         if(value.result=="ar"){
         var temp =await translate.translate_en(firstname)
         firstname_en =temp.result;
-        console.log(firstname_en,"name_en")
+        logger.fatal(firstname_en,"name_en")
         firstname_ar =firstname}
         else{ firstname_en = firstname
           var temp =await translate.translate_ar(firstname)
-          console.log(temp,"temp")
+          logger.fatal(temp,"temp")
           firstname_ar = temp.result}
         }
         if(lastname ==""){
@@ -78,15 +78,15 @@ function insert_user(registerobject,otp){
             lastname_en = lastname;
           }
           else{
-          console.log(value.result,"value")
+          logger.fatal(value.result,"value")
           if(value.result=="ar"){
           var temp =await translate.translate_en(lastname)
           lastname_en =temp.result;
-          console.log(lastname_en,"name_en")
+          logger.fatal(lastname_en,"name_en")
           lastname_ar =lastname}
           else{ lastname_en = lastname
             var temp =await translate.translate_ar(lastname)
-            console.log(temp,"temp")
+            logger.fatal(temp,"temp")
           lastname_ar = temp.result}
           }
         if(address ==""){
@@ -96,13 +96,13 @@ function insert_user(registerobject,otp){
         else{
      if(value.result=="ar"){   
     var temp =await translate.translate_en(address)
-    console.log(temp,"999999999999999")
+    logger.fatal(temp,"999999999999999")
     address_en =temp.result
     address_ar = address;
      }
      else{ address_en = address
       var temp =await translate.translate_ar(address)
-      console.log(temp,"999999999999999")
+      logger.fatal(temp,"999999999999999")
     address_ar = temp.result}
      }
     
@@ -118,7 +118,7 @@ function insert_user(registerobject,otp){
     }
       else{ company_en = company
         var temp =await translate.translate_ar(company)
-        console.log(temp,"999999999999999")
+        logger.fatal(temp,"999999999999999")
       company_ar = temp.result}
     }
     
@@ -136,16 +136,16 @@ function insert_user(registerobject,otp){
     }
     else{ nationality_en = nationality
       var temp =await translate.translate_ar(nationality)
-      console.log(temp,"999999999999999")
+      logger.fatal(temp,"999999999999999")
     nationality_ar = temp.result}
     }
-    console.log(firstname_en,firstname_ar,"test 124")
+    logger.fatal(firstname_en,firstname_ar,"test 124")
   var sql = "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ('" + firstname_en + "','" + firstname_ar + "','" + lastname_en + "','" + lastname_ar + "','" +company_en + "','" + company_ar + "','" + nationality_en + "','" + nationality_ar + "','" + alter_number + "','" + address_en + "','" + address_ar + "', '" + po_box + "', '" + emirates_id + "', '" + mobile_number + "', '" + email_id + "', '" + password + "','" + verify_mobile + "','" + verify_email + "', '" + language + "', '" + newsletter + "','" + user_type + "','" + date.format(now, 'YYYY/MM/DD HH:mm:ss') +"','" + otp + "')";
   con.query(sql,function(err,result){
-    if(err) { console.log("something",err)
+    if(err) { logger.fatal("something",err)
         return reject({ "status": 400, "body": 'Cannot fetch the data' })}
         else{
-              console.log(result,"achieved")
+              logger.fatal(result,"achieved")
         return resolve({ result});
         }
         

@@ -29,8 +29,8 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
         const page=await browser.newPage();
        // const HeadingName="Hall Ticket"
         // const ImgSrc=__dirname+'/survey.png'
-        // console.log("ImgSrc==========",ImgSrc)
-        // console.log(yesvalue3)
+        // logger.fatal("ImgSrc==========",ImgSrc)
+        // logger.fatal(yesvalue3)
 
         await page.setContent(`<!DOCTYPE html>
         <html>
@@ -249,12 +249,12 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
 //   </div>
         await page.emulateMedia('screen');
         var datetime = dateFormat (new Date(),"yyyy-mm-dd h:MM:ss");
-        console.log(datetime);
+        logger.fatal(datetime);
         var path='/home/bahirathy/Music/pdf'+datetime
 
         let query= await insertquery.pdf_insert(path,email)
-        console.log(query !=0,"data inserted")
-         console.log("guess done");
+        logger.fatal(query !=0,"data inserted")
+         logger.fatal("guess done");
         await page.pdf({
          
             path:'/home/bahirathy/Music/pdf'+datetime,
@@ -265,7 +265,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
             // var path1=[path1]
             // var path=upload.array('filepath')
             // let query_value =[path,email]
-            // console.log(query_value,"query_value")
+            // logger.fatal(query_value,"query_value")
          
             return resolve({
             message:"pdf conversion done",
@@ -283,7 +283,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
   
     // function mail(email){
     //   var datetime = dateFormat (new Date(),"yyyy-mm-dd h:MM:ss");
-    //   console.log(datetime);
+    //   logger.fatal(datetime);
 
     var transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -309,12 +309,12 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
               html: "Dear "+ email +"<br>This is your survey Report for your building"  +""+ email + "  with SANED as a Supplier.  SANED will be rolling out new services for Sharjah residents."+"<br><br>" + "We will contact you for further information.<br><br><br>"+"Best Regards,<br>"+"SANED Team."
         
             };
-            console.log(path,"pathfghfff");
+            logger.fatal(path,"pathfghfff");
             transporter.sendMail(mailOptions, (error, info) => {
-              console.log("error",error)
+              logger.fatal("error",error)
               
               if (error) {
-                console.log("Mail send error: ", error);
+                logger.fatal("Mail send error: ", error);
               }
             })
 
@@ -325,7 +325,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
           //  )
         
         } catch(e){
-          console.log('our error',e)
+          logger.fatal('our error',e)
           return reject({
               message:"not done"
           })

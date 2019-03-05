@@ -5,14 +5,14 @@ const logger = log4js.getLogger('Aman_project');
 function Image_insert(Image) {
 
     return new Promise( function (resolve,reject){
-        // console.log("hiiiii",params)
+        // logger.fatal("hiiiii",params)
        // var image=image;
         sql= "INSERT INTO Image (uploadFile,fileName) VALUES ? ";
        con.query(sql, Image ,function(err,result){
         if(err) { logger.fatal("something",err)
             return reject({ "status": 400, "body": 'Cannot insert the data' })}
             else{
-                //  console.log(result,"achieved")
+                //  logger.fatal(result,"achieved")
             return resolve({ result});
             }
             

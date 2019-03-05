@@ -14,10 +14,10 @@ function aregister(registerobject){
     return new Promise( async (resolve, reject)=>{
         var email_id = registerobject.email;
        
-        console.log("hai");
-        console.log(!email_id)
+        logger.fatal("hai");
+        logger.fatal(!email_id)
         if(!email_id){
-          console.log("email is not null")
+          logger.fatal("email is not null")
          return reject({
             "status":400,
             "message":"Please provide Mandatory fields",
@@ -28,7 +28,7 @@ function aregister(registerobject){
    
            var result = await registerform.verify_user(registerobject)
       
-        console.log(result.result.length != 0);
+        logger.fatal(result.result.length != 0);
        
         dbFunc.connectionRelease;
         if(result.result.length != 0){
@@ -44,7 +44,7 @@ function aregister(registerobject){
         else{	
 
           var otp = await otpfun.otpgen();
-          console.log("in core before mail")
+          logger.fatal("in core before mail")
           await emailotpfun.emailotp(email_id,otp)
       
            var result =  await registerform.insert_user(registerobject,otp)
@@ -56,7 +56,7 @@ function aregister(registerobject){
            }
         //    bcSdk.updatetransaction({ updatedetails: userdetails})
         bc.main(params)
-        console.log(result,"inserted.......")
+        logger.fatal(result,"inserted.......")
        return resolve({
            Message:"Registration successfull"
           })

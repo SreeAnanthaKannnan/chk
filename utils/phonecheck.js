@@ -13,3 +13,6 @@ function validateMobileNumber(mobileNumber) {
     else
         return false;
 }
+module.exports={
+    validateMobileNumber:validateMobileNumber  
+}

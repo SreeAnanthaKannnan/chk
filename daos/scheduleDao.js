@@ -6,8 +6,8 @@ function schedule_insert(values) {
 
     return new Promise( function (resolve,reject){
        values =[values]
-       console.log("values",values)
-        let qry = "INSERT INTO Schedules(schedule_time,requestdate,suplier_id,building_id) VALUES ? ";
+       logger.fatal("values",values)
+        let qry = "INSERT INTO Schedules(schedule_time,requestdate,suplier_id,building_id,status) VALUES ? ";
        con.query(qry,[values] ,function(err,result){
         if(err) { logger.fatal("something",err)
             return reject({ 

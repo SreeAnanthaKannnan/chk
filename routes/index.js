@@ -29,18 +29,30 @@ var con = require('../mysql_connection/dbConfig.js'),
     building = require('../core/building'),
     assesserview = require('../core/assesserview'),
     schedule = require('../core/schedule'),
+    schedulefun = require('../core/Bulkschedule'),
     getBuildings= require('../core/getBuildings'),
     check = require('../utils/checkToken'),
+    phone = require('../utils/phonecheck.js'),
     image = require('../core/image.js'),
     pdf = require('../core/pdf.js'),
-    assessment = require('../core/assessment');
+    upload=require('../core/upload.js'),
+    pdf1=require('../core/pdfviewer.js'),
+    update = require('../core/update'),
+    assessment = require('../core/assessment'),
+    book = require('../core/servicehistory'),
+    multer = require("multer"),
+    log4js = require('log4js'),
+    path = require('path');
+    
     
 let Appeal = require('../core/Appeal'),
     moment = require('moment');
 
 const Cryptr = require('cryptr'),
     cryptr = new Cryptr('myTotalySecretKey'),
-    nodemailer = require('nodemailer');
+    nodemailer = require('nodemailer'),
+    logger = log4js.getLogger('Aman_project'),
+    fs = require('fs');
 
 /* GET home page. */
 router.get('/', function (request, response, next) {
@@ -90,7 +102,7 @@ router.post('/register', cors(), function(req, res){
 //=======================registerservice==========================================================//
 router.post('/admin-register', cors(), function(req, res){
     var registerobject= req.body;
-    console.log(registerobject,"registerobject");
+    logger.fatal(registerobject,"registerobject");
     aregister.aregister(registerobject)
     .then(result=>{
             res.send({
@@ -103,9 +115,18 @@ router.post('/admin-register', cors(), function(req, res){
     }))
     })     
      //=========================citizen-registration-start===========================================
-  router.post('/citizen-register', cors(), function(req, res){
+  router.post('/citizen-register', cors(),async function(req, res){
     var registerobject= req.body;
-    console.log(registerobject,"registerobject");
+    logger.fatal(registerobject,"registerobject");
+    var mobile=registerobject.mobile;
+    var result=await phone.validateMobileNumber(mobile)
+    if(result==false)
+    {
+        res.send({
+            message:"Please check Your Mobile number"
+        })
+    }
+    else{
     cregister.cregister(registerobject)
     .then(result=>{
              res.send({
@@ -116,7 +137,48 @@ router.post('/admin-register', cors(), function(req, res){
     .catch(err => res.status(err.status).json({
         message: err.message
     }))
+}
   }) 
+  router.post("/emailotpverification1", cors(), async function(req, res){
+    //var id = await check.checkToken(req);
+    
+    // if(id.status==400 || id.status==403){
+    //     res.send({
+    //         result:id
+    //     })
+    // }
+    // else{
+    var otp = req.body.otp;
+    logger.fatal(req.body);
+    var email_id = req.body.email;
+  logger.fatal(otp);
+  con.query("SELECT otp FROM citizens where email_id = '" + email_id + "'",  function(error, results, fields) {
+      if (error) {
+          throw error;
+      } else {
+     
+          if (results.length != 0) {
+           
+              if (results[0].otp == req.body.otp) {
+                  
+                 var verify_email = "Y"
+                  con.query("UPDATE citizens SET verify_email = '" + verify_email + "' WHERE otp = '" + results[0].otp + "'",  function(error, results, fields) {});
+                  res.send({
+                      status: 200,
+                      "message": "You are successfully registered",
+                      الرسالة: "أنت مسجل بنجاح"
+                  });
+              }} else {
+                  res.send({
+                      status: 401,
+                      "message": "Invalid one time password",
+                      رسالة: "كلمة مرور غير صالحة مرة واحدة"
+                  });
+              }
+        }
+  });
+// }
+  });
 //========================================citizen-registration-end=====================================
     //=====================================emailotpverification========================================
     router.post("/emailotpverification", cors(), async function(req, res){
@@ -129,9 +191,9 @@ router.post('/admin-register', cors(), function(req, res){
     // }
     // else{
     var otp = req.body.otp;
-    console.log(req.body);
+    logger.fatal(req.body);
     var email_id = req.body.email_id;
-    console.log(otp);
+    logger.fatal(otp);
     con.query("SELECT * FROM Residents where otp = '" + otp+ "'",  function(error, results, fields) {
     if (error) {
         throw error;
@@ -184,50 +246,7 @@ router.post('/admin-register', cors(), function(req, res){
         }))
     }
     })
-    //=============================schedule=====================================================
-    // router.post('/schedules', cors(), async function(req, res){
-    //     var id = await check.checkToken(req);
-
-    //     if(id.status==400 || id.status==403){
-    //         res.send({
-    //             result:id
-    //         })
-    //     }
-    //     else{
-    //     var s= req.body;
-    //     console.log(s,"s");
-    //     var schedule_time= req.body.schedule_time;
-    // //     let dateTime = new Date(trade_license_validity);
-    // //    trade_license_validity = moment(dateTime).format("YYYY/MM/DD HH:mm:ss");
-    //     var requestdate1=req.body.requestdate
-    //     var building_id = req.body.building_id
-    //      if (!schedule_time || !requestdate1) {
-
-    //         res
-    //             .status(40)
-    //             .json({
-    //                 message: 'Please enter the details completely !'
-    //             });
-
-    //     }
-    //     else {
-
-    //         schedule.schedule(schedule_time,requestdate1,building_id)
-    //         .then(result => {
-    //         res.send({
-    //             "message": "schedule details saved",
-    //             "status": true,
-    //             result:result,
-        
-    //        });
-    //             })
-    //         .catch(err => res.status(err.status).json({
-    //             message: err.message
-    //         }))
-    //     }
-    // }
-    // })
-    //==============================================================================================
+   
     router.post('/getdetails', cors(),async function(req, res){
         var id = await check.checkToken(req);
 
@@ -261,10 +280,10 @@ router.post('/admin-register', cors(), function(req, res){
     }
     else{
         const Appeal_Object = req.body;
-        console.log(Appeal_Object);
+        logger.fatal(Appeal_Object);
         Appeal.Appeal(Appeal_Object)
                 .then(result => {
-                    console.log(result)
+                    logger.fatal(result)
                     res
                         .status(result.status)
                         .json({
@@ -283,7 +302,7 @@ router.post('/admin-register', cors(), function(req, res){
     //===================================addbuilding=============================================//
     router.post('/AddsingleBuilding', cors(), async function(req, res){
     var id = await check.checkToken(req);
-    console.log(id);
+    logger.fatal(id);
     if(id.status == 400 && id.status == 403){
         res.send({
             result:id
@@ -317,7 +336,7 @@ router.post('/getBuildings', cors(), async function(req, res){
     }
     else{
     var buildingobject= id.result;
-    console.log(buildingobject,"data");
+    logger.fatal(buildingobject,"data");
     getBuildings.getbuildings(buildingobject)
     .then(result=>{
             res.send({
@@ -331,7 +350,66 @@ router.post('/getBuildings', cors(), async function(req, res){
     }
     })
     //=======================================================================================================
+    router.post('/installationdetails', cors(), function(req, res){
+        var installation= req.body;
+        logger.fatal(installation,"installation");
+        update.update(installation)
+        .then(result=>{
+                 res.send({
+                     result:result,
+               
+            })
+          })
+        .catch(err => res.status(err.status).json({
+            message: err.message
+        }))
+      }) 
+      //=============================upload=====================================================
+var uploads = multer({ dest: '/var/www/html/'});
+router.use('/download', express.static(path.join(__dirname, 'upload')))
+// File input field name is simply 'file'
+//router.use('/static', express.static(path.join(__dirname, 'uploads')))
+router.post('/file_upload', uploads.single('file'), function(req, res) {
+ var file = '/var/www/html/' + '/' + req.file.filename;
+ var email_id=req.body.email
 
+ var filepath=req.file.path
+  fs.rename(filepath, file, function(err) {
+
+   if (err) {
+     logger.fatal(err);
+     res.send(500);
+   } else {
+   
+    upload.upload(filepath,email_id)
+    .then(result=>{
+      res.send({
+        message:'file uploaded successfully',
+          result:req.file.filename
+     
+ })
+})
+.catch(err => res.status(err.status).json({
+ message: err.message
+}))
+
+   }
+ });
+});
+//==============================Booking-History============================================//
+router.post('/serviceHistory', cors(),function(req, res){
+    var email_id= req.body.email_id;       
+    book.bookservice(email_id)
+    .then(result=>{
+             res.send({
+                 result:result,
+        })
+      })
+    .catch(err => res.status(err.status).json({
+        message: err.message
+    }))
+  })
+//==============================================================================================
     router.post('/Assessment', cors(),async function(req, res){
     // var id = await check.checkToken(req);
     //  if(id.status==400 || id.status==403){
@@ -340,7 +418,7 @@ router.post('/getBuildings', cors(), async function(req, res){
     //   })
     // }
     //  else{
-    console.log(req.body);
+    logger.fatal(req.body);
     var id= req.body.id
     var status=req.body.status
     if (!id || !status.trim()) {
@@ -389,31 +467,16 @@ router.post('/getBuildings', cors(), async function(req, res){
     }))
     }
     })
-    //   router.post('/upload', (req, res, next) => {
-    //     let uploadFile = req.files.file
-    //     const fileName = req.files.file.name
-    //     uploadFile.mv(
-    //       `${__dirname}/public/files/${fileName}`,
-    //       function (err) {
-    //         if (err) {
-    //           return res.status(500).send(err)
-    //         }
-
-    //         res.json({
-    //           file: `public/${req.files.file.name}`,
-    //         })
-    //       },
-    //     )
-    //   })
+   
     router.post('/textimage', cors(), (req, res,next) => {
     const uploadFile=req.files.file;
     const fileName = req.files.file.name
-    //   console.log(Appeal_Object)
+    //   logger.fatal(Appeal_Object)
     const Image= uploadFile.mv(
         `${__dirname}/public/files/${fileName}`,
     image.Image(Image)
             .then(result => {
-                console.log(result)
+                logger.fatal(result)
                 res
                     .status(result.status)
                     .json({
@@ -432,9 +495,9 @@ router.post('/getBuildings', cors(), async function(req, res){
     router.post('/forgetpassword',(req,res) =>{
 
     let forgetpassword = req.body;
-    console.log("body",forgetpassword);
+    logger.fatal("body",forgetpassword);
     let password = req.body.password;
-    console.log(password)
+    logger.fatal(password)
     let confirmpassword = req.body.confirmpassword;
     let username = req.body.email;
     if(!username || !password || !confirmpassword)
@@ -444,7 +507,7 @@ router.post('/getBuildings', cors(), async function(req, res){
     })
     }
     else{
-    console.log(username)
+    logger.fatal(username)
             let sql = "SELECT * FROM Residents where email_id ='" + username + "'";
         
             con.query(sql, function (err, result) {
@@ -454,7 +517,7 @@ router.post('/getBuildings', cors(), async function(req, res){
             // logger.fatal("DataBase ERR:",err)
             //logger.fatal("Database Error while selecting from register table:",err)
             if(result.length == 0){
-                console.log("i am here")
+                logger.fatal("i am here")
                 res.send({message:"Invalid User Name",
                 الرسالة: "اسم المستخدم غير صالح"              })
             // dbFunc.connectionRelease;
@@ -469,7 +532,7 @@ router.post('/getBuildings', cors(), async function(req, res){
         
 
             if(cryptr.decrypt(result[0].password) == password ){
-                console.log("previous");
+                logger.fatal("previous");
             res.send({
                 message:"Password should not be a previously used one",
                 رسالة:"مرور سبق استخدامهاكلمة المرور لا يجب أن تكون كلمة"
@@ -485,7 +548,7 @@ router.post('/getBuildings', cors(), async function(req, res){
             for (var i = 0; i < 4; i++)
                 otp += possible.charAt(Math.floor(Math.random() * possible.length));
         
-            console.log(otp,"otp");
+            logger.fatal(otp,"otp");
             // var encodedMail = new Buffer(req.body.email).toString('base64');
             let sql = "SELECT * FROM Residents where email_id ='" + username + "'";
             con.query(sql,function (err,result){
@@ -495,9 +558,9 @@ router.post('/getBuildings', cors(), async function(req, res){
                 namea=result[0].name_ar;
 
             //  })
-            console.log("datanames",result[0].name_en);
-            console.log(result[0].name_ar);
-            console.log("copy",namen);
+            logger.fatal("datanames",result[0].name_en);
+            logger.fatal(result[0].name_ar);
+            logger.fatal("copy",namen);
             var transporter = nodemailer.createTransport({
                 host: 'smtp.gmail.com',
                 port: 587,
@@ -521,7 +584,7 @@ router.post('/getBuildings', cors(), async function(req, res){
             transporter.sendMail(mailOptions, (error, info) => {
             
             if (error) {
-                console.log("Mail send error: ", error);
+                logger.fatal("Mail send error: ", error);
             }
             })
             var sql ="UPDATE Residents SET otp = '" + otp + "' WHERE email_id = '" + username + "'";
@@ -546,7 +609,7 @@ router.post('/getBuildings', cors(), async function(req, res){
     var otp = req.body.otp;
     var password = cryptr.encrypt(req.body.password)
 
-    console.log(otp);
+    logger.fatal(otp);
 
     con.query("SELECT * FROM Residents where otp='" + otp+ "'",  function(error, results, fields) {
     if (error) {
@@ -558,7 +621,7 @@ router.post('/getBuildings', cors(), async function(req, res){
         
         if (results.length > 0) {
             if (results[0].otp == otp) {
-                console.log(otp);
+                logger.fatal(otp);
                 con.query("UPDATE Residents SET password = '" + password + "' WHERE otp = '" + otp + "'",  function(error, results, fields) {});
                     res.send({
                     status: "true",
@@ -579,56 +642,14 @@ router.post('/getBuildings', cors(), async function(req, res){
     });
 
 
-    //==========================forgetotpend===================================//
-    //================================pdf===========================================//
-    // router.post('/Convert_Pdf', cors(), async function (req, res) {
-    // //    var id = await check.checkToken(req);
-    // //  if(id.status==400 || id.status==403){
-    // //    res.send({
-    // //      result:id
-    // // })
-    // //}
-    // // else{
-    // console.log(req.body);
-    // let checked1=req.body.SelectedValues1;
-    // let checked2=req.body.SelectedValues2;
-    // //let email=id.result;
-    // // let checked3=req.body.SelectedValues3;
-    // if(checked1=="1"){
-    //     yesvalue1="checked";
-    //     novalue1="unchecked"
-    // }
-    // else{
-    //     yesvalue1="unchecked";
-    //     novalue1="checked"
-    // }
-    // if(checked2=="1"){
-    //     yesvalue2="checked";
-    //     novalue2="unchecked"
-    // }
-    // else{
-    //     yesvalue2="unchecked";
-    //     novalue2="checked"
-    // }
-    // //    var yesvalue3="checked";
-
-    // var email = req.body.email_id;
-    // //console.log("All data=====>>", checked1,checked2,checked3);
-    // pdf.Pdf(yesvalue1,novalue1,yesvalue2,novalue2)
-    // pdf.mail(email)
-    // res.send({
-    //     "message":"success"
-    // })
-    // //}
-    // })
-    //===============================pdfend==========================================//
+   
     router.post('/schedules', cors(),async function(req, res){
-    console.log(req.body);
+    logger.fatal(req.body);
     var time=req.body.schedule_time;
     var reqdate= req.body.requestdate;
     var building_id=req.body.building_id;
-    //console.log("id",req.body.id);
-    console.log("building_id",building_id);
+    //logger.fatal("id",req.body.id);
+    logger.fatal("building_id",building_id);
     var date = moment(new Date(reqdate.substr(0, 16)));
     var rdate=date.format("YYYY-MM-DD HH:mm:ss");
     schedule.sup(time,rdate,building_id)
@@ -732,40 +753,14 @@ router.post('/getBuildings', cors(), async function(req, res){
 //    var yesvalue3="checked";
 
    
-    //console.log("All data=====>>", checked1,checked2,checked3);
+    //logger.fatal("All data=====>>", checked1,checked2,checked3);
    pdf.Pdf(yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,email)
       // pdf.mail(email)
        res.send({
            "message":"success"
        })
 })
-//=========================================BulkBooking=============================================
-// router.post('/BulkBooking', cors(), async function(req, res){
-//     var id = await check.checkToken(req);
-//     console.log(id);
-//     if(id.status == 400 && id.status == 403){
-//         res.send({
-//             result:id
-//         })
-//     }
-//     else{
-//         var email_id = id.email_id;
-//     var buildingobject= req.body;
- 
-//     building.buildings(buildingobject,email_id)
-//     .then(result=>{
-//              res.send({
-//                  result:result,
-//             message: "mock mock"
-//         })
-//       })
-//     .catch(err => res.status(err.status).json({
-//         message: err.message
-//     }))
 
-//     }
-
-// });
 //=========================================pdfviewer=============================================
 
 router.post('/pdfviewer', cors(),async function (req, res){
@@ -780,7 +775,7 @@ router.post('/pdfviewer', cors(),async function (req, res){
     const email = req.body.email;
     pdf1.pdf1(email)
             .then(result => {
-                console.log(result)
+                logger.fatal(result)
                 res
                     .status(result.status)
                     .json({
@@ -796,6 +791,69 @@ router.post('/pdfviewer', cors(),async function (req, res){
         // }
     
 });
+//================================installationdetails=================================//
+router.post('/installationdetails', cors(), function(req, res){
+    var installation= req.body;
+    logger.fatal(installation,"installation");
+    update.update(installation)
+    .then(result=>{
+             res.send({
+                 result:result,
+           
+        })
+      })
+    .catch(err => res.status(err.status).json({
+        message: err.message
+    }))
+  })  
+//==================================bulkschedules============================================//
+  router.post('/BulkSchedules', cors(),async function(req, res){
+    logger.fatal(req.body);
+
+   var schedules=req.body;
+    logger.fatal("schedules",schedules);
+    logger.fatal("length",schedules.schedule.length);
+    logger.fatal("reqdate",schedules.schedule[0].selectedStartDate);
+    for(let i=0;i<schedules.schedule.length;i++){
+        logger.fatal(i,"i")
+    let uidate = schedules.schedule[i].selectedStartDate;
+   var date =  moment(new Date(uidate.substr(0, 16)));
+   var rdate=  date.format("YYYY-MM-DD");
+  await schedulefun.sup(schedules.schedule[i].time,rdate,schedules.schedule[i].building_id)
+    
+    }
+    
+    res.send({
+        "message":"Your Buildings are scheduled for service. Please visit booking history for details"
+    })
+   
+  })
+
+router.post('/blockchain', cors(),async function(req, res){
+
+    var transaction={
+        name:"manoj",
+        address:"chennai"
+    }
+var params={
+    id:"1",
+    fun:"create",
+    data:transaction
+}
+ 
+     
+     bc.main(params)
+     .then(result=>{
+        res.send({
+            result:result,
+       
+   })
+ })
+.catch(err => res.status(err.status).json({
+   message: err.message
+}))
+    })
+       
 
 
 

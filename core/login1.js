@@ -11,16 +11,16 @@ module.exports={
     loginuser:loginuser
 }
 function loginuser(loginobject){
-    console.log(loginobject,"loginobject")
+    logger.fatal(loginobject,"loginobject")
    return new Promise(async (resolve, reject) => {
     //    var responseObj = {};
     var email_id=loginobject.email;
       var password=loginobject.password;
 
          var result = await login.login(loginobject)
-    console.log("login",result);
-    //console.log(result.result[0].password,"test")
-    console.log(result.result.length == 0)
+    logger.fatal("login",result);
+    //logger.fatal(result.result[0].password,"test")
+    logger.fatal(result.result.length == 0)
     if(result.result.length == 0){
         return reject({
           "message":"Invalid User name",
@@ -37,11 +37,11 @@ function loginuser(loginobject){
       
       // }
       // else{
-          console.log(result.result[0].password,"test")
+          logger.fatal(result.result[0].password,"test")
       let  registered_password =  cryptr.decrypt(result.result[0].password);
-      console.log(registered_password,"db password")
+      logger.fatal(registered_password,"db password")
       let registered_user = result.result[0].email_id;
-      console.log(registered_user,"user nameeeeeeeee")
+      logger.fatal(registered_user,"user nameeeeeeeee")
       
         if(registered_user == email_id &&  registered_password == password){
           let token = jwt.sign({email_id},
@@ -60,7 +60,7 @@ function loginuser(loginobject){
               
         }
       else{
-        console.log("pass ")
+        logger.fatal("pass ")
       return reject({
         "message":"Password is Incorrect",
         "status": 401,

@@ -9,10 +9,10 @@ function assement_get(){
     return new Promise(async(resolve, reject)=>{
 var sql= "SELECT Schedules.schedule_time,Schedules.status, Buildings.buildingname,Buildings.owner_id,Schedules.id,Buildings.address,Buildings.lat,Buildings.lon, Schedules.requestdate FROM Schedules INNER JOIN Buildings ON Schedules.building_id=Buildings.id;"
 con.query(sql,function(err,result){
-    if(err) { console.log("something",err)
+    if(err) { logger.fatal("something",err)
         return reject({ "status": 400, "body": 'failed to insert' })}
         else{
-              console.log(result,"result in Daos");
+              logger.fatal(result,"result in Daos");
         return resolve({result});
         }
     });  

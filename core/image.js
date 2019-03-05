@@ -12,16 +12,16 @@ exports.Image = (Imageobject) => new Promise(async(resolve, reject) => {
     //let today = new Date();
    // let Appeal_date = moment(today).format("YYYY/MM/DD HH:mm:ss");
     let query_value =Image
-    console.log(query_value,"query_value")
+    logger.fatal(query_value,"query_value")
     let query= await insertquery.Image_insert(query_value)
-       console.log(query !=0,"data inserted")
+       logger.fatal(query !=0,"data inserted")
     // let language = await language_detect.languageDetect(service)
-    // console.log(language.result,"language")
+    // logger.fatal(language.result,"language")
     
 
 
     //  let messagevalue =  await  message.getmessage(language.result,"S01")
-    //   console.log(messagevalue,"last")
+    //   logger.fatal(messagevalue,"last")
   
   
       return  resolve({

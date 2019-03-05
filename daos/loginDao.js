@@ -7,9 +7,9 @@ const logger = log4js.getLogger('Aman_project');
 function login(loginobject) {
 
   return new Promise( function (resolve,reject){
-      // console.log("hiiiii",params)
+      // logger.fatal("hiiiii",params)
      var email_id=loginobject.email;
-     console.log("in dao",email_id);
+     logger.fatal("in dao",email_id);
       //var password=loginobject.password;
       //var sql = "SELECT  * FROM Residents where email_id ='" + email_id + "'";
     // var sql1="SELECT * FROM Residents UNION SELECT * FROM admin where email_id ='" + email_id + "'";
@@ -19,7 +19,7 @@ function login(loginobject) {
       if(err) { logger.fatal("something",err)
           return reject({ "status": 400, "body": 'Cannot insert the data' })}
           else{
-                console.log(result,"achieved")
+                logger.fatal(result,"achieved")
           return resolve({ result});
           }
           
@@ -29,9 +29,9 @@ function login(loginobject) {
 // function loginadmin(loginobject) {
 
 //     return new Promise( function (resolve,reject){
-//         // console.log("hiiiii",params)
+//         // logger.fatal("hiiiii",params)
 //        var email_id=loginobject.email;
-//        console.log("in dao",email_id);
+//        logger.fatal("in dao",email_id);
 //         //var password=loginobject.password;
 //         var sql = "SELECT  * FROM admin where email_id ='" + email_id + "'";
 //       // var sql1="SELECT * FROM Residents UNION SELECT * FROM admin where email_id ='" + email_id + "'";
@@ -39,7 +39,7 @@ function login(loginobject) {
 //         if(err) { logger.fatal("something",err)
 //             return reject({ "status": 400, "body": 'Cannot insert the data' })}
 //             else{
-//                   console.log(result,"achieved")
+//                   logger.fatal(result,"achieved")
 //             return resolve({ result});
 //             }
             

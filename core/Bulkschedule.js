@@ -28,13 +28,13 @@ async function sup(time, rdate, building_id) {
             var schedule_time = time;
             var suplier_id = suparray[0];
             var requestdate = idate;
-            let status1="scheduled";
-            let data = [schedule_time, requestdate, suplier_id, building_id,status1]
+            var status1 = "scheduled";
+            let data = [schedule_time, requestdate, suplier_id, building_id, status1]
             let query = await insertquery.schedule_insert(data)
         var date22 = moment(requestdate).format("YYYY-MM-DD");    
 	return resolve({
                 result: {
-                                        "message":"Your Building is Scheduled for service on" + " " + date22 + " " + schedule_time +"   As requested slot is available"
+        "message":"Your Building is Scheduled for service on" + " " + date22 + " " + schedule_time +"   As requested slot is available"
 
                 }
             })
@@ -56,12 +56,12 @@ async function sup(time, rdate, building_id) {
                             logger.fatal("assigned to", suparray[j]);
                             let status1="scheduled";
                             logger.fatal("date", sdate);
-                            let data = [schedule_time, requestdate, suplier_id, building_id,status1]
+                            let data = [schedule_time, requestdate, suplier_id, building_id, status1]
                             let query = await insertquery.schedule_insert(data)
 			var date22 = moment(requestdate).format("YYYY-MM-DD");                            
 return resolve({
                                 result: {
-                                                                      "message":"Your Building is Scheduled for service on" + " " + date22 + " " + schedule_time +"   As requested slot is unavailable"
+             "message":"done"
 
                                 }
                             });

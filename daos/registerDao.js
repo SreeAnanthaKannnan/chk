@@ -17,14 +17,14 @@ module.exports={
 }
  function verify_user(registerobject){
   return new Promise( async function (resolve,reject){
-   console.log("i am in daos of verifyuser")
+   logger.fatal("i am in daos of verifyuser")
   var email_id= registerobject.email;
   var sql = "SELECT  * FROM Residents where email_id ='" + email_id + "'";
   con.query(sql,function(err,result){
     if(err) { logger.fatal("something",err)
         return reject({ "status": 400, "body": 'Cannot fetch the data' })}
         else{
-              console.log(result,"achieved")
+              logger.fatal(result,"achieved")
         return resolve({ result});
         }
         
@@ -60,15 +60,15 @@ function insert_user(registerobject,otp){
           name_en = name;
         }
         else{
-        console.log(value.result,"value")
+        logger.fatal(value.result,"value")
         if(value.result=="ar"){
         var temp =await translate.translate_en(name)
         name_en =temp.result;
-        console.log(name_en,"name_en")
+        logger.fatal(name_en,"name_en")
         name_ar =name}
         else{ name_en = name
           var temp =await translate.translate_ar(name)
-          console.log(temp,"temp")
+          logger.fatal(temp,"temp")
         name_ar = temp.result}
         }
         if(address ==""){
@@ -78,13 +78,13 @@ function insert_user(registerobject,otp){
         else{
      if(value.result=="ar"){   
     var temp =await translate.translate_en(address)
-    console.log(temp,"999999999999999")
+    logger.fatal(temp,"999999999999999")
     address_en =temp.result
     address_ar = address;
      }
      else{ address_en = address
       var temp =await translate.translate_ar(address)
-      console.log(temp,"999999999999999")
+      logger.fatal(temp,"999999999999999")
     address_ar = temp.result}
      }
     
@@ -100,7 +100,7 @@ function insert_user(registerobject,otp){
     }
       else{ company_en = company
         var temp =await translate.translate_ar(company)
-        console.log(temp,"999999999999999")
+        logger.fatal(temp,"999999999999999")
       company_ar = temp.result}
     }
     
@@ -118,16 +118,16 @@ function insert_user(registerobject,otp){
     }
     else{ nationality_en = nationality
       var temp =await translate.translate_ar(nationality)
-      console.log(temp,"999999999999999")
+      logger.fatal(temp,"999999999999999")
     nationality_ar = temp.result}
     }
-    console.log(name_en,name_ar,"test 124")
+    logger.fatal(name_en,name_ar,"test 124")
   var sql = "INSERT INTO Residents (name_en, name_ar,company_en,company_ar,nationality_en,nationality_ar,phone_nmuber,address_en,address_ar,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ('" + name_en + "','" + name_ar + "','" +company_en + "','" + company_ar + "','" + nationality_en + "','" + nationality_ar + "','" + phone_nmuber + "','" + address_en + "','" + address_ar + "', '" + po_box + "', '" + mobile_number + "', '" + email_id + "', '" + password + "','" + verify_mobile + "','" + verify_email + "', '" + language + "', '" + newsletter + "','" + user_type + "','" + date.format(now, 'YYYY/MM/DD HH:mm:ss') +"','" + otp + "')";
   con.query(sql,function(err,result){
-    if(err) { console.log("something",err)
+    if(err) { logger.fatal("something",err)
         return reject({ "status": 400, "body": 'Cannot fetch the data' })}
         else{
-              console.log(result,"achieved")
+              logger.fatal(result,"achieved")
         return resolve({ result});
         }
         

@@ -4,7 +4,7 @@ var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 function consent(consentformobject){
     return new Promise((resolve, reject)=>{
-        console.log(consentformobject,"=>consentformobject");
+        logger.fatal(consentformobject,"=>consentformobject");
         var consent_id= consentformobject.consent_id;
         var facp_working_condition = consentformobject.facp_working_condition
         var facp_readiness =consentformobject.facp_readiness;
@@ -14,7 +14,7 @@ function consent(consentformobject){
         if (err) throw err;
         dbFunc.connectionRelease;
         logger.fatal("DataBase ERR:",err)
-        console.log(result,"inserted.......")
+        logger.fatal(result,"inserted.......")
        resolve({
             Message: "consent done",
                   })

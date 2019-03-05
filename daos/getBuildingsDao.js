@@ -4,7 +4,7 @@ var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 function buildings(buildingobject){
   return new Promise((resolve, reject)=>{
-      console.log(buildingobject,"=>buildingobject");
+      logger.fatal(buildingobject,"=>buildingobject");
      // var id = buildingobject.id;
     //  var email_id=buildingobject.email_id;
    //   var type=buildingobject.type;
@@ -20,7 +20,7 @@ function buildings(buildingobject){
       if (err) throw err;
       dbFunc.connectionRelease;
       logger.fatal("DataBase ERR:",err)
-      console.log(result,"inserted.......")
+      logger.fatal(result,"inserted.......")
      resolve({
           Message: "get Buildings done",
            result:result
@@ -30,7 +30,7 @@ function buildings(buildingobject){
 }
 function phone(buildingobject){
   return new Promise((resolve, reject)=>{
-      console.log(buildingobject,"=>buildingobject");
+      logger.fatal(buildingobject,"=>buildingobject");
      // var id = buildingobject.id;
     //  var email_id=buildingobject.email_id;
    //   var type=buildingobject.type;

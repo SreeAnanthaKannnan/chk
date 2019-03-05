@@ -13,9 +13,9 @@ exports.getHistory = (id) => {
 
                 .then((docs) => {
                     var len = docs.length;
-                    console.log(len)
+                    logger.fatal(len)
 
-                    console.log("docs....123>>>", docs)
+                    logger.fatal("docs....123>>>", docs)
 
                     return resolve({
                         status: 201,
@@ -27,7 +27,7 @@ exports.getHistory = (id) => {
 
         .catch(err => {
 
-            console.log("error occurred" + err);
+            logger.fatal("error occurred" + err);
 
             return reject({
                 status: 500,
