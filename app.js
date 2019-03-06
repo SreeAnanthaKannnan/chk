@@ -22,10 +22,17 @@ var createError = require('http-errors'),
     logger = require('morgan'),
     swaggerJSDoc = require('swagger-jsdoc'),
     cors = require('cors'),
-    log4js = require('log4js');
+    log4js = require('log4js'),
+    con = require('./mysql_connection/connection.js');
 
 var indexRouter = require('./routes/index');
 var app = express();
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+})
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -40,6 +47,23 @@ var swaggerDefinition = {
     basePath: '/',
 };
 
+log4js.configure({
+    appenders: {
+        Salama_project: {
+            type: 'dateFile', 
+            filename: './log/Salama_Project_' + 
+                    new Date().getFullYear() + "-"+ (new Date().getMonth()+ 1) + "-" + 
+                    new Date().getDate() + '.log'
+        }
+    },
+    categories: {
+      default: { appenders: [ 'Salama_project' ], level: 'debug' }
+    }
+});
+
+const loggerS = log4js.getLogger('SPSA_project');
+
+con.connectionCheck;
 // options for the swagger docs
 var options = {
     // import swaggerDefinitions
@@ -68,6 +92,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('data/img'));
 
 app.use('/', indexRouter);
 
