@@ -43,7 +43,7 @@ function insert_user(registerobject,otp){
   var po_box = registerobject.po_box;
   var language = registerobject.language;
   var newsletter = registerobject.newsletter;
-  var user_type = "1";
+  var user_type = "2";
   var type_description = registerobject.typedescription;
   var name_ar,name_en,company_ar,company_en,nationality_ar,nationality_en,address_ar,address_en;
   var value;

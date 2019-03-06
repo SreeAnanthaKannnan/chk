@@ -31,6 +31,7 @@ var con = require('../mysql_connection/dbConfig.js'),
     schedule = require('../core/schedule'),
     schedulefun = require('../core/Bulkschedule'),
     getBuildings= require('../core/getBuildings'),
+    profile= require('../core/profile'),
     check = require('../utils/checkToken'),
     phone = require('../utils/phonecheck.js'),
     image = require('../core/image.js'),
@@ -41,7 +42,7 @@ var con = require('../mysql_connection/dbConfig.js'),
     assessment = require('../core/assessment'),
     book = require('../core/servicehistory'),
     multer = require("multer"),
-    log4js = require('log4js'),
+   
     path = require('path');
     
     
@@ -51,8 +52,11 @@ let Appeal = require('../core/Appeal'),
 const Cryptr = require('cryptr'),
     cryptr = new Cryptr('myTotalySecretKey'),
     nodemailer = require('nodemailer'),
-    logger = log4js.getLogger('Aman_project'),
+   
+  // logger = require('morgan'),
     fs = require('fs');
+var  log4js = require('log4js');
+const logger = log4js.getLogger('Aman_project');
 
 /* GET home page. */
 router.get('/', function (request, response, next) {
@@ -349,6 +353,30 @@ router.post('/getBuildings', cors(), async function(req, res){
     }))
     }
     })
+//==============================Residentsdetails===========================================//    
+    router.post('/profile', cors(), async function(req, res){
+        // var id =await check.checkToken(req);
+        // if(id.status==400 || id.status==403){
+        //     res.send({
+        //         result:id
+        //     })
+        // }
+        // else{
+        //var buildingobject= id.result;
+        var buildingobject=req.body.email;
+        logger.fatal(buildingobject,"data");
+        profile.getbuildings(buildingobject)
+        .then(result=>{
+                res.send({
+                    result:result,
+                    message: "mock mock"
+            })
+        })
+        .catch(err => res.status(err.status).json({
+            message: err.message
+        }))
+       // }
+        })
     //=======================================================================================================
     router.post('/installationdetails', cors(), function(req, res){
         var installation= req.body;

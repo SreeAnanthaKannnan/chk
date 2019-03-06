@@ -26,16 +26,23 @@ fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
 
 
     csvParser(csvData, { delimiter: ',' }, function(err, data) {
+        var params=[]; 
         if (err)
         {
-            logger.fatal(err);
+            console.log(err);
         } 
         else 
-        {      
-        logger.fatal(data);    
+        {  
+               
+        console.log(data.length);  
+        for(var i=1;i<data.length;i++){
+            params.push(data[i])
+
+        } 
+        console.log(params); 
        // var owner_id=email_id
             var sql = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-            con.query(sql, [data], function(err,result) {
+            con.query(sql, [params], function(err,result) {
                 if(err) { logger.fatal("something",err)
                 return reject({ "status": 400, "body": 'Cannot insert the data' })}
                 else{
