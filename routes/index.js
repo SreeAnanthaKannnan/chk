@@ -42,7 +42,7 @@ var con = require('../mysql_connection/dbConfig.js'),
     assessment = require('../core/assessment'),
     book = require('../core/servicehistory'),
     multer = require("multer"),
-   
+    image_upload= require('../core/image_upload'),
     path = require('path');
     
     
@@ -355,15 +355,15 @@ router.post('/getBuildings', cors(), async function(req, res){
     })
 //==============================Residentsdetails===========================================//    
     router.post('/profile', cors(), async function(req, res){
-        // var id =await check.checkToken(req);
-        // if(id.status==400 || id.status==403){
-        //     res.send({
-        //         result:id
-        //     })
-        // }
-        // else{
-        //var buildingobject= id.result;
-        var buildingobject=req.body.email;
+        var id =await check.checkToken(req);
+        if(id.status==400 || id.status==403){
+            res.send({
+                result:id
+            })
+        }
+        else{
+        var buildingobject= id.result;
+        //var buildingobject=req.body.email;
         logger.fatal(buildingobject,"data");
         profile.getbuildings(buildingobject)
         .then(result=>{
@@ -375,7 +375,7 @@ router.post('/getBuildings', cors(), async function(req, res){
         .catch(err => res.status(err.status).json({
             message: err.message
         }))
-       // }
+        }
         })
     //=======================================================================================================
     router.post('/installationdetails', cors(), function(req, res){
@@ -393,37 +393,66 @@ router.post('/getBuildings', cors(), async function(req, res){
         }))
       }) 
       //=============================upload=====================================================
-var uploads = multer({ dest: '/var/www/html/'});
-router.use('/download', express.static(path.join(__dirname, 'upload')))
-// File input field name is simply 'file'
-//router.use('/static', express.static(path.join(__dirname, 'uploads')))
-router.post('/file_upload', uploads.single('file'), function(req, res) {
- var file = '/var/www/html/' + '/' + req.file.filename;
- var email_id=req.body.email
-
- var filepath=req.file.path
-  fs.rename(filepath, file, function(err) {
-
-   if (err) {
-     logger.fatal(err);
-     res.send(500);
-   } else {
+      var uploads = multer({ dest: 'var/www/html/'});
+      router.use('/download', express.static(path.join(__dirname, 'upload')))
+      // File input field name is simply 'file'
+      //router.use('/static', express.static(path.join(__dirname, 'uploads')))
+      router.post('/file_upload', uploads.single('file'), function(req, res) {
+       var file = 'var/www/html/' + '/' + req.file.filename;
+       var email_id=req.body.email
+      
+       var filepath=req.file.path
+        fs.rename(filepath, file, function(err) {
+      
+         if (err) {
+           console.log(err);
+           res.send(500);
+         } else {
+         
+          upload.upload(filepath,email_id)
+          .then(result=>{
+            res.send({
+              message:'file uploaded successfully',
+                result:req.file.filename
+           
+       })
+      })
+      .catch(err => res.status(err.status).json({
+       message: err.message
+      }))
+      
+         }
+       });
+      });
+//=================================image===============================================//
+//=============================imageupload==================================================//
+router.post('/image_upload', uploads.single('file'), function(req, res) {
+    var file = 'var/www/html/' + '/' + req.file.filename;
+    var id=req.body.id
    
-    upload.upload(filepath,email_id)
-    .then(result=>{
-      res.send({
-        message:'file uploaded successfully',
-          result:req.file.filename
-     
- })
-})
-.catch(err => res.status(err.status).json({
- message: err.message
-}))
-
-   }
- });
-});
+    var filepath=req.file.path
+     fs.rename(filepath, file, function(err) {
+   
+      if (err) {
+        console.log(err);
+        res.send(500);
+      } else {
+      
+       image_upload.image_upload(filepath,id)
+       .then(result=>{
+         res.send({
+           message:'file uploaded successfully',
+             result:req.file.filename
+        
+    })
+   })
+   .catch(err => res.status(err.status).json({
+    message: err.message
+   }))
+   
+      }
+    });
+   });
 //==============================Booking-History============================================//
 router.post('/serviceHistory', cors(),function(req, res){
     var email_id= req.body.email_id;       
@@ -475,14 +504,14 @@ router.post('/serviceHistory', cors(),function(req, res){
     });
     //==========================assesser-view=====================================================//
     router.get('/assesser-view', cors(),async function(req, res){
-    var id = await check.checkToken(req);
+    // var id = await check.checkToken(req);
 
-    if(id.status==400 || id.status==403){
-        res.send({
-            result:id
-        })
-    }
-    else{
+    // if(id.status==400 || id.status==403){
+    //     res.send({
+    //         result:id
+    //     })
+    // }
+    // else{
     assesserview.assesserview()
     .then(result=>{
             res.send({
@@ -493,7 +522,7 @@ router.post('/serviceHistory', cors(),function(req, res){
     .catch(err => res.status(err.status).json({
         message: err.message
     }))
-    }
+   // }
     })
    
     router.post('/textimage', cors(), (req, res,next) => {
@@ -694,100 +723,118 @@ router.post('/serviceHistory', cors(),function(req, res){
     })
     //============================================convert pdf===================================================//
 
-  router.post('/Convert_Pdf', cors(), async function (req, res) {
-    let checked1=req.body.SelectedValues1;
-    let checked2=req.body.SelectedValues2;
-    let checked3=req.body.SelectedValues3;
-    let checked4=req.body.SelectedValues4;
-    let checked5=req.body.SelectedValues5;
-    let checked6=req.body.SelectedValues6;
-    let checked7=req.body.SelectedValues7;
-    let checked8=req.body.SelectedValues8;
-    let checked9=req.body.SelectedValues9;
-    let email=req.body.email;
-   // let checked3=req.body.SelectedValues3;
-    if(checked1=="yes"){
-        yesvalue1="checked";
-        novalue1="unchecked"
-    }
-    else{
-        yesvalue1="unchecked";
-        novalue1="checked"
-    }
-    if(checked2=="yes"){
-        yesvalue2="checked";
-        novalue2="unchecked"
-    }
-    else{
-        yesvalue2="unchecked";
-        novalue2="checked"
-    }
-    if(checked3=="yes"){
-        yesvalue3="checked";
-        novalue3="unchecked"
-    }
-    else{
-        yesvalue3="unchecked";
-        novalue3="checked"
-    }
-    if(checked4=="yes"){
-        yesvalue4="checked";
-        novalue4="unchecked"
-    }
-    else{
-        yesvalue4="unchecked";
-        novalue4="checked"
-    }
-    if(checked5=="yes"){
-        yesvalue5="checked";
-        novalue5="unchecked"
-    }
-    else{
-        yesvalue5="unchecked";
-        novalue5="checked"
-    }
-    if(checked6=="yes"){
-        yesvalue6="checked";
-        novalue6="unchecked"
-    }
-    else{
-        yesvalue6="unchecked";
-        novalue6="checked"
-    }
-    if(checked7=="yes"){
-        yesvalue7="checked";
-        novalue7="unchecked"
-    }
-    else{
-        yesvalue7="unchecked";
-        novalue7="checked"
-    }
-    if(checked8=="yes"){
-        yesvalue8="checked";
-        novalue8="unchecked"
-    }
-    else{
-        yesvalue8="unchecked";
-        novalue8="checked"
-    }
-    if(checked9=="yes"){
-        yesvalue9="checked";
-        novalue9="unchecked"
-    }
-    else{
-        yesvalue9="unchecked";
-        novalue9="checked"
-    }
-//    var yesvalue3="checked";
-
-   
-    //logger.fatal("All data=====>>", checked1,checked2,checked3);
-   pdf.Pdf(yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,email)
-      // pdf.mail(email)
-       res.send({
-           "message":"success"
-       })
-})
+    router.post('/Convert_Pdf', cors(), async function (req, res) {
+        //var flag=0;
+        let checked1=req.body.SelectedValues1;
+        let checked2=req.body.SelectedValues2;
+        let checked3=req.body.SelectedValues3;
+        let checked4=req.body.SelectedValues4;
+        let checked5=req.body.SelectedValues5;
+        let checked6=req.body.SelectedValues6;
+        let checked7=req.body.SelectedValues7;
+        let checked8=req.body.SelectedValues8;
+        let checked9=req.body.SelectedValues9;
+        let email=req.body.email;
+        let flag=0;
+       // let checked3=req.body.SelectedValues3;
+        if(checked1=="1"){
+            yesvalue1="checked";
+            novalue1="unchecked";
+            
+        }
+        else{
+            yesvalue1="unchecked";
+            novalue1="checked";
+            flag=1
+    
+        }
+        if(checked2=="1"){
+            yesvalue2="checked";
+            novalue2="unchecked";
+            
+        }
+        else{
+            yesvalue2="unchecked";
+            novalue2="checked";
+            flag=1
+        }
+        if(checked3=="1"){
+            yesvalue3="checked";
+            novalue3="unchecked"
+           
+        }
+        else{
+            yesvalue3="unchecked";
+            novalue3="checked";
+            flag=1
+        }
+        if(checked4=="1"){
+            yesvalue4="checked";
+            novalue4="unchecked"
+        }
+        else{
+            yesvalue4="unchecked";
+            novalue4="checked";
+            flag=1
+        }
+        if(checked5=="1"){
+            yesvalue5="checked";
+            novalue5="unchecked"
+        }
+        else{
+            yesvalue5="unchecked";
+            novalue5="checked";
+            flag=1;
+        }
+        if(checked6=="1"){
+            yesvalue6="checked";
+            novalue6="unchecked"
+        }
+        else{
+            yesvalue6="unchecked";
+            novalue6="checked";
+            flag=1;
+        }
+        if(checked7=="1"){
+            yesvalue7="checked";
+            novalue7="unchecked"
+        }
+        else{
+            yesvalue7="unchecked";
+            novalue7="checked";
+            flag=1;
+        }
+        if(checked8=="1"){
+            yesvalue8="checked";
+            novalue8="unchecked"
+        }
+        else{
+            yesvalue8="unchecked";
+            novalue8="checked";
+            flag=1;
+        }
+        if(checked9=="1"){
+            yesvalue9="checked";
+            novalue9="unchecked"
+    
+        }
+        else{
+            yesvalue9="unchecked";
+            novalue9="checked";
+            flag=1
+        }
+    //    var yesvalue3="checked";
+    
+       console.log("in 781",flag);
+        //console.log("All data=====>>", checked1,checked2,checked3);
+       pdf.Pdf(yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,email)
+          // pdf.mail(email)
+          
+           res.send({
+               "message":"success",
+               flag:flag
+           })
+    })
 
 //=========================================pdfviewer=============================================
 
@@ -835,14 +882,24 @@ router.post('/installationdetails', cors(), function(req, res){
     }))
   })  
 //==================================bulkschedules============================================//
-  router.post('/BulkSchedules', cors(),async function(req, res){
+router.post('/BulkSchedules', cors(),async function(req, res){
     console.log(req.body);
-
    var schedules=req.body;
-    console.log("schedules",schedules.schedule.schedule);
+    console.log("schedules",schedules.schedule.schedule[0]);
+    console.log("schedules",schedules.schedule.schedule[1]);
+   // console.log("schedules",schedules.schedule.schedule[2]);
     console.log("length",schedules.schedule.schedule.length);
-    console.log("reqdate",schedules.schedule.schedule[0].selectedStartDate);
-    for(let i=0;i<schedules.schedule.schedule.length;i++){
+    if(schedules.schedule.schedule.length==0)
+    {
+        res.send({
+            "message":"Please Schedule the selected Buildings",
+            "flag":1
+        })
+  
+    }
+    else{
+    //console.log("reqdate",schedules.schedule[0].reqdate);
+    for(let i=0;i<schedules.schedule.length;i++){
         console.log(i,"i")
     let uidate = schedules.schedule.schedule[i].selectedStartDate;
    var date =  moment(new Date(uidate.substr(0, 16)));
@@ -854,8 +911,10 @@ router.post('/installationdetails', cors(), function(req, res){
     res.send({
         "message":"Your Buildings are scheduled for service. Please visit booking history for details"
     })
+  }
    
   })
+//===================================================================================//  
 
 router.post('/blockchain', cors(),async function(req, res){
 
