@@ -16,7 +16,11 @@
 
 var express = require('express'),
     router = express.Router(),
-    cors = require('cors');
+    cors = require('cors'),
+    multipart = require("connect-multiparty"),
+    multer = require("multer"),
+    path = require('path');
+    // log4js = require('log4js');
 
 var con = require('../mysql_connection/dbConfig.js'),
     login = require('../core/login.js'),
@@ -46,17 +50,75 @@ var con = require('../mysql_connection/dbConfig.js'),
     path = require('path');
     
     
+    book = require('../core/servicehistory');
+
+let moment = require('moment');
+
 let Appeal = require('../core/Appeal'),
-    moment = require('moment');
+    hr_login = require('../core/Hr_login'),
+    trainer_login = require('../core/Trainer_login'),
+    hr_registration = require('../core/Hr_registration'),
+    Employee_profile = require('../core/Employee_profile'),
+    email_otp_verify = require('../core/Email_otp_verify'),
+    hr_forget_password = require('../core/Hr_Forget_password'), 
+    trainer_forget_password = require('../core/Trainer_forget_password'),
+    hr_forget_password_otp_verify = require('../core/Hr_forget_password_otp_verify'),
+    trainer_forget_password_otp_verify = require('../core/Trainer_forget_password_otp_verify'),
+    safety_officer_details = require('../core/Employee_safetyofficer_profile_showup'),
+    other_employee_details = require('../core/Employee_other_category_showup'),
+    loginValidation = require('../validation/hr_login'),
+    classroom =  require('../core/Classroom'),
+    scheduling =  require('../core/Scheduling'),
+    availability = require('../core/Classroom_availability'),
+    available_date1 =  require('../core/Available_date_showup'),
+    photo = require('../core/Photo_upload'),
+    seat_availability = require('../core/seat_availability'),
+    trainer_trainee_view = require('../core/Trainer_trainee_view'),
+    company_profile = require('../core/Company_profile'),
+    company_trading_license = require('../core/Company_trade_license'),
+    trainer_account = require('../core/Trainer_registration'),
+    training_booking = require('../core/Booking_for_training'),
+    safety_officer = require('../core/Safety_officer_direct_exam'),
+    partial_booking = require('../core/Partial_booking'),
+    course_view = require('../core/Course_view'),
+    trainer_names = require('../core/Trainer_names'),
+    course_creation = require('../core/Course_creation'),
+    time_slots_list = require('../core/Time_slots_list'),
+    Trained_Employees = require('../core/Trained_Employees_list'),
+    Untrained_Employees = require('../core/Untrained_Employees_showup'),
+    schedule_summary = require('../core/Schedule_summary'),
+    bulk_booking = require('../core/Bulk_booking'),
+    certificate = require("../core/certificate"),
+    uploadSalama = require("../core/uploadbulkemployee"),
+    general_login = require("../core/General_login"),
+    Untrained_Employees_schedule = require('../core/Untrained_Employees_showup_schedule'),
+    ip = require('ip');
+
+   
 
 const Cryptr = require('cryptr'),
     cryptr = new Cryptr('myTotalySecretKey'),
     nodemailer = require('nodemailer'),
-   
-  // logger = require('morgan'),
-    fs = require('fs');
-var  log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+    fs = require("fs"),
+    logger = require('morgan');
+    //logger = log4js.getLogger('Aman_project');
+
+let ipAddress = ip.address();
+console.log("ips====>", ipAddress);
+const storage = multer.diskStorage({
+    // notice you are calling the multer.diskStorage() method here, not multer()
+    // destination: function(req, file, cb) {
+    //     cb(null, '/home/kavitha/Videos/salama_docs/Salama_backend_v0.1/uploads/')
+    // },
+    destination: function(req, file, cb) {
+        cb(null, "/var/www/html/");
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+    
+var multipartMiddleware = multipart();
 
 /* GET home page. */
 router.get('/', function (request, response, next) {
@@ -940,8 +1002,1395 @@ var params={
    message: err.message
 }))
     })
+
+//=========================================Login=============================================//
+router.post("/Trainer_account_creation", cors(), (req, res) => {
+    const data = req.body;
+    const token = req.headers.token;
+    console.log(token, "initialtest");
+
+    trainer_account.trainer_account(data, token).then(result => {
+        console.log(result);
+        res.status(result.status).json({
+            message: result.message
+        });
+    }).catch(err => res.status(err.status).json({
+        message: err.message
+    }).json({
+        status: err.status
+    })
+    );
+});
+
+  //=========================================Login=============================================//
+
+  router.post("/Hr_login", cors(), async (req, res) => {
+    const login = req.body;
+    let Company_Email = req.body.Company_Email;
+    let Password = req.body.Password;
+
+    if (!Company_Email || !Password) {
+      return res.send({
+        status: 402,
+        message: "Please fill all the fields"
+      });
+    } else {
+      hr_login
+        .hr_login(login)
+        .then(result => {
+          console.log(result);
+
+          res.status(result.status).json({
+            message: result
+          });
+        })
+        .catch(err =>
+          res
+            .status(err.status)
+            .json({
+              message: err.message
+            })
+            .json({
+              status: err.status
+            })
+        );
+    }
+  });
+
+  //=================================TrainerLogin=============================================//
+  router.post("/Trainer_login", cors(), (req, res) => {
+    const trainer_login_Object = req.body;
+    console.log("Routes_console", trainer_login_Object);
+
+    trainer_login
+      .trainer_login(trainer_login_Object)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+  //=======================Appeal===============================================//
+  router.post("/Appeal", cors(), (req, res) => {
+    const Appeal_Object = req.body;
+    console.log(Appeal_Object);
+    let service = Appeal_Object.service;
+    let Description = Appeal_Object.Description;
+    if (!service || !Description) {
+      return res.send({
+        status: 400,
+        message: "Please fill all the fields"
+      });
+    } else {
+      Appeal.Appeal(Appeal_Object)
+        .then(result => {
+          console.log(result);
+
+          res.status(result.status).json({
+            message: result
+          });
+        })
+        .catch(err =>
+          res
+            .status(err.status)
+            .json({
+              message: err.message
+            })
+            .json({
+              status: err.status
+            })
+        );
+    }
+  });
+  //=======================================General Registartion======================================================//
+  router.post("/General_registration_otp_verify", cors(), (req, res) => {
+    const otp_verify_request = req.body;
+    console.log(otp_verify_request);
+    if (!req.body.otp) {
+      return res.send({
+        status: 400,
+        message: "Please provide a valid otp"
+      });
+    } else {
+      general_registration_otp_verify
+        .General_registration_otp_verify(otp_verify_request)
+        .then(result => {
+          console.log(result);
+
+          res.status(result.status).json({
+            message: result
+          });
+        })
+        .catch(err =>
+          res
+            .status(err.status)
+            .json({
+              message: err.message
+            })
+            .json({
+              status: err.status
+            })
+        );
+    }
+  });
+
+  //==============================================================================================//
+  //=================================TrainerLogin=============================================//
+  router.post("/General_Login", cors(), (req, res) => {
+    const general_login_Object = req.body;
+    console.log("Routes_console", general_login_Object);
+
+    general_login
+      .general_login(general_login_Object)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+
+  //=============================================Trainer account creation============
+  router.post("/Trainer_account_creation", cors(), (req, res) => {
+    const trainer_Object = req.body;
+    console.log(trainer_Object, "initialtest");
+
+    trainer
+      .trainer_account(trainer_Object)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result.message
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+
+  //=============================================================================//
+  router.post("/Hr_Registration", cors(), (req, res) => {
+    const hr = req.body;
+    console.log(hr);
+    if (!hr.Company_Email || !hr.Password) {
+      return res.send({
+        status: 400,
+        message: "Invalid email id or password"
+      });
+    } else {
+      hr_registration
+        .hr_registration(hr)
+        .then(result => {
+          console.log(result);
+
+          res.status(result.status).json({
+            message: result
+          });
+        })
+        .catch(err =>
+          res
+            .status(err.status)
+            .json({
+              message: err.message
+            })
+            .json({
+              status: err.status
+            })
+        );
+    }
+  });
+  //=============================================================================================//
+  router.post("/Hr_registration_otp_verify", cors(), (req, res) => {
+    const otp_verify_request = req.body;
+    console.log(otp_verify_request);
+    if (!req.body.otp) {
+      return res.send({
+        status: 400,
+        message: "Please provide a valid otp"
+      });
+    } else {
+      hr_registration_otp_verify
+        .hr_registration_otp_verify(otp_verify_request)
+        .then(result => {
+          console.log(result);
+
+          res.status(result.status).json({
+            message: result
+          });
+        })
+        .catch(err =>
+          res
+            .status(err.status)
+            .json({
+              message: err.message
+            })
+            .json({
+              status: err.status
+            })
+        );
+    }
+  });
+  //============================================================================================//
+  router.post('/Untrained_Employees_list', cors(), (req, res) => {
+
+   
+    const token = req.headers.token;
+    const language = req.headers.language;
+    const data = req.body;
+    console.log(data,token,language)
+  
+
+              Untrained_Employees
+                    .Untrained_Employees(data,token,language)
+            .then(result => {
+                console.log(result)
+
+               
+                res
+                    .status(result.status)
+                    .json({
+                        message: result,
+                    
+                    });
+
+            })
+            .catch(err => res.status(err.status).json({
+                message: err.message
+            }).json({
+                status: err.status
+            }));
+    
+});
+router.post('/Trained_Employees_list', cors(), (req, res) => {
+
+   
+  const token = req.headers.token;
+  const language = req.headers.language;
+  const data = req.body;
+  console.log(data,token,language)
+
+
+            Trained_Employees
+                  .Trained_Employees(data,token,language)
+          .then(result => {
+              console.log(result)
+
+             
+              res
+                  .status(result.status)
+                  .json({
+                      message: result,
+                  
+                  });
+
+          })
+          .catch(err => res.status(err.status).json({
+              message: err.message
+          }).json({
+              status: err.status
+          }));
+  
+});
+
+
+  //==============================================================================================//
+  router.post(
+    "/Employee_Profile",
+    // upload.single("file"),
+    cors(),
+    (req, res) => {
+      const EmployeeProfile = req.headers;
+      console.log(EmployeeProfile);
+      // let file = req.file;
+      // var ipAddress = ip.address();
+      // console.log("ips====>", ipAddress);
+      // console.log(file, "file_details");
+      // var path = "http://" + ipAddress + "/" + file.filename;
+      // console.log(path, "path");
+      // const filename_blob = fs.readFileSync(req.file.path);
+      // const filename_url = req.file.path;
+      // // let filename = new Buffer(fs.readFileSync(req.file.path)).toString("base64")
+
+      // console.log(filename_url, "Avanthiiii");
+      // console.log("http://" + ipAddress + "/" + file.filename);
+
+      // console.log(req.file, "fileeeee");
+
+      Employee_profile.Employee_profile(
+        EmployeeProfile
+        // filename_blob,
+        // filename_url,
+        // path
+      )
+        .then(result => {
+          console.log(result);
+
+          res.status(result.status).json({
+            message: result
+          });
+        })
+
+        .catch(err =>
+          res
+            .status(err.status)
+            .json({
+              message: err.message
+            })
+            .json({
+              status: err.status
+            })
+        );
+    }
+  );
+  //====================================email-otp-verify========================================//
+  router.post("/Email_otp_verification", cors(), (req, res) => {
+    const email_otp_verify_request = req.body;
+    console.log(email_otp_verify_request);
+    if (!req.body.otp) {
+      return res.send({
+        status: 400,
+        message: "Please provide a valid otp"
+      });
+    } else {
+      email_otp_verify
+        .email_otp_verify(email_otp_verify_request)
+        .then(result => {
+          console.log(result);
+
+          res.status(result.status).json({
+            message: result
+          });
+        })
+        .catch(err =>
+          res
+            .status(err.status)
+            .json({
+              message: err.message
+            })
+            .json({
+              status: err.status
+            })
+        );
+    }
+  });
+  //====================================Forget password========================================//
+  router.post("/Hr_forget_password", cors(), (req, res) => {
+    const hr_orget_password_request = req.body;
+    console.log(hr_orget_password_request);
+    if (!req.body.password || !req.body.confirmpassword || !req.body.email_id) {
+      return res.send({
+        status: 400,
+        message: "Please fill all the fields"
+      });
+    }
+
+    hr_forget_password
+      .hr_forget_password(hr_orget_password_request)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+  //====================================forget_email_otp_verification===============================//
+  router.post("/Hr_forget_password_otp_verify", cors(), (req, res) => {
+    const otp_verify_request = req.body;
+    console.log("otp", otp_verify_request);
+    if (!req.body.otp) {
+      return res.send({
+        status: 400,
+        message: "Please provide a valid otp"
+      });
+    } else {
+      hr_forget_password_otp_verify
+        .hr_forget_password_otp_verify(otp_verify_request)
+        .then(result => {
+          console.log(result);
+
+          res.status(result.status).json({
+            message: result
+          });
+        })
+        .catch(err =>
+          res
+            .status(err.status)
+            .json({
+              message: err.message
+            })
+            .json({
+              status: err.status
+            })
+        );
+    }
+  });
+  //==============================================================================================//
+  router.post("/Trainer_forget_password", cors(), (req, res) => {
+    const trainer_forget_password_request = req.body;
+    console.log(trainer_forget_password_request);
+    if (!req.body.password || !req.body.confirmpassword || !req.body.email_id) {
+      return res.send({
+        status: 400,
+        message: "Please fill all the fields"
+      });
+    } else {
+      trainer_forget_password
+        .trainer_forget_password(trainer_forget_password_request)
+        .then(result => {
+          console.log(result);
+
+          res.status(result.status).json({
+            message: result
+          });
+        })
+        .catch(err =>
+          res
+            .status(err.status)
+            .json({
+              message: err.message
+            })
+            .json({
+              status: err.status
+            })
+        );
+    }
+  });
+  //===============================================================================================//
+  router.post("/Trainer_forget_password_otp_verify", cors(), (req, res) => {
+    const otp_verify_request = req.body;
+    console.log(otp_verify_request);
+    if (!req.body.otp) {
+      return res.send({
+        status: 400,
+        message: "Please provide a valid otp"
+      });
+    } else {
+      trainer_forget_password_otp_verify
+        .trainer_forget_password_otp_verify(otp_verify_request)
+        .then(result => {
+          console.log(result);
+
+          res.status(result.status).json({
+            message: result
+          });
+        })
+        .catch(err =>
+          res
+            .status(err.status)
+            .json({
+              message: err.message
+            })
+            .json({
+              status: err.status
+            })
+        );
+    }
+  });
+  //========================================Safetyofficer_detail_showup===========================//
+  router.post("/Safetyofficer_details", cors(), (req, res) => {
+    const token = req.headers.token;
+    const request = req.body;
+    console.log(request);
+
+    safety_officer_details
+      .safety_officer_details(request, token)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+
+  //==================================================================================================//
+  router.post("/Other_employee_details", cors(), (req, res) => {
+    const token = req.headers.token;
+    const request = req.body;
+    console.log(request);
+
+    other_employee_details
+      .other_employee_details(request, token)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+  //=============================================================================================//
+  router.post('/Untrained_Employees_list', cors(), (req, res) => {
+  
+     
+    const token = req.headers.token;
+    const language = req.headers.language;
+    const data = req.body;
+    console.log(data,token,language)
+  
+  
+              Untrained_Employees
+                    .Untrained_Employees(data,token,language)
+            .then(result => {
+                console.log(result)
+  
+               
+                res
+                    .status(result.status)
+                    .json({
+                        message: result,
+                    
+                    });
+  
+            })
+            .catch(err => res.status(err.status).json({
+                message: err.message
+            }).json({
+                status: err.status
+            }));
+    
+  });
+  //=============================================================================================//
+
+  //=======================================Schedule=================================================//
+  router.post('/Classroom', cors(), (req, res) => {
+
+    const data = req.body;
+      const token = req.headers.token;
+    const language = req.headers.language;
+    console.log(data, "request data");
+    console.log(token, "token");
+    let classroom_id = data.classroom_id;
+    let trainer_id = data.trainer_id;
+    let trainer_email_id = data.trainer_email_id;
+    let address = data.address;
+    let number_of_seats = data.number_of_seats;
+    let available_date = data.available_date;
+    
+    
+
+
+   
+    if(!classroom_id || !trainer_name || !address || !number_of_seats || !available_date ){
+        return res.send({
+            status : 402,
+            message : "Please fill all the fields"
+        })
+    }
+    else{
+    
+
+              classroom
+                    .classroom(data,token,language)
+            .then(result => {
+              console.log(result);
+
+            })
+            .catch(err => res.status(err.status).json({
+                message: err.message
+            }).json({
+                status: err.status
+            }));
+       }
+
+
+    
+ });
+  //=============================================================================================//
+  router.post('/Schedule', cors(), (req, res) => {
+
+    const data = req.headers;
+    const request = req.body
+    console.log(data)
+    console.log(request,"<======request")
+   
+    if(!data)
+    {
+        return res.send({
+            status : 400,
+            message : "Please fill required the fields"
+        })
+    }
+    else{
+    
+
+          scheduling
+            .scheduling(data,request)
+            .then(result => {
+              console.log(result);
+              res.status(result.status).json({
+                message: result
+              });
+
+            
+
+            })
+            .catch(err => res.status(err.status).json({
+                message: err.message
+            }).json({
+                status: err.status
+            }));
+        }
+    
+}); 
+//====================================================================================//
+router.post('/Untrained_Employees_Schedule', cors(), (req, res) => {
+
+   
+  const token = req.headers.token;
+  const language = req.headers.language;
+  const data = req.body;
+  console.log(data,token,language)
+  console.log(data,"data====>")
+
+
+            Untrained_Employees_schedule
+                  .Untrained_Employees_schedule(data,token,language)
+          .then(result => {
+              console.log(result)
+
+             
+              res
+                  .status(result.status)
+                  .json({
+                      message: result,
+                  
+                  });
+
+          })
+          .catch(err => res.status(err.status).json({
+              message: err.message
+          }).json({
+              status: err.status
+          }));
+  
+});
+//====================================================================================//
+  router.post("/Classroom_availability", cors(), (req, res) => {
+    let data = req.body;
+    let token = req.headers.token;
+
+    console.log(data);
+
+    availability
+      .availability(data, token)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+  //==============================================================================================//
+  router.post("/Classroom_available_date", cors(), (req, res) => {
+    const token = req.headers.token;
+    const data = req.body;
+    // console.log(request)
+
+    available_date1
+      .available_date1(token, data)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+  //========================Photo_upload===================================================================//
+  // router.get('/Photo_upload', cors(), (req, res) => {
+
+  // let file = req.photo;
+  // let Employee_ID = req.Employee_ID;
+  //     let ipAddress = ip.address();
+  //     console.log("ips====>", ipAddress);
+  //     console.log(file,"file_details")
+  //     let path = 'http://' + ipAddress + '/' + file.filename;
+  //     console.log(path,"path")
+  //     const filename_blob = fs.readFileSync(req.file.path)
+  //     const filename_url = req.file.path
+
+  //                       photo
+  //                             .photo(filename_url,Employee_ID)
+  //                                    .then(result => {
+  //                                            console.log(result)
+
+  //                        res
+  //                           .status(result.status)
+  //                           .json({
+  //                                   message: result,
+
+  //     });
+
+  // })
+  // .catch(err => res.status(err.status).json({
+  // message: err.message
+  // }).json({
+  // status: err.status
+  // }));
+
+  // });
+  //============================================================================================//
+  router.post("/Seat_availability", cors(), (req, res) => {
+    let data = req.body;
+    let token = req.headers.token;
+
+    console.log(data);
+
+    seat_availability
+      .seat_availability(data, token)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+  //================================Trainer_trainee_view=========================================//
+  //============================================//
+  router.post("/Feedback", cors(), function(req, res) {
+    // var id= req.body.id
+    var Company_Email = req.body.Company_Email;
+    var comments = req.body.comments;
+    console.log(Company_Email, "fhdkhfd");
+    feedback.feedback(Company_Email, comments);
+
+    if (!Company_Email || !comments.trim()) {
+      res.status(400).json({
+        message: "Please enter the details completely !"
+      });
+    } else {
+      feedback
+        .feedback(Company_Email, comments)
+        .then(result => {
+          res.send({
+            message: "schedule details saved",
+            status: true,
+            result: result
+          });
+        })
+        .catch(err =>
+          res.status(err.status).json({
+            message: err.message
+          })
+        );
+    }
+  });
+  //=============================================
+  router.post("/Trainer_trainee_view", cors(), (req, res) => {
+    let data = req.body;
+    let token = req.headers.token;
+
+    console.log(data);
+
+    trainer_trainee_view
+      .trainer_trainee_view(data, token)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+
+  //====================================Company_Profile============================================//
+  router.post("/Company_Profile", cors(), (req, res) => {
+    let data = req.body;
+    let token = req.headers.token
+    
+    console.log(data)
+    
+
+   
+         company_profile
+            .company_profile(data,token)
+            .then(result => {
+              console.log(result);
+      
+              res.status(result.status).json({
+                message: result
+              });
+            })
+            .catch(err => res.status(err.status).json({
+                message: err.message
+            }).json({
+                status: err.status
+            }));
+        
+    
+});
+//====================================Company_Profile============================================//
+router.get('/Company_trading_license', cors(), (req, res) => {
+
+    let data = req.headers
+    
+    console.log(data)
+    
+
+   
+         
+
+    console.log(data);
+
+    company_trading_license
+      .company_trading_license(data)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+
+  //================================================================================================//
+  router.post("/Booked_for_training", cors(), (req, res) => {
+    const data = req.body;
+    const value = req.headers;
+    const token = req.headers.token;
+    console.log(data, "Booked_employee_training");
+    if (!data) {
+      return res.send({
+        status: 400,
+        message: "Please fill all the fields"
+      });
+    }
+
+    training_booking
+      .training_booking(data, value)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+  //================================================================================================//
+//   router.post("/Safety_officer_direct_exam", cors(), (req, res) => {
+//     let data = req.body;
+//     let token = req.headers.token;
+
+//     console.log(data);
+
+//             })
+//             .catch(err => res.status(err.status).json({
+//                 message: err.message
+//             }).json({
+//                 status: err.status
+//             }));
+        
+    
+// });
+//================================================================================================//
+router.post('/Trained_Employees_list', cors(), (req, res) => {
+
+   
+  const token = req.headers.token;
+  const language = req.headers.language;
+  const data = req.body;
+  console.log(data,token,language)
+
+
+            Trained_Employees
+                  .Trained_Employees(data,token,language)
+          .then(result => {
+              console.log(result)
+
+             
+              res
+                  .status(result.status)
+                  .json({
+                      message: result,
+                  
+                  });
+
+          })
+          .catch(err => res.status(err.status).json({
+              message: err.message
+          }).json({
+              status: err.status
+          }));
+  
+});
+
+
+
        
+  
+
+  //=============================================================================================//
+  router.post("/Partial_booking", cors(), (req, res) => {
+    let data = req.body;
+    let token = req.headers.token;
+
+    console.log(data);
+
+    partial_booking
+      .partial_booking(data, token)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+  //==========================================================================================//
+  router.post("/Course_names", cors(), (req, res) => {
+    const token = req.headers.token;
+    const language = req.headers.language;
+    console.log(token);
+
+    course_view
+      .course_view(token, language)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+
+  //=============================================================================================//
+  router.get("/Trainer_names", cors(), (req, res) => {
+    const token = req.headers.token;
+    console.log(token);
+
+    trainer_names
+      .trainer_names(token)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+  //===============================================================================================//
+
+  router.post("/Course_creation", cors(), (req, res) => {
+    let data = req.body;
+    let token = req.headers.token
+    
+    console.log(data)
+
+   
+         course_creation
+            .course_creation(data,token)
+            .then(result => {
+                console.log(result)
+
+               
+                res
+                    .status(result.status)
+                    .json({
+                        message: result,
+                    
+                    });
+
+            })
+            .catch(err => res.status(err.status).json({
+                message: err.message
+            }).json({
+                status: err.status
+            }));
+        
+    
+});
+//============================================================================================//
+router.post("/Time_slots_list", cors(), (req, res) => {
+  let data = req.body;
+  let token = req.headers.token;
+  let language = req.headers.language;
+
+  console.log(data);
+
+  time_slots_list
+    .time_slots_list(data,token,language)
+    .then(result => {
+      console.log(result);
+
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+});
+//===========================================================================================//
+router.get("/Schedule_summary", cors(), (req, res) => {
+  //let data = req.body;
+  let request= req.headers;
+ // console.log(data);
+
+  schedule_summary
+    .schedule_summary(request)
+    .then(result => {
+      console.log(result);
+
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+})
+//========================================================================================//
+router.post("/Bulk_booking", cors(), (req, res) => {
+  //let data = req.body;
+  let request= req.headers;
+  let data = req.body
+ // console.log(data);
+
+  bulk_booking
+    .bulk_booking(request,data)
+    .then(result => {
+      console.log(result);
+
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+})
+    // console.log(data);
+
+    // course_creation
+    //   .course_creation(data, token)
+    //   .then(result => {
+    //     console.log(result);
 
 
+  //====================================Company_Profile============================================//
+  router.get("/Company_trading_license", cors(), (req, res) => {
+    let data = req.headers;
+
+    console.log(data);
+
+    company_trading_license
+      .company_trading_license(data)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+
+  //====================================EXAM RESULTS============================================//
+  router.use("/static", express.static(path.join(__dirname, "upload")));
+  router.post("/Results", cors(), (request, response) => {
+    certificate.Certificate(request, function(error, result) {
+      console.log("err", result);
+      // console.log("result", result);
+      if (error) {
+        response.status(error.status).json({
+          message: error
+        });
+      } else {
+        response.status(result.status).json({
+          message: result.message
+        });
+      }
+    });
+  });
+  //====================================FETCH CERTIFICATE============================================//
+  router.post("/getCertificate", cors(), (request, response) => {
+    certificate.getCertificate(request, function(error, result) {
+      console.log("err", error);
+      if (error) {
+        response.status(error.status).json({
+          message: error.message
+        });
+      } else {
+        response.status(result.status).json({
+          message: result.message
+        });
+      }
+    });
+  });
+  //====================================FETCH ATTENDANCE LIST============================================//
+  router.post("/getAttendance", cors(), (request, response) => {
+    certificate.getAttendance(request, function(error, result) {
+      console.log("err", error);
+      if (error) {
+        response.status(error.status).json({
+          message: error.message
+        });
+      } else {
+        response.status(result.status).json({
+          message: result.message
+        });
+      }
+    });
+  });
+
+  //=================================Trainer Attendance=============================================//
+  router.post("/Trainer_employee_list", cors(), (req, res) => {
+    const trainer_employee = req.body;
+    console.log("Trainer_employee_list_routes", trainer_employee);
+
+    const Trainer_Email = req.body.Trainer_emailid;
+    console.log("Trainer_Company_Email_routes", Trainer_Email);
+
+    trainer_attendance
+      .trainer_attendance(Trainer_Email)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+  router.post("/get_employee_attendance_list", cors(), (req, res) => {
+    const data = req.body;
+    const token = req.headers.token;
+    trainer_attendance
+      .get_employee_attendance(data)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  });
+router.post("/uploadbulkemployee", multipartMiddleware, cors(), (req, res) => {
+      const data = req.files.file.path;
+      console.log("file", data);
+      const token = req.headers.token;
+      // const email = req.headers.email;
+      uploadSalama.uploadbulkemployee(data).then(result => {
+          console.log(result);
+          res.status(result.status).json({
+            message: result
+          });
+        }).catch(err => res.status(err.status).json({
+              message: err.message
+            }).json({
+              status: err.status
+            })
+        );
+});
+
+router.use("/download", express.static(path.join(__dirname, "upload")));
+  // router.post("/getCSVtemplate", cors(), (request, response) => {
+  //   res.send("/bulkemployee_template.csv");
+  // });
+//========================================================================
 
 module.exports = router;
