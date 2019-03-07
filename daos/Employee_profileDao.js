@@ -1,5 +1,9 @@
+// const con = require("../config/DBConfig");
 const con = require("../mysql_connection/dbConfig");
-const mysqlConnection = require("../mysql_connection/Connection");
+
+// const mysqlConnection = require("../config/Connection");
+const mysqlConnection = require("../mysql_connection/connection");
+
 const query = require("../mysql_connection/queries");
 // const mysqlConnection = require("../config/config_test");
 
@@ -153,35 +157,36 @@ async function Booking_for_training(Employee_data) {
 }
 //==================================================================================================//
 
-function Trained_Employees_list(Company_Trade_Lincense_No, language, status) {
-  return new Promise(async function(resolve, reject) {
-    if (language == "en") {
-      console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
+// function Trained_Employees_list(Company_Trade_Lincense_No, language, status) {
+//   return new Promise(async function(resolve, reject) {
+//     if (language == "en") {
+//       console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
+//       console.log(status,"status")
 
-      var res1 = await mysqlConnection.query_execute(
-        "select * from Employee_Profile where Company_Trade_Lincense_No=? and Employee_ID in (select Employee_ID from Results where result_en=?) ",
-        [Company_Trade_Lincense_No, status]
-      );
-      console.log("res1===>", res1.data[0].Employee_ID);
-      return resolve({ result: res1.data });
-    } else {
-      console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
+//       var res1 = await mysqlConnection.query_execute(
+//         "select * from Employee_Profile where Company_Trade_Lincense_No=? and National_ID in (select emirates_id from Results where result_en=?) ",
+//         [Company_Trade_Lincense_No, status]
+//       );
+//       console.log("res1===>", res1.data[0].Employee_ID);
+//       return resolve({ result: res1.data });
+//     } else {
+//       console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
 
-      var res1 = await mysqlConnection.query_execute(
-        "select * from Employee_Profile where Company_Trade_Lincense_No=? and Employee_ID in (select Employee_ID from Results where result_ar=?) ",
-        [Company_Trade_Lincense_No, status]
-      );
-      console.log("res1===>", res1);
-      return resolve({ result: res1.data });
-    }
-  });
-}
+//       var res1 = await mysqlConnection.query_execute(
+//         "select * from Employee_Profile where Company_Trade_Lincense_No=? and National_ID in (select emirates_id from Results where result_ar=?) ",
+//         [Company_Trade_Lincense_No, status]
+//       );
+//       console.log("res1===>", res1);
+//       return resolve({ result: res1.data });
+//     }
+//   });
+// }
 //=======================================================================================//
 function Employee_update(Emirates_ID, Company_Trade_Lincense_No, language) {
   return new Promise(async function(resolve, reject) {
     if (language == "en") {
       console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
-      console.log(Emirates_ID.length, "Emirates_ID");
+      console.log(Emirates_ID, "Emirates_ID");
       for (i = 0; i < Emirates_ID.length; i++) {
         var res1 = await mysqlConnection.query_execute(
           "update Employee_Profile set assigned_for_training =? where Company_Trade_Lincense_No = ? and National_ID =?",
@@ -195,12 +200,12 @@ function Employee_update(Emirates_ID, Company_Trade_Lincense_No, language) {
 }
 
 //===========================================================================================
-function Untrained_Employees_list(Company_Trade_Lincense_No, language) {
+function Untrained_Employees_schedule(Company_Trade_Lincense_No, language) {
   return new Promise(async function(resolve, reject) {
     if (language == "en") {
       var res2 = await mysqlConnection.query_execute(
-        "select * from Employee_Profile where  Company_Trade_Lincense_No=? and Category=? and  National_ID not in(select Emirates_ID from Results where result_en=?) ",
-        [Company_Trade_Lincense_No, "Others", "pass"]
+        "select * from Employee_Profile where  National_ID not in(select Emirates_ID from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ",
+        ["pass","NO",Company_Trade_Lincense_No, "Others"]
       );
       console.log("kavitha", res2.data);
       return resolve({ result: res2.data });
@@ -290,7 +295,7 @@ function trainer_id(trainer_name, language) {
   return new Promise(async function(resolve, reject) {
     if (language == "en") {
       var res2 = await mysqlConnection.query_execute(
-        "select * from Employee_Profile where  Company_Trade_Lincense_No=? and Category=? and  National_ID not in(select Emirates_ID from Results where result_en=?) ",
+        "select * from Employee_Profile where  Company_Trade_Lincense_No=? and Category=? and  National_ID not in(select National_Id from Results where result_en=?) ",
         [Company_Trade_Lincense_No, "Others", "pass"]
       );
       console.log("kavitha", res2.data);
@@ -299,13 +304,73 @@ function trainer_id(trainer_name, language) {
       console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
 
       var res1 = await mysqlConnection.query_execute(
-        "select * from Employee_Profile where Company_Trade_Lincense_No=? and Employee_ID in (select Employee_ID from Results where result_ar=?) ",
+        "select * from Employee_Profile where Company_Trade_Lincense_No=? and Employee_ID in (select National_Id from Results where result_ar=?) ",
         [Company_Trade_Lincense_No, status]
       );
       console.log("res1===>", res1);
       return resolve({ result: res1.data });
     }
   });
+}
+//===============================================================================================//
+async function notbooked_employee_list() {
+  return new Promise(async function(resolve, reject) {
+    mysqlConnection
+      .query_execute("SELECT * from Employee_Profile where Category=? and assigned_for_training <> ? ", ["Others","Booked"])
+      .then(function(result, err) {
+        if (err) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          console.log(result);
+          return resolve({ status: 200, message: result });
+        }
+      });
+  });
+}
+//=================================================================================================//
+function Untrained_Employees_list(Company_Trade_Lincense_No, language) {
+  return new Promise(async function(resolve, reject) {
+    if (language == "en") {
+      var res2 = await mysqlConnection.query_execute(
+        "select * from Employee_Profile where  National_ID not in(select National_Id from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ",
+        ["pass","NO",Company_Trade_Lincense_No, "Others"]
+      );
+      console.log("kavitha", res2.data);
+      return resolve({ result: res2.data });
+    } else {
+      console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
+
+      var res1 = await mysqlConnection.query_execute(
+        "select * from Employee_Profile where Company_Trade_Lincense_No=? and Employee_ID in (select National_Id from Results where result_ar=?) ",
+        [Company_Trade_Lincense_No, status]
+      );
+      console.log("res1===>", res1);
+      return resolve({ result: res1.data });
+    }
+  });
+}
+//===============================================================================================//
+function Trained_Employees_list(Company_Trade_Lincense_No,language,status) {
+
+  return new Promise( async function (resolve,reject){
+      if (language == 'en'){  
+    console.log("Company_Trade_Lincense_No",Company_Trade_Lincense_No)
+  
+              var res1= await mysqlConnection.query_execute("select * from Employee_Profile where Company_Trade_Lincense_No=? and National_ID in (select National_Id from Results where result_en=?) ",[Company_Trade_Lincense_No,status])
+    console.log("res1===>",res1)
+              return resolve({result:res1.data})
+          }
+           else{
+              console.log("Company_Trade_Lincense_No",Company_Trade_Lincense_No)
+  
+              var res1= await mysqlConnection.query_execute("select * from Employee_Profile where Company_Trade_Lincense_No=? and National_ID in (select National_Id from Results where result_ar=?) ",[Company_Trade_Lincense_No,status])
+    console.log("res1===>",res1)
+              return resolve({result:res1.data})
+           }
+  })
+  
 }
 
 module.exports = {
@@ -316,8 +381,11 @@ module.exports = {
   delete_Employee: delete_Employee,
   Booking_for_training: Booking_for_training,
   Trained_Employees_list: Trained_Employees_list,
-  Untrained_Employees_list: Untrained_Employees_list,
+  Untrained_Employees_schedule: Untrained_Employees_schedule,
   Employee_update: Employee_update,
-  Employee_name_schedule: Employee_name_schedule
+  Employee_name_schedule: Employee_name_schedule,
+  trainer_id : trainer_id,
+  notbooked_employee_list : notbooked_employee_list,
+  Untrained_Employees_list : Untrained_Employees_list
   //Photo_upload : Photo_upload
 };

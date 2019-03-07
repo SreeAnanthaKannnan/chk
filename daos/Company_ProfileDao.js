@@ -39,7 +39,7 @@ function company_trading_license(param) {
           console.log("something", err);
           return resolve({ status: 400, err: err });
         } else {
-          console.log(result);
+          console.log(result,"<=======result");
           return resolve({ result: result });
         }
       }

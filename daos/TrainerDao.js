@@ -1,5 +1,5 @@
 const con = require("../mysql_connection/dbConfig");
-const mysqlConnection = require("../mysql_connection/Connection");
+const mysqlConnection = require("../mysql_connection/connection");
 const query = require("../mysql_connection/queries");
 async function Trainer_information(params) {
   return new Promise(function(resolve, reject) {
@@ -223,6 +223,36 @@ async function get_employee_list(params) {
       });
   });
 }
+//==============================================================================================//
+function trainer_name_schedule(trainer_id, language) {
+  return new Promise(async function(resolve, reject) {
+    //  param = moment(param).format("YYYY-MM-DD")
+    if (language == "en") {
+      let sql = "SELECT Name_en FROM Trainer where id = ?";
+      await con.query(sql, [trainer_id], function(err, result) {
+        if (err) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          return resolve({ result: result });
+        }
+      });
+    } else {
+      let sql = "SELECT Name_ar FROM Trainer where id = '" + trainer_id + "'";
+      con.query(sql, function(err, result) {
+        if (!result) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          return resolve({ result: result });
+        }
+      });
+    }
+  });
+}
+//==================================================================================================//
 module.exports = {
   Trainer_information: Trainer_information,
   email_otp_update: email_otp_update,
@@ -232,5 +262,6 @@ module.exports = {
   Trainer_insert: Trainer_insert,
   Trainer_id_select: Trainer_id_select,
   Scheduler_information: Scheduler_information,
-  get_employee_list: get_employee_list
+  get_employee_list: get_employee_list,
+  trainer_name_schedule : trainer_name_schedule
 };

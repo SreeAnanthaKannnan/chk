@@ -760,6 +760,8 @@ let sql = "SELECT TIMEDIFF( '"+ end_time +"' , '" +start_time+ "') as starting_t
                     var res2= await 
                       mysqlConnection.insert_query("INSERT INTO Schedule(classroom_id,Emirates_ID,start_time,end_time,course_id,trainer_id,Company_Trade_Lincense_No,number_of_seats_selected,scheduling_date,scheduled_date,payment_status,amount,status)VALUES ?",query_values)
                     console.log("resvalue=========>res2",res2)
+                    var Employee_update= await mysqlConnection.query_execute("UPDATE Employee_Profile SET assigned_for_training =? where National_ID=?",["Booked",Emirates_ID[i]])
+                     console.log("pavannnnnnnnnnn",Employee_update)
 
                    }
                    return resolve({result:res2.data})

@@ -1,4 +1,4 @@
-const  scheduleDao = require ('../daos/ScheduleDao')
+const  scheduleDao = require ('../daos/SchedulingDao')
 const  ClassroomDao = require ('../daos/ClassroomDao')
 // const FeesdetailsDao = require('../DAO/FeesdetailsDao')
 const Employee_profileDao = require('../daos/Employee_profileDao')

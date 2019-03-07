@@ -47,7 +47,19 @@ exports.company_profile = (data, token) =>
           Company_Email,
           Number_of_employees
         ];
-        await CompanyDao.Company_profile_insert(query_value)
+        await CompanyDao.company_trading_license(Company_Email)
+        .then(async function(result) {
+          console.log("already exits=====>",result)
+          if(result.result.length!=0){
+            return resolve({
+              status: 200,
+              message: "Company Profile is already exists"
+            });
+          }
+          else{
+
+        
+          await CompanyDao.Company_profile_insert(query_value)
           .then(async function(result) {
             console.log("result", result);
             if (result.result.length != 0) {
@@ -57,6 +69,8 @@ exports.company_profile = (data, token) =>
               });
             }
           })
+        }
+        })
           .catch(async function(err) {
             return resolve({ status: 400, message: "something went wrong" });
           });

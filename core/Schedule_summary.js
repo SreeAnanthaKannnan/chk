@@ -1,6 +1,8 @@
 const  SessionDao = require ('../daos/SessionDao')
 const session_time = require('../utils/session_time_difference')
-const  ScheduleDao = require ('../daos/ScheduleDao')
+const  ScheduleDao = require ('../daos/SchedulingDao')
+const  TrainerDao = require ('../daos/TrainerDao')
+const CourseDao = require('../daos/CourseDao')
 const Employee_ProfileDao = require('../daos/Employee_profileDao')
 
 
@@ -16,7 +18,7 @@ exports.schedule_summary = (request) => new Promise(async(resolve, reject) => {
     console.log(query,"testinggggggggg")
     if(query.length ==0){
         resolve({
-            status:402,
+            status:400,
             message : "Invalid token"
         })
     }
@@ -45,10 +47,16 @@ exports.schedule_summary = (request) => new Promise(async(resolve, reject) => {
                 
                 await ScheduleDao.schedule_summary_value(Company_Trade_Lincense_No,language,status)
                 .then(async function(result) {
-                    console.log("result", result);
+                    console.log("result", result.result.data.length);
+                    if(result.result.data.length==0){
+                        return resolve({status:400,message:"Nobody are booked"})
+                    }
+                    else{
                     var value =[];
                     var obj ={}
                     var schedule_result=result.result.data
+                    
+                    console.log(schedule_result,"scheduleresult")
                     console.log(result.result.data[0].Emirates_ID,"length")
                     for(i=0;i<result.result.data.length;i++){
                         value.push(result.result.data[i].Emirates_ID)
@@ -56,16 +64,22 @@ exports.schedule_summary = (request) => new Promise(async(resolve, reject) => {
                                        console.log(value,"value")
                     await Employee_ProfileDao.Employee_name_schedule(value,language)
                        .then(async function(result){
-                           console.log(result.result[0],"kavitha")
+                           console.log(result,"kavitha------------")
                            let final_array =[]
-
+                           let final_array1 =[]
+                      if(language =="ar"){
                            for(i=0;i<result.result.length;i++){
+                              let trainer_Name = await TrainerDao.trainer_name_schedule(schedule_result[i].trainer_id,language)
+                                console.log(trainer_Name,"testing=============================")
+                                let course_Name = await CourseDao.course_name_schedule(schedule_result[i].course_id,language)
+                                console.log(course_Name,"testing1=============================")
+
                                let start_time = schedule_result[i].start_time;
                                let end_time = schedule_result[i].end_time
                                let amount = schedule_result[i].amount
                                let Emirates_ID = schedule_result[i].Emirates_ID
-                               let trainer_name = schedule_result[i].trainer_name
-                               let course_name = schedule_result[i].course_name
+                               let   trainer_name = trainer_Name.result[0].Name_ar
+                               let course_name = course_Name.result[0].name_ar
                                let Employee_name = result.result[i]
                                let classroom_id = schedule_result[i].classroom_id
                                obj={start_time:start_time,
@@ -76,24 +90,63 @@ exports.schedule_summary = (request) => new Promise(async(resolve, reject) => {
                                 course_name:course_name,
                                 trainer_name:trainer_name,
                             classroom_id:classroom_id}
+                            
 
                                final_array.push(obj)
 
                            }
                            return resolve({status : 200,message:final_array})
+                        }
+                        else{
+                            for(i=0;i<result.result.length;i++){
+                                let trainer_Name = await TrainerDao.trainer_name_schedule(schedule_result[i].trainer_id,language)
+                                  console.log(trainer_Name,"testing=============================")
+                                  let course_Name = await CourseDao.course_name_schedule(schedule_result[i].course_id,language)
+                                  console.log(course_Name,"testing1=============================")
+
+                                  
+                                 let start_time = schedule_result[i].start_time;
+                                 let end_time = schedule_result[i].end_time
+                                 let amount = schedule_result[i].amount
+                                 let Emirates_ID = schedule_result[i].Emirates_ID
+                                 let   trainer_name = trainer_Name.result[0].Name_en
+                                 let course_name = course_Name.result[0].name_en
+                                 let Employee_name = result.result[i]
+                                 let classroom_id = schedule_result[i].classroom_id
+                                 obj={start_time:start_time,
+                                  end_time:end_time,
+                                  amount:amount,
+                                  Emirates_ID:Emirates_ID,
+                                  Employee_name:Employee_name,
+                                  course_name:course_name,
+                                  trainer_name:trainer_name,
+                              classroom_id:classroom_id}
+                              
+  
+                                 final_array1.push(obj)
+  
+                             }
+                             return resolve({status : 200,message:final_array1})
+
+                        }
                        })
+                    }
                     // if(result.result.length !=0){
                         
                     // return resolve({status:200, message :result});}
                 })
+            
                     .catch(async function(err) {
                         console.log(err,"err")
                         return resolve({status : 400,message :"something went wrong"});
                     });
+                
 
 
              }
+            
             }
+        
 
 
 

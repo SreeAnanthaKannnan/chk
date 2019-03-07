@@ -1,6 +1,6 @@
 const  SessionDao = require ('../daos/SessionDao')
 const session_time = require('../utils/session_time_difference')
-const  ScheduleDao = require ('../daos/ScheduleDao')
+const  ScheduleDao = require ('../daos/SchedulingDao')
 const  classroomDao = require ('../daos/ClassroomDao')
 const  CourseDao = require ('../daos/CourseDao')
 
@@ -45,7 +45,7 @@ exports.bulk_booking = (request,data) => new Promise(async(resolve, reject) => {
                                     message : "session expired"
                                       })
              }
-             await Employee_ProfileDao.Untrained_Employees_list(Company_Trade_Lincense_No,language)
+             await Employee_ProfileDao.Untrained_Employees_schedule(Company_Trade_Lincense_No,language)
              .then(async function(result) {
                  console.log("result", result);
                  

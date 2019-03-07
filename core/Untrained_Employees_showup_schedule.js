@@ -3,20 +3,16 @@ const  Employee_profileDao = require ('../daos/Employee_profileDao')
 const session_time = require('../utils/session_time_difference')
 var base64ToImage = require('base64-to-image');
 const ab2str = require('arraybuffer-to-string')
-
-
-
-
 const language_detect = require('../utils/language_detect')
 const translate = require('../utils/translate')
  const fs = require("fs")
  
 
 
-exports.Trained_Employees = (data,token,language) => new Promise(async(resolve, reject) => {
+exports.Untrained_Employees_schedule = (data,token,language) => new Promise(async(resolve, reject) => {
     let Company_Trade_Lincense_No = data.Company_Trade_Lincense_No
    
-    let status = "pass";
+    // let status = data.status;
     
     // let Safety_Officer = request.safety_officer;
     console.log(token,"test")
@@ -48,14 +44,14 @@ exports.Trained_Employees = (data,token,language) => new Promise(async(resolve, 
                                       })
              }
              else{
-                 let Trained_Employees = await Employee_profileDao.Trained_Employees_list(Company_Trade_Lincense_No,language,status)
-            let result = Trained_Employees[0]
+                 let Untrained_Employees = await Employee_profileDao.Untrained_Employees_schedule(Company_Trade_Lincense_No,language)
+            let result = Untrained_Employees[0]
 console.log(result,"result")
 
 
                  return resolve({
                      status :200,
-                     message : Trained_Employees
+                     message : Untrained_Employees
                  })
                 
             }
@@ -63,7 +59,3 @@ console.log(result,"result")
             }
             
 })
-
-
-
-

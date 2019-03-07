@@ -85,7 +85,10 @@ let Appeal = require('../core/Appeal'),
     certificate = require("../core/certificate"),
     uploadSalama = require("../core/uploadbulkemployee"),
     general_login = require("../core/General_login"),
+    Untrained_Employees_schedule = require('../core/Untrained_Employees_showup_schedule'),
     ip = require('ip');
+
+   
 
 const Cryptr = require('cryptr'),
     cryptr = new Cryptr('myTotalySecretKey'),
@@ -1224,6 +1227,36 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
             }));
     
 });
+router.post('/Trained_Employees_list', cors(), (req, res) => {
+
+   
+  const token = req.headers.token;
+  const language = req.headers.language;
+  const data = req.body;
+  console.log(data,token,language)
+
+
+            Trained_Employees
+                  .Trained_Employees(data,token,language)
+          .then(result => {
+              console.log(result)
+
+             
+              res
+                  .status(result.status)
+                  .json({
+                      message: result,
+                  
+                  });
+
+          })
+          .catch(err => res.status(err.status).json({
+              message: err.message
+          }).json({
+              status: err.status
+          }));
+  
+});
 
 
   //==============================================================================================//
@@ -1483,6 +1516,39 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
           })
       );
   });
+  //=============================================================================================//
+  router.post('/Untrained_Employees_list', cors(), (req, res) => {
+  
+     
+    const token = req.headers.token;
+    const language = req.headers.language;
+    const data = req.body;
+    console.log(data,token,language)
+  
+  
+              Untrained_Employees
+                    .Untrained_Employees(data,token,language)
+            .then(result => {
+                console.log(result)
+  
+               
+                res
+                    .status(result.status)
+                    .json({
+                        message: result,
+                    
+                    });
+  
+            })
+            .catch(err => res.status(err.status).json({
+                message: err.message
+            }).json({
+                status: err.status
+            }));
+    
+  });
+  //=============================================================================================//
+
   //=======================================Schedule=================================================//
   router.post('/Classroom', cors(), (req, res) => {
 
@@ -1533,6 +1599,7 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
     const data = req.headers;
     const request = req.body
     console.log(data)
+    console.log(request,"<======request")
    
     if(!data)
     {
@@ -1548,6 +1615,11 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
             .scheduling(data,request)
             .then(result => {
               console.log(result);
+              res.status(result.status).json({
+                message: result
+              });
+
+            
 
             })
             .catch(err => res.status(err.status).json({
@@ -1557,7 +1629,40 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
             }));
         }
     
-}); //====================================================================================//
+}); 
+//====================================================================================//
+router.post('/Untrained_Employees_Schedule', cors(), (req, res) => {
+
+   
+  const token = req.headers.token;
+  const language = req.headers.language;
+  const data = req.body;
+  console.log(data,token,language)
+  console.log(data,"data====>")
+
+
+            Untrained_Employees_schedule
+                  .Untrained_Employees_schedule(data,token,language)
+          .then(result => {
+              console.log(result)
+
+             
+              res
+                  .status(result.status)
+                  .json({
+                      message: result,
+                  
+                  });
+
+          })
+          .catch(err => res.status(err.status).json({
+              message: err.message
+          }).json({
+              status: err.status
+          }));
+  
+});
+//====================================================================================//
   router.post("/Classroom_availability", cors(), (req, res) => {
     let data = req.body;
     let token = req.headers.token;
@@ -1740,16 +1845,11 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
          company_profile
             .company_profile(data,token)
             .then(result => {
-                console.log(result)
-
-               
-                res
-                    .status(result.status)
-                    .json({
-                        message: result,
-                    
-                    });
-
+              console.log(result);
+      
+              res.status(result.status).json({
+                message: result
+              });
             })
             .catch(err => res.status(err.status).json({
                 message: err.message
@@ -1768,10 +1868,7 @@ router.get('/Company_trading_license', cors(), (req, res) => {
     
 
    
-         company_trading_license
-            .company_trading_license(data)
-            .then(result => {
-                console.log(result)
+         
 
     console.log(data);
 
@@ -1795,6 +1892,7 @@ router.get('/Company_trading_license', cors(), (req, res) => {
           })
       );
   });
+
   //================================================================================================//
   router.post("/Booked_for_training", cors(), (req, res) => {
     const data = req.body;
@@ -1829,21 +1927,21 @@ router.get('/Company_trading_license', cors(), (req, res) => {
       );
   });
   //================================================================================================//
-  router.post("/Safety_officer_direct_exam", cors(), (req, res) => {
-    let data = req.body;
-    let token = req.headers.token;
+//   router.post("/Safety_officer_direct_exam", cors(), (req, res) => {
+//     let data = req.body;
+//     let token = req.headers.token;
 
-    console.log(data);
+//     console.log(data);
 
-            })
-            .catch(err => res.status(err.status).json({
-                message: err.message
-            }).json({
-                status: err.status
-            }));
+//             })
+//             .catch(err => res.status(err.status).json({
+//                 message: err.message
+//             }).json({
+//                 status: err.status
+//             }));
         
     
-});
+// });
 //================================================================================================//
 router.post('/Trained_Employees_list', cors(), (req, res) => {
 

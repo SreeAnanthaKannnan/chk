@@ -137,6 +137,31 @@ function Course_id_select(course_name,language) {
             console.log("res1===>",res1.data)
             return resolve({result:res1.data})
         }    
+          
+    })
+
+}
+//=====================================================================================//
+function course_name_schedule(course_id,language) {
+
+    return new Promise( async function (resolve,reject){
+        //  param = moment(param).format("YYYY-MM-DD")
+       
+         if(language =="en"){
+            var res1= await mysqlConnection.query_execute("SELECT name_en FROM Course where course_id=?",[course_id])
+            
+            console.log("res1===>",res1.data)
+            return resolve({result:res1.data})
+        }        
+          
+       
+    
+    else{
+        var res1= await mysqlConnection.query_execute("SELECT name_ar FROM Course where course_id =?",[course_id])
+            
+            console.log("res1===>",res1.data)
+            return resolve({result:res1.data})
+        }    
         
           
       
@@ -153,5 +178,6 @@ module.exports ={
     Course_display : Course_display,
     Course_display_arabic : Course_display_arabic,
     Course_id_select : Course_id_select,
-    Course_amount : Course_amount
+    Course_amount : Course_amount,
+    course_name_schedule : course_name_schedule
     }

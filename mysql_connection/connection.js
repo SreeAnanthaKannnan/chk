@@ -23,7 +23,7 @@ function connectionRelease() {
    });
 }
 
-exports.getConnection = () => {
+function getConnection() {
     return new Promise(resolve => {
       var connection = mysql.createConnection(dbConfig);
       connection.connect(function(err) {
@@ -39,7 +39,7 @@ exports.getConnection = () => {
     });
   };
   
-  exports.query_execute = (query, params, connection = "") => {
+ function query_execute(query, params, connection = "")  {
     return new Promise(resolve => {
       if (connection) {
         console.log(connection.threadId);
@@ -89,7 +89,7 @@ exports.getConnection = () => {
     });
   };
   
-  exports.insert_query = (query, params, connection = "") => {
+  function insert_query (query, params, connection = "")  {
     return new Promise((resolve, reject) => {
       if (connection) {
         connection.query(query, [[params]], function(error, result, fields) {
@@ -140,5 +140,11 @@ exports.getConnection = () => {
 
 module.exports = {
    connectionCheck:connectionCheck(),
-   connectionRelease:connectionRelease()
+   connectionRelease:connectionRelease(),
+   getConnection : getConnection,
+   query_execute : query_execute,
+   insert_query : insert_query,
+
+
+
 }
