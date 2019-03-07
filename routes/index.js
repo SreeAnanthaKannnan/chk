@@ -1558,8 +1558,8 @@ router.post('/Trained_Employees_list', cors(), (req, res) => {
     console.log(data, "request data");
     console.log(token, "token");
     let classroom_id = data.classroom_id;
-    let trainer_id = data.trainer_id;
-    let trainer_email_id = data.trainer_email_id;
+    let trainer_name = data.trainer_name;
+    // let trainer_email_id = data.trainer_email_id;
     let address = data.address;
     let number_of_seats = data.number_of_seats;
     let available_date = data.available_date;
@@ -1581,6 +1581,9 @@ router.post('/Trained_Employees_list', cors(), (req, res) => {
                     .classroom(data,token,language)
             .then(result => {
               console.log(result);
+              res.status(result.status).json({
+                message: result
+              });
 
             })
             .catch(err => res.status(err.status).json({

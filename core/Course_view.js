@@ -41,16 +41,19 @@ exports.course_view = (token,language) =>
       } else {
            if(language =="en"){
           await CourseDao.Course_display()
-          .then(async function (result) {
+          .then(async function (result,err) {
+            if(result){
             console.log("result",result );
             
               return resolve({
                 status: 200,
                 message: result.result
               });
+            }
              
           })
           .catch(async function (err) {
+            
 
             return resolve({ status: 400, message: "Something Went Wrong" });
           });

@@ -35,8 +35,9 @@ function Course_display() {
         //  param = moment(param).format("YYYY-MM-DD")
         //  console.log(param,"date")
                 
-        await  con.query("SELECT name FROM Course ", (err, result) => {
-            if(!result) { 
+        await  con.query("SELECT name_en FROM Course ", (err, result) => {
+            
+            if(err) { 
                 //  console.log(result,"achieved")
                 console.log("something",err)
                 return resolve({ status: 400, err : err })
@@ -52,7 +53,7 @@ function Course_display() {
             //     console.log(b,"value===========>")
             //     value.push (b)
             var data = {}
-            data = {id:i+1 , name :result[i].name}
+            data = {id:i+1 , name :result[i].name_en}
             value.push(data)
             
             }
