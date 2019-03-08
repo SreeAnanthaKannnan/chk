@@ -94,7 +94,89 @@ const Cryptr = require("cryptr"),
   fs = require("fs"),
   logger = require("morgan");
 //logger = log4js.getLogger('Aman_project');
+("use strict");
 
+var express = require("express"),
+  router = express.Router(),
+  cors = require("cors"),
+  multipart = require("connect-multiparty"),
+  multer = require("multer"),
+  path = require("path");
+// log4js = require('log4js');
+
+var con = require("../mysql_connection/dbConfig.js"),
+  login = require("../core/login.js"),
+  login1 = require("../core/login1.js"),
+  consentform = require("../core/consentform.js"),
+  register = require("../core/register.js"),
+  aregister = require("../core/aregister.js"),
+  cregister = require("../core/cregister.js"),
+  history = require("../core/history"),
+  building = require("../core/building"),
+  assesserview = require("../core/assesserview"),
+  schedule = require("../core/schedule"),
+  schedulefun = require("../core/Bulkschedule"),
+  getBuildings = require("../core/getBuildings"),
+  profile = require("../core/profile"),
+  check = require("../utils/checkToken"),
+  phone = require("../utils/phonecheck.js"),
+  image = require("../core/image.js"),
+  pdf = require("../core/pdf.js"),
+  upload = require("../core/upload.js"),
+  pdf1 = require("../core/pdfviewer.js"),
+  update = require("../core/update"),
+  assessment = require("../core/assessment"),
+  book = require("../core/servicehistory"),
+  multer = require("multer"),
+  image_upload = require("../core/image_upload"),
+  path = require("path");
+
+book = require("../core/servicehistory");
+
+// let moment = require('moment');
+
+// let Appeal = require('../core/Appeal'),
+(hr_login = require("../core/Hr_login")),
+  (trainer_login = require("../core/Trainer_login")),
+  (hr_registration = require("../core/Hr_registration")),
+  (Employee_profile = require("../core/Employee_profile")),
+  (email_otp_verify = require("../core/Email_otp_verify")),
+  (hr_forget_password = require("../core/Hr_Forget_password")),
+  (trainer_forget_password = require("../core/Trainer_forget_password")),
+  (hr_forget_password_otp_verify = require("../core/Hr_forget_password_otp_verify")),
+  (trainer_forget_password_otp_verify = require("../core/Trainer_forget_password_otp_verify")),
+  (safety_officer_details = require("../core/Employee_safetyofficer_profile_showup")),
+  (other_employee_details = require("../core/Employee_other_category_showup")),
+  (loginValidation = require("../validation/hr_login")),
+  (classroom = require("../core/Classroom")),
+  (scheduling = require("../core/Scheduling")),
+  (availability = require("../core/Classroom_availability")),
+  (available_date1 = require("../core/Available_date_showup")),
+  (photo = require("../core/Photo_upload")),
+  (seat_availability = require("../core/seat_availability")),
+  (trainer_trainee_view = require("../core/Trainer_trainee_view")),
+  (company_profile = require("../core/Company_profile")),
+  (company_trading_license = require("../core/Company_trade_license")),
+  (trainer_account = require("../core/Trainer_registration")),
+  (training_booking = require("../core/Booking_for_training")),
+  (safety_officer = require("../core/Safety_officer_direct_exam")),
+  (partial_booking = require("../core/Partial_booking")),
+  (course_view = require("../core/Course_view")),
+  (trainer_names = require("../core/Trainer_names")),
+  (course_creation = require("../core/Course_creation")),
+  (time_slots_list = require("../core/Time_slots_list")),
+  (Trained_Employees = require("../core/Trained_Employees_list")),
+  (Untrained_Employees = require("../core/Untrained_Employees_showup")),
+  (schedule_summary = require("../core/Schedule_summary")),
+  (bulk_booking = require("../core/Bulk_booking")),
+  (certificate = require("../core/certificate")),
+  (uploadSalama = require("../core/uploadbulkemployee")),
+  (general_login = require("../core/General_login")),
+  (Untrained_Employees_schedule = require("../core/Untrained_Employees_showup_schedule")),
+  (ip = require("ip"));
+let gr_registration = require("../core/General_register");
+//logger = log4js.getLogger('Aman_project');
+let general_registration_otp_verify = require("../core/General_registration_otp_verify");
 let ipAddress = ip.address();
 console.log("ips====>", ipAddress);
 const storage = multer.diskStorage({
@@ -486,23 +568,97 @@ router.post("/installationdetails", cors(), function(req, res) {
       })
     );
 });
+//==============================Residentsdetails===========================================//
+router.post("/profile", cors(), async function(req, res) {
+  var id = await check.checkToken(req);
+  if (id.status == 400 || id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var buildingobject = id.result;
+    //var buildingobject=req.body.email;
+    logger.fatal(buildingobject, "data");
+    profile
+      .getbuildings(buildingobject)
+      .then(result => {
+        res.send({
+          result: result,
+          message: "mock mock"
+        });
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
+});
+//=======================================================================================================
+router.post("/installationdetails", cors(), function(req, res) {
+  var installation = req.body;
+  logger.fatal(installation, "installation");
+  update
+    .update(installation)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
 //=============================upload=====================================================
-var uploads = multer({ dest: "/var/www/html/" });
+var uploads = multer({ dest: "var/www/html/" });
 router.use("/download", express.static(path.join(__dirname, "upload")));
 // File input field name is simply 'file'
 //router.use('/static', express.static(path.join(__dirname, 'uploads')))
 router.post("/file_upload", uploads.single("file"), function(req, res) {
-  var file = "/var/www/html/" + "/" + req.file.filename;
+  var file = "var/www/html/" + "/" + req.file.filename;
+  console.log(req.file, "ffg");
   var email_id = req.body.email;
 
   var filepath = req.file.path;
   fs.rename(filepath, file, function(err) {
     if (err) {
-      logger.fatal(err);
+      console.log(err);
       res.send(500);
     } else {
       upload
         .upload(filepath, email_id)
+        .then(result => {
+          res.send({
+            message: "file uploaded successfully",
+            result: req.file.filename
+          });
+        })
+        .catch(err =>
+          res.status(err.status).json({
+            message: err.message
+          })
+        );
+    }
+  });
+});
+//=================================image===============================================//
+//=============================imageupload==================================================//
+
+router.post("/image_upload", uploads.single("file"), function(req, res) {
+  var file = "var/www/html/" + "/" + req.file.filename;
+  console.log(req.file);
+  console.log(req.body);
+  var id = req.body.id;
+  var filepath = req.file.path;
+  fs.rename(filepath, file, function(err) {
+    if (err) {
+      console.log(err);
+      res.send(500);
+    } else {
+      image_upload
+        .image_upload(filepath, id)
         .then(result => {
           res.send({
             message: "file uploaded successfully",
@@ -569,25 +725,181 @@ router.post("/Assessment", cors(), async function(req, res) {
 });
 //==========================assesser-view=====================================================//
 router.get("/assesser-view", cors(), async function(req, res) {
-  var id = await check.checkToken(req);
+  // var id = await check.checkToken(req);
 
-  if (id.status == 400 || id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
-    assesserview
-      .assesserview()
+  // if(id.status==400 || id.status==403){
+  //     res.send({
+  //         result:id
+  //     })
+  // }
+  // else{
+  assesserview
+    .assesserview()
+    .then(result => {
+      res.send({
+        result: result.result.result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+  // }
+});
+
+router.post("/textimage", cors(), (req, res, next) => {
+  const uploadFile = req.files.file;
+  const fileName = req.files.file.name;
+  //   logger.fatal(Appeal_Object)
+  const Image = uploadFile.mv(
+    `${__dirname}/public/files/${fileName}`,
+    image
+      .Image(Image)
       .then(result => {
-        res.send({
-          result: result.result.result
+        logger.fatal(result);
+        res.status(result.status).json({
+          message: result
         });
       })
       .catch(err =>
-        res.status(err.status).json({
-          message: err.message
-        })
-      );
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      )
+  );
+});
+//======================================forgetpassword===========================================
+//===============================forgetpassword==============================================//
+router.post("/forgetpassword", (req, res) => {
+  let forgetpassword = req.body;
+  logger.fatal("body", forgetpassword);
+  let password = req.body.password;
+  logger.fatal(password);
+  let confirmpassword = req.body.confirmpassword;
+  let username = req.body.email;
+  if (!username || !password || !confirmpassword) {
+    res.send({
+      message: "Please fill all the details"
+    });
+  } else {
+    logger.fatal(username);
+    let sql = "SELECT * FROM Residents where email_id ='" + username + "'";
+
+    con.query(sql, function(err, result) {
+      // logger.fatal(result,"select")
+      if (err) throw err;
+      // dbFunc.connectionRelease;
+      // logger.fatal("DataBase ERR:",err)
+      //logger.fatal("Database Error while selecting from register table:",err)
+      if (result.length == 0) {
+        logger.fatal("i am here");
+        res.send({
+          message: "Invalid User Name",
+          الرسالة: "اسم المستخدم غير صالح"
+        });
+        // dbFunc.connectionRelease;
+      } else {
+        if (password != confirmpassword) {
+          res.send({
+            message: "password doesn't match",
+            الرسالة: "كلمة المرور غير متطابقة"
+          });
+        } else {
+          if (cryptr.decrypt(result[0].password) == password) {
+            logger.fatal("previous");
+            res.send({
+              message: "Password should not be a previously used one",
+              رسالة: "مرور سبق استخدامهاكلمة المرور لا يجب أن تكون كلمة"
+            });
+            //dbFunc.connectionRelease;
+          }
+          // });
+          else {
+            var otp = "";
+            var possible = "0123456789";
+            var namea;
+            var namen;
+            for (var i = 0; i < 4; i++)
+              otp += possible.charAt(
+                Math.floor(Math.random() * possible.length)
+              );
+
+            logger.fatal(otp, "otp");
+            // var encodedMail = new Buffer(req.body.email).toString('base64');
+            let sql =
+              "SELECT * FROM Residents where email_id ='" + username + "'";
+            con.query(sql, function(err, result) {
+              if (err) throw err;
+              //dbFunc.connectionRelease;
+              namen = result[0].name_en;
+              namea = result[0].name_ar;
+
+              //  })
+              logger.fatal("datanames", result[0].name_en);
+              logger.fatal(result[0].name_ar);
+              logger.fatal("copy", namen);
+              var transporter = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 587,
+                secure: false,
+                auth: {
+                  user: "sanedservices2019@gmail.com",
+                  pass: "Sanedwebservices1!"
+                }
+              });
+              var mailOptions = {
+                transport: transporter,
+                from: "Saned Services" + "<sanedservices2019@gmail.com>",
+                to: req.body.email,
+                subject: "Saned Service-OTP Verification",
+
+                html:
+                  "Dear  " +
+                  result[0].name_en +
+                  "/" +
+                  result[0].name_ar +
+                  "<br>Your one Time Password for forgotPassword recovery for Saned services,<br> Your one time password is.<br> " +
+                  otp +
+                  "<br>" +
+                  "كلمة المرور الخاصة بك مرة واحدة نسيت استرداد كلمة المرور لخدمات Saned" +
+                  namea +
+                  "  العزيز,<br> Your One time password is. <br> " +
+                  otp +
+                  "<br>"
+              };
+
+              transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                  logger.fatal("Mail send error: ", error);
+                }
+              });
+              var sql =
+                "UPDATE Residents SET otp = '" +
+                otp +
+                "' WHERE email_id = '" +
+                username +
+                "'";
+              con.query(sql, function(err) {
+                if (err) throw err;
+                // dbFunc.connectionRelease;
+                // logger.fatal("DataBase ERR:",err)
+                res.send({
+                  message: "Please check your mail for One time Password",
+                  رسالة: "يرجى التحقق من بريدك مرة واحدة لكلمة المرور"
+                });
+              });
+              // dbFunc.connectionRelease;
+            });
+          }
+        }
+      }
+    });
   }
 });
 
@@ -818,6 +1130,7 @@ router.post("/schedules", cors(), async function(req, res) {
 //============================================convert pdf===================================================//
 
 router.post("/Convert_Pdf", cors(), async function(req, res) {
+  //var flag=0;
   let checked1 = req.body.SelectedValues1;
   let checked2 = req.body.SelectedValues2;
   let checked3 = req.body.SelectedValues3;
@@ -828,73 +1141,84 @@ router.post("/Convert_Pdf", cors(), async function(req, res) {
   let checked8 = req.body.SelectedValues8;
   let checked9 = req.body.SelectedValues9;
   let email = req.body.email;
+  let flag = 0;
   // let checked3=req.body.SelectedValues3;
-  if (checked1 == "yes") {
+  if (checked1 == "1") {
     yesvalue1 = "checked";
     novalue1 = "unchecked";
   } else {
     yesvalue1 = "unchecked";
     novalue1 = "checked";
+    flag = 1;
   }
-  if (checked2 == "yes") {
+  if (checked2 == "1") {
     yesvalue2 = "checked";
     novalue2 = "unchecked";
   } else {
     yesvalue2 = "unchecked";
     novalue2 = "checked";
+    flag = 1;
   }
-  if (checked3 == "yes") {
+  if (checked3 == "1") {
     yesvalue3 = "checked";
     novalue3 = "unchecked";
   } else {
     yesvalue3 = "unchecked";
     novalue3 = "checked";
+    flag = 1;
   }
-  if (checked4 == "yes") {
+  if (checked4 == "1") {
     yesvalue4 = "checked";
     novalue4 = "unchecked";
   } else {
     yesvalue4 = "unchecked";
     novalue4 = "checked";
+    flag = 1;
   }
-  if (checked5 == "yes") {
+  if (checked5 == "1") {
     yesvalue5 = "checked";
     novalue5 = "unchecked";
   } else {
     yesvalue5 = "unchecked";
     novalue5 = "checked";
+    flag = 1;
   }
-  if (checked6 == "yes") {
+  if (checked6 == "1") {
     yesvalue6 = "checked";
     novalue6 = "unchecked";
   } else {
     yesvalue6 = "unchecked";
     novalue6 = "checked";
+    flag = 1;
   }
-  if (checked7 == "yes") {
+  if (checked7 == "1") {
     yesvalue7 = "checked";
     novalue7 = "unchecked";
   } else {
     yesvalue7 = "unchecked";
     novalue7 = "checked";
+    flag = 1;
   }
-  if (checked8 == "yes") {
+  if (checked8 == "1") {
     yesvalue8 = "checked";
     novalue8 = "unchecked";
   } else {
     yesvalue8 = "unchecked";
     novalue8 = "checked";
+    flag = 1;
   }
-  if (checked9 == "yes") {
+  if (checked9 == "1") {
     yesvalue9 = "checked";
     novalue9 = "unchecked";
   } else {
     yesvalue9 = "unchecked";
     novalue9 = "checked";
+    flag = 1;
   }
   //    var yesvalue3="checked";
 
-  //logger.fatal("All data=====>>", checked1,checked2,checked3);
+  console.log("in 781", flag);
+  //console.log("All data=====>>", checked1,checked2,checked3);
   pdf.Pdf(
     yesvalue1,
     novalue1,
@@ -917,8 +1241,10 @@ router.post("/Convert_Pdf", cors(), async function(req, res) {
     email
   );
   // pdf.mail(email)
+
   res.send({
-    message: "success"
+    message: "success",
+    flag: flag
   });
 });
 
@@ -974,27 +1300,35 @@ router.post("/installationdetails", cors(), function(req, res) {
 //==================================bulkschedules============================================//
 router.post("/BulkSchedules", cors(), async function(req, res) {
   console.log(req.body);
-
   var schedules = req.body;
-  console.log("schedules", schedules.schedule.schedule);
+  console.log("schedules", schedules.schedule.schedule[0]);
+  console.log("schedules", schedules.schedule.schedule[1]);
+  // console.log("schedules",schedules.schedule.schedule[2]);
   console.log("length", schedules.schedule.schedule.length);
-  console.log("reqdate", schedules.schedule.schedule[0].selectedStartDate);
-  for (let i = 0; i < schedules.schedule.schedule.length; i++) {
-    console.log(i, "i");
-    let uidate = schedules.schedule.schedule[i].selectedStartDate;
-    var date = moment(new Date(uidate.substr(0, 16)));
-    var rdate = date.format("YYYY-MM-DD");
-    await schedulefun.sup(
-      schedules.schedule.schedule[i].time,
-      rdate,
-      schedules.schedule.schedule[i].building_id
-    );
-  }
+  if (schedules.schedule.schedule.length == 0) {
+    res.send({
+      message: "Please Schedule the selected Buildings",
+      flag: 1
+    });
+  } else {
+    //console.log("reqdate",schedules.schedule[0].reqdate);
+    for (let i = 0; i < schedules.schedule.length; i++) {
+      console.log(i, "i");
+      let uidate = schedules.schedule.schedule[i].selectedStartDate;
+      var date = moment(new Date(uidate.substr(0, 16)));
+      var rdate = date.format("YYYY-MM-DD");
+      await schedulefun.sup(
+        schedules.schedule.schedule[i].time,
+        rdate,
+        schedules.schedule.schedule[i].building_id
+      );
+    }
 
-  res.send({
-    message:
-      "Your Buildings are scheduled for service. Please visit booking history for details"
-  });
+    res.send({
+      message:
+        "Your Buildings are scheduled for service. Please visit booking history for details"
+    });
+  }
 });
 
 router.post("/blockchain", cors(), async function(req, res) {
@@ -1120,6 +1454,39 @@ router.post("/Appeal", cors(), (req, res) => {
     });
   } else {
     Appeal.Appeal(Appeal_Object)
+      .then(result => {
+        console.log(result);
+
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  }
+});
+//=======================================General Registartion======================================================//
+router.post("/General_Registration", cors(), (req, res) => {
+  const gr = req.body;
+  console.log("Routes_gr", gr);
+
+  if (!gr.Email || !gr.Password) {
+    return res.send({
+      status: 400,
+      message: "Invalid email id or password"
+    });
+  } else {
+    console.log("hiii");
+    gr_registration
+      .gr_registration(gr)
       .then(result => {
         console.log(result);
 
@@ -1286,8 +1653,115 @@ router.post("/Hr_registration_otp_verify", cors(), (req, res) => {
       );
   }
 });
-//============================================================================================//
+//=============================================================================================//
 router.post("/Untrained_Employees_list", cors(), (req, res) => {
+  const token = req.headers.token;
+  const language = req.headers.language;
+  const data = req.body;
+  console.log(data, token, language);
+
+  Untrained_Employees.Untrained_Employees(data, token, language)
+    .then(result => {
+      console.log(result);
+
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+});
+//=============================================================================================//
+
+//=======================================Schedule=================================================//
+router.post("/Classroom", cors(), (req, res) => {
+  const data = req.body;
+  const token = req.headers.token;
+  const language = req.headers.language;
+  console.log(data, "request data");
+  console.log(token, "token");
+  let classroom_id = data.classroom_id;
+  let trainer_name = data.trainer_name;
+  // let trainer_email_id = data.trainer_email_id;
+  let address = data.address;
+  let number_of_seats = data.number_of_seats;
+  let available_date = data.available_date;
+
+  if (
+    !classroom_id ||
+    !trainer_name ||
+    !address ||
+    !number_of_seats ||
+    !available_date
+  ) {
+    return res.send({
+      status: 402,
+      message: "Please fill all the fields"
+    });
+  } else {
+    classroom
+      .classroom(data, token, language)
+      .then(result => {
+        console.log(result);
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  }
+});
+//=============================================================================================//
+router.post("/Schedule", cors(), (req, res) => {
+  const data = req.headers;
+  const request = req.body;
+  console.log(data);
+  console.log(request, "<======request");
+
+  if (!data) {
+    return res.send({
+      status: 400,
+      message: "Please fill required the fields"
+    });
+  } else {
+    scheduling
+      .scheduling(data, request)
+      .then(result => {
+        console.log(result);
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+  }
+});
+//====================================================================================//
+router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
   const token = req.headers.token;
   const language = req.headers.language;
   const data = req.body;
@@ -2512,4 +2986,5 @@ router.post("/attendence", cors(), (req, res) => {
         })
     );
 });
+
 module.exports = router;
