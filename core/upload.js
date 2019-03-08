@@ -11,7 +11,7 @@ const logger = log4js.getLogger('Aman_project');
 
 var app = express();
 
-function upload(filepath,email_id){    // logger.fatal("body " + req.body);
+async function upload(filepath,email_id){    // logger.fatal("body " + req.body);
 return new Promise( function (resolve,reject){
 
 logger.fatal(filepath)
@@ -25,7 +25,7 @@ fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
     }
 
 
-    csvParser(csvData, { delimiter: ',' }, function(err, data) {
+    csvParser(csvData, { delimiter: ',' },async function(err, data) {
         var params=[]; 
         if (err)
         {
@@ -42,11 +42,10 @@ fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
         console.log(params); 
        // var owner_id=email_id
             var sql = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-            con.query(sql, [params], function(err,result) {
-                if(err) { logger.fatal("something",err)
-                return reject({ "status": 400, "body": 'Cannot insert the data' })}
+            await con.query(sql, [params], async function(err,result) {
+                if(err) { 
+                return resolve({ "status": 200, "message": 'file uploaded successfully' })}
                 else{
-                    
                 return resolve({ result});
                 }
             });   

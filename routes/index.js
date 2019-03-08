@@ -461,6 +461,7 @@ router.post('/getBuildings', cors(), async function(req, res){
       //router.use('/static', express.static(path.join(__dirname, 'uploads')))
       router.post('/file_upload', uploads.single('file'), function(req, res) {
        var file = 'var/www/html/' + '/' + req.file.filename;
+       console.log(req.file,"ffg")
        var email_id=req.body.email
       
        var filepath=req.file.path
@@ -488,33 +489,35 @@ router.post('/getBuildings', cors(), async function(req, res){
       });
 //=================================image===============================================//
 //=============================imageupload==================================================//
+
 router.post('/image_upload', uploads.single('file'), function(req, res) {
-    var file = 'var/www/html/' + '/' + req.file.filename;
-    var id=req.body.id
-   
-    var filepath=req.file.path
-     fs.rename(filepath, file, function(err) {
-   
-      if (err) {
-        console.log(err);
-        res.send(500);
-      } else {
-      
-       image_upload.image_upload(filepath,id)
-       .then(result=>{
-         res.send({
-           message:'file uploaded successfully',
-             result:req.file.filename
-        
-    })
-   })
-   .catch(err => res.status(err.status).json({
-    message: err.message
-   }))
-   
-      }
-    });
-   });
+  var file = 'var/www/html/' + '/' + req.file.filename;
+  console.log(req.file);
+  console.log(req.body);
+  var id=req.body.id
+  var filepath=req.file.path
+   fs.rename(filepath, file, function(err) {
+ 
+    if (err) {
+      console.log(err);
+      res.send(500);
+    } else {
+ 
+     image_upload.image_upload(filepath,id)
+     .then(result=>{
+       res.send({
+         message:'file uploaded successfully',
+           result:req.file.filename
+ 
+  })
+ })
+ .catch(err => res.status(err.status).json({
+  message: err.message
+ }))
+ 
+    }
+  });
+ })
 //==============================Booking-History============================================//
 router.post('/serviceHistory', cors(),function(req, res){
     var email_id= req.body.email_id;       
