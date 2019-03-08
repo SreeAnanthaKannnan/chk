@@ -29,15 +29,14 @@ async function Certificate(req, callback) {
     console.log("employee_name", employee_name);
     var emirates_id = output[i].National_Id;
     console.log("employee_name", employee_name);
-    var attendence_id = output[i].id;
-    console.log("attendence_id", attendence_id);
+    // var attendence_id = output[i].id;
+    // console.log("attendence_id", attendence_id);
     var result = output[i].result;
     console.log("result", result);
 
     if (
       !employee_name ||
       !result ||
-      !attendence_id ||
       !employee_id ||
       !date_attended ||
       !emirates_id
@@ -80,12 +79,12 @@ async function Certificate(req, callback) {
             var query_value = [
               date_attended,
               employee_id,
-              attendence_id,
               score,
               result_en,
               result_ar,
               path,
-              emirates_id
+              emirates_id,
+              course_name
             ];
             await Result.Result_select(emirates_id).then(async function(
               result

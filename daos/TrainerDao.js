@@ -1,5 +1,5 @@
 const con = require("../mysql_connection/dbConfig");
-const mysqlConnection = require("../mysql_connection/connection");
+const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 async function Trainer_information(params) {
   return new Promise(function(resolve, reject) {
@@ -116,6 +116,39 @@ function Trainer_names_display() {
   });
 }
 //===========================================================================================//
+function employee_attendence(
+  param,
+  param1,
+  param2,
+  param3,
+  param4,
+  param5,
+  param6,
+  param7
+) {
+  return new Promise(async function(resolve, reject) {
+    console.log("hiiiii", param);
+    //  param = moment(param).format("YYYY-MM-DD")
+    //  console.log(param,"date")
+    console.log("param", param);
+    param = [param, param1, param2, param3, param4, param5, param6, param7];
+
+    sql =
+      "INSERT INTO Trainer (employee_id,attendance_status,National_id,Name_en,trainer_id,Attended,time_slots,classroom) VALUES ?";
+    await con.query(sql, [param], function(err, result) {
+      if (!result) {
+        //  console.log(result,"achieved")
+        console.log("something", err);
+        return resolve({ status: 400, err: err });
+      } else {
+        console.log(result);
+        return resolve({ result: result });
+      }
+    });
+  });
+}
+//=============================================================================================//
+//===========================================================================================//
 function Trainer_insert(param) {
   return new Promise(async function(resolve, reject) {
     console.log("hiiiii", param);
@@ -188,6 +221,38 @@ async function Scheduler_information(params) {
     );
   });
 }
+
+async function Scheduler_date_select(params, params1, params2, params3) {
+  return new Promise(function(resolve, reject) {
+    console.log("params======>", params);
+    console.log("params======>", params1);
+    console.log("params======>", params2);
+    console.log("params======>", params3);
+
+    con.query(
+      "SELECT * FROM Schedule where Trainer_id ='" +
+        params +
+        "' AND scheduled_date='" +
+        params1 +
+        "' AND start_time='" +
+        params2 +
+        "' AND end_time='" +
+        params3 +
+        "'",
+
+      (err, result) => {
+        if (err) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          return resolve({ result: result });
+        }
+      }
+    );
+  });
+}
+
 async function Scheduler_information(params) {
   return new Promise(function(resolve, reject) {
     console.log(params, "params======>");
@@ -223,36 +288,48 @@ async function get_employee_list(params) {
       });
   });
 }
-//==============================================================================================//
-function trainer_name_schedule(trainer_id, language) {
+
+async function Trainer_attendence_list(
+  params,
+  params1,
+  params2,
+  params3,
+  params4,
+  params5,
+  params6,
+  params7,
+  params8,
+  params9
+) {
   return new Promise(async function(resolve, reject) {
-    //  param = moment(param).format("YYYY-MM-DD")
-    if (language == "en") {
-      let sql = "SELECT Name_en FROM Trainer where id = ?";
-      await con.query(sql, [trainer_id], function(err, result) {
+    var values = [
+      params,
+      params1,
+      params2,
+      params3,
+      params4,
+      params5,
+      params6,
+      params7,
+      params8,
+      params9
+    ];
+
+    await mysqlConnection
+      .insert_query(query.insertattendance, values)
+      .then(function(result, err) {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
           return resolve({ status: 400, err: err });
         } else {
-          return resolve({ result: result });
+          console.log(result);
+          return resolve({ status: 200, message: result });
         }
       });
-    } else {
-      let sql = "SELECT Name_ar FROM Trainer where id = '" + trainer_id + "'";
-      con.query(sql, function(err, result) {
-        if (!result) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          return resolve({ result: result });
-        }
-      });
-    }
   });
 }
-//==================================================================================================//
+
 module.exports = {
   Trainer_information: Trainer_information,
   email_otp_update: email_otp_update,
@@ -262,6 +339,8 @@ module.exports = {
   Trainer_insert: Trainer_insert,
   Trainer_id_select: Trainer_id_select,
   Scheduler_information: Scheduler_information,
+  Scheduler_date_select: Scheduler_date_select,
   get_employee_list: get_employee_list,
-  trainer_name_schedule : trainer_name_schedule
+  employee_attendence: employee_attendence,
+  Trainer_attendence_list: Trainer_attendence_list
 };
