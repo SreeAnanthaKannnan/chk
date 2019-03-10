@@ -20,6 +20,7 @@ async function Certificate(req, callback) {
   // var score = 50;
   var output = req.body.result;
   var lang = req.body.lang;
+  
   // var employee_name = req.body.employee_name;
   var course_name = req.body.course_name;
   var queryresult;
@@ -30,7 +31,7 @@ async function Certificate(req, callback) {
     var employee_name = output[i].Name_en;
     console.log("employee_name", employee_name);
     var emirates_id = output[i].National_Id;
-    console.log("employee_name", employee_name);
+    console.log("employee_name", emirates_id);
     // var attendence_id = output[i].id;
     // console.log("attendence_id", attendence_id);
     var result = output[i].result;

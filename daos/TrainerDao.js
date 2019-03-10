@@ -158,7 +158,7 @@ function Trainer_insert(param) {
     param = [param];
 
     sql =
-      "INSERT INTO Trainer (Name_en,Name_ar,trainer_email_id,password,reg_date,course_name_en,course_name_ar,otp) VALUES ?";
+      "INSERT INTO Trainer (Name_en,Name_ar,trainer_email_id,password,reg_date,course_name_en,course_name_ar,otp,Trainer_id) VALUES ?";
     await con.query(sql, [param], function(err, result) {
       if (!result) {
         //  console.log(result,"achieved")
@@ -272,6 +272,35 @@ async function Scheduler_information(params) {
     );
   });
 }
+
+function trainer_name_schedule(trainer_id, language) {
+  return new Promise(async function(resolve, reject) {
+    //  param = moment(param).format("YYYY-MM-DD")
+    if (language == "en") {
+      let sql = "SELECT Name_en FROM Trainer where id = ?";
+      await con.query(sql, [trainer_id], function(err, result) {
+        if (err) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          return resolve({ result: result });
+        }
+      });
+    } else {
+      let sql = "SELECT Name_ar FROM Trainer where id = '" + trainer_id + "'";
+      con.query(sql, function(err, result) {
+        if (!result) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          return resolve({ result: result });
+        }
+      });
+    }
+  });
+}
 async function get_employee_list(params) {
   return new Promise(async function(resolve, reject) {
     mysqlConnection
@@ -342,5 +371,6 @@ module.exports = {
   Scheduler_date_select: Scheduler_date_select,
   get_employee_list: get_employee_list,
   employee_attendence: employee_attendence,
-  Trainer_attendence_list: Trainer_attendence_list
+  Trainer_attendence_list: Trainer_attendence_list,
+  trainer_name_schedule: trainer_name_schedule
 };

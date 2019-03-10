@@ -6,6 +6,7 @@ const TrainerDao = require("../daos/TrainerDao");
 const SchedulerDao = require("../daos/TrainerDao");
 const ClassroomDao = require("../daos/ClassroomDao");
 const Employee_profileDao = require("../daos/Employee_profileDao");
+const CourseDao = require("../daos/CourseDao")
 
 // const EmployeeDao = require("../DAO/Employee_profile");
 var moment = require("moment");
@@ -21,15 +22,16 @@ module.exports = {
   trainer_date_select: trainer_date_select,
   trainer_attendance_list: trainer_attendance_list
 };
-async function trainer_attendance(Trainer_Email) {
+async function trainer_attendance(Trainer_Email,language) {
   return new Promise(async (resolve, reject) => {
     //let Trainer_Email = Trainer_Email
     console.log("core_Trainer_Email", Trainer_Email);
+    console.log(language,"arjjjjjjjjjjjjjjjjjj")
 
     let select_query = await TrainerDao.Trainer_information(Trainer_Email);
     console.log("Core_selectQuery _Trainer_Table===>", select_query);
     if (select_query.result != 0) {
-      let Trainer_id = select_query.result[0].Trainer_id;
+      let Trainer_id = select_query.result[0].id;
       console.log("core_T_id===>", Trainer_id);
 
       // var date_testing = new Date(Date.now()).toLocaleString();
@@ -72,8 +74,17 @@ async function trainer_attendance(Trainer_Email) {
           var end_time = select_query_scheduler.result[i].end_time;
           console.log("select_query_scheduled_date", end_time);
 
-          var course_name = select_query_scheduler.result[i].course_name;
-          console.log("select_query_scheduled_date", course_name);
+          // var course_name = select_query_scheduler.result[i].course_id;
+          // console.log("select_query_scheduled_date", course_name);
+
+
+        
+          let course_Name = await CourseDao.course_name_schedule(
+           select_query_scheduler.result[i].course_id,
+            language
+          );
+          console.log(course_Name, "testing1=============================");
+
           obj = {
             name:
               select_query_scheduled_date +
@@ -84,7 +95,7 @@ async function trainer_attendance(Trainer_Email) {
               end_time +
               ")",
             id: Trainer_id,
-            course_name: course_name
+            course_name: course_Name.result[0].name_en
           };
 
           data.push(obj);

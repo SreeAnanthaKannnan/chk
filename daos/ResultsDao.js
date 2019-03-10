@@ -109,7 +109,7 @@ async function result_national_id(params) {
           return resolve({ status: 400, err: err });
         } else {
           console.log(result);
-          return resolve({  result });
+          return resolve({ result });
         }
       });
   });
@@ -120,5 +120,5 @@ module.exports = {
   Result_select: Result_select,
   Attendance_select: Attendance_select,
   Attendance_delete: Attendance_delete,
-  result_national_id:result_national_id
+  result_national_id: result_national_id
 };

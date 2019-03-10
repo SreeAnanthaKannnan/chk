@@ -8,7 +8,7 @@ var dbConfig = {
   host: "127.0.0.1",
   user: "root",
   password: "Rpqb$2018",
-  database: "SALAMA"
+  database: "SHARJAH"
 };
 
 exports.getConnection = () => {
