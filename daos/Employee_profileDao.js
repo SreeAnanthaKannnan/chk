@@ -378,6 +378,22 @@ function Trained_Employees_list(Company_Trade_Lincense_No, language, status) {
     }
   });
 }
+async function national_id(Emirates_ID, class_id) {
+  return new Promise(async function(resolve, reject) {
+    let length = Emirates_ID.length;
+    var obj = {};
+    var value = [];
+    for (i = 0; i < length; i++) {
+      let res = await mysqlConnection.query_execute(query.findemployee, [
+        Emirates_ID[i]
+      ]);
+      console.log(res, "responsedao====>");
+      obj = { classroomID: class_id, data_value: res.data[0] };
+      value.push(obj);
+    }
+    return resolve({ result: value });
+  });
+}
 
 module.exports = {
   Employee_insert: Employee_insert,
@@ -392,6 +408,7 @@ module.exports = {
   Employee_name_schedule: Employee_name_schedule,
   trainer_id: trainer_id,
   notbooked_employee_list: notbooked_employee_list,
-  Untrained_Employees_list: Untrained_Employees_list
+  Untrained_Employees_list: Untrained_Employees_list,
+  national_id: national_id
   //Photo_upload : Photo_upload
 };

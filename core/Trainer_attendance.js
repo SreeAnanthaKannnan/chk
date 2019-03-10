@@ -40,70 +40,80 @@ async function trainer_attendance(Trainer_Email) {
         Trainer_id
       );
       console.log("Core_selectQuery_scheduler===>", select_query_scheduler);
-      for (i = 0; i < select_query_scheduler.result.length; i++) {
-        var date = select_query_scheduler.result[i].scheduling_date + 1;
-        var newdate = moment(date).format("YYYY/MM/DD");
-        select_query_scheduler.result[i].scheduling_date = newdate;
+      if (select_query_scheduler.result != 0) {
+        for (i = 0; i < select_query_scheduler.result.length; i++) {
+          var date = select_query_scheduler.result[i].scheduling_date + 1;
+          var newdate = moment(date).format("YYYY/MM/DD");
+          select_query_scheduler.result[i].scheduling_date = newdate;
 
-        var date1 = select_query_scheduler.result[i].scheduled_date + 1;
-        var schedulleddate = moment(date1).format("YYYY/MM/DD");
-        select_query_scheduler.result[i].scheduled_date = schedulleddate;
-        console.log("schedulleddate=======>", schedulleddate);
+          var date1 = select_query_scheduler.result[i].scheduled_date + 1;
+          var schedulleddate = moment(date1).format("YYYY/MM/DD");
+          select_query_scheduler.result[i].scheduled_date = schedulleddate;
+          console.log("schedulleddate=======>", schedulleddate);
+        }
+        console.log(
+          "core testing select_query_scheduler",
+          select_query_scheduler
+        );
+        let obj = {};
+        let data = [];
+
+        for (i = 0; i < select_query_scheduler.result.length; i++) {
+          var select_query_scheduled_date =
+            select_query_scheduler.result[i].scheduled_date;
+          console.log(
+            "select_query_scheduled_date",
+            select_query_scheduled_date
+          );
+
+          var start_time = select_query_scheduler.result[i].start_time;
+          console.log("select_query_scheduled_date", start_time);
+
+          var end_time = select_query_scheduler.result[i].end_time;
+          console.log("select_query_scheduled_date", end_time);
+
+          var course_name = select_query_scheduler.result[i].course_name;
+          console.log("select_query_scheduled_date", course_name);
+          obj = {
+            name:
+              select_query_scheduled_date +
+              "" +
+              "(" +
+              start_time +
+              "-" +
+              end_time +
+              ")",
+            id: Trainer_id,
+            course_name: course_name
+          };
+
+          data.push(obj);
+        }
+
+        console.log("data", data);
+
+        // for (i = 0; i < select_query_scheduler.result.length; i++) {
+        //   var scheduled_date_val = select_query_scheduler.result[i].schdeuled_date
+        //   data
+        // }
+        return resolve({
+          statuscode: "E08",
+          status: 200,
+          //Token: token,
+          message: data
+        });
+      } else {
+        return resolve({
+          status: 400,
+          //Token: token,
+          message: "Record not found"
+        });
       }
-      console.log(
-        "core testing select_query_scheduler",
-        select_query_scheduler
-      );
-      let obj = {};
-      let data = [];
-
-      for (i = 0; i < select_query_scheduler.result.length; i++) {
-        var select_query_scheduled_date =
-          select_query_scheduler.result[i].scheduled_date;
-        console.log("select_query_scheduled_date", select_query_scheduled_date);
-
-        var start_time = select_query_scheduler.result[i].start_time;
-        console.log("select_query_scheduled_date", start_time);
-
-        var end_time = select_query_scheduler.result[i].end_time;
-        console.log("select_query_scheduled_date", end_time);
-
-        var course_name = select_query_scheduler.result[i].course_name;
-        console.log("select_query_scheduled_date", course_name);
-        obj = {
-          name:
-            select_query_scheduled_date +
-            "" +
-            "(" +
-            start_time +
-            "-" +
-            end_time +
-            ")",
-          id: Trainer_id,
-          course_name: course_name
-        };
-
-        data.push(obj);
-      }
-
-      console.log("data", data);
-
-      // for (i = 0; i < select_query_scheduler.result.length; i++) {
-      //   var scheduled_date_val = select_query_scheduler.result[i].schdeuled_date
-      //   data
-      // }
-      return resolve({
-        statuscode: "E08",
-        status: 200,
-        //Token: token,
-        message: data
-      });
     } else {
       return resolve({
-        statuscode: "E08",
         status: 400,
         //Token: token,
-        message: "rows not found"
+        message: "Record not found"
       });
     }
   });
@@ -135,38 +145,55 @@ async function trainer_date_select(
     var select_query_classroom_id = await ClassroomDao.classroom_id(
       classroom_id
     );
+    if (select_query_classroom_id.result.length != 0) {
+      var class_id = select_query_classroom_id.result.data[0].classroom_id;
+      console.log("Core_selectQuery classroom_id===>", class_id);
 
-    var class_id = select_query_classroom_id.result.data[0].classroom_id;
-    console.log("Core_selectQuery classroom_id===>", class_id);
+      console.log("schedule_table_length", select_query.result);
 
-    console.log("schedule_table_length", select_query.result);
+      var data = [];
+      for (var i = 0; i < select_query.result.length; i++) {
+        console.log("i", i);
+        var national_id = await select_query.result[i].National_Id;
+        // console.log("national_id_core", national_id)
 
-    var data = [];
-    for (var i = 0; i < select_query.result.length; i++) {
-      console.log("i", i);
-      var national_id = await select_query.result[i].National_Id;
-      // console.log("national_id_core", national_id)
+        // var select_query_national_id = await Employee_profileDao.national_id(national_id);
+        // console.log("Core_selectQuery _emplyeeselect_Table===>", select_query_national_id.result.data[0]);
 
-      // var select_query_national_id = await Employee_profileDao.national_id(national_id);
-      // console.log("Core_selectQuery _emplyeeselect_Table===>", select_query_national_id.result.data[0]);
+        data.push(national_id);
+      }
+      let Emirates_ID = data;
+      var final_result = await Employee_profileDao.national_id(
+        Emirates_ID,
+        class_id
+      );
+      if (final_result.result.length != 0) {
+        console.log(final_result, "Final result");
 
-      data.push(national_id);
+        //console.log("select_query_classroom_id============>>", select_query_classroom_id)
+
+        return resolve({
+          statuscode: "E08",
+          status: 200,
+          //Token: token,
+          message: final_result
+        });
+      } else {
+        return resolve({
+          statuscode: "E08",
+          status: 400,
+          //Token: token,
+          message: "Record not found"
+        });
+      }
+    } else {
+      return resolve({
+        statuscode: "E08",
+        status: 400,
+        //Token: token,
+        message: "Record not found"
+      });
     }
-    let Emirates_ID = data;
-    var final_result = await Employee_profileDao.national_id(
-      Emirates_ID,
-      class_id
-    );
-    console.log(final_result, "Final result");
-
-    //console.log("select_query_classroom_id============>>", select_query_classroom_id)
-
-    return resolve({
-      statuscode: "E08",
-      status: 200,
-      //Token: token,
-      message: final_result
-    });
   });
 }
 async function trainer_attendance_list(
@@ -214,6 +241,14 @@ async function trainer_attendance_list(
         course_name
       );
       console.log("select_query==================>>>>", select_query);
+      if (select_query.message.data.affectedRows == 1) {
+        var select_query = select_query;
+      } else {
+        var select_query = {
+          status: 400,
+          message: "Something went wrong while storing records"
+        };
+      }
     }
     return resolve({
       statuscode: "E08",

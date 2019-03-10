@@ -1,7 +1,7 @@
 module.exports.findemployeeResults =
   "SELECT * FROM Results where National_Id  = ?";
 module.exports.insertemployeeResults =
-  "INSERT INTO Results (date_attended,employee_id,score,result_en,result_ar,certificate,National_Id,course_name) VALUES ? ";
+  "INSERT INTO Results (date_attended,employee_id,score,result_en,result_ar,certificate,National_Id,course_name_en,course_name_ar) VALUES ? ";
 module.exports.deleteattendance =
   "delete from Attendance where National_Id = ?";
 module.exports.getemployeedetails =

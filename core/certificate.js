@@ -4,6 +4,7 @@ const Result = require("../daos/ResultsDao");
 const language_detect = require("../utils/language_detect");
 const translate = require("../utils/translate");
 const moment = require("moment");
+
 module.exports = {
   Certificate: Certificate,
   getCertificate: getCertificate,
@@ -18,6 +19,7 @@ async function Certificate(req, callback) {
   // var emirates_id = req.body.emirates_id;
   // var score = 50;
   var output = req.body.result;
+  var lang = req.body.lang;
   // var employee_name = req.body.employee_name;
   var course_name = req.body.course_name;
   var queryresult;
@@ -37,6 +39,7 @@ async function Certificate(req, callback) {
     if (
       !employee_name ||
       !result ||
+      !lang ||
       !employee_id ||
       !date_attended ||
       !emirates_id
@@ -61,6 +64,7 @@ async function Certificate(req, callback) {
         let temp = await translate.translate_en(result);
         result_en = temp.result;
       }
+
       var value = {
         employee_name: employee_name,
 
@@ -68,49 +72,121 @@ async function Certificate(req, callback) {
       };
 
       if (result == "Pass") {
+        let course_ar, course_en;
+        let language = await language_detect.languageDetect(course_name);
+        console.log(language.result, "language");
+        if (language.result == "en") {
+          let temp = await translate.translate_ar(course_name);
+          console.log(temp);
+          course_ar = temp.result;
+          course_en = course_name;
+        } else {
+          course_ar = course_name;
+          let temp = await translate.translate_en(course_name);
+          console.log(temp);
+          course_en = temp.result;
+        }
         var score = 50;
         console.log("value", value);
-        await certificate
-          .Pdf(value.employee_name, value.course_name)
-          .then(async function(result) {
-            // console.log("result", result);
-            var path = "/certificate" + employee_name + ".pdf";
-            // callback("", result);
-            var query_value = [
-              date_attended,
-              employee_id,
-              score,
-              result_en,
-              result_ar,
-              path,
-              emirates_id,
-              course_name
-            ];
-            await Result.Result_select(emirates_id).then(async function(
-              result
-            ) {
-              console.log("dbresult.................>>>>>>>>>>", result);
-              if (result.message.data.length == 0) {
-                let query = await Result.Result_insert(query_value);
-                console.log("queryinsert", query);
-                if (query.message.data.affectedRows == 1) {
+        if (lang == "English") {
+          await certificate
+            .Pdf(value.employee_name, value.course_name)
+            .then(async function(result) {
+              // console.log("result", result);
+              var path = "/certificate" + employee_name + ".pdf";
+              // callback("", result);
+              var query_value = [
+                date_attended,
+                employee_id,
+                score,
+                result_en,
+                result_ar,
+                path,
+                emirates_id,
+                course_en,
+                course_ar
+              ];
+              await Result.Result_select(emirates_id).then(async function(
+                result
+              ) {
+                console.log("dbresult.................>>>>>>>>>>", result);
+                if (result.message.data.length == 0) {
+                  let query = await Result.Result_insert(query_value);
+                  console.log("queryinsert", query);
+                  if (query.message.data.affectedRows == 1) {
+                    queryresult = {
+                      status: 200,
+                      message: "Results has been successfully stored"
+                    };
+                    var deleteattendance = await Result.Attendance_delete(
+                      emirates_id
+                    );
+                    console.log("deleteattendance", deleteattendance);
+                  }
+                } else if (result.message.data.length != 0) {
                   queryresult = {
-                    status: 200,
-                    message: "Results has been successfully stored"
+                    status: 404,
+                    message: "Results for this user is already exists."
                   };
-                  var deleteattendance = await Result.Attendance_delete(
-                    emirates_id
-                  );
-                  console.log("deleteattendance", deleteattendance);
                 }
-              } else if (result.message.data.length != 0) {
-                queryresult = {
-                  status: 404,
-                  message: "Results for this user is already exists."
-                };
-              }
+              });
             });
-          });
+        } else if (lang == "Arabic") {
+          let employee_ar;
+          let language = await language_detect.languageDetect(employee_name);
+          console.log(language.result, "language");
+          let temp = await translate.translate_ar(employee_name);
+          console.log(temp);
+          employee_ar = temp.result;
+          // employee_en = result;
+
+          var value1 = {
+            employee_ar: employee_ar,
+            course_name_ar: course_ar
+          };
+          await certificate
+            .Pdf(value1.employee_ar, value1.course_name_ar)
+            .then(async function(result) {
+              // console.log("result", result);
+              var path = "/certificate" + employee_name + ".pdf";
+              // callback("", result);
+              var query_value = [
+                date_attended,
+                employee_id,
+                score,
+                result_en,
+                result_ar,
+                path,
+                emirates_id,
+                course_en,
+                course_ar
+              ];
+              await Result.Result_select(emirates_id).then(async function(
+                result
+              ) {
+                console.log("dbresult.................>>>>>>>>>>", result);
+                if (result.message.data.length == 0) {
+                  let query = await Result.Result_insert(query_value);
+                  console.log("queryinsert", query);
+                  if (query.message.data.affectedRows == 1) {
+                    queryresult = {
+                      status: 200,
+                      message: "Results has been successfully stored"
+                    };
+                    var deleteattendance = await Result.Attendance_delete(
+                      emirates_id
+                    );
+                    console.log("deleteattendance", deleteattendance);
+                  }
+                } else if (result.message.data.length != 0) {
+                  queryresult = {
+                    status: 404,
+                    message: "Results for this user is already exists."
+                  };
+                }
+              });
+            });
+        }
       } else if (result == "Fail") {
         // var path =
         //   "/home/rpqb-desk-004/Dubai_project/certificate.pdf" + employee_name;
