@@ -125,7 +125,7 @@ function Trainer_insert(param) {
     param = [param];
 
     sql =
-      "INSERT INTO Trainer (Name_en,Name_ar,trainer_email_id,password,reg_date,course_name,otp) VALUES ?";
+      "INSERT INTO Trainer (Name_en,Name_ar,trainer_email_id,password,reg_date,course_name_en,course_name_ar,otp) VALUES ?";
     await con.query(sql, [param], function(err, result) {
       if (!result) {
         //  console.log(result,"achieved")

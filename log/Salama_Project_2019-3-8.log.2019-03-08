@@ -1,0 +1,475 @@
+[2019-03-08T00:21:01.298] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTg0NjYxLCJleHAiOjE1NTE5ODgyNjF9.5uNQl9s6Oe6_qkYFcCDkMrrobmWiEHpHBcZgshoJsis',
+  '2019/03/08 00:20:06' ]
+[2019-03-08T00:21:03.172] [FATAL] Aman_project - achie abc
+[2019-03-08T00:21:48.484] [FATAL] Aman_project - achie abc
+[2019-03-08T00:22:23.578] [FATAL] Aman_project - achie abc
+[2019-03-08T00:22:30.998] [FATAL] Aman_project - achie abc
+[2019-03-08T00:24:08.118] [FATAL] Aman_project - achie abc
+[2019-03-08T01:54:48.675] [FATAL] Salama_project - { Error: ER_NO_SUCH_TABLE: Table 'SALAMA.General_Registration' doesn't exist
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/General_RegisterDAO.js:15:13
+    at new Promise (<anonymous>)
+    at Object.gr_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/General_RegisterDAO.js:10:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_register.js:66:50)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sqlMessage: 'Table \'SALAMA.General_Registration\' doesn\'t exist',
+  sqlState: '42S02',
+  index: 0,
+  sql: 'INSERT INTO General_Registration (First_Name,Last_Name,Emirates_ID,Mobile_Number,AlternateNumber,Email_ID,password,Nationality,Address,Company,POBOX,otp,usertype,reg_date) VALUES (\'rrrr\', \'aaaa\', \'222-4444-1234567-2\', \'9876543210\', \'8807441260\', \'d@g.com\', \'0fd6792f727b6b1d5dbe265f72519d6d47e123d8f24069dab769\', \'aaa\', \'aaa\', \'aaa\', \'600001\', \'0733\', \'residence\', \'2019/03/08 01:54:48\') ' }
+[2019-03-08T01:57:10.222] [FATAL] Salama_project - { Error: ER_NO_SUCH_TABLE: Table 'SHARJAH.General_Registration' doesn't exist
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/General_RegisterDAO.js:15:13
+    at new Promise (<anonymous>)
+    at Object.gr_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/General_RegisterDAO.js:10:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_register.js:66:50)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sqlMessage: 'Table \'SHARJAH.General_Registration\' doesn\'t exist',
+  sqlState: '42S02',
+  index: 0,
+  sql: 'INSERT INTO General_Registration (First_Name,Last_Name,Emirates_ID,Mobile_Number,AlternateNumber,Email_ID,password,Nationality,Address,Company,POBOX,otp,usertype,reg_date) VALUES (\'rrrr\', \'aaaa\', \'222-4444-1234567-2\', \'9876543210\', \'8807441260\', \'d@g.com\', \'4e29aebbf22da7f3bc4b775cf18d2118b4adaacb9286fda4b5e5\', \'aaa\', \'aaa\', \'aaa\', \'600001\', \'9724\', \'residence\', \'2019/03/08 01:57:08\') ' }
+[2019-03-08T01:59:06.933] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkwNTQ2LCJleHAiOjE1NTE5OTQxNDZ9.Szt1oEVz1axxGOxk7a1aeP2NiwmBGknxk7sp8k5c6yc',
+  '2019/03/08 01:58:00' ]
+[2019-03-08T01:59:06.940] [FATAL] Aman_project - something { Error: ER_NO_SUCH_TABLE: Table 'SHARJAH.Session' doesn't exist
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:13:12
+    at new Promise (<anonymous>)
+    at Object.Session_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:9:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_login.js:61:40)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sqlMessage: 'Table \'SHARJAH.Session\' doesn\'t exist',
+  sqlState: '42S02',
+  index: 0,
+  sql: 'INSERT INTO Session (user_ID,token,session_created_at) VALUES (\'d@g.com\', \'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkwNTQ2LCJleHAiOjE1NTE5OTQxNDZ9.Szt1oEVz1axxGOxk7a1aeP2NiwmBGknxk7sp8k5c6yc\', \'2019/03/08 01:58:00\') ' }
+[2019-03-08T01:59:25.567] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkwNTY1LCJleHAiOjE1NTE5OTQxNjV9.VmYt0C6lhziXl9mqMAILf6RT2cGnIIww69amWYVpq4M',
+  '2019/03/08 01:59:23' ]
+[2019-03-08T01:59:25.588] [FATAL] Aman_project - something { Error: ER_NO_SUCH_TABLE: Table 'SHARJAH.Session' doesn't exist
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:13:12
+    at new Promise (<anonymous>)
+    at Object.Session_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:9:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_login.js:61:40)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sqlMessage: 'Table \'SHARJAH.Session\' doesn\'t exist',
+  sqlState: '42S02',
+  index: 0,
+  sql: 'INSERT INTO Session (user_ID,token,session_created_at) VALUES (\'d@g.com\', \'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkwNTY1LCJleHAiOjE1NTE5OTQxNjV9.VmYt0C6lhziXl9mqMAILf6RT2cGnIIww69amWYVpq4M\', \'2019/03/08 01:59:23\') ' }
+[2019-03-08T01:59:51.080] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkwNTkxLCJleHAiOjE1NTE5OTQxOTF9.yDJRBcDvpwTU2PlLxZEY--DEnpMGs8J1ROJyKgRC_7s',
+  '2019/03/08 01:59:23' ]
+[2019-03-08T01:59:51.094] [FATAL] Aman_project - something { Error: ER_NO_SUCH_TABLE: Table 'SHARJAH.Session' doesn't exist
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:13:12
+    at new Promise (<anonymous>)
+    at Object.Session_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:9:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_login.js:61:40)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sqlMessage: 'Table \'SHARJAH.Session\' doesn\'t exist',
+  sqlState: '42S02',
+  index: 0,
+  sql: 'INSERT INTO Session (user_ID,token,session_created_at) VALUES (\'d@g.com\', \'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkwNTkxLCJleHAiOjE1NTE5OTQxOTF9.yDJRBcDvpwTU2PlLxZEY--DEnpMGs8J1ROJyKgRC_7s\', \'2019/03/08 01:59:23\') ' }
+[2019-03-08T02:00:33.221] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkwNjMzLCJleHAiOjE1NTE5OTQyMzN9.ke0IsHeNNwuJ_2DedsPlM-qoRAPC60PPmCFCbqTpHRs',
+  '2019/03/08 01:59:57' ]
+[2019-03-08T02:00:33.240] [FATAL] Aman_project - something { Error: ER_NO_SUCH_TABLE: Table 'SHARJAH.Session' doesn't exist
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:13:12
+    at new Promise (<anonymous>)
+    at Object.Session_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:9:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_login.js:61:40)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sqlMessage: 'Table \'SHARJAH.Session\' doesn\'t exist',
+  sqlState: '42S02',
+  index: 0,
+  sql: 'INSERT INTO Session (user_ID,token,session_created_at) VALUES (\'d@g.com\', \'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkwNjMzLCJleHAiOjE1NTE5OTQyMzN9.ke0IsHeNNwuJ_2DedsPlM-qoRAPC60PPmCFCbqTpHRs\', \'2019/03/08 01:59:57\') ' }
+[2019-03-08T02:02:32.390] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkwNzUyLCJleHAiOjE1NTE5OTQzNTJ9.U58f9HEf87h8FaT_joGTfhvtfEJlRisiyEP14TZ1YsI',
+  '2019/03/08 02:00:54' ]
+[2019-03-08T02:02:32.486] [FATAL] Aman_project - something { Error: ER_NO_SUCH_TABLE: Table 'SHARJAH.Session' doesn't exist
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:13:12
+    at new Promise (<anonymous>)
+    at Object.Session_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:9:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_login.js:61:40)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sqlMessage: 'Table \'SHARJAH.Session\' doesn\'t exist',
+  sqlState: '42S02',
+  index: 0,
+  sql: 'INSERT INTO Session (user_ID,token,session_created_at) VALUES (\'d@g.com\', \'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkwNzUyLCJleHAiOjE1NTE5OTQzNTJ9.U58f9HEf87h8FaT_joGTfhvtfEJlRisiyEP14TZ1YsI\', \'2019/03/08 02:00:54\') ' }
+[2019-03-08T02:07:17.041] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkxMDM3LCJleHAiOjE1NTE5OTQ2Mzd9.-l25fwwJGUlIlZR_qqLJCRrgo8y0PQtFy7gSaalkOhc',
+  '2019/03/08 02:07:11' ]
+[2019-03-08T02:07:17.078] [FATAL] Aman_project - something { Error: ER_NO_SUCH_TABLE: Table 'SHARJAH.Session' doesn't exist
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:13:12
+    at new Promise (<anonymous>)
+    at Object.Session_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/SessionDao.js:9:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_login.js:61:40)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sqlMessage: 'Table \'SHARJAH.Session\' doesn\'t exist',
+  sqlState: '42S02',
+  index: 0,
+  sql: 'INSERT INTO Session (user_ID,token,session_created_at) VALUES (\'d@g.com\', \'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkxMDM3LCJleHAiOjE1NTE5OTQ2Mzd9.-l25fwwJGUlIlZR_qqLJCRrgo8y0PQtFy7gSaalkOhc\', \'2019/03/08 02:07:11\') ' }
+[2019-03-08T02:28:13.321] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkyMjkzLCJleHAiOjE1NTE5OTU4OTN9.jtyJRks_eHcP2X2mE_c52k3IR63up3fscoCNV6fq_MQ',
+  '2019/03/08 02:07:11' ]
+[2019-03-08T02:28:17.212] [FATAL] Aman_project - achie abc
+[2019-03-08T02:29:09.473] [FATAL] Aman_project - achie abc
+[2019-03-08T02:29:31.942] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkyMzcxLCJleHAiOjE1NTE5OTU5NzF9.mpQYHMGdBv0cCtZS-MYdNiUyYJ-0M8vJygFqXFeEfPw',
+  '2019/03/08 02:07:11' ]
+[2019-03-08T02:29:33.343] [FATAL] Aman_project - achie abc
+[2019-03-08T02:30:20.122] [FATAL] Aman_project - achie abc
+[2019-03-08T02:31:06.870] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkyNDY2LCJleHAiOjE1NTE5OTYwNjZ9.uvRDYcmJuRy2lj1X3bR9LUZQU63rIKUUL-zX4XAXC3o',
+  '2019/03/08 02:30:03' ]
+[2019-03-08T02:31:17.005] [FATAL] Aman_project - achie abc
+[2019-03-08T02:34:05.955] [FATAL] Aman_project - achie abc
+[2019-03-08T02:37:19.239] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkyODM5LCJleHAiOjE1NTE5OTY0Mzl9.yzLJn3yvffO_M_e5GeGyUa5I8HhIMvgLDZG4vae-J5I',
+  '2019/03/08 02:30:03' ]
+[2019-03-08T02:37:21.485] [FATAL] Aman_project - achie abc
+[2019-03-08T02:37:36.305] [FATAL] Aman_project - achie abc
+[2019-03-08T02:39:23.612] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkyOTYzLCJleHAiOjE1NTE5OTY1NjN9.f7soTyAv3IctV_bWg0PFQO3r5vrBV9zAi-G-LCMZwmI',
+  '2019/03/08 02:30:03' ]
+[2019-03-08T02:39:26.737] [FATAL] Aman_project - achie abc
+[2019-03-08T02:39:44.718] [FATAL] Aman_project - achie abc
+[2019-03-08T02:40:26.468] [FATAL] Aman_project - achie abc
+[2019-03-08T02:42:19.852] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkzMTM5LCJleHAiOjE1NTE5OTY3Mzl9.xI4o-DCYok2Yf7YM9dwRfdyaRJBZ8oT8LAv3qu3PGSk',
+  '2019/03/08 02:30:03' ]
+[2019-03-08T02:42:22.630] [FATAL] Aman_project - achie abc
+[2019-03-08T02:43:12.363] [FATAL] Aman_project - achie abc
+[2019-03-08T02:43:26.734] [FATAL] Aman_project - achie abc
+[2019-03-08T02:43:32.295] [FATAL] Aman_project - achie abc
+[2019-03-08T02:43:43.935] [FATAL] Aman_project - achie abc
+[2019-03-08T02:51:10.767] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTkzNjcwLCJleHAiOjE1NTE5OTcyNzB9.v49ZUOx9pRw47JHFKchDzfY8hk1qzz6kOBWRM2R0avk',
+  '2019/03/08 02:50:39' ]
+[2019-03-08T02:51:15.187] [FATAL] Aman_project - achie abc
+[2019-03-08T02:52:05.598] [FATAL] Aman_project - achie abc
+[2019-03-08T02:58:40.752] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTk0MTIwLCJleHAiOjE1NTE5OTc3MjB9.0mFCtaKxeKXIjJhk4nHkfqGpb_kkTqC9yk4X-1ozFg0',
+  '2019/03/08 02:58:21' ]
+[2019-03-08T02:58:42.280] [FATAL] Aman_project - achie abc
+[2019-03-08T02:59:14.715] [FATAL] Aman_project - achie abc
+[2019-03-08T03:00:56.915] [FATAL] Aman_project - achie abc
+[2019-03-08T03:29:31.039] [FATAL] Aman_project - achie abc
+[2019-03-08T03:36:45.487] [FATAL] Aman_project - achie abc
+[2019-03-08T03:36:49.213] [FATAL] Aman_project - achie abc
+[2019-03-08T03:36:53.092] [FATAL] Aman_project - achie abc
+[2019-03-08T03:44:16.771] [FATAL] Aman_project - achie abc
+[2019-03-08T03:44:22.911] [FATAL] Aman_project - achie abc
+[2019-03-08T03:46:41.586] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUxOTk3MDAxLCJleHAiOjE1NTIwMDA2MDF9.cHDRcwWR9SnPGxb7_eEaLfHSZNFtt6VFOAg9EigUwIU',
+  '2019/03/08 03:29:27' ]
+[2019-03-08T03:46:43.239] [FATAL] Aman_project - achie abc
+[2019-03-08T03:46:50.407] [FATAL] Aman_project - achie abc
+[2019-03-08T03:49:48.770] [FATAL] Aman_project - achie abc
+[2019-03-08T16:18:12.890] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDQyMDkyLCJleHAiOjE1NTIwNDU2OTJ9.HXaiexmEAhApfebPlRw0dRSyqVRtwcdvxMjl5B3HGVg',
+  '2019/03/08 16:17:52' ]
+[2019-03-08T16:18:15.004] [FATAL] Aman_project - achie abc
+[2019-03-08T16:18:57.378] [FATAL] Aman_project - achie abc
+[2019-03-08T16:19:25.789] [FATAL] Aman_project - achie abc
+[2019-03-08T16:20:42.397] [FATAL] Aman_project - achie abc
+[2019-03-08T16:25:49.261] [FATAL] Aman_project - achie abc
+[2019-03-08T16:31:15.007] [FATAL] Aman_project - achie abc
+[2019-03-08T16:35:50.943] [FATAL] Aman_project - achie abc
+[2019-03-08T16:36:47.097] [FATAL] Aman_project - achie abc
+[2019-03-08T16:39:03.801] [FATAL] Aman_project - achie abc
+[2019-03-08T16:39:27.850] [FATAL] Aman_project - achie abc
+[2019-03-08T16:39:31.657] [FATAL] Aman_project - achie abc
+[2019-03-08T16:46:14.576] [FATAL] Aman_project - achie abc
+[2019-03-08T16:46:26.307] [FATAL] Aman_project - achie abc
+[2019-03-08T16:46:29.614] [FATAL] Aman_project - achie abc
+[2019-03-08T16:52:58.861] [FATAL] Aman_project - achie abc
+[2019-03-08T17:00:28.162] [FATAL] Aman_project - achie abc
+[2019-03-08T17:04:03.101] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDQ0ODQzLCJleHAiOjE1NTIwNDg0NDN9.Ux5dR6de5_ndWlZeSTTvlR55ctJ8vEehnCyQBrLPheE',
+  '2019/03/08 16:38:25' ]
+[2019-03-08T17:04:06.040] [FATAL] Aman_project - achie abc
+[2019-03-08T17:04:22.285] [FATAL] Aman_project - achie abc
+[2019-03-08T17:04:30.664] [FATAL] Aman_project - achie abc
+[2019-03-08T17:07:41.341] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDQ1MDYxLCJleHAiOjE1NTIwNDg2NjF9.iG8Wr7IoHZkLAcA4WJFoZD4vGxVT0pxbwABj9lJFs0A',
+  '2019/03/08 16:38:25' ]
+[2019-03-08T17:07:47.346] [FATAL] Aman_project - achie abc
+[2019-03-08T17:07:53.663] [FATAL] Aman_project - achie abc
+[2019-03-08T17:09:12.575] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDQ1MTUyLCJleHAiOjE1NTIwNDg3NTJ9.yDaFKVzd_B6fq7C6uDsMOHmciNzlsu4rjV1-VrHiXMI',
+  '2019/03/08 16:38:25' ]
+[2019-03-08T17:09:14.693] [FATAL] Aman_project - achie abc
+[2019-03-08T17:09:22.744] [FATAL] Aman_project - achie abc
+[2019-03-08T17:10:46.931] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDQ1MjQ2LCJleHAiOjE1NTIwNDg4NDZ9.9VvM95CMY5vHmbVyoF9dQXgF94yX1Na884Dsu_NkO1I',
+  '2019/03/08 16:38:25' ]
+[2019-03-08T17:10:48.037] [FATAL] Aman_project - achie abc
+[2019-03-08T17:10:55.769] [FATAL] Aman_project - achie abc
+[2019-03-08T17:13:44.326] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDQ1NDI0LCJleHAiOjE1NTIwNDkwMjR9.sSyXkmEvpKSaNKEP9XJFKysU97TdbcPDc8W9nkTHLCk',
+  '2019/03/08 16:38:25' ]
+[2019-03-08T17:13:46.876] [FATAL] Aman_project - achie abc
+[2019-03-08T17:14:48.781] [FATAL] Aman_project - achie abc
+[2019-03-08T17:16:12.725] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDQ1NTcyLCJleHAiOjE1NTIwNDkxNzJ9.aJ-Dg0AV-UrkcsIW3AO02-KqlPcW0fdS4I8Rr6-NkZw',
+  '2019/03/08 17:14:44' ]
+[2019-03-08T17:16:15.806] [FATAL] Aman_project - achie abc
+[2019-03-08T17:16:32.445] [FATAL] Aman_project - achie abc
+[2019-03-08T17:19:19.349] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDQ1NzU5LCJleHAiOjE1NTIwNDkzNTl9.6hHh-Y5wJRUUeiGKQW3nnkAXc9g1A3G_ItteWxpRbn0',
+  '2019/03/08 17:19:01' ]
+[2019-03-08T17:19:20.677] [FATAL] Aman_project - achie abc
+[2019-03-08T17:19:34.823] [FATAL] Aman_project - achie abc
+[2019-03-08T17:50:56.289] [FATAL] Aman_project - achie abc
+[2019-03-08T17:53:50.046] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDQ3ODMwLCJleHAiOjE1NTIwNTE0MzB9.5w7Xgb1LNB-2Jg7hF8fd2N2yuV6CIbBp85VbUUpDkZk',
+  '2019/03/08 17:19:01' ]
+[2019-03-08T17:53:54.349] [FATAL] Aman_project - achie abc
+[2019-03-08T17:54:01.192] [FATAL] Aman_project - achie abc
+[2019-03-08T17:55:52.067] [FATAL] Aman_project - achie abc
+[2019-03-08T18:17:29.086] [FATAL] Aman_project - achie abc
+[2019-03-08T18:19:57.186] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDQ5Mzk3LCJleHAiOjE1NTIwNTI5OTd9.Wj5i76tL4Iuw0JM5IimZ9ag3ARu3jHx_SL81uYtfQu8',
+  '2019/03/08 17:19:01' ]
+[2019-03-08T18:19:59.306] [FATAL] Aman_project - achie abc
+[2019-03-08T18:20:04.371] [FATAL] Aman_project - achie abc
+[2019-03-08T18:20:04.548] [FATAL] Aman_project - achie eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJrYXZpdGhhLnJhamFzZWthcmFuQHJhcGlkcXViZS5jb20iLCJpYXQiOjE1NDg0MDU0NzksImV4cCI6MTU0ODQwOTA3OX0.ERsMvGBitaD01AWEus6c9KusaGJx1I6cD0qPnvTs-JA
+[2019-03-08T18:20:04.563] [FATAL] Aman_project - achie eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJrYXZpdGhhLnJhamFzZWthcmFuQHJhcGlkcXViZS5jb20iLCJpYXQiOjE1NDg0MDU0NzksImV4cCI6MTU0ODQwOTA3OX0.ERsMvGBitaD01AWEus6c9KusaGJx1I6cD0qPnvTs-JA
+[2019-03-08T18:55:57.843] [FATAL] Aman_project - achie abc
+[2019-03-08T19:00:55.735] [FATAL] Aman_project - achie abc
+[2019-03-08T19:02:44.729] [FATAL] Aman_project - achie abc
+[2019-03-08T19:03:33.710] [FATAL] Aman_project - achie abc
+[2019-03-08T19:04:27.923] [FATAL] Aman_project - achie abc
+[2019-03-08T19:06:37.134] [FATAL] Aman_project - achie abc
+[2019-03-08T19:09:11.103] [FATAL] Aman_project - achie abc
+[2019-03-08T19:12:12.774] [FATAL] Aman_project - achie abc
+[2019-03-08T19:14:52.925] [FATAL] Aman_project - achie abc
+[2019-03-08T19:15:27.645] [FATAL] Aman_project - achie abc
+[2019-03-08T19:15:50.807] [FATAL] Aman_project - achie abc
+[2019-03-08T19:15:56.239] [FATAL] Aman_project - achie abc
+[2019-03-08T19:16:30.409] [FATAL] Aman_project - achie abc
+[2019-03-08T20:26:25.519] [FATAL] Aman_project - achie abc
+[2019-03-08T20:29:07.892] [FATAL] Aman_project - achie abc
+[2019-03-08T20:34:51.855] [FATAL] Aman_project - achie abc
+[2019-03-08T20:36:37.234] [FATAL] Aman_project - achie abc
+[2019-03-08T20:39:03.291] [FATAL] Aman_project - achie abc
+[2019-03-08T20:39:47.341] [FATAL] Aman_project - achie abc
+[2019-03-08T20:40:11.516] [FATAL] Aman_project - achie abc
+[2019-03-08T20:41:02.985] [FATAL] Aman_project - achie abc
+[2019-03-08T20:43:36.685] [FATAL] Aman_project - achie abc
+[2019-03-08T20:49:19.388] [FATAL] Aman_project - achie abc
+[2019-03-08T20:50:17.665] [FATAL] Aman_project - achie abc
+[2019-03-08T20:53:35.734] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDU4NjE1LCJleHAiOjE1NTIwNjIyMTV9.cz7lOjIuT0ie_MV7m8SyKqyNsVdiOKzP76m21v-pzDg',
+  '2019/03/08 20:36:33' ]
+[2019-03-08T20:53:41.103] [FATAL] Aman_project - achie abc
+[2019-03-08T20:53:54.711] [FATAL] Aman_project - achie eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJrYXZpdGhhLnJhamFzZWthcmFuQHJhcGlkcXViZS5jb20iLCJpYXQiOjE1NDg0MDU0NzksImV4cCI6MTU0ODQwOTA3OX0.ERsMvGBitaD01AWEus6c9KusaGJx1I6cD0qPnvTs-JA
+[2019-03-08T20:53:54.713] [FATAL] Aman_project - achie eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJrYXZpdGhhLnJhamFzZWthcmFuQHJhcGlkcXViZS5jb20iLCJpYXQiOjE1NDg0MDU0NzksImV4cCI6MTU0ODQwOTA3OX0.ERsMvGBitaD01AWEus6c9KusaGJx1I6cD0qPnvTs-JA
+[2019-03-08T21:00:13.437] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDU5MDEzLCJleHAiOjE1NTIwNjI2MTN9.Q2vFOHTAF5HqvJ840eP7v9dpoouBSKCdVo9W-oQvWl0',
+  '2019/03/08 20:36:33' ]
+[2019-03-08T21:00:18.142] [FATAL] Aman_project - achie abc
+[2019-03-08T21:00:24.946] [FATAL] Aman_project - achie abc
+[2019-03-08T21:00:24.952] [FATAL] Aman_project - achie abc
+[2019-03-08T21:01:03.641] [FATAL] Aman_project - achie abc
+[2019-03-08T21:01:10.217] [FATAL] Aman_project - achie abc
+[2019-03-08T21:01:19.314] [FATAL] Aman_project - achie eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJrYXZpdGhhLnJhamFzZWthcmFuQHJhcGlkcXViZS5jb20iLCJpYXQiOjE1NDg0MDU0NzksImV4cCI6MTU0ODQwOTA3OX0.ERsMvGBitaD01AWEus6c9KusaGJx1I6cD0qPnvTs-JA
+[2019-03-08T21:26:42.516] [FATAL] Aman_project - achie eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJrYXZpdGhhLnJhamFzZWthcmFuQHJhcGlkcXViZS5jb20iLCJpYXQiOjE1NDg0MDU0NzksImV4cCI6MTU0ODQwOTA3OX0.ERsMvGBitaD01AWEus6c9KusaGJx1I6cD0qPnvTs-JA
+[2019-03-08T21:53:25.110] [FATAL] Aman_project - achie eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJrYXZpdGhhLnJhamFzZWthcmFuQHJhcGlkcXViZS5jb20iLCJpYXQiOjE1NDg0MDU0NzksImV4cCI6MTU0ODQwOTA3OX0.ERsMvGBitaD01AWEus6c9KusaGJx1I6cD0qPnvTs-JA
+[2019-03-08T21:53:45.272] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDYyMjI1LCJleHAiOjE1NTIwNjU4MjV9.iBZrmTvd2c8sb9zqZp0f2z1ODUmvCcj2WTSEWHkXHLo',
+  '2019/03/08 20:36:33' ]
+[2019-03-08T21:53:47.117] [FATAL] Aman_project - achie abc
+[2019-03-08T21:53:53.659] [FATAL] Aman_project - achie abc
+[2019-03-08T21:53:53.671] [FATAL] Aman_project - achie abc
+[2019-03-08T21:54:06.887] [FATAL] Aman_project - achie abc
+[2019-03-08T21:54:09.866] [FATAL] Aman_project - achie abc
+[2019-03-08T21:54:12.423] [FATAL] Aman_project - achie abc
+[2019-03-08T21:54:17.146] [FATAL] Aman_project - achie eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJrYXZpdGhhLnJhamFzZWthcmFuQHJhcGlkcXViZS5jb20iLCJpYXQiOjE1NDg0MDU0NzksImV4cCI6MTU0ODQwOTA3OX0.ERsMvGBitaD01AWEus6c9KusaGJx1I6cD0qPnvTs-JA
+[2019-03-08T21:56:09.918] [FATAL] Aman_project - achie abc
+[2019-03-08T21:59:07.743] [FATAL] Aman_project - achie abc
+[2019-03-08T22:03:08.853] [FATAL] Aman_project - achie abc
+[2019-03-08T22:04:02.943] [FATAL] Aman_project - achie abc
+[2019-03-08T22:05:07.342] [FATAL] Aman_project - achie eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJrYXZpdGhhLnJhamFzZWthcmFuQHJhcGlkcXViZS5jb20iLCJpYXQiOjE1NDg0MDU0NzksImV4cCI6MTU0ODQwOTA3OX0.ERsMvGBitaD01AWEus6c9KusaGJx1I6cD0qPnvTs-JA
+[2019-03-08T22:14:41.346] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDYzNDgxLCJleHAiOjE1NTIwNjcwODF9.pfcmrueCXnAErrDtrYR8GNMrsiWNNREEPtn-ioGW2Nk',
+  '2019/03/08 22:03:53' ]
+[2019-03-08T22:14:43.347] [FATAL] Aman_project - achie abc
+[2019-03-08T22:14:50.417] [FATAL] Aman_project - achie abc
+[2019-03-08T22:14:50.421] [FATAL] Aman_project - achie abc
+[2019-03-08T22:15:05.137] [FATAL] Aman_project - achie abc
+[2019-03-08T22:15:11.245] [FATAL] Aman_project - achie abc
+[2019-03-08T22:15:18.130] [FATAL] Aman_project - achie abc
+[2019-03-08T22:15:31.598] [FATAL] Aman_project - achie abc
+[2019-03-08T22:50:24.797] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDY1NjI0LCJleHAiOjE1NTIwNjkyMjR9.jdjHb19SYmyRUQxuCf9CgZGv2NtJ18l2ureFn43k0Gs',
+  '2019/03/08 22:49:43' ]
+[2019-03-08T22:50:27.063] [FATAL] Aman_project - achie abc
+[2019-03-08T22:50:31.634] [FATAL] Aman_project - achie abc
+[2019-03-08T22:50:31.643] [FATAL] Aman_project - achie abc
+[2019-03-08T22:50:43.925] [FATAL] Aman_project - achie abc
+[2019-03-08T22:50:48.615] [FATAL] Aman_project - achie abc
+[2019-03-08T22:50:55.968] [FATAL] Aman_project - achie abc
+[2019-03-08T22:51:02.022] [FATAL] Aman_project - achie abc
+[2019-03-08T22:53:34.218] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDY1ODE0LCJleHAiOjE1NTIwNjk0MTR9.gKTXqwExfdvO4sV0C29J6DAR6yW8Ler_CbwB6UgkCts',
+  '2019/03/08 22:52:52' ]
+[2019-03-08T22:53:36.428] [FATAL] Aman_project - achie abc
+[2019-03-08T22:53:40.931] [FATAL] Aman_project - achie abc
+[2019-03-08T22:53:40.932] [FATAL] Aman_project - achie abc
+[2019-03-08T22:53:49.481] [FATAL] Aman_project - achie abc
+[2019-03-08T22:53:54.151] [FATAL] Aman_project - achie abc
+[2019-03-08T22:53:58.942] [FATAL] Aman_project - achie abc
+[2019-03-08T22:54:04.643] [FATAL] Aman_project - achie abc
+[2019-03-08T23:37:16.382] [FATAL] Aman_project - achie abc
+[2019-03-08T23:37:44.817] [FATAL] Aman_project - achie abc
+[2019-03-08T23:47:15.567] [FATAL] Aman_project - hiiiii [ 'd@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJkQGcuY29tIiwiaWF0IjoxNTUyMDY5MDM1LCJleHAiOjE1NTIwNzI2MzV9._lFBuLpFjm9CsCP35wnfoPgnlnoqSJo4MWafGmJ_uX0',
+  '2019/03/08 22:52:52' ]
+[2019-03-08T23:47:18.976] [FATAL] Aman_project - achie abc
+[2019-03-08T23:47:30.125] [FATAL] Aman_project - achie abc
+[2019-03-08T23:47:30.128] [FATAL] Aman_project - achie abc
+[2019-03-08T23:47:44.693] [FATAL] Aman_project - achie abc
+[2019-03-08T23:47:45.555] [FATAL] Aman_project - achie abc
+[2019-03-08T23:47:50.546] [FATAL] Aman_project - achie abc
+[2019-03-08T23:47:58.817] [FATAL] Aman_project - achie abc

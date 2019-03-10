@@ -24,6 +24,7 @@ exports.gr_registration = gr => {
         let Address1 = gr.Address1
         let Company = gr.Company;
         let POBOX = gr.POBOX;
+        let usertype = "residence"
 
 
         //    let Company_Category = hr.Company_Category;
@@ -56,6 +57,7 @@ exports.gr_registration = gr => {
                 Company,
                 POBOX,
                 otp,
+                usertype,
                 date.format(now, "YYYY/MM/DD HH:mm:ss")
             ];
 

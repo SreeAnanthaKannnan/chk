@@ -12,3 +12,7 @@ module.exports.insertemployee =
   "INSERT INTO Employee_Profile (Employee_ID,Name_en,Name_ar,Position,National_Id,Company_Trade_Lincense_No,assigned_for_training,Category) VALUES ?";
 module.exports.deleteemployee =
   "delete from Employee_Profile where National_Id = ?";
+
+  module.exports.getcoursename =
+  "SELECT * FROM Results where National_Id =?";
+  

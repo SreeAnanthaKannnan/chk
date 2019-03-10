@@ -45,7 +45,7 @@ var con = require('../mysql_connection/dbConfig.js'),
     update = require('../core/update'),
     assessment = require('../core/assessment'),
     book = require('../core/servicehistory');
-
+    
 let moment = require('moment');
 
 let Appeal = require('../core/Appeal'),
@@ -85,10 +85,13 @@ let Appeal = require('../core/Appeal'),
     certificate = require("../core/certificate"),
     uploadSalama = require("../core/uploadbulkemployee"),
     general_login = require("../core/General_login"),
+    gr_registration = require('../core/General_register'),
+    general_registration_otp_verify = require('../core/General_registration_otp_verify'),
     Untrained_Employees_schedule = require('../core/Untrained_Employees_showup_schedule'),
+    number_validation_schedule = require('../core/Number_validation_schedule'),
     ip = require('ip');
 
-   
+    const trainer_attendance = require("../core/Trainer_attendance");
 
 const Cryptr = require('cryptr'),
     cryptr = new Cryptr('myTotalySecretKey'),
@@ -99,18 +102,18 @@ const Cryptr = require('cryptr'),
 
 let ipAddress = ip.address();
 console.log("ips====>", ipAddress);
-const storage = multer.diskStorage({
-    // notice you are calling the multer.diskStorage() method here, not multer()
-    // destination: function(req, file, cb) {
-    //     cb(null, '/home/kavitha/Videos/salama_docs/Salama_backend_v0.1/uploads/')
-    // },
-    destination: function(req, file, cb) {
-        cb(null, "/var/www/html/");
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname);
-    }
-});
+// const storage = multer.diskStorage({
+//     // notice you are calling the multer.diskStorage() method here, not multer()
+//     // destination: function(req, file, cb) {
+//     //     cb(null, '/home/kavitha/Videos/salama_docs/Salama_backend_v0.1/uploads/')
+//     // },
+//     destination: function(req, file, cb) {
+//         cb(null, "/var/www/html/");
+//     },
+//     filename: function(req, file, cb) {
+//         cb(null, file.originalname);
+//     }
+// });
     
 var multipartMiddleware = multipart();
 
@@ -199,6 +202,22 @@ router.post('/admin-register', cors(), function(req, res){
     }))
 }
   }) 
+  //====================================================================================//
+  router.post('/number_validation_schedule', cors(), function(req, res){
+    var data= req.body;
+    var request = req.headers;
+    number_validation_schedule.number_validation_schedule(data,request)
+    .then(result=>{
+             res.send({
+                 result:result,
+           
+        })
+      })
+    .catch(err => res.status(err.status).json({
+        message: err.message
+    }))
+  })
+  //======================================================================================//
   router.post("/emailotpverification1", cors(), async function(req, res){
     //var id = await check.checkToken(req);
     
@@ -240,7 +259,40 @@ router.post('/admin-register', cors(), function(req, res){
 // }
   });
 //========================================citizen-registration-end=====================================
-    //=====================================emailotpverification========================================
+
+router.post("/General_Registration", cors(), (req, res) => {
+   const gr = req.body;
+   console.log("Routes_gr", gr);
+
+   if (!gr.Email || !gr.Password) {
+     return res.send({
+       status: 400,
+       message: "Invalid email id or password"
+     });
+   } else {
+     console.log("hiii");
+     gr_registration
+       .gr_registration(gr)
+       .then(result => {
+         console.log(result);
+
+         res.status(result.status).json({
+           message: result
+         });
+       })
+       .catch(err =>
+         res
+           .status(err.status)
+           .json({
+             message: err.message
+           })
+           .json({
+             status: err.status
+           })
+       );
+   }
+ });   
+//=====================================emailotpverification========================================
     router.post("/emailotpverification", cors(), async function(req, res){
     //var id = await check.checkToken(req);
 
@@ -1558,8 +1610,8 @@ router.post('/Trained_Employees_list', cors(), (req, res) => {
     console.log(data, "request data");
     console.log(token, "token");
     let classroom_id = data.classroom_id;
-    let trainer_id = data.trainer_id;
-    let trainer_email_id = data.trainer_email_id;
+    let trainer_name = data.trainer_name;
+    // let trainer_email_id = data.trainer_email_id;
     let address = data.address;
     let number_of_seats = data.number_of_seats;
     let available_date = data.available_date;
@@ -1581,6 +1633,9 @@ router.post('/Trained_Employees_list', cors(), (req, res) => {
                     .classroom(data,token,language)
             .then(result => {
               console.log(result);
+              res.status(result.status).json({
+                message: result
+              });
 
             })
             .catch(err => res.status(err.status).json({
@@ -1865,11 +1920,6 @@ router.get('/Company_trading_license', cors(), (req, res) => {
     let data = req.headers
     
     console.log(data)
-    
-
-   
-         
-
     console.log(data);
 
     company_trading_license
@@ -2281,6 +2331,108 @@ router.post("/Bulk_booking", cors(), (req, res) => {
           })
       );
   });
+  // =================================================================================
+  router.post("/Selecting_date_trainer", cors(), (req, res) => {
+    const trainer_employee = req.body;
+    console.log("Trainer_date_list_routes", trainer_employee);
+   
+    const Trainer_id = req.body.Trainer_id;
+    console.log("Trainer_Trainer_id_routes", Trainer_id);
+   
+    const selected_date = req.body.select_date;
+    console.log("Trainer_Company_selected_date_routes", selected_date);
+   
+    const start_time = req.body.start_time;
+    console.log("Trainer_Company_Email_routes", start_time);
+   
+    const end_time = req.body.end_time;
+    console.log("Trainer_Company_Email_routes", end_time);
+   
+    trainer_attendance
+      .trainer_date_select(Trainer_id, selected_date, start_time, end_time)
+      .then(result => {
+        console.log(result);
+   
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      );
+   });
+
+  //  =====================================================================
+
+  //=================================Trainer Attendance=============================================//
+router.post("/attendence", cors(), (req, res) => {
+  const trainer_employee = req.body;
+  console.log("Trainer_attendance_list_routes", trainer_employee);
+ 
+  const getdata = req.body.getdata;
+  console.log("Trainer_Company_employee_id_routes", getdata);
+ 
+  const attendance_status = "Present";
+  console.log("Trainer_Company_attendance_status_routes", attendance_status);
+ 
+  const trainer_id = req.body.Trainer_id;
+  console.log("Trainer_Company_trainer_id_routes", trainer_id);
+ 
+  const Attended_date_val = req.body.attended_date;
+ 
+  var Attended_date = moment(Attended_date_val).format("YYYY/MM/DD");
+ 
+  console.log("Trainer_Company_Attended_date_routes", Attended_date);
+ 
+  const start_time = req.body.start_time;
+  console.log("Trainer_Company_start_time_routes", start_time);
+ 
+  const end_time = req.body.end_time;
+  console.log("Trainer_Company_end_time_routes", end_time);
+ 
+  const classroom = req.body.classroom_id;
+  console.log("Trainer_Company_classroom_routes", classroom);
+ 
+  const course_name = req.body.course_name;
+  console.log("Trainer_Company_course_name_routes", course_name);
+ 
+  trainer_attendance
+    .trainer_attendance_list(
+      getdata,
+      attendance_status,
+      trainer_id,
+      Attended_date,
+      start_time,
+      end_time,
+      classroom,
+      course_name
+    )
+    .then(result => {
+      console.log(result);
+ 
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+ });
+ //=====================================================
   router.post("/get_employee_attendance_list", cors(), (req, res) => {
     const data = req.body;
     const token = req.headers.token;

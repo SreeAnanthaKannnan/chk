@@ -189,7 +189,7 @@ function Employee_update(Emirates_ID, Company_Trade_Lincense_No, language) {
       console.log(Emirates_ID, "Emirates_ID");
       for (i = 0; i < Emirates_ID.length; i++) {
         var res1 = await mysqlConnection.query_execute(
-          "update Employee_Profile set assigned_for_training =? where Company_Trade_Lincense_No = ? and National_ID =?",
+          "update Employee_Profile set assigned_for_training =? where Company_Trade_Lincense_No = ? and National_Id =?",
           ["Booked", Company_Trade_Lincense_No, Emirates_ID[i]]
         );
         console.log("res1===>", res1.data);
@@ -204,7 +204,7 @@ function Untrained_Employees_schedule(Company_Trade_Lincense_No, language) {
   return new Promise(async function(resolve, reject) {
     if (language == "en") {
       var res2 = await mysqlConnection.query_execute(
-        "select * from Employee_Profile where  National_ID not in(select Emirates_ID from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ",
+        "select * from Employee_Profile where  National_Id not in(select National_Id from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ",
         ["pass","NO",Company_Trade_Lincense_No, "Others"]
       );
       console.log("kavitha", res2.data);
@@ -212,12 +212,12 @@ function Untrained_Employees_schedule(Company_Trade_Lincense_No, language) {
     } else {
       console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
 
-      var res1 = await mysqlConnection.query_execute(
-        "select * from Employee_Profile where Company_Trade_Lincense_No=? and Employee_ID in (select Employee_ID from Results where result_ar=?) ",
-        [Company_Trade_Lincense_No, status]
+      var res2 = await mysqlConnection.query_execute(
+        "select * from Employee_Profile where  National_Id not in(select National_Id from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ",
+        ["pass","NO",Company_Trade_Lincense_No, "Others"]
       );
-      console.log("res1===>", res1);
-      return resolve({ result: res1.data });
+      console.log("res1===>", res2);
+      return resolve({ result: res2.data });
     }
   });
 }
@@ -251,7 +251,7 @@ function Employee_name_schedule(value, language) {
 
         await mysqlConnection
           .query_execute(
-            "select Name_en from Employee_Profile where National_ID =?",
+            "select Name_en from Employee_Profile where National_Id =?",
             [Emirates_ID]
           )
           .then(async function(result, err) {
@@ -273,7 +273,7 @@ function Employee_name_schedule(value, language) {
 
         await mysqlConnection
           .query_execute(
-            "select Name_ar from Employee_Profile where National_ID =?",
+            "select Name_ar from Employee_Profile where National_Id =?",
             [Emirates_ID]
           )
           .then(async function(result, err) {
@@ -295,7 +295,7 @@ function trainer_id(trainer_name, language) {
   return new Promise(async function(resolve, reject) {
     if (language == "en") {
       var res2 = await mysqlConnection.query_execute(
-        "select * from Employee_Profile where  Company_Trade_Lincense_No=? and Category=? and  National_ID not in(select National_Id from Results where result_en=?) ",
+        "select * from Employee_Profile where  Company_Trade_Lincense_No=? and Category=? and  National_Id not in(select National_Id from Results where result_en=?) ",
         [Company_Trade_Lincense_No, "Others", "pass"]
       );
       console.log("kavitha", res2.data);
@@ -334,7 +334,7 @@ function Untrained_Employees_list(Company_Trade_Lincense_No, language) {
   return new Promise(async function(resolve, reject) {
     if (language == "en") {
       var res2 = await mysqlConnection.query_execute(
-        "select * from Employee_Profile where  National_ID not in(select National_Id from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ",
+        "select * from Employee_Profile where  National_Id not in(select National_Id from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ",
         ["pass","NO",Company_Trade_Lincense_No, "Others"]
       );
       console.log("kavitha", res2.data);
@@ -358,17 +358,35 @@ function Trained_Employees_list(Company_Trade_Lincense_No,language,status) {
       if (language == 'en'){  
     console.log("Company_Trade_Lincense_No",Company_Trade_Lincense_No)
   
-              var res1= await mysqlConnection.query_execute("select * from Employee_Profile where Company_Trade_Lincense_No=? and National_ID in (select National_Id from Results where result_en=?) ",[Company_Trade_Lincense_No,status])
+              var res1= await mysqlConnection.query_execute("select * from Employee_Profile where Company_Trade_Lincense_No=? and National_Id in (select National_Id from Results where result_en=?) ",[Company_Trade_Lincense_No,status])
     console.log("res1===>",res1)
               return resolve({result:res1.data})
           }
            else{
               console.log("Company_Trade_Lincense_No",Company_Trade_Lincense_No)
   
-              var res1= await mysqlConnection.query_execute("select * from Employee_Profile where Company_Trade_Lincense_No=? and National_ID in (select National_Id from Results where result_ar=?) ",[Company_Trade_Lincense_No,status])
+              var res1= await mysqlConnection.query_execute("select * from Employee_Profile where Company_Trade_Lincense_No=? and National_Id in (select National_Id from Results where result_ar=?) ",[Company_Trade_Lincense_No,status])
     console.log("res1===>",res1)
               return resolve({result:res1.data})
            }
+  })
+  
+}
+function number_validation_schedule(Company_Trade_Lincense_No) {
+
+  return new Promise( async function (resolve,reject){
+      
+    console.log("Company_Trade_Lincense_No",Company_Trade_Lincense_No)
+  
+    var res2 = await mysqlConnection.query_execute(
+      "select count(National_Id) as count from Employee_Profile where  National_Id not in(select National_Id from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ",
+      ["pass","NO",Company_Trade_Lincense_No, "Others"]
+    );
+              return resolve({result:res2.data})
+          
+          
+              
+           
   })
   
 }

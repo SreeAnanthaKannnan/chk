@@ -26,6 +26,7 @@ exports.Employee_profile = (
     // let Safety_Officer = EmployeeProfile.safety_officer
     let Company_Trade_Lincense_No = EmployeeProfile.company_trade_lincense_no;
     let token = EmployeeProfile.token;
+    let assigend_for_training ="NO"
     // let profile_photo_url = path;
     // let base64data = filename_blob.toString('base64');
     // console.log(base64data,"==============================>")
@@ -82,14 +83,15 @@ exports.Employee_profile = (
           Position,
           National_ID,
           Company_Trade_Lincense_No,
+           assigend_for_training,
           // profile_photo_url,
           Category
         ];
         console.log(query_value, "query_value");
-        await Employee_profileDao.Employee_select(Employee_ID)
-          .then(async function (result) {
-            console.log("result", result);
-            if (result.message.length != 0) {
+        await Employee_profileDao.Employee_select(National_ID)
+          .then(async function (result,err) {
+            console.log("result======>", result.message.data.length);
+            if (result.message.data.length != 0) {
               var messagevalue = await  message.getmessage(language.result,"E02")
 
               return resolve({
@@ -97,8 +99,9 @@ exports.Employee_profile = (
                 message: messagevalue
               });
             } else {
-              let query = Employee_profileDao.Employee_insert(query_value);
+              let query =  await Employee_profileDao.Employee_insert(query_value);
               var messagevalue = await  message.getmessage(language.result,"S02")
+              console.log(query,"======>queryvalue")
 
 
               return resolve({
@@ -107,11 +110,13 @@ exports.Employee_profile = (
               });
             }
           })
+        
           .catch(async function (err) {
             var messagevalue = await  message.getmessage(language.result,"E01")
 
             return resolve({ status: 400, message: messagevalue });
           });
+        
       }
     }
   });

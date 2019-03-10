@@ -33,7 +33,7 @@ function Classroom_insert(params,duration,insert_count) {
 
                               var res1=await mysqlConnection.insert_query("INSERT INTO Classroom (classroom_id,trainer_id,address_en,address_ar,number_of_seats,number_of_available_seats,available_date,start_time,end_time,course_id)Values ?",[params[0][0],params[0][1],params[0][2],params[0][3],params[0][4],params[0][4],params[0][6],start_time,ended_time,params[0][9]])
              
-       console.log("start_time",start_time)
+       console.log("start_time",res1)
        start_time = ended_time
         console.log("startTIme123456", start_time);
         }
@@ -758,9 +758,9 @@ let sql = "SELECT TIMEDIFF( '"+ end_time +"' , '" +start_time+ "') as starting_t
                        console.log(query_values,"query__________________value")
                        
                     var res2= await 
-                      mysqlConnection.insert_query("INSERT INTO Schedule(classroom_id,Emirates_ID,start_time,end_time,course_id,trainer_id,Company_Trade_Lincense_No,number_of_seats_selected,scheduling_date,scheduled_date,payment_status,amount,status)VALUES ?",query_values)
+                      mysqlConnection.insert_query("INSERT INTO Schedule(classroom_id,National_Id,start_time,end_time,course_id,trainer_id,Company_Trade_Lincense_No,number_of_seats_selected,scheduling_date,scheduled_date,payment_status,amount,status)VALUES ?",query_values)
                     console.log("resvalue=========>res2",res2)
-                    var Employee_update= await mysqlConnection.query_execute("UPDATE Employee_Profile SET assigned_for_training =? where National_ID=?",["Booked",Emirates_ID[i]])
+                    var Employee_update= await mysqlConnection.query_execute("UPDATE Employee_Profile SET assigned_for_training =? where National_Id=?",["Booked",Emirates_ID[i]])
                      console.log("pavannnnnnnnnnn",Employee_update)
 
                    }

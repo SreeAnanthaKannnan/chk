@@ -1,10 +1,19 @@
 const SessionDao = require("../daos/SessionDao");
+const Employee_profileDao = require("../daos/Employee_profileDao");
 const session_time = require("../utils/session_time_difference");
 const message = require('../utils/messages')
-const CourseDao = require('../daos/CourseDao')
+const language_detect = require("../utils/language_detect");
+const translate = require("../utils/translate");
 
-exports.course_view = (token,language) =>
+exports.number_validation_schedule= (
+  data,request
+  
+) =>
   new Promise(async (resolve, reject) => {
+    
+    let Company_Trade_Lincense_No = request.company_trade_lincense_no;
+    let no_of_seats_selected= data.no_of_seats_selected;
+    let token = request.token
     console.log(token, "test");
     let query = await SessionDao.Session_select(token);
     console.log(query, "testinggggggggg");
@@ -39,45 +48,36 @@ exports.course_view = (token,language) =>
           message: "session expired"
         });
       } else {
-           if(language =="en"){
-          await CourseDao.Course_display()
-          .then(async function (result,err) {
-            if(result){
-            console.log("result",result );
-            
+        
+       
+        await Employee_profileDao.number_validation_schedule(Company_Trade_Lincense_No)
+        .then(async function (result,err) {
+            console.log("result======>", result.result[0].count)
+            console.log(result.result[0].count,"<+++++++++count")
+            console.log("DFFFFFFFFFFFff")
+            let count =result.result[0].count
+
+            if (count<no_of_seats_selected) {
+                let count = result.result[0].count
+
+              return resolve({
+                status: 400,
+                message:"Only"+" "+count+" "+"untrained employees available.Please provide maximum"+" "+count+" "+"count"
+              });
+            } else {
+              
               return resolve({
                 status: 200,
-                message: result.result
+                message:"sucess"
               });
             }
-             
           })
-          .catch(async function (err) {
-            
-
-            return resolve({ status: 400, message: "Something Went Wrong" });
-          });
-        }
-        else{
-
-          await CourseDao.Course_display_arabic()
-          .then(async function (result) {
-            console.log("result",result );
-            
-              return resolve({
-                status: 200,
-                message: result.result
-              });
-             
-          })
+        
           .catch(async function (err) {
 
-            return resolve({ status: 400, message: "Something Went Wrong" });
+            return resolve({ status: 400, message: "" });
           });
-
-
-
-        }
+        
       }
     }
   });

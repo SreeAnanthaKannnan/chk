@@ -51,7 +51,7 @@ exports.bulk_booking = (request,data) => new Promise(async(resolve, reject) => {
                  
                      let Emirates_array =[]
                      for(i=0;i<result.result.length;i++){
-                         let Emirates_value = result.result[i].National_ID
+                         let Emirates_value = result.result[i].National_Id
                          Emirates_array.push(Emirates_value)
 
 

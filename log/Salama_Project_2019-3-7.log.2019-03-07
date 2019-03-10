@@ -1,0 +1,246 @@
+[2019-03-07T19:22:37.110] [FATAL] Aman_project - hiiiii [ 'a@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJhQGcuY29tIiwiaWF0IjoxNTUxOTY2NzU3LCJleHAiOjE1NTE5NzAzNTd9.dMkP4Cy1DtW3THZMsijrSDocswpcploxA65__Y0jIeo',
+  '2019/03/07 19:21:01' ]
+[2019-03-07T19:22:39.561] [FATAL] Aman_project - achie abc
+[2019-03-07T19:23:48.442] [FATAL] Aman_project - hiiiii [ 'a@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJhQGcuY29tIiwiaWF0IjoxNTUxOTY2ODI4LCJleHAiOjE1NTE5NzA0Mjh9.DzMvbSlihmeNqNXYng7QPHBW0nasCZ_EpwLzPhLpZ60',
+  '2019/03/07 19:21:01' ]
+[2019-03-07T19:23:50.297] [FATAL] Aman_project - achie abc
+[2019-03-07T19:34:28.388] [FATAL] Salama_project - { Error: ER_DUP_ENTRY: Duplicate entry '111-1111-1234567-1' for key 'PRIMARY'
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/General_RegisterDAO.js:15:13
+    at new Promise (<anonymous>)
+    at Object.gr_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/General_RegisterDAO.js:10:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_register.js:64:50)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_DUP_ENTRY',
+  errno: 1062,
+  sqlMessage: 'Duplicate entry \'111-1111-1234567-1\' for key \'PRIMARY\'',
+  sqlState: '23000',
+  index: 0,
+  sql: 'INSERT INTO General_Registration (First_Name,Last_Name,Emirates_ID,Mobile_Number,AlternateNumber,Email_ID,password,Nationality,Address,Company,POBOX,otp,reg_date) VALUES (\'Kumar\', \'a\', \'111-1111-1234567-1\', \'9876543210\', \'8807441260\', \'c@g.com\', \'002ad7ec10922f3e0104f430af254a8b2e1f0ba7584ddc38297c\', \'aaa\', \'aaa\', \'aaa\', \'600001\', \'7448\', \'2019/03/07 19:34:27\') ' }
+[2019-03-07T19:35:27.456] [FATAL] Salama_project - { Error: ER_DUP_ENTRY: Duplicate entry '111-1111-1234567-1' for key 'PRIMARY'
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/General_RegisterDAO.js:15:13
+    at new Promise (<anonymous>)
+    at Object.gr_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/General_RegisterDAO.js:10:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_register.js:64:50)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_DUP_ENTRY',
+  errno: 1062,
+  sqlMessage: 'Duplicate entry \'111-1111-1234567-1\' for key \'PRIMARY\'',
+  sqlState: '23000',
+  index: 0,
+  sql: 'INSERT INTO General_Registration (First_Name,Last_Name,Emirates_ID,Mobile_Number,AlternateNumber,Email_ID,password,Nationality,Address,Company,POBOX,otp,reg_date) VALUES (\'Kumar\', \'a\', \'111-1111-1234567-1\', \'9876543210\', \'8807441260\', \'k@g.com\', \'adeb706d61561e4b4ce66b8f157c2894a7d5a536f1374bce87df\', \'aaa\', \'aaa\', \'aaa\', \'600001\', \'7941\', \'2019/03/07 19:35:27\') ' }
+[2019-03-07T19:36:42.507] [FATAL] Aman_project - hiiiii [ 'v@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJ2QGcuY29tIiwiaWF0IjoxNTUxOTY3NjAyLCJleHAiOjE1NTE5NzEyMDJ9.PxWpo1Wolel7RErb0wyBjPX8H2D7iW8_pwyjRthbkxk',
+  '2019/03/07 19:35:51' ]
+[2019-03-07T19:36:55.845] [FATAL] Aman_project - hiiiii [ 'v@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJ2QGcuY29tIiwiaWF0IjoxNTUxOTY3NjE1LCJleHAiOjE1NTE5NzEyMTV9.wFyHLWevYezL-RCrguSqqRHYXmO-mKuuK7SwJ3gdHT0',
+  '2019/03/07 19:35:51' ]
+[2019-03-07T19:39:25.566] [FATAL] Salama_project - { Error: ER_WRONG_VALUE_COUNT_ON_ROW: Column count doesn't match value count at row 1
+    at Query.Sequence._packetToError (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Query.ErrorPacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/sequences/Query.js:77:18)
+    at Protocol._parsePacket (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:278:23)
+    at Parser.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Parser.js:76:12)
+    at Protocol.write (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:91:28)
+    at Socket.<anonymous> (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Connection.js:502:10)
+    at emitOne (events.js:116:13)
+    at Socket.emit (events.js:211:7)
+    at addChunk (_stream_readable.js:263:12)
+    at readableAddChunk (_stream_readable.js:250:11)
+    at Socket.Readable.push (_stream_readable.js:208:10)
+    at TCP.onread (net.js:607:20)
+    --------------------
+    at Pool.query (/home/logesh/Documents/Salama/saned_spsa_backend/node_modules/mysql/lib/Pool.js:199:23)
+    at /home/logesh/Documents/Salama/saned_spsa_backend/daos/General_RegisterDAO.js:15:13
+    at new Promise (<anonymous>)
+    at Object.gr_insert (/home/logesh/Documents/Salama/saned_spsa_backend/daos/General_RegisterDAO.js:10:12)
+    at Promise (/home/logesh/Documents/Salama/saned_spsa_backend/core/General_register.js:66:50)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+  code: 'ER_WRONG_VALUE_COUNT_ON_ROW',
+  errno: 1136,
+  sqlMessage: 'Column count doesn\'t match value count at row 1',
+  sqlState: '21S01',
+  index: 0,
+  sql: 'INSERT INTO General_Registration (First_Name,Last_Name,Emirates_ID,Mobile_Number,AlternateNumber,Email_ID,password,Nationality,Address,Company,POBOX,otp,reg_date) VALUES (\'PK\', \'A\', \'222-2222-1234567-8\', \'9876543210\', \'8870123469\', \'m@g.com\', \'8e9a5533a163d4262b7e17c5adf2cc4ea1d804f17782141d0f6ab3\', \'aaa\', \'aaa\', \'aaa\', \'600001\', \'8167\', NULL, \'2019/03/07 19:39:25\') ' }
+[2019-03-07T19:45:05.738] [FATAL] Aman_project - hiiiii [ 'e@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJlQGcuY29tIiwiaWF0IjoxNTUxOTY4MTA1LCJleHAiOjE1NTE5NzE3MDV9.FPMkdYMEvFeDbPaZAsOSNua2dlVM7FQiSwuXQnSs_XA',
+  '2019/03/07 19:41:11' ]
+[2019-03-07T19:48:25.834] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTY4MzA1LCJleHAiOjE1NTE5NzE5MDV9._l7opcq6i35bK-txvrm9I6E0YH4FcLLYjeXFuqD211g',
+  '2019/03/07 19:46:14' ]
+[2019-03-07T19:52:42.329] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTY4NTYyLCJleHAiOjE1NTE5NzIxNjJ9.zg-tVtqObuty7Joz-oXg_pKmpcwux58KKlzZY4BkITU',
+  '2019/03/07 19:46:14' ]
+[2019-03-07T19:52:44.127] [FATAL] Aman_project - achie abc
+[2019-03-07T19:53:11.485] [FATAL] Aman_project - achie abc
+[2019-03-07T19:55:13.689] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTY4NzEzLCJleHAiOjE1NTE5NzIzMTN9.QGLAcwm8LpRQUTeeXYAB9HWAMBDCqVGjmIRJAAaSIj8',
+  '2019/03/07 19:46:14' ]
+[2019-03-07T19:55:22.555] [FATAL] Aman_project - achie abc
+[2019-03-07T19:57:11.131] [FATAL] Aman_project - achie abc
+[2019-03-07T19:57:32.202] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTY4ODUyLCJleHAiOjE1NTE5NzI0NTJ9.gXDI3BHEfNES297pvXQzXBqlKcbS9FAsdxeIe2AeLkc',
+  '2019/03/07 19:46:14' ]
+[2019-03-07T19:57:49.103] [FATAL] Aman_project - achie abc
+[2019-03-07T20:01:48.969] [FATAL] Aman_project - achie abc
+[2019-03-07T20:02:19.537] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTY5MTM5LCJleHAiOjE1NTE5NzI3Mzl9.KoEn7xn3ar31GFj2eS1yt0meB5wpqnDldrt-At1z2WU',
+  '2019/03/07 20:01:45' ]
+[2019-03-07T20:02:22.217] [FATAL] Aman_project - achie abc
+[2019-03-07T20:03:23.426] [FATAL] Aman_project - achie abc
+[2019-03-07T20:04:04.268] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTY5MjQ0LCJleHAiOjE1NTE5NzI4NDR9.ZojzP5buk_SVT19CMTxaZkU12MSdNZu1pMtrcK-Ziz0',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T20:04:10.855] [FATAL] Aman_project - achie abc
+[2019-03-07T20:04:36.532] [FATAL] Aman_project - achie abc
+[2019-03-07T20:05:01.742] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTY5MzAxLCJleHAiOjE1NTE5NzI5MDF9.S2DMvCoRn46M1dxVCvVJdmrK4CIv_L73B0wPiCDP7Ro',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T20:05:03.865] [FATAL] Aman_project - achie abc
+[2019-03-07T20:05:26.000] [FATAL] Aman_project - achie abc
+[2019-03-07T20:09:16.521] [FATAL] Aman_project - achie abc
+[2019-03-07T20:12:35.974] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTY5NzU1LCJleHAiOjE1NTE5NzMzNTV9.nmBS48UBN2Qg5rmY8rd2vMnaZ-6IS9GiX_MnJAC4nN0',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T20:12:36.936] [FATAL] Aman_project - achie abc
+[2019-03-07T20:13:10.073] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTY5NzkwLCJleHAiOjE1NTE5NzMzOTB9.8iAyKyP-7EMXH7BbXCd8tOVjvqRBq_XxbGgBj9OqDBQ',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T20:13:15.792] [FATAL] Aman_project - achie abc
+[2019-03-07T20:34:24.112] [FATAL] Aman_project - achie abc
+[2019-03-07T20:37:56.299] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTcxMjc2LCJleHAiOjE1NTE5NzQ4NzZ9.cxrTl39qBw4bmqdilYdtSPUKjQalQMujqu1xu7hv9Rg',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T20:37:57.625] [FATAL] Aman_project - achie abc
+[2019-03-07T20:38:36.838] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTcxMzE2LCJleHAiOjE1NTE5NzQ5MTZ9.EivlFHJRfVU8s72FYO1vcjwX57zWi3PGcT2hBRXrQKE',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T20:38:39.535] [FATAL] Aman_project - achie abc
+[2019-03-07T20:39:33.941] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTcxMzczLCJleHAiOjE1NTE5NzQ5NzN9.jIt-KlCXMyzI8AIUWG6HuNBvB7uC8tpIlN42Oi7mHjk',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T20:39:35.839] [FATAL] Aman_project - achie abc
+[2019-03-07T20:40:03.550] [FATAL] Aman_project - achie abc
+[2019-03-07T20:41:20.751] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTcxNDgwLCJleHAiOjE1NTE5NzUwODB9.u8Kz_WWAReMdcKsyOqQGbYf33TLwOFbH_8JhIhDwBUQ',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T20:41:25.031] [FATAL] Aman_project - achie abc
+[2019-03-07T20:42:00.237] [FATAL] Aman_project - achie abc
+[2019-03-07T21:37:36.923] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTc0ODU2LCJleHAiOjE1NTE5Nzg0NTZ9.OB3QNsx6hDsbdpZFH2jmMfY0mdw1Nrvs-rjEXYl_ZfQ',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T21:37:43.998] [FATAL] Aman_project - achie abc
+[2019-03-07T21:38:29.253] [FATAL] Aman_project - achie abc
+[2019-03-07T21:39:12.710] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTc0OTUyLCJleHAiOjE1NTE5Nzg1NTJ9.KU1akcXqSrgIGXAC3E683VPihxnGTIIsovo-Z1yY4Zk',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T21:39:18.751] [FATAL] Aman_project - achie abc
+[2019-03-07T23:06:53.124] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgwMjEzLCJleHAiOjE1NTE5ODM4MTN9.98RukJqgbOVsdsUlUXSDE46pSU7LlBnXRCHTRyjn5MU',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:06:58.133] [FATAL] Aman_project - achie abc
+[2019-03-07T23:07:13.232] [FATAL] Aman_project - achie abc
+[2019-03-07T23:14:33.381] [FATAL] Aman_project - achie abc
+[2019-03-07T23:16:31.858] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgwNzkxLCJleHAiOjE1NTE5ODQzOTF9.wLys4VJzhLnLlAMJFK2zfQkiZQ0m_yGMFoXTpVgtG9w',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:19:01.710] [FATAL] Aman_project - achie abc
+[2019-03-07T23:21:17.813] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgxMDc3LCJleHAiOjE1NTE5ODQ2Nzd9.DYmmv09JP-yrhBRJDYsDY4xBvPWpXQ_5KFl-Z-OAlyM',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:21:26.249] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgxMDg2LCJleHAiOjE1NTE5ODQ2ODZ9.UZNViuSjEvZWlxhPRw7FlanfhwsL89iDJ2HQ7_TncZc',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:21:42.796] [FATAL] Aman_project - achie abc
+[2019-03-07T23:22:15.566] [FATAL] Aman_project - achie abc
+[2019-03-07T23:23:14.110] [FATAL] Aman_project - achie abc
+[2019-03-07T23:23:35.081] [FATAL] Aman_project - achie abc
+[2019-03-07T23:25:58.679] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgxMzU4LCJleHAiOjE1NTE5ODQ5NTh9.ODphcH3uCTaiRk3TvvnSqbtY8qnE3yICc1590RgvYtA',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:26:03.325] [FATAL] Aman_project - achie abc
+[2019-03-07T23:26:50.789] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgxNDEwLCJleHAiOjE1NTE5ODUwMTB9.0UQr9qBi5FX7AiQ9v-2znXTtqNIRTGNqMvcDTlC0q3Q',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:28:50.838] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgxNTMwLCJleHAiOjE1NTE5ODUxMzB9.PnoaESmvuusz_M1RWSfjBEBsZ1ds72oge4VF8-QbJGU',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:28:55.036] [FATAL] Aman_project - achie abc
+[2019-03-07T23:29:31.235] [FATAL] Aman_project - achie abc
+[2019-03-07T23:32:53.841] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgxNzczLCJleHAiOjE1NTE5ODUzNzN9.vFoKfvUhx7oc80NjS5shjeX4n5eRmGdJ4ZgIcfPEJic',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:33:09.942] [FATAL] Aman_project - achie abc
+[2019-03-07T23:40:35.401] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgyMjM1LCJleHAiOjE1NTE5ODU4MzV9.qldxGl1TZGWsngi_5PJfFLDZhB7M04PjvndL_aPimsM',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:40:42.282] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgyMjQyLCJleHAiOjE1NTE5ODU4NDJ9.QCmot3BfTxFwzQPKSgF_bT7GlscOY-abt8Iv_HH4RrM',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:40:51.407] [FATAL] Aman_project - achie abc
+[2019-03-07T23:42:10.215] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgyMzMwLCJleHAiOjE1NTE5ODU5MzB9.uYFUm48vEGeL8sVW10r0R8QsBsvqwvevoYWVnlOjhwU',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:42:14.043] [FATAL] Aman_project - achie abc
+[2019-03-07T23:42:42.342] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgyMzYyLCJleHAiOjE1NTE5ODU5NjJ9.1f5gvgIdF92cI4VEsv5g_qNdiP4q5bDWdcJLE8pxGoo',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:43:02.006] [FATAL] Aman_project - achie abc
+[2019-03-07T23:44:19.325] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgyNDU5LCJleHAiOjE1NTE5ODYwNTl9.NT8JF_9YIGyqcTzSeafKfAbLpXEu-SUetN-EradBNOI',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:44:21.804] [FATAL] Aman_project - achie abc
+[2019-03-07T23:48:22.994] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgyNzAyLCJleHAiOjE1NTE5ODYzMDJ9.rCzewWUuigoUBOZBGWKlB8MQfmeU29_LGndf-tNLIEk',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:48:26.556] [FATAL] Aman_project - achie abc
+[2019-03-07T23:49:54.625] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgyNzk0LCJleHAiOjE1NTE5ODYzOTR9.jxFeX0GSJTq9PLqu8MBG_m4UuIyLUJCGaQ2tE0Xqyrs',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:50:26.844] [FATAL] Aman_project - achie abc
+[2019-03-07T23:51:20.370] [FATAL] Aman_project - hiiiii [ 'a@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJhQGcuY29tIiwiaWF0IjoxNTUxOTgyODgwLCJleHAiOjE1NTE5ODY0ODB9.IR9Amt10jgFADm4RFp3cN7zSYDzYgLZ9JpKOJ0MCexc',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:51:23.271] [FATAL] Aman_project - achie abc
+[2019-03-07T23:54:12.684] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgzMDUyLCJleHAiOjE1NTE5ODY2NTJ9.HMA-U2TiLQ3eRGnvrFaoXK2oCKYJZIMJMY5p-sdYpLU',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:54:16.127] [FATAL] Aman_project - achie abc
+[2019-03-07T23:55:47.047] [FATAL] Aman_project - hiiiii [ 'r@g.com',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXJhbXMiOiJyQGcuY29tIiwiaWF0IjoxNTUxOTgzMTQ3LCJleHAiOjE1NTE5ODY3NDd9.Tnczf3sy50wi6UgPTEdxNgCWVRLJekO48B3-OLSVoQk',
+  '2019/03/07 20:03:19' ]
+[2019-03-07T23:55:49.028] [FATAL] Aman_project - achie abc

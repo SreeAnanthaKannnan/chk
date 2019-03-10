@@ -10,7 +10,7 @@ async function gr_insert(params) {
     return new Promise(function (resolve, reject) {
         console.log("hiiiii", params)
         params = [params]
-        sql = "INSERT INTO General_Registration (First_Name,Last_Name,Emirates_ID,Mobile_Number,AlternateNumber,Email_ID,password,Nationality,Address,Company,POBOX,otp,reg_date) VALUES ? ";
+        sql = "INSERT INTO General_Registration (First_Name,Last_Name,Emirates_ID,Mobile_Number,AlternateNumber,Email_ID,password,Nationality,Address,Company,POBOX,otp,usertype,reg_date) VALUES ? ";
 
         con.query(sql, [params], function (err, result) {
             if (err) {

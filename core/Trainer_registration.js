@@ -70,8 +70,24 @@ exports.trainer_account = (data,token) => new Promise(async(resolve, reject) => 
             let temp = await translate.translate_en(Name)
             Name_en = temp.result;
         }
+        language = await language_detect.languageDetect(course_name)
+        console.log(language.result,"language")
+        if(language.result =="en"){
+           let temp = await translate.translate_ar(course_name)
+           console.log(temp)
+           course_name_ar = temp.result;
+           console.log(course_name_ar)
+           course_name_en = course_name
+                
+        }
+        else{
+            course_name_ar =course_name
+            let temp = await translate.translate_en(course_name)
+            course_name_en = temp.result;
+        }
     
-         let query_value =[Name_en,Name_ar,trainer_email_id,password,reg_date,course_name,otp]
+    
+         let query_value =[Name_en,Name_ar,trainer_email_id,password,reg_date,course_name_en,course_name_ar,otp]
          await TrainerDao.Trainer_information(trainer_email_id)
          .then(async function(result) {
              console.log("result", result);

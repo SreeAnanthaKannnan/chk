@@ -56,10 +56,10 @@ exports.schedule_summary = (request) => new Promise(async(resolve, reject) => {
                     var obj ={}
                     var schedule_result=result.result.data
                     
-                    console.log(schedule_result,"scheduleresult")
-                    console.log(result.result.data[0].Emirates_ID,"length")
+                    console.log(schedule_result[0].trainer_id,"scheduleresult")
+                    console.log(result.result.data[0].National_Id,"length")
                     for(i=0;i<result.result.data.length;i++){
-                        value.push(result.result.data[i].Emirates_ID)
+                        value.push(result.result.data[i].National_Id)
                                        }
                                        console.log(value,"value")
                     await Employee_ProfileDao.Employee_name_schedule(value,language)
@@ -69,6 +69,8 @@ exports.schedule_summary = (request) => new Promise(async(resolve, reject) => {
                            let final_array1 =[]
                       if(language =="ar"){
                            for(i=0;i<result.result.length;i++){
+                            console.log(schedule_result[i],"myyyyyyyyyyyyyyyyyyyyyyyyyyy")
+
                               let trainer_Name = await TrainerDao.trainer_name_schedule(schedule_result[i].trainer_id,language)
                                 console.log(trainer_Name,"testing=============================")
                                 let course_Name = await CourseDao.course_name_schedule(schedule_result[i].course_id,language)
@@ -77,7 +79,7 @@ exports.schedule_summary = (request) => new Promise(async(resolve, reject) => {
                                let start_time = schedule_result[i].start_time;
                                let end_time = schedule_result[i].end_time
                                let amount = schedule_result[i].amount
-                               let Emirates_ID = schedule_result[i].Emirates_ID
+                               let Emirates_ID = schedule_result[i].National_Id
                                let   trainer_name = trainer_Name.result[0].Name_ar
                                let course_name = course_Name.result[0].name_ar
                                let Employee_name = result.result[i]
@@ -99,6 +101,8 @@ exports.schedule_summary = (request) => new Promise(async(resolve, reject) => {
                         }
                         else{
                             for(i=0;i<result.result.length;i++){
+                                console.log(schedule_result[i],"myyyyyyyyyyyyyyyyyyyyyyyyyyy")
+
                                 let trainer_Name = await TrainerDao.trainer_name_schedule(schedule_result[i].trainer_id,language)
                                   console.log(trainer_Name,"testing=============================")
                                   let course_Name = await CourseDao.course_name_schedule(schedule_result[i].course_id,language)
@@ -108,7 +112,7 @@ exports.schedule_summary = (request) => new Promise(async(resolve, reject) => {
                                  let start_time = schedule_result[i].start_time;
                                  let end_time = schedule_result[i].end_time
                                  let amount = schedule_result[i].amount
-                                 let Emirates_ID = schedule_result[i].Emirates_ID
+                                 let Emirates_ID = schedule_result[i].National_Id
                                  let   trainer_name = trainer_Name.result[0].Name_en
                                  let course_name = course_Name.result[0].name_en
                                  let Employee_name = result.result[i]

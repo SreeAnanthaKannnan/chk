@@ -43,7 +43,7 @@ function Schedule(query_value) {
 
         ]
         console.log(query_value,"query_value")
-        var res1= await mysqlConnection.insert_query("INSERT INTO Schedule(classroom_id,Emirates_ID,start_time,end_time,course_id,trainer_id,Company_Trade_Lincense_No,number_of_seats_selected,scheduling_date,scheduled_date,payment_status,amount,status)VALUES ?",query_value)
+        var res1= await mysqlConnection.insert_query("INSERT INTO Schedule(classroom_id,National_Id,start_time,end_time,course_id,trainer_id,Company_Trade_Lincense_No,number_of_seats_selected,scheduling_date,scheduled_date,payment_status,amount,status)VALUES ?",query_value)
         // sql= "INSERT INTO Employee_Profile (Employee_ID,Name_en,Name_ar,Position,National_ID,Safety_Officer,Company_Trade_Lincense_No) VALUES ? ";
             console.log(res1,"result")
         }
@@ -91,7 +91,7 @@ function Schedule_select(classroom_id,Emirates_id,Company_Trade_Lincense_No){
 
              
          ]
-        let res1= await mysqlConnection.query_execute("select * from Schedule where Company_Trade_Lincense_No=? and Emirates_ID =? and classroom_id=? ",query_value)
+        let res1= await mysqlConnection.query_execute("select * from Schedule where Company_Trade_Lincense_No=? and National_Id =? and classroom_id=? ",query_value)
         // for(j=0;j<res1.data[i].length;j++){
             console.log(res1,"tesinggggggggggggg") 
             if(res1.data!=[]) {  
