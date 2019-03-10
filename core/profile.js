@@ -5,7 +5,7 @@ module.exports={
   getbuildings:getbuildings
 }
 function getbuildings(buildingobject) {
-  logger.fatal(buildingobject,"buildingobject");
+ // logger.fatal(buildingobject,"buildingobject");
  return new Promise(async (resolve, reject) => {
     
      var result = await buildings.phone(buildingobject);

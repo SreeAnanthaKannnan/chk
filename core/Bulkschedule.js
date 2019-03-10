@@ -28,7 +28,7 @@ async function sup(time, rdate, building_id) {
             var schedule_time = time;
             var suplier_id = suparray[0];
             var requestdate = idate;
-            var status1 = "scheduled";
+            var status1 = "open";
             let data = [schedule_time, requestdate, suplier_id, building_id, status1]
             let query = await insertquery.schedule_insert(data)
         var date22 = moment(requestdate).format("YYYY-MM-DD");    
@@ -54,7 +54,7 @@ async function sup(time, rdate, building_id) {
                             var suplier_id = suparray[j];
                             var requestdate = sdate;
                             logger.fatal("assigned to", suparray[j]);
-                            let status1="scheduled";
+                            let status1="open";
                             logger.fatal("date", sdate);
                             let data = [schedule_time, requestdate, suplier_id, building_id, status1]
                             let query = await insertquery.schedule_insert(data)

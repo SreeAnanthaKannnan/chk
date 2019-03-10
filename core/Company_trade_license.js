@@ -50,9 +50,22 @@ console.log(time_difference_minutes,"function")
                 return resolve({status : 400,message :"something went wrong"});
             });
 
+                await CompanyDao.company_trading_license(Company_Email)
+                .then(async function(result) {
+                    console.log("result", result);
+                    if(result.result.length !=0){
+                    return resolve({status:200, message :result});}
+                    else{
+                        return resolve({status:402, message:"Please add your company profile in the profile page"})
+                    }
+                })
+                    .catch(async function(err) {
+                        return resolve({status : 400,message :"something went wrong"});
+                    });
 
-     }
-    }
+
+             }
+            }
 
 
 

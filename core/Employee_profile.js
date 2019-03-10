@@ -1,7 +1,7 @@
 const SessionDao = require("../daos/SessionDao");
 const Employee_profileDao = require("../daos/Employee_profileDao");
 const session_time = require("../utils/session_time_difference");
-const message = require('../utils/messages')
+const message = require("../utils/messages");
 let date = require("date-and-time");
 // let now = new Date();
 var datetime = require("node-datetime");
@@ -11,7 +11,7 @@ const translate = require("../utils/translate");
 const fs = require("fs");
 
 exports.Employee_profile = (
-  EmployeeProfile,
+  EmployeeProfile
   // filename_blob,
   // filename_url,
   // path
@@ -106,7 +106,7 @@ exports.Employee_profile = (
 
               return resolve({
                 status: 200,
-                message:messagevalue
+                message: messagevalue
               });
             }
           })
