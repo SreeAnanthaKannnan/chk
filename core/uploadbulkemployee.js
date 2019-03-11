@@ -40,11 +40,12 @@ function uploadbulkemployee(filepath, email_id) {
             message: "Something went wrong"
           };
           throw error;
-        } else {
+        } else if (data.length != 0) {
           console.log("length", data[0].length);
           for (i = 0; i < data.length; i++) {
             console.log("data", data[i]);
             var select_record = await Employee.Employee_select(data[i][4]);
+            data[i][6] = "NO";
             console.log("select_record", select_record);
             if (select_record.message.data.length == 0) {
               console.log(data[i]);
@@ -93,6 +94,12 @@ function uploadbulkemployee(filepath, email_id) {
               " employee records were captured and " +
               length +
               " employee records were found to be duplicate."
+          });
+        } else {
+          return resolve({
+            // statuscode: "E08",
+            status: 400,
+            message: "Records not found in Employee List.csv File"
           });
         }
       });

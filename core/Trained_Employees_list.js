@@ -4,7 +4,7 @@ const session_time = require('../utils/session_time_difference')
 var base64ToImage = require('base64-to-image');
 const ab2str = require('arraybuffer-to-string')
 
-
+const Result = require("../daos/ResultsDao");
 
 
 const language_detect = require('../utils/language_detect')
@@ -49,13 +49,30 @@ exports.Trained_Employees = (data,token,language) => new Promise(async(resolve, 
              }
              else{
                  let Trained_Employees = await Employee_profileDao.Trained_Employees_list(Company_Trade_Lincense_No,language,status)
-            let result = Trained_Employees[0]
-console.log(result,"result")
+            console.log("trained_emp====>",Trained_Employees)
 
+
+            console.log("length",Trained_Employees.result.length)
+var data_val=[];
+            for (i = 0; i < Trained_Employees.result.length; i++) {
+                var result = Trained_Employees.result[i].National_Id
+                console.log(result,"result<====")
+
+                let national_id = await Result.result_national_id(result)
+                console.log("result_national_core====>",national_id)
+
+data_val.push(national_id)
+
+
+            }
+             console.log("data==========>",data_val)   
+            
+                 
 
                  return resolve({
                      status :200,
                      message : Trained_Employees
+                     
                  })
                 
             }

@@ -65,7 +65,7 @@ exports.scheduling = (data,request) => new Promise(async(resolve, reject) => {
         let trainer_id = result.result[0].id
         await ClassroomDao.Classroom_num(classroom_id,language)
         .then(async function(result) {
-            console.log("result", result.result[0].Classnum);
+            console.log("result<=====================", result);
              classroom_id = result.result[0].classnum;
       
         // var query_value = [scheduled_date,start_time,end_time,ctrainerlassroom_id,scheduling_date,course_name,number_of_seats_selected]
