@@ -595,7 +595,7 @@ router.use("/download", express.static(path.join(__dirname, "upload")));
 router.post("/file_upload", uploads.single("file"), function(req, res) {
   var file = "var/www/html/" + "/" + req.file.filename;
   console.log(req.file, "ffg");
-  var email_id = req.body.email;
+  var email_id = "manoj";
 
   var filepath = req.file.path;
   fs.rename(filepath, file, function(err) {
@@ -651,7 +651,14 @@ router.post("/image_upload", uploads.single("file"), function(req, res) {
 });
 //==============================Booking-History============================================//
 router.post("/serviceHistory", cors(), function(req, res) {
-  var email_id = req.body.email_id;
+  var id = await check.checkToken(req);
+  logger.fatal(id);
+  if (id.status == 400 && id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+ var email_id = id.result;;
   book
     .bookservice(email_id)
     .then(result => {
@@ -664,6 +671,7 @@ router.post("/serviceHistory", cors(), function(req, res) {
         message: err.message
       })
     );
+    }
 });
 //==============================================================================================
 router.post("/Assessment", cors(), async function(req, res) {
