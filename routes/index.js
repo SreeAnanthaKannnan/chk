@@ -418,35 +418,35 @@ router.post("/getdetails", cors(), async function (req, res) {
   }
 });
 //=================================Appeal====================================================
-router.post("/Appeal", cors(), async function (req, res) {
-  var id = await check.checkToken(req);
+// router.post("/Appeal", cors(), async function (req, res) {
+//   var id = await check.checkToken(req);
 
-  if (id.status == 400 || id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
-    const Appeal_Object = req.body;
-    console.log(Appeal_Object);
-    Appeal.Appeal(Appeal_Object)
-      .then(result => {
-        console.log(result);
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
+//   if (id.status == 400 || id.status == 403) {
+//     res.send({
+//       result: id
+//     });
+//   } else {
+//     const Appeal_Object = req.body;
+//     console.log(Appeal_Object);
+//     Appeal.Appeal(Appeal_Object)
+//       .then(result => {
+//         console.log(result);
+//         res.status(result.status).json({
+//           message: result
+//         });
+//       })
+//       .catch(err =>
+//         res
+//           .status(err.status)
+//           .json({
+//             message: err.message
+//           })
+//           .json({
+//             status: err.status
+//           })
+//       );
+//   }
+// });
 
 //===================================addbuilding=============================================//
 router.post("/AddsingleBuilding", cors(), async function (req, res) {
@@ -1455,7 +1455,9 @@ router.post("/Trainer_login", cors(), (req, res) => {
 //=======================Appeal===============================================//
 router.post("/Appeal", cors(), (req, res) => {
   const Appeal_Object = req.body;
+  const token= req.headers.token;
   console.log(Appeal_Object);
+  console.log(token,"token")
   let service = Appeal_Object.service;
   let Description = Appeal_Object.Description;
   if (!service || !Description) {
@@ -1464,7 +1466,7 @@ router.post("/Appeal", cors(), (req, res) => {
       message: "Please fill all the fields"
     });
   } else {
-    Appeal.Appeal(Appeal_Object)
+    Appeal.Appeal(Appeal_Object,token)
       .then(result => {
         console.log(result);
 
