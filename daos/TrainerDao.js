@@ -202,25 +202,49 @@ function Trainer_id_select(params, language) {
   });
 }
 
-async function Scheduler_information(params) {
-  return new Promise(function(resolve, reject) {
-    console.log(params, "params======>");
 
-    con.query(
-      "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id ='" + params + "'",
+//=====================================query======================================
+// async function Scheduler_information(params) {
+//   return new Promise(async function(resolve, reject) {
+//     console.log("DAO=======>",params)
 
-      (err, result) => {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          return resolve({ result: result });
-        }
-      }
-    );
-  });
-}
+//     mysqlConnection
+//       .query_execute(query.getdatedetails, [params])
+//       .then(function(result, err) {
+//         if (err) {
+//           //  console.log(result,"achieved")
+//           console.log("something", err);
+//           return resolve({ status: 400, err: err });
+//         } else {
+//           console.log("result=====>>",result);
+//           return resolve({ status: 200, result: result });
+//         }
+//       });
+//   });
+// }
+//=============================================query=========================================
+// async function Scheduler_information(params) {
+//   return new Promise(function(resolve, reject) {
+//     console.log(params, "params======>");
+
+//     await con.query(
+
+     
+//       "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id ='" + params + "'",
+
+//       (err, result) => {
+//         if (err) {
+//           //  console.log(result,"achieved")
+//           console.log("something", err);
+//           return resolve({ status: 400, err: err });
+//         } else {
+//           console.log("DAO=====================>>>>",result)
+//           return resolve({ result: result });
+//         }
+//       }
+//     );
+//   });
+// }
 
 async function Scheduler_date_select(params, params1, params2, params3) {
   return new Promise(function(resolve, reject) {
@@ -258,7 +282,7 @@ async function Scheduler_information(params) {
     console.log(params, "params======>");
 
     con.query(
-      "SELECT * FROM Schedule where Trainer_id ='" + params + "'",
+      "SELECT DISTINCT Scheduled_date,start_time,end_time,course_id from SHARJAH.Schedule where Trainer_id ='" + params + "'",
 
       (err, result) => {
         if (err) {
@@ -266,6 +290,7 @@ async function Scheduler_information(params) {
           console.log("something", err);
           return resolve({ status: 400, err: err });
         } else {
+          console.log("result_DAO",result)
           return resolve({ result: result });
         }
       }
