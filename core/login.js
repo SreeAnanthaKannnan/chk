@@ -6,6 +6,9 @@ const jwt = require('jsonwebtoken');
 let secret= 'rapidqubepvtltd';
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
+const sessionDao = require("../daos/SessionDao");
+let date = require("date-and-time");
+let now = new Date();
 
 module.exports={
     loginuser:loginuser
@@ -18,6 +21,7 @@ function loginuser(loginobject) {
       var password=loginobject.password;
 
          var result = await login.login(loginobject)
+         
          //var resultadmin = await login.loginadmin(loginobject)
        //logger.fatal(result.result[0].password,"test")
     logger.fatal(result.result.length == 0 )
@@ -37,6 +41,7 @@ function loginuser(loginobject) {
       
       // }
       // else{
+        
           logger.fatal(result.result[0].password,"test")
       let  registered_password =  cryptr.decrypt(result.result[0].password);
       logger.fatal(registered_password,"db password")
@@ -46,14 +51,25 @@ function loginuser(loginobject) {
         if(registered_user == email_id &&  registered_password == password){
           let token = jwt.sign({email_id},
            secret,
-            { expiresIn: '500000000000000000000000000' // expires in 24 hours
+            { expiresIn: '500000000000000000000000' // expires in 24 hours
             }
           );
+          let query_value = [
+            registered_user,
+            token,
+            date.format(now, "YYYY/MM/DD HH:mm:ss")
+          ];
+          let Session = await sessionDao.Session_insert(query_value);
         return resolve ({
                 "message":"Login Successfull",
                 "status":200,
-                "user":user,
+                "user_type":user,
                 "token":token,
+                "email_id":registered_user,
+                "first_name_en": result.result[0].firstname_en,
+                "first_name_ar":result.result[0].firstname_ar,
+                "company_name_en":result.result[0].company_en,
+                "company_name_ar":result.result[0].company_ar,
                 "النتيجة": "تسجيل الدخول ناجح"
            });
               }

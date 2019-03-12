@@ -8,7 +8,7 @@ function login(loginobject) {
 return new Promise( function (resolve,reject){
          var email_id=loginobject.email;
      logger.fatal("in dao",email_id);
-      var sql="SELECT email_id,password,user_type FROM Residents where email_id ='"+ email_id+"' UNION SELECT email_id,password,user_type FROM admin where email_id ='"+ email_id+"'";
+      var sql="SELECT email_id,password,user_type FROM citizens where email_id ='"+ email_id+"'";
  con.query(sql,function(err,result){
       if(err) { logger.fatal("something",err)
           return reject({ "status": 400, "body": 'Cannot insert the data' })}

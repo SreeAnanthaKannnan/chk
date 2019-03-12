@@ -650,7 +650,7 @@ router.post("/image_upload", uploads.single("file"), function(req, res) {
   });
 });
 //==============================Booking-History============================================//
-router.post("/serviceHistory", cors(), function(req, res) {
+router.post("/serviceHistory", cors(),async function(req, res) {
   var id = await check.checkToken(req);
   logger.fatal(id);
   if (id.status == 400 && id.status == 403) {
@@ -658,7 +658,7 @@ router.post("/serviceHistory", cors(), function(req, res) {
       result: id
     });
   } else {
- var email_id = id.result;;
+ var email_id = id.result;
   book
     .bookservice(email_id)
     .then(result => {
@@ -800,7 +800,7 @@ router.post("/forgetpassword", (req, res) => {
     });
   } else {
     logger.fatal(username);
-    let sql = "SELECT * FROM Residents where email_id ='" + username + "'";
+    let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
 
     con.query(sql, function(err, result) {
       // logger.fatal(result,"select")
@@ -844,7 +844,7 @@ router.post("/forgetpassword", (req, res) => {
             logger.fatal(otp, "otp");
             // var encodedMail = new Buffer(req.body.email).toString('base64');
             let sql =
-              "SELECT * FROM Residents where email_id ='" + username + "'";
+              "SELECT * FROM citizens where email_id ='" + username + "'";
             con.query(sql, function(err, result) {
               if (err) throw err;
               //dbFunc.connectionRelease;
@@ -891,7 +891,7 @@ router.post("/forgetpassword", (req, res) => {
                 }
               });
               var sql =
-                "UPDATE Residents SET otp = '" +
+                "UPDATE citizens SET otp = '" +
                 otp +
                 "' WHERE email_id = '" +
                 username +
@@ -955,7 +955,7 @@ router.post("/forgetpassword", (req, res) => {
     });
   } else {
     logger.fatal(username);
-    let sql = "SELECT * FROM Residents where email_id ='" + username + "'";
+    let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
 
     con.query(sql, function(err, result) {
       // logger.fatal(result,"select")
@@ -999,7 +999,7 @@ router.post("/forgetpassword", (req, res) => {
             logger.fatal(otp, "otp");
             // var encodedMail = new Buffer(req.body.email).toString('base64');
             let sql =
-              "SELECT * FROM Residents where email_id ='" + username + "'";
+              "SELECT * FROM citizens where email_id ='" + username + "'";
             con.query(sql, function(err, result) {
               if (err) throw err;
               //dbFunc.connectionRelease;
@@ -1046,7 +1046,7 @@ router.post("/forgetpassword", (req, res) => {
                 }
               });
               var sql =
-                "UPDATE Residents SET otp = '" +
+                "UPDATE citizens SET otp = '" +
                 otp +
                 "' WHERE email_id = '" +
                 username +
@@ -1075,7 +1075,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
 
   logger.fatal(otp);
 
-  con.query("SELECT * FROM Residents where otp='" + otp + "'", function(
+  con.query("SELECT * FROM citizens where otp='" + otp + "'", function(
     error,
     results,
     fields
@@ -1090,7 +1090,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
         if (results[0].otp == otp) {
           logger.fatal(otp);
           con.query(
-            "UPDATE Residents SET password = '" +
+            "UPDATE citizens SET password = '" +
               password +
               "' WHERE otp = '" +
               otp +
