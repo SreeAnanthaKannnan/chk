@@ -2,7 +2,7 @@ const con = require("../mysql_connection/dbConfig");
 const moment = require("moment");
 
 function Company_profile_insert(param) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.log("hiiiii", param);
     param = [param];
     //  param = moment(param).format("YYYY-MM-DD")
@@ -10,7 +10,7 @@ function Company_profile_insert(param) {
 
     sql =
       "INSERT INTO Company_Profile (Company_Trade_License_No,Mandatory_Training_Percentage,Category,Company_Email,Number_of_employees) VALUES ?";
-    await con.query(sql, [param], function(err, result) {
+    await con.query(sql, [param], function (err, result) {
       if (!result) {
         //  console.log(result,"achieved")
         console.log("something", err);
@@ -24,23 +24,23 @@ function Company_profile_insert(param) {
 }
 
 function company_trading_license(param) {
-  return new Promise(async function(resolve, reject) {
-    console.log("hiiiii", param);
+  return new Promise(async function (resolve, reject) {
+    console.log("Company_TRAde_licence_DAO", param);
     //  param = moment(param).format("YYYY-MM-DD")
     //  console.log(param,"date")
 
     await con.query(
       "SELECT Company_Trade_License_No FROM Company_Profile where Company_Email ='" +
-        param +
-        "'",
+      param +
+      "'",
       (err, result) => {
         if (!result) {
           //  console.log(result,"achieved")
           console.log("something", err);
           return resolve({ status: 400, err: err });
         } else {
-          console.log(result,"<=======result");
-          return resolve({ result: result });
+          console.log("<=======result", result);
+          return resolve({ result });
         }
       }
     );

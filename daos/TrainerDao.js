@@ -207,7 +207,7 @@ async function Scheduler_information(params) {
     console.log(params, "params======>");
 
     con.query(
-      "SELECT * FROM Schedule where Trainer_id ='" + params + "'",
+      "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id ='" + params + "'",
 
       (err, result) => {
         if (err) {

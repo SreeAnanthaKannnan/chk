@@ -38,7 +38,7 @@ function phone(buildingobject){
    //   var buildingname=buildingobject.buildingname;
 
 
-      var sql = "SELECT * FROM Residents where email_id = '" + buildingobject + "'";
+      var sql = "SELECT * FROM citizens where email_id = '" + buildingobject + "'";
      // var sql= "SELECT *,Residents.mobile_number FROM Buildings INNER JOIN Residents ON Buildings.owner_id=Residents.email_id;"
 
       //var sql = await("INSERT INTO Buildings(owner_id ,type,address,Buildingname) VALUES ('"+ owner_id + "','" +type + "','" + address + "','" + Buildingname +"')");

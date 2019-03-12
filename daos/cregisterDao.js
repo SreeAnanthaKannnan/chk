@@ -46,7 +46,7 @@ function insert_user(registerobject,otp){
   var language = registerobject.language;
   var emirates_id= registerobject.emirates_id;
   var newsletter = registerobject.newsletter;
-  var user_type = "citizen";
+  var user_type =registerobject.user_type;
   var type_description = registerobject.typedescription;
   var firstname_ar,firstname_en,lastname_ar,lastname_en,company_ar,company_en,nationality_ar,nationality_en,address_ar,address_en;
   var value;

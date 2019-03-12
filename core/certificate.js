@@ -20,7 +20,7 @@ async function Certificate(req, callback) {
   // var score = 50;
   var output = req.body.result;
   var lang = req.body.lang;
-  
+
   // var employee_name = req.body.employee_name;
   var course_name = req.body.course_name;
   var queryresult;
@@ -92,7 +92,7 @@ async function Certificate(req, callback) {
         if (lang == "English") {
           await certificate
             .Pdf(value.employee_name, value.course_name)
-            .then(async function(result) {
+            .then(async function (result) {
               // console.log("result", result);
               var path = "/certificate" + employee_name + ".pdf";
               // callback("", result);
@@ -107,7 +107,7 @@ async function Certificate(req, callback) {
                 course_en,
                 course_ar
               ];
-              await Result.Result_select(emirates_id).then(async function(
+              await Result.Result_select(emirates_id).then(async function (
                 result
               ) {
                 console.log("dbresult.................>>>>>>>>>>", result);
@@ -147,7 +147,7 @@ async function Certificate(req, callback) {
           };
           await certificate
             .Pdf(value1.employee_ar, value1.course_name_ar)
-            .then(async function(result) {
+            .then(async function (result) {
               // console.log("result", result);
               var path = "/certificate" + employee_name + ".pdf";
               // callback("", result);
@@ -162,7 +162,7 @@ async function Certificate(req, callback) {
                 course_en,
                 course_ar
               ];
-              await Result.Result_select(emirates_id).then(async function(
+              await Result.Result_select(emirates_id).then(async function (
                 result
               ) {
                 console.log("dbresult.................>>>>>>>>>>", result);
@@ -195,14 +195,14 @@ async function Certificate(req, callback) {
         var query_value = [
           date_attended,
           employee_id,
-          attendence_id,
+
           score,
           result_en,
           result_ar,
           null,
           emirates_id
         ];
-        await Result.Result_select(emirates_id).then(async function(result) {
+        await Result.Result_select(emirates_id).then(async function (result) {
           console.log("dbresult.................>>>>>>>>>>", result);
           if (result.message.data.length == 0) {
             let query = await Result.Result_insert(query_value);
