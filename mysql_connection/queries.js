@@ -15,3 +15,6 @@ module.exports.deleteemployee =
 module.exports.getclassroom = "SELECT * FROM Classroom where classnum =?";
 module.exports.insertattendance =
   "INSERT INTO Attendance (employee_id, attendance_status, National_id, Name_en, trainer_id, Attended_date, start_time, end_time, classroom, course_name) VALUES ? ";
+
+  module.exports.getdatedetails =
+  "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";

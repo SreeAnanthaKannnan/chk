@@ -9,6 +9,8 @@ var express = require('express')
 var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
 var dateFormat = require('dateformat');
+var log4js = require('log4js');
+const logger = log4js.getLogger('Aman_project');
 
 
 
@@ -29,8 +31,8 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
         const page=await browser.newPage();
        // const HeadingName="Hall Ticket"
         // const ImgSrc=__dirname+'/survey.png'
-        // logger.fatal("ImgSrc==========",ImgSrc)
-        // logger.fatal(yesvalue3)
+        // console.log("ImgSrc==========",ImgSrc)
+        // console.log(yesvalue3)
 
         await page.setContent(`<!DOCTYPE html>
         <html>
@@ -249,15 +251,15 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
 //   </div>
         await page.emulateMedia('screen');
         var datetime = dateFormat (new Date(),"yyyy-mm-dd h:MM:ss");
-        logger.fatal(datetime);
-        var path='/home/bahirathy/Music/pdf'+datetime
+        console.log(datetime);
+        var  path='/pdf'+datetime+email+'.pdf';
 
         let query= await insertquery.pdf_insert(path,email)
-        logger.fatal(query !=0,"data inserted")
-         logger.fatal("guess done");
+        console.log(query !=0,"data inserted")
+         console.log("guess done");
         await page.pdf({
          
-            path:'/home/bahirathy/Music/pdf'+datetime,
+          path: './uploads/pdf'+datetime+email+'.pdf',
             format:'A4',
             printBackground:true
            
@@ -265,7 +267,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
             // var path1=[path1]
             // var path=upload.array('filepath')
             // let query_value =[path,email]
-            // logger.fatal(query_value,"query_value")
+            // console.log(query_value,"query_value")
          
             return resolve({
             message:"pdf conversion done",
@@ -283,7 +285,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
   
     // function mail(email){
     //   var datetime = dateFormat (new Date(),"yyyy-mm-dd h:MM:ss");
-    //   logger.fatal(datetime);
+    //   console.log(datetime);
 
     var transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -302,19 +304,19 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
               subject: 'Saned Services',
               attachments: [{   // filename and content type is derived from path
               // filename and content type is derived from path
-            path: '/home/bahirathy/Music/pdf'+datetime
+            path: './uploads/pdf'+datetime+email+'.pdf'
         },
             ],
             
               html: "Dear "+ email +"<br>This is your survey Report for your building"  +""+ email + "  with SANED as a Supplier.  SANED will be rolling out new services for Sharjah residents."+"<br><br>" + "We will contact you for further information.<br><br><br>"+"Best Regards,<br>"+"SANED Team."
         
             };
-            logger.fatal(path,"pathfghfff");
+            console.log(path,"pathfghfff");
             transporter.sendMail(mailOptions, (error, info) => {
-              logger.fatal("error",error)
+              console.log("error",error)
               
               if (error) {
-                logger.fatal("Mail send error: ", error);
+                console.log("Mail send error: ", error);
               }
             })
 
@@ -325,7 +327,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
           //  )
         
         } catch(e){
-          logger.fatal('our error',e)
+          console.log('our error',e)
           return reject({
               message:"not done"
           })

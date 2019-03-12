@@ -247,6 +247,7 @@ async function Scheduler_information(params) {
           console.log("something", err);
           return resolve({ status: 400, err: err });
         } else {
+          console.log("result_DAO",result)
           return resolve({ result: result });
         }
       }

@@ -44,7 +44,8 @@ var con = require("../mysql_connection/dbConfig.js"),
   pdf1 = require("../core/pdfviewer.js"),
   update = require("../core/update"),
   assessment = require("../core/assessment"),
-  book = require("../core/servicehistory");
+  book = require("../core/servicehistory"),
+  image_upload= require('../core/image_upload');
 
 let moment = require("moment");
 
@@ -589,9 +590,9 @@ router.post("/installationdetails", cors(), function (req, res) {
 });
 //=============================upload=====================================================
 var uploads = multer({ dest: "var/www/html/" });
-router.use("/download", express.static(path.join(__dirname, "upload")));
+//router.use("/download", express.static(path.join(__dirname, "../upload")));
 // File input field name is simply 'file'
-//router.use('/static', express.static(path.join(__dirname, 'uploads')))
+router.use('/static', express.static(path.join(__dirname, "../uploads")))
 router.post("/file_upload", uploads.single("file"), function (req, res) {
   var file = "var/www/html/" + "/" + req.file.filename;
   console.log(req.file, "ffg");
@@ -1140,7 +1141,7 @@ router.post("/schedules", cors(), async function (req, res) {
 });
 //============================================convert pdf===================================================//
 
-router.post("/Convert_Pdf", cors(), async function (req, res) {
+router.post("/Convert_Pdf", cors(),function(req, res) {
   //var flag=0;
   let checked1 = req.body.SelectedValues1;
   let checked2 = req.body.SelectedValues2;
@@ -1155,82 +1156,82 @@ router.post("/Convert_Pdf", cors(), async function (req, res) {
   let flag = 0;
   // let checked3=req.body.SelectedValues3;
   if (checked1 == "1") {
-    yesvalue1 = "checked";
-    novalue1 = "unchecked";
+   var  yesvalue1 = "checked";
+   var  novalue1 = "unchecked";
   } else {
-    yesvalue1 = "unchecked";
-    novalue1 = "checked";
+   var yesvalue1 = "unchecked";
+   var novalue1 = "checked";
     flag = 1;
   }
   if (checked2 == "1") {
-    yesvalue2 = "checked";
-    novalue2 = "unchecked";
+    var yesvalue2 = "checked";
+    var novalue2 = "unchecked";
   } else {
-    yesvalue2 = "unchecked";
-    novalue2 = "checked";
+   var yesvalue2 = "unchecked";
+   var novalue2 = "checked";
     flag = 1;
   }
   if (checked3 == "1") {
-    yesvalue3 = "checked";
-    novalue3 = "unchecked";
+   var yesvalue3 = "checked";
+    var novalue3 = "unchecked";
   } else {
-    yesvalue3 = "unchecked";
-    novalue3 = "checked";
+    var yesvalue3 = "unchecked";
+   var novalue3 = "checked";
     flag = 1;
   }
   if (checked4 == "1") {
-    yesvalue4 = "checked";
-    novalue4 = "unchecked";
+   var yesvalue4 = "checked";
+    var novalue4 = "unchecked";
   } else {
-    yesvalue4 = "unchecked";
-    novalue4 = "checked";
+    var yesvalue4 = "unchecked";
+    var novalue4 = "checked";
     flag = 1;
   }
   if (checked5 == "1") {
-    yesvalue5 = "checked";
-    novalue5 = "unchecked";
+    var yesvalue5 = "checked";
+    var novalue5 = "unchecked";
   } else {
-    yesvalue5 = "unchecked";
-    novalue5 = "checked";
+    var yesvalue5 = "unchecked";
+    var novalue5 = "checked";
     flag = 1;
   }
   if (checked6 == "1") {
-    yesvalue6 = "checked";
-    novalue6 = "unchecked";
+    var yesvalue6 = "checked";
+    var novalue6 = "unchecked";
   } else {
-    yesvalue6 = "unchecked";
-    novalue6 = "checked";
+    var yesvalue6 = "unchecked";
+    var novalue6 = "checked";
     flag = 1;
   }
   if (checked7 == "1") {
-    yesvalue7 = "checked";
-    novalue7 = "unchecked";
+    var yesvalue7 = "checked";
+    var novalue7 = "unchecked";
   } else {
-    yesvalue7 = "unchecked";
-    novalue7 = "checked";
+   var yesvalue7 = "unchecked";
+    var novalue7 = "checked";
     flag = 1;
   }
   if (checked8 == "1") {
-    yesvalue8 = "checked";
-    novalue8 = "unchecked";
+    var yesvalue8 = "checked";
+    var novalue8 = "unchecked";
   } else {
-    yesvalue8 = "unchecked";
-    novalue8 = "checked";
+    var yesvalue8 = "unchecked";
+    var novalue8 = "checked";
     flag = 1;
   }
   if (checked9 == "1") {
-    yesvalue9 = "checked";
-    novalue9 = "unchecked";
+    var yesvalue9 = "checked";
+   var novalue9 = "unchecked";
   } else {
-    yesvalue9 = "unchecked";
-    novalue9 = "checked";
+    var yesvalue9 = "unchecked";
+    var novalue9 = "checked";
     flag = 1;
   }
   //    var yesvalue3="checked";
 
   console.log("in 781", flag);
   //console.log("All data=====>>", checked1,checked2,checked3);
-  pdf.Pdf(
+   pdf.Pdf(
     yesvalue1,
     novalue1,
     yesvalue2,

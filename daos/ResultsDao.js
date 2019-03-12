@@ -35,19 +35,7 @@ async function Result_insert(params) {
 }
 async function Result_select(params) {
   return new Promise(async function(resolve, reject) {
-    // await con.query(
-    //   "SELECT * FROM Results where emirates_id ='" + params + "'",
-    //   (err, result) => {
-    //     if (err) {
-    //       //  console.log(result,"achieved")
-    //       console.log("something", err);
-    //       return resolve({ status: 400, err: err });
-    //     } else {
-    //       console.log(result);
-    //       return resolve({ status: 200, message: result });
-    //     }
-    //   }
-    // );
+
     mysqlConnection
       .query_execute(query.findemployeeResults, [params])
       .then(function(result, err) {
