@@ -177,7 +177,7 @@ router.post("/register", cors(), function (req, res) {
 //=======================registerservice==========================================================//
 router.post("/admin-register", cors(), function (req, res) {
   var registerobject = req.body;
-  logger.fatal(registerobject, "registerobject");
+  console.log(registerobject, "registerobject");
   aregister
     .aregister(registerobject)
     .then(result => {
@@ -195,7 +195,7 @@ router.post("/admin-register", cors(), function (req, res) {
 //=========================citizen-registration-start===========================================
 router.post("/citizen-register", cors(), async function (req, res) {
   var registerobject = req.body;
-  logger.fatal(registerobject, "registerobject");
+  console.log(registerobject, "registerobject");
   var mobile = registerobject.mobile;
   var result = await phone.validateMobileNumber(mobile);
   if (result == false) {
@@ -246,32 +246,32 @@ router.post("/emailotpverification1", cors(), async function (req, res) {
   // }
   // else{
   var otp = req.body.otp;
-  logger.fatal(req.body);
+  console.log(req.body);
   var email_id = req.body.email;
-  logger.fatal(otp);
+  console.log(otp);
   con.query(
     "SELECT otp FROM citizens where email_id = '" + email_id + "'",
     function (error, results, fields) {
       if (error) {
         throw error;
       } else {
-        if (results.length != 0) {
-          if (results[0].otp == req.body.otp) {
-            var verify_email = "Y";
-            con.query(
-              "UPDATE citizens SET verify_email = '" +
-              verify_email +
-              "' WHERE otp = '" +
-              results[0].otp +
-              "'",
-              function (error, results, fields) { }
-            );
-            res.send({
-              status: 200,
-              message: "You are successfully registered",
-              الرسالة: "أنت مسجل بنجاح"
-            });
-          }
+        // if (results.length != 0) {
+        if (results[0].otp == req.body.otp) {
+          var verify_email = "Y";
+          con.query(
+            "UPDATE citizens SET verify_email = '" +
+            verify_email +
+            "' WHERE otp = '" +
+            results[0].otp +
+            "'",
+            function (error, results, fields) { }
+          );
+          res.send({
+            status: 200,
+            message: "You are successfully registered",
+            الرسالة: "أنت مسجل بنجاح"
+          });
+          // }
         } else {
           res.send({
             status: 401,
@@ -329,9 +329,9 @@ router.post("/emailotpverification", cors(), async function (req, res) {
   // }
   // else{
   var otp = req.body.otp;
-  logger.fatal(req.body);
+  console.log(req.body);
   var email_id = req.body.email_id;
-  logger.fatal(otp);
+  console.log(otp);
   con.query("SELECT * FROM Residents where otp = '" + otp + "'", function (
     error,
     results,
@@ -427,10 +427,10 @@ router.post("/Appeal", cors(), async function (req, res) {
     });
   } else {
     const Appeal_Object = req.body;
-    logger.fatal(Appeal_Object);
+    console.log(Appeal_Object);
     Appeal.Appeal(Appeal_Object)
       .then(result => {
-        logger.fatal(result);
+        console.log(result);
         res.status(result.status).json({
           message: result
         });
@@ -451,7 +451,7 @@ router.post("/Appeal", cors(), async function (req, res) {
 //===================================addbuilding=============================================//
 router.post("/AddsingleBuilding", cors(), async function (req, res) {
   var id = await check.checkToken(req);
-  logger.fatal(id);
+  console.log(id);
   if (id.status == 400 && id.status == 403) {
     res.send({
       result: id
@@ -484,7 +484,7 @@ router.post("/getBuildings", cors(), async function (req, res) {
     });
   } else {
     var buildingobject = id.result;
-    logger.fatal(buildingobject, "data");
+    console.log(buildingobject, "data");
     getBuildings
       .getbuildings(buildingobject)
       .then(result => {
@@ -511,7 +511,7 @@ router.post("/profile", cors(), async function (req, res) {
   // else{
   //var buildingobject= id.result;
   var buildingobject = req.body.email;
-  logger.fatal(buildingobject, "data");
+  console.log(buildingobject, "data");
   profile
     .getbuildings(buildingobject)
     .then(result => {
@@ -530,7 +530,7 @@ router.post("/profile", cors(), async function (req, res) {
 //=======================================================================================================
 router.post("/installationdetails", cors(), function (req, res) {
   var installation = req.body;
-  logger.fatal(installation, "installation");
+  console.log(installation, "installation");
   update
     .update(installation)
     .then(result => {
@@ -554,7 +554,7 @@ router.post("/profile", cors(), async function (req, res) {
   } else {
     var buildingobject = id.result;
     //var buildingobject=req.body.email;
-    logger.fatal(buildingobject, "data");
+    console.log(buildingobject, "data");
     profile
       .getbuildings(buildingobject)
       .then(result => {
@@ -573,7 +573,7 @@ router.post("/profile", cors(), async function (req, res) {
 //=======================================================================================================
 router.post("/installationdetails", cors(), function (req, res) {
   var installation = req.body;
-  logger.fatal(installation, "installation");
+  console.log(installation, "installation");
   update
     .update(installation)
     .then(result => {
@@ -652,7 +652,7 @@ router.post("/image_upload", uploads.single("file"), function (req, res) {
 //==============================Booking-History============================================//
 router.post("/serviceHistory", cors(), async function (req, res) {
   var id = await check.checkToken(req);
-  logger.fatal(id);
+  console.log(id);
   if (id.status == 400 && id.status == 403) {
     res.send({
       result: id
@@ -682,7 +682,7 @@ router.post("/Assessment", cors(), async function (req, res) {
   //   })
   // }
   //  else{
-  logger.fatal(req.body);
+  console.log(req.body);
   var id = req.body.id;
   var status = req.body.status;
   if (!id || !status.trim()) {
@@ -762,13 +762,13 @@ router.get("/assesser-view", cors(), async function (req, res) {
 router.post("/textimage", cors(), (req, res, next) => {
   const uploadFile = req.files.file;
   const fileName = req.files.file.name;
-  //   logger.fatal(Appeal_Object)
+  //   console.log(Appeal_Object)
   const Image = uploadFile.mv(
     `${__dirname}/public/files/${fileName}`,
     image
       .Image(Image)
       .then(result => {
-        logger.fatal(result);
+        console.log(result);
         res.status(result.status).json({
           message: result
         });
@@ -789,9 +789,9 @@ router.post("/textimage", cors(), (req, res, next) => {
 //===============================forgetpassword==============================================//
 router.post("/forgetpassword", (req, res) => {
   let forgetpassword = req.body;
-  logger.fatal("body", forgetpassword);
+  console.log("body", forgetpassword);
   let password = req.body.password;
-  logger.fatal(password);
+  console.log(password);
   let confirmpassword = req.body.confirmpassword;
   let username = req.body.email;
   if (!username || !password || !confirmpassword) {
@@ -799,17 +799,17 @@ router.post("/forgetpassword", (req, res) => {
       message: "Please fill all the details"
     });
   } else {
-    logger.fatal(username);
+    console.log(username);
     let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
 
     con.query(sql, function (err, result) {
-      // logger.fatal(result,"select")
+      // console.log(result,"select")
       if (err) throw err;
       // dbFunc.connectionRelease;
-      // logger.fatal("DataBase ERR:",err)
-      //logger.fatal("Database Error while selecting from register table:",err)
+      // console.log("DataBase ERR:",err)
+      //console.log("Database Error while selecting from register table:",err)
       if (result.length == 0) {
-        logger.fatal("i am here");
+        console.log("i am here");
         res.send({
           message: "Invalid User Name",
           الرسالة: "اسم المستخدم غير صالح"
@@ -823,7 +823,7 @@ router.post("/forgetpassword", (req, res) => {
           });
         } else {
           if (cryptr.decrypt(result[0].password) == password) {
-            logger.fatal("previous");
+            console.log("previous");
             res.send({
               message: "Password should not be a previously used one",
               رسالة: "مرور سبق استخدامهاكلمة المرور لا يجب أن تكون كلمة"
@@ -841,7 +841,7 @@ router.post("/forgetpassword", (req, res) => {
                 Math.floor(Math.random() * possible.length)
               );
 
-            logger.fatal(otp, "otp");
+            console.log(otp, "otp");
             // var encodedMail = new Buffer(req.body.email).toString('base64');
             let sql =
               "SELECT * FROM citizens where email_id ='" + username + "'";
@@ -852,9 +852,9 @@ router.post("/forgetpassword", (req, res) => {
               namea = result[0].name_ar;
 
               //  })
-              logger.fatal("datanames", result[0].name_en);
-              logger.fatal(result[0].name_ar);
-              logger.fatal("copy", namen);
+              console.log("datanames", result[0].name_en);
+              console.log(result[0].name_ar);
+              console.log("copy", namen);
               var transporter = nodemailer.createTransport({
                 host: "smtp.gmail.com",
                 port: 587,
@@ -887,7 +887,7 @@ router.post("/forgetpassword", (req, res) => {
 
               transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                  logger.fatal("Mail send error: ", error);
+                  console.log("Mail send error: ", error);
                 }
               });
               var sql =
@@ -899,7 +899,7 @@ router.post("/forgetpassword", (req, res) => {
               con.query(sql, function (err) {
                 if (err) throw err;
                 // dbFunc.connectionRelease;
-                // logger.fatal("DataBase ERR:",err)
+                // console.log("DataBase ERR:",err)
                 res.send({
                   message: "Please check your mail for One time Password",
                   رسالة: "يرجى التحقق من بريدك مرة واحدة لكلمة المرور"
@@ -917,13 +917,13 @@ router.post("/forgetpassword", (req, res) => {
 router.post("/textimage", cors(), (req, res, next) => {
   const uploadFile = req.files.file;
   const fileName = req.files.file.name;
-  //   logger.fatal(Appeal_Object)
+  //   console.log(Appeal_Object)
   const Image = uploadFile.mv(
     `${__dirname}/public/files/${fileName}`,
     image
       .Image(Image)
       .then(result => {
-        logger.fatal(result);
+        console.log(result);
         res.status(result.status).json({
           message: result
         });
@@ -944,9 +944,9 @@ router.post("/textimage", cors(), (req, res, next) => {
 //===============================forgetpassword==============================================//
 router.post("/forgetpassword", (req, res) => {
   let forgetpassword = req.body;
-  logger.fatal("body", forgetpassword);
+  console.log("body", forgetpassword);
   let password = req.body.password;
-  logger.fatal(password);
+  console.log(password);
   let confirmpassword = req.body.confirmpassword;
   let username = req.body.email;
   if (!username || !password || !confirmpassword) {
@@ -954,17 +954,17 @@ router.post("/forgetpassword", (req, res) => {
       message: "Please fill all the details"
     });
   } else {
-    logger.fatal(username);
+    console.log(username);
     let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
 
     con.query(sql, function (err, result) {
-      // logger.fatal(result,"select")
+      // console.log(result,"select")
       if (err) throw err;
       // dbFunc.connectionRelease;
-      // logger.fatal("DataBase ERR:",err)
-      //logger.fatal("Database Error while selecting from register table:",err)
+      // console.log("DataBase ERR:",err)
+      //console.log("Database Error while selecting from register table:",err)
       if (result.length == 0) {
-        logger.fatal("i am here");
+        console.log("i am here");
         res.send({
           message: "Invalid User Name",
           الرسالة: "اسم المستخدم غير صالح"
@@ -978,7 +978,7 @@ router.post("/forgetpassword", (req, res) => {
           });
         } else {
           if (cryptr.decrypt(result[0].password) == password) {
-            logger.fatal("previous");
+            console.log("previous");
             res.send({
               message: "Password should not be a previously used one",
               رسالة: "مرور سبق استخدامهاكلمة المرور لا يجب أن تكون كلمة"
@@ -996,7 +996,7 @@ router.post("/forgetpassword", (req, res) => {
                 Math.floor(Math.random() * possible.length)
               );
 
-            logger.fatal(otp, "otp");
+            console.log(otp, "otp");
             // var encodedMail = new Buffer(req.body.email).toString('base64');
             let sql =
               "SELECT * FROM citizens where email_id ='" + username + "'";
@@ -1007,9 +1007,9 @@ router.post("/forgetpassword", (req, res) => {
               namea = result[0].name_ar;
 
               //  })
-              logger.fatal("datanames", result[0].name_en);
-              logger.fatal(result[0].name_ar);
-              logger.fatal("copy", namen);
+              console.log("datanames", result[0].name_en);
+              console.log(result[0].name_ar);
+              console.log("copy", namen);
               var transporter = nodemailer.createTransport({
                 host: "smtp.gmail.com",
                 port: 587,
@@ -1042,7 +1042,7 @@ router.post("/forgetpassword", (req, res) => {
 
               transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                  logger.fatal("Mail send error: ", error);
+                  console.log("Mail send error: ", error);
                 }
               });
               var sql =
@@ -1054,7 +1054,7 @@ router.post("/forgetpassword", (req, res) => {
               con.query(sql, function (err) {
                 if (err) throw err;
                 // dbFunc.connectionRelease;
-                // logger.fatal("DataBase ERR:",err)
+                // console.log("DataBase ERR:",err)
                 res.send({
                   message: "Please check your mail for One time Password",
                   رسالة: "يرجى التحقق من بريدك مرة واحدة لكلمة المرور"
@@ -1073,7 +1073,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
   var otp = req.body.otp;
   var password = cryptr.encrypt(req.body.password);
 
-  logger.fatal(otp);
+  console.log(otp);
 
   con.query("SELECT * FROM citizens where otp='" + otp + "'", function (
     error,
@@ -1088,7 +1088,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
     } else {
       if (results.length > 0) {
         if (results[0].otp == otp) {
-          logger.fatal(otp);
+          console.log(otp);
           con.query(
             "UPDATE citizens SET password = '" +
             password +
@@ -1116,12 +1116,12 @@ router.post("/forgetotpverification", cors(), (req, res) => {
 });
 
 router.post("/schedules", cors(), async function (req, res) {
-  logger.fatal(req.body);
+  console.log(req.body);
   var time = req.body.schedule_time;
   var reqdate = req.body.requestdate;
   var building_id = req.body.building_id;
-  //logger.fatal("id",req.body.id);
-  logger.fatal("building_id", building_id);
+  //console.log("id",req.body.id);
+  console.log("building_id", building_id);
   var date = moment(new Date(reqdate.substr(0, 16)));
   var rdate = date.format("YYYY-MM-DD HH:mm:ss");
   schedule
@@ -1274,7 +1274,7 @@ router.post("/pdfviewer", cors(), async function (req, res) {
   pdf1
     .pdf1(email)
     .then(result => {
-      logger.fatal(result);
+      console.log(result);
       res.status(result.status).json({
         message: result
       });
@@ -1294,7 +1294,7 @@ router.post("/pdfviewer", cors(), async function (req, res) {
 //================================installationdetails=================================//
 router.post("/installationdetails", cors(), function (req, res) {
   var installation = req.body;
-  logger.fatal(installation, "installation");
+  console.log(installation, "installation");
   update
     .update(installation)
     .then(result => {
@@ -1779,7 +1779,7 @@ router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
   const data = req.body;
   console.log(data, token, language);
 
-  Untrained_Employees.Untrained_Employees(data, token, language)
+  Untrained_Employees_schedule.Untrained_Employees_schedule(data, token, language)
     .then(result => {
       console.log(result);
 
