@@ -1779,7 +1779,7 @@ router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
   const data = req.body;
   console.log(data, token, language);
 
-  Untrained_Employees.Untrained_Employees(data, token, language)
+  Untrained_Employees_schedule.Untrained_Employees_schedule(data, token, language)
     .then(result => {
       console.log(result);
 
