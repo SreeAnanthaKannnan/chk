@@ -44,7 +44,8 @@ var con = require("../mysql_connection/dbConfig.js"),
   pdf1 = require("../core/pdfviewer.js"),
   update = require("../core/update"),
   assessment = require("../core/assessment"),
-  book = require("../core/servicehistory");
+  book = require("../core/servicehistory"),
+  image_upload= require('../core/image_upload');
 
 let moment = require("moment");
 
@@ -589,9 +590,9 @@ router.post("/installationdetails", cors(), function (req, res) {
 });
 //=============================upload=====================================================
 var uploads = multer({ dest: "var/www/html/" });
-router.use("/download", express.static(path.join(__dirname, "upload")));
+//router.use("/download", express.static(path.join(__dirname, "../upload")));
 // File input field name is simply 'file'
-//router.use('/static', express.static(path.join(__dirname, 'uploads')))
+router.use('/static', express.static(path.join(__dirname, "../uploads")))
 router.post("/file_upload", uploads.single("file"), function (req, res) {
   var file = "var/www/html/" + "/" + req.file.filename;
   console.log(req.file, "ffg");
