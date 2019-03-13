@@ -1,5 +1,7 @@
 var con = require('../mysql_connection/dbConfig.js');
 var dbFunc = require('../mysql_connection/connection.js');
+var log4js = require('log4js');
+const logger = log4js.getLogger('Aman_project');
 
 function pdf1(email){
   return new Promise((resolve, reject)=>{

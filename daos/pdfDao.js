@@ -20,7 +20,7 @@ function pdf_insert(path,email) {
              
          } 
             logger.fatal(!result[0].path)
-             if(result[0].path=="null"){
+             if(result[0].path==null){
                  logger.fatal("line 25")
                    var sql= "UPDATE Buildings SET path ='"+path+"' where email_id='"+owner_id+"'";
        con.query(sql,function(err,result)
