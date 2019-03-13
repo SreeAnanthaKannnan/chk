@@ -41,14 +41,16 @@ async function trainer_attendance(Trainer_Email,language) {
       let select_query_scheduler = await SchedulerDao.Scheduler_information(
         Trainer_id
       );
-      console.log("Core_selectQuery_scheduler===>", select_query_scheduler);
+      //console.log("Core_selectQuery_scheduler===>", select_query_scheduler);
+console.log("length===>>",select_query_scheduler.result.length)
+
       if (select_query_scheduler.result != 0) {
         for (i = 0; i < select_query_scheduler.result.length; i++) {
           var date = select_query_scheduler.result[i].scheduling_date + 1;
           var newdate = moment(date).format("YYYY/MM/DD");
           select_query_scheduler.result[i].scheduling_date = newdate;
 
-          var date1 = select_query_scheduler.result[i].scheduled_date + 1;
+          var date1 = select_query_scheduler.result[i].Scheduled_date + 1;
           var schedulleddate = moment(date1).format("YYYY/MM/DD");
           select_query_scheduler.result[i].scheduled_date = schedulleddate;
           console.log("schedulleddate=======>", schedulleddate);
@@ -74,8 +76,8 @@ async function trainer_attendance(Trainer_Email,language) {
           var end_time = select_query_scheduler.result[i].end_time;
           console.log("select_query_scheduled_date", end_time);
 
-          // var course_name = select_query_scheduler.result[i].course_id;
-          // console.log("select_query_scheduled_date", course_name);
+          var course_name = select_query_scheduler.result[i].course_id;
+          console.log("select_query_coursename", course_name);
 
 
         
