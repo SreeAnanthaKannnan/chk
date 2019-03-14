@@ -10,6 +10,13 @@ var dbConfig = {
   password: "Rpqb$2018",
   database: "SHARJAH"
 };
+// var dbConfig = {
+//  connectionLimit : 100,
+//     host : '68.183.86.120',
+//     user :  'rapiduser',
+//     password: 'Rpqb$2018',
+//     database: 'SHARJAH'
+// };
 
 exports.getConnection = () => {
   return new Promise(resolve => {

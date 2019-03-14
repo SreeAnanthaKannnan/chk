@@ -2,6 +2,8 @@ const con = require('../mysql_connection/dbConfig');
 var dbFunc = require('../mysql_connection/connection.js');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
+const mysqlConnection = require("../config/Connection");
+const query = require("../mysql_connection/queries");
 
 
 function Session_insert(params) {
@@ -22,22 +24,21 @@ function Session_insert(params) {
     })
 }
 async function Session_select(params){
-    return  new Promise( function (resolve,reject){
+    return  new Promise( async function (resolve,reject){
 
      logger.fatal("achie",params)
-    con.query("SELECT * FROM Session where token ='" + params + "'", (err, result) => {
-        if(err) { return resolve ({
-            status:202,
-            message:"Invalid token"
-
-        })}
+     var res1= await mysqlConnection
+        .query_execute(query.session,[params])
+        if(res1.data.errno){
+            return reject("something went wrong")
+        }
       
         else{
-        return resolve (result);
+        return resolve (res1.data);
         }
         
     });
-})
+//})
 
 }
 async function Session_update(params){

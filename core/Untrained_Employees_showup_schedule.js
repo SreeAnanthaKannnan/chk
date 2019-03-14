@@ -45,15 +45,43 @@ exports.Untrained_Employees_schedule = (data,token,language) => new Promise(asyn
              }
              else{
                  let Untrained_Employees = await Employee_profileDao.Untrained_Employees_schedule(Company_Trade_Lincense_No,language)
-            let result = Untrained_Employees[0]
-console.log(result,"result")
+            let result = Untrained_Employees
+console.log(Untrained_Employees.result,"<====================result")
+let total_length =Untrained_Employees.result
+         let value =[];
+         let obj={}
+         if(language=="ar"){
+              for(i=0;i<total_length.length;i++){
+                  obj={Employee_ID:total_length[i].Employee_ID,
+                       Name_ar:total_length[i].Name_ar,
+                       Position:total_length[i].Position,
+                       National_Id:total_length[i].National_Id,
+                       Company_Trade_Lincense_No:total_length[i].Company_Trade_Lincense_No,
+                       assigned_for_training:total_length[i].assigned_for_training     }
+                       value.push(obj)
 
 
-                 return resolve({
-                     status :200,
-                     message : Untrained_Employees
-                 })
-                
+              }
+              console.log(value,"=============value")
+              return resolve({status:200,message:value})
+         }
+         if(language=="en"){
+            for(i=0;i<total_length.length;i++){
+                obj={Employee_ID:total_length[i].Employee_ID,
+                     Name_en:total_length[i].Name_en,
+                     Position:total_length[i].Position,
+                     National_Id:total_length[i].National_Id,
+                     Company_Trade_Lincense_No:total_length[i].Company_Trade_Lincense_No,
+                     assigned_for_training:total_length[i].assigned_for_training     }
+                     value.push(obj)
+
+
+            }
+            return resolve({status:200,message:value})
+       }
+
+
+                 
             }
         
             }

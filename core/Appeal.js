@@ -11,14 +11,18 @@ const session_time = require("../utils/session_time_difference");
 const translate = require("../utils/translate");
 let moment = require('moment')
 
-exports.Appeal = (Appeal_Object) => new Promise(async(resolve, reject) => {
+
+exports.Appeal = (Appeal_Object,token,language) => new Promise(async(resolve, reject) => {
     let service = Appeal_Object.service;
     let Description = Appeal_Object.Description;
     let today = new Date();
     let Appeal_date = moment(today).format("YYYY/MM/DD HH:mm:ss");
     console.log(token, "test");
-    let query = await SessionDao.Session_select(token);
-    console.log(query, "testinggggggggg");
+     await SessionDao.Session_select(token)
+     .then(async function(result) {
+      console.log("result<======", result);
+    console.log(result[0], "testinggggggggg");
+    let query = result
     if (query.length == 0) {
       resolve({
         status: 402,
@@ -50,18 +54,28 @@ exports.Appeal = (Appeal_Object) => new Promise(async(resolve, reject) => {
           message: "session expired"
         });
       } else {
-        let language = await language_detect.languageDetect(Description);
-        console.log(language.result, "language");
-        if (language.result == "en") {
-          let temp = await translate.translate_ar(Description);
-          let temp1 = await translate.translate_ar(service)
-          console.log(temp);
-          console.log(temp1)
+        // let language = await language_detect.languageDetect(Description);
+        console.log(language, "language");
+        if (language == "en") {
+         await translate.translate_ar(Description)
+         .then(async function(result) {
+          console.log("result_translate", result)
+          temp=result
           Description_ar = temp.result;
-          service_ar = temp1.result;
+          await translate.translate_ar(service)
+          service_ar = result.result;
+          Description_ar = result.result;
           Description_en = Description;
           service_en = service;
-        } else {
+         })
+         .catch(async function(err) {
+          var messagevalue = await message.getmessage(language.result, "E01");
+          return resolve({ status: 400, message: "somthing went wrong" });
+        });
+
+        }
+       
+       else {
           Description_ar = Description;
           service_ar = service;
           let temp = await translate.translate_en(Description);
@@ -71,19 +85,24 @@ exports.Appeal = (Appeal_Object) => new Promise(async(resolve, reject) => {
         }
       }
     }
-    let query_value =[service,Description]
-    logger.fatal(query_value,"query_value")
-   // let query= await insertquery.Appeal_insert(query_value)
-       logger.fatal(query !=0,"data inserted")
-    // let language = await language_detect.languageDetect(service)
-    // logger.fatal(language.result,"language")
-    //  let messagevalue =  await  message.getmessage(language.result,"S01")
-    //   logger.fatal(messagevalue,"last")
+    let query_value =[service_en,service_ar,Description_en,Description_ar,Appeal_date]
+   await insertquery.Appeal_insert(query_value)
+   .then(async function(result) {
+    console.log("result===>", result);
   
       return  resolve({
         status: 200,
-        message:"Appeal Done", 
+        message:"your appeal is submitted successfully", 
       })
+    })
+
+       })
+     
+     
+         .catch(async function(err) {
+           var messagevalue = await message.getmessage(language, "E01");
+           return resolve({ status: 400, message: err });
+         });
     
     
 })
