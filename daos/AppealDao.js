@@ -1,7 +1,6 @@
 
-var log4js = require('log4js');
 
-const logger = log4js.getLogger('Aman_project');
+// const logger = log4js.getLogger('Aman_project');
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 

@@ -2,7 +2,7 @@ const con = require("../mysql_connection/dbConfig");
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 async function Trainer_information(params) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     console.log(params, "params======>");
 
     con.query(
@@ -23,7 +23,7 @@ function email_otp_update(params1, params2) {
   console.log(params1, "params1");
   console.log(params2, "params2");
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     var verify_email = "Y";
     // var sql ="UPDATE Residents SET verify_email = '" + verify_email + "' WHERE email_id = '" + params + "'";
     var sql =
@@ -32,7 +32,7 @@ function email_otp_update(params1, params2) {
       "' WHERE Email_ID = '" +
       params2 +
       "'";
-    con.query(sql, function(err, result) {
+    con.query(sql, function (err, result) {
       if (!result) {
         //  console.log(result,"achieved")
         console.log("something", err);
@@ -45,7 +45,7 @@ function email_otp_update(params1, params2) {
   });
 }
 async function Trainer_email_otp_verification(params) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     // console.log("achie")
     con.query(
       "SELECT * FROM Trainer_Profile where otp ='" + params + "'",
@@ -63,14 +63,14 @@ function password_update(params1, params2) {
   console.log(params1, "params1");
   console.log(params2, "params2");
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     var sql =
       "UPDATE Trainer SET Password = '" +
       params1 +
       "' WHERE otp = '" +
       params2 +
       "'";
-    con.query(sql, function(err, result) {
+    con.query(sql, function (err, result) {
       if (!result) {
         //  console.log(result,"achieved")
         console.log("something", err);
@@ -155,7 +155,7 @@ function employee_attendence(
   param6,
   param7
 ) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.log("hiiiii", param);
     //  param = moment(param).format("YYYY-MM-DD")
     //  console.log(param,"date")
@@ -164,7 +164,7 @@ function employee_attendence(
 
     sql =
       "INSERT INTO Trainer (employee_id,attendance_status,National_id,Name_en,trainer_id,Attended,time_slots,classroom) VALUES ?";
-    await con.query(sql, [param], function(err, result) {
+    await con.query(sql, [param], function (err, result) {
       if (!result) {
         //  console.log(result,"achieved")
         console.log("something", err);
@@ -179,7 +179,7 @@ function employee_attendence(
 //=============================================================================================//
 //===========================================================================================//
 function Trainer_insert(param) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.log("hiiiii", param);
     //  param = moment(param).format("YYYY-MM-DD")
     //  console.log(param,"date")
@@ -188,7 +188,7 @@ function Trainer_insert(param) {
 
     sql =
       "INSERT INTO Trainer (Name_en,Name_ar,trainer_email_id,password,reg_date,course_name_en,course_name_ar,otp,Trainer_id) VALUES ?";
-    await con.query(sql, [param], function(err, result) {
+    await con.query(sql, [param], function (err, result) {
       if (!result) {
         //  console.log(result,"achieved")
         console.log("something", err);
@@ -202,7 +202,7 @@ function Trainer_insert(param) {
 }
 //=============================================================================================//
 function Trainer_id_select(params, language) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     //  param = moment(param).format("YYYY-MM-DD")
     console.log(params, "date");
     if (language == "en") {
@@ -235,28 +235,10 @@ function Trainer_id_select(params, language) {
   });
 }
 
-async function Scheduler_information(params) {
-  return new Promise(function(resolve, reject) {
-    console.log(params, "params======>");
 
-    con.query(
-      "SELECT * FROM Schedule where Trainer_id ='" + params + "'",
-
-      (err, result) => {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          return resolve({ result: result });
-        }
-      }
-    );
-  });
-}
 
 async function Scheduler_date_select(params, params1, params2, params3) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     console.log("params======>", params);
     console.log("params======>", params1);
     console.log("params======>", params2);
@@ -264,14 +246,14 @@ async function Scheduler_date_select(params, params1, params2, params3) {
 
     con.query(
       "SELECT * FROM Schedule where Trainer_id ='" +
-        params +
-        "' AND scheduled_date='" +
-        params1 +
-        "' AND start_time='" +
-        params2 +
-        "' AND end_time='" +
-        params3 +
-        "'",
+      params +
+      "' AND scheduled_date='" +
+      params1 +
+      "' AND start_time='" +
+      params2 +
+      "' AND end_time='" +
+      params3 +
+      "'",
 
       (err, result) => {
         if (err) {
@@ -287,18 +269,18 @@ async function Scheduler_date_select(params, params1, params2, params3) {
 }
 
 async function Scheduler_information(params) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     console.log(params, "params======>");
 
     con.query(
-      "SELECT * FROM Schedule where Trainer_id ='" + params + "'",
-
+      "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id ='" + params + "'",
       (err, result) => {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
           return resolve({ status: 400, err: err });
         } else {
+          console.log("result_DAO",result)
           return resolve({ result: result });
         }
       }
@@ -307,11 +289,11 @@ async function Scheduler_information(params) {
 }
 
 function trainer_name_schedule(trainer_id, language) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     //  param = moment(param).format("YYYY-MM-DD")
     if (language == "en") {
       let sql = "SELECT Name_en FROM Trainer where id = ?";
-      await con.query(sql, [trainer_id], function(err, result) {
+      await con.query(sql, [trainer_id], function (err, result) {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
@@ -322,7 +304,7 @@ function trainer_name_schedule(trainer_id, language) {
       });
     } else {
       let sql = "SELECT Name_ar FROM Trainer where id = '" + trainer_id + "'";
-      con.query(sql, function(err, result) {
+      con.query(sql, function (err, result) {
         if (!result) {
           //  console.log(result,"achieved")
           console.log("something", err);
@@ -335,10 +317,10 @@ function trainer_name_schedule(trainer_id, language) {
   });
 }
 async function get_employee_list(params) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     mysqlConnection
       .query_execute(query.getemployeedetails, [params])
-      .then(function(result, err) {
+      .then(function (result, err) {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
@@ -363,7 +345,7 @@ async function Trainer_attendence_list(
   params8,
   params9
 ) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     var values = [
       params,
       params1,
@@ -379,7 +361,7 @@ async function Trainer_attendence_list(
 
     await mysqlConnection
       .insert_query(query.insertattendance, values)
-      .then(function(result, err) {
+      .then(function (result, err) {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);

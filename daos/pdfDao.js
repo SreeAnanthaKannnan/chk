@@ -1,5 +1,7 @@
 var con = require('../mysql_connection/dbConfig.js');
 var dbFunc = require('../mysql_connection/connection.js');
+var log4js = require('log4js');
+const logger = log4js.getLogger('Aman_project');
 
 
 function pdf_insert(path,email) {
@@ -16,13 +18,9 @@ function pdf_insert(path,email) {
          if(err){
              throw err;
              
-         } //{ logger.fatal("something",err)
-            //  return reject({ "status": 400, "body": 'Cannot insert the data' })}
-            //  else{
-            //        logger.fatal(result,"achieved")
-            //  return resolve({ result});
+         } 
             logger.fatal(!result[0].path)
-             if(result[0].path=="null"){
+             if(result[0].path==null){
                  logger.fatal("line 25")
                    var sql= "UPDATE Buildings SET path ='"+path+"' where email_id='"+owner_id+"'";
        con.query(sql,function(err,result)

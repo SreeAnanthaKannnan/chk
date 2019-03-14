@@ -1,4 +1,6 @@
 var pdfviewer = require('../daos/pdfviewerDao.js');
+var log4js = require('log4js');
+const logger = log4js.getLogger('Aman_project');
 module.exports={
   pdf1:pdf1
 }

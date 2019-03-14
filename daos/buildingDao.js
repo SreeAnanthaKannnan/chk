@@ -21,10 +21,7 @@ function building(buildingobject,email_id){
         dbFunc.connectionRelease;
         logger.fatal("DataBase ERR:",err)
         logger.fatal(result,"inserted.......")
-        con.query("select * from Buildings", function(err, res) {
-           
-          });
-        })
+         })
        resolve({
             Message: "Add Building done",
            

@@ -1,4 +1,6 @@
 const con = require('../mysql_connection/dbConfig');
+var log4js = require('log4js');
+const logger = log4js.getLogger('Aman_project');
 function auto(t,s,D){
     logger.fatal("auto s",s);
     logger.fatal("auto t",t);

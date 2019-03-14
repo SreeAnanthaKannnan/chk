@@ -173,8 +173,8 @@ function course_name_schedule(course_id,language) {
     return new Promise( async function (resolve,reject){
         //  param = moment(param).format("YYYY-MM-DD")
        
-         if(language =="en"){
-            var res1= await mysqlConnection.query_execute("SELECT name_en FROM Course where course_id=?",[course_id])
+         if(language =="ar"){
+            var res1= await mysqlConnection.query_execute("SELECT name_ar FROM Course where course_id=?",[course_id])
             
             console.log("res1===>",res1.data)
             return resolve({result:res1.data})
@@ -183,7 +183,7 @@ function course_name_schedule(course_id,language) {
        
     
     else{
-        var res1= await mysqlConnection.query_execute("SELECT name_ar FROM Course where course_id =?",[course_id])
+        var res1= await mysqlConnection.query_execute("SELECT name_en FROM Course where course_id =?",[course_id])
             
             console.log("res1===>",res1.data)
             return resolve({result:res1.data})
