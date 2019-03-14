@@ -7,11 +7,9 @@ const logger = log4js.getLogger('Aman_project');
 function login(loginobject) {
 
   return new Promise( function (resolve,reject){
-      // logger.fatal("hiiiii",params)
-     var email_id=loginobject.email;
+      var email_id=loginobject.email;
      logger.fatal("in dao",email_id);
-      //var password=loginobject.password;
-      var sql = "SELECT  * FROM admin where email_id ='" + email_id + "'";
+       var sql = "SELECT  * FROM admin where email_id ='" + email_id + "'";
      con.query(sql,function(err,result){
       if(err) { logger.fatal("something",err)
           return reject({ "status": 400, "body": 'Cannot insert the data' })}
@@ -19,8 +17,7 @@ function login(loginobject) {
                 logger.fatal(result,"achieved");
           return resolve({ result});
           }
-          
-      }); 
+          }); 
   })
 }
 module.exports={
