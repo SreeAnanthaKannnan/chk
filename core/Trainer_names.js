@@ -3,7 +3,7 @@ const session_time = require("../utils/session_time_difference");
 const message = require('../utils/messages')
 const TrainerDao = require('../daos/TrainerDao')
 
-exports.trainer_names = (token) =>
+exports.trainer_names = (token,language) =>
   new Promise(async (resolve, reject) => {
     console.log(token, "test");
     let query = await SessionDao.Session_select(token);
@@ -40,7 +40,7 @@ exports.trainer_names = (token) =>
         });
       } else {
        
-          await TrainerDao.Trainer_names_display()
+          await TrainerDao.Trainer_names_display(language)
           .then(async function (result) {
             console.log("result",result );
             

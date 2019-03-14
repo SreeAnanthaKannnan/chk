@@ -419,35 +419,6 @@ router.post("/getdetails", cors(), async function (req, res) {
   }
 });
 //=================================Appeal====================================================
-// router.post("/Appeal", cors(), async function (req, res) {
-//   var id = await check.checkToken(req);
-
-//   if (id.status == 400 || id.status == 403) {
-//     res.send({
-//       result: id
-//     });
-//   } else {
-//     const Appeal_Object = req.body;
-//     console.log(Appeal_Object);
-//     Appeal.Appeal(Appeal_Object)
-//       .then(result => {
-//         console.log(result);
-//         res.status(result.status).json({
-//           message: result
-//         });
-//       })
-//       .catch(err =>
-//         res
-//           .status(err.status)
-//           .json({
-//             message: err.message
-//           })
-//           .json({
-//             status: err.status
-//           })
-//       );
-//   }
-// });
 
 //===================================addbuilding=============================================//
 router.post("/AddsingleBuilding", cors(), async function (req, res) {
@@ -1456,7 +1427,9 @@ router.post("/Trainer_login", cors(), (req, res) => {
 //=======================Appeal===============================================//
 router.post("/Appeal", cors(), (req, res) => {
   const Appeal_Object = req.body;
-  const token= req.headers.token;
+  const token = req.headers.token;
+  const language = req.headers.language;
+
   console.log(Appeal_Object);
   console.log(token,"token")
   let service = Appeal_Object.service;
@@ -1467,7 +1440,7 @@ router.post("/Appeal", cors(), (req, res) => {
       message: "Please fill all the fields"
     });
   } else {
-    Appeal.Appeal(Appeal_Object,token)
+    Appeal.Appeal(Appeal_Object,token,language)
       .then(result => {
         console.log(result);
 
@@ -2354,11 +2327,12 @@ router.post("/Classroom_availability", cors(), (req, res) => {
 //==============================================================================================//
 router.post("/Classroom_available_date", cors(), (req, res) => {
   const token = req.headers.token;
+  const language = req.headers.language
   const data = req.body;
-  // console.log(request)
+   console.log(language,"<=================language")
 
   available_date1
-    .available_date1(token, data)
+    .available_date1(token, data,language)
     .then(result => {
       console.log(result);
 
@@ -2683,10 +2657,11 @@ router.post("/Course_names", cors(), (req, res) => {
 //=============================================================================================//
 router.get("/Trainer_names", cors(), (req, res) => {
   const token = req.headers.token;
+  const language = req.headers.language
   console.log(token);
 
   trainer_names
-    .trainer_names(token)
+    .trainer_names(token,language)
     .then(result => {
       console.log(result);
 

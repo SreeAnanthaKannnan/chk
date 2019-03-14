@@ -1,29 +1,26 @@
-const con = require('../mysql_connection/dbConfig');
+
+
+// const logger = log4js.getLogger('Aman_project');
+const mysqlConnection = require("../config/Connection");
+const query = require("../mysql_connection/queries");
 
 
 
-
-
-
-function Appeal_insert(params) {
-
+function Appeal_insert(param) {
     return new Promise( async function (resolve,reject){
         // console.log("hiiiii",params)
-        params =[params]
-        sql= "INSERT INTO Appeal (service_en,service_ar,Description_en,Description_ar,Appeal_date) VALUES ? ";
-      await con.query(sql,  [params] ,async function(err,result){
-        if(err) { 
-            //  console.log(result,"achieved")
-            console.log("something",err)
-            return resolve({ status: 400, err: err })
-    }
-      
-    else{
-        console.log(result)
-        return resolve({ status: 200, message: result});
-        }
+        let res1=  await mysqlConnection
+        .insert_query(query.Appeal, param)
+      console.log(res1,"dbresult")
+      if(res1.data.errno){
+          return reject("something went wrong")
+      }
+      else{
+        return resolve({ status: 200, result: res1.data});
+
+      }
         
-    }); 
+     
 })
 }
 

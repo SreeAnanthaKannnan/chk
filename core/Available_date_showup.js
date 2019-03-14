@@ -5,14 +5,18 @@ const TrainerDao = require ('../daos/TrainerDao')
 const CourseDao = require ('../daos/CourseDao')
 
 
-exports.available_date1 = (token,data) => new Promise(async(resolve, reject) => {
+exports.available_date1 = (token,data,language) => new Promise(async(resolve, reject) => {
 
      console.log(token,"token")
+     console.log(language,"language")
      let no_of_seats_selected = data.no_of_seats_selected
      let trainer_name = data.trainer_name
      let course_name = data.course_name
-     let language = "en"
-     console.log(trainer_name,"trainer_name========>")
+    // if(language=="ar"){
+    //   trainer_name = trainer_name.split("").reverse().join("");
+    //   course_name = course_name.split("").reverse().join("")
+    // }
+    console.log(trainer_name,"trainer_name========>")
      console.log(course_name,"course_name=====>")
 
   let query = await SessionDao.Session_select(token)
@@ -51,7 +55,7 @@ exports.available_date1 = (token,data) => new Promise(async(resolve, reject) => 
        else{
         await TrainerDao.Trainer_id_select(trainer_name,language)
          .then(async function(result) {
-          console.log("result", result);
+          console.log("result_trainerid", result.result);
           let trainer_id = result.result[0].id
           console.log(trainer_id,"trainer_id")
         

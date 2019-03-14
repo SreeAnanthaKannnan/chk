@@ -85,11 +85,11 @@ function password_update(params1, params2) {
   });
 }
 //=================================================================================================//
-function Trainer_names_display() {
-  return new Promise(async function (resolve, reject) {
-    //  param = moment(param).format("YYYY-MM-DD")
-    //  console.log(param,"date")
+function Trainer_names_display(language) {
+  return new Promise(async function(resolve, reject) {
+    console.log("language===>",language)
 
+    if(language=="en"){
     await con.query("SELECT id,Name_en FROM Trainer ", (err, result) => {
       if (!result) {
         //  console.log(result,"achieved")
@@ -113,7 +113,36 @@ function Trainer_names_display() {
         return resolve({ result: value });
       }
     });
+  }
+    //  param = moment(param).format("YYYY-MM-DD")
+    //  console.log(param,"date")
+  else{
+    await con.query("SELECT id,Name_ar FROM Trainer ", (err, result) => {
+      if (!result) {
+        //  console.log(result,"achieved")
+        console.log("something", err);
+        return resolve({ status: 400, err: err });
+      } else {
+        console.log(result.length, "name");
+        let value = [];
+        let myobject = new Object();
+        for (i = 0; i < result.length; i++) {
+          //    let b= myobject[result[i].name] ;
+          //     // value.push(myobject[result[i].name])
+          //     console.log(b,"value===========>")
+          //     value.push (b)
+          var data = {};
+          data = { id: result[i].id, name: result[i].Name_ar };
+          value.push(data);
+        }
+        console.log(value, "value");
+
+        return resolve({ result: value });
+      }
+    });
+  }
   });
+
 }
 //===========================================================================================//
 function employee_attendence(
@@ -177,27 +206,31 @@ function Trainer_id_select(params, language) {
     //  param = moment(param).format("YYYY-MM-DD")
     console.log(params, "date");
     if (language == "en") {
-      let sql = "SELECT id FROM Trainer where Name_en = ?";
-      await con.query(sql, [params], function (err, result) {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          return resolve({ result: result });
-        }
-      });
+      var res1= await mysqlConnection
+        .query_execute(query.trainerid,[params])
+      console.log(res1,"dbresult")
+      if(res1.data.errno){
+          return reject("something went wrong")
+      }
+      else{
+        return resolve({ status: 200, result: res1.data});
+
+      }
     } else {
-      let sql = "SELECT id FROM Trainer where Name_ar = '" + params + "'";
-      con.query(sql, function (err, result) {
-        if (!result) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          return resolve({ result: result });
-        }
-      });
+      
+   
+      var res1= await mysqlConnection
+        .query_execute(query.trainerid_ar,[params])
+      console.log(res1,"dbresult")
+      if(res1.data.errno){
+          return reject("something went wrong")
+      }
+      else{
+        return resolve({ status: 200, result: res1.data});
+
+      }
+      
+     
     }
   });
 }

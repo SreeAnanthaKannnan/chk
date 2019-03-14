@@ -41,9 +41,8 @@ exports.course_creation = (data, token, language) =>
           message: "session expired"
         });
       } else {
-        let language = await language_detect.languageDetect(name);
-        console.log(language.result, "language");
-        if (language.result == "en") {
+       
+        if (language == "en") {
           let temp = await translate.translate_ar(name);
           console.log(temp, "arabic value");
           name_ar = temp.result;
@@ -61,19 +60,39 @@ exports.course_creation = (data, token, language) =>
           amount_training,
           duration
         ];
-        await CourseDao.Course_insert(query_value)
+        await CourseDao.Course_select(name_en)
+        .then(async function(result) {
+          console.log("result<======", result);
+          if(result.result.length !==0){
+            return resolve({ status: 401 , message:"course already exists"})
+          
+          }
+          else{ 
+       
+             await CourseDao.Course_insert(query_value)
           .then(async function(result) {
-            console.log("result", result);
-            var messagevalue = await message.getmessage(language.result, "S04");
-
-            if (result.result.length != 0) {
-              return resolve({ status: 200, message: messagevalue });
-            }
+            console.log("result===>", result);
+            return resolve({ status: 200 , message:"course created successfully"})
+            
           })
+       // }
+        }
+        })
+     // }
+      
+        //})
+      
+      
           .catch(async function(err) {
             var messagevalue = await message.getmessage(language.result, "E01");
             return resolve({ status: 400, message: err });
           });
+        
+          
+          
       }
     }
+  
+  
   });
+
