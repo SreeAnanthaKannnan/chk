@@ -24,12 +24,6 @@ var express = require("express"),
 
 var con = require("../mysql_connection/dbConfig.js"),
   login = require("../core/login.js"),
-<<<<<<< HEAD
-  consentform = require("../core/consentform.js"),
-  register = require("../core/register.js"),
-  aregister = require("../core/aregister.js"),
-=======
->>>>>>> 640ba8f8419755ddc4485bb66d287e43b127c250
   cregister = require("../core/cregister.js"),
   history = require("../core/history"),
   building = require("../core/building"),
@@ -129,44 +123,9 @@ router.post("/login", cors(), function (req, res) {
       })
     );
 });
-<<<<<<< HEAD
-//=======================registerservice===============================================//
-router.post("/register", cors(), function (req, res) {
-  var registerobject = req.body;
-  register
-    .register(registerobject)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
-      })
-    );
-});
-//=======================registerservice==========================================================//
-router.post("/admin-register", cors(), function (req, res) {
-  var registerobject = req.body;
-  console.log(registerobject, "registerobject");
-  aregister
-    .aregister(registerobject)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
-      }))
-})
-=======
 
 
 
->>>>>>> 640ba8f8419755ddc4485bb66d287e43b127c250
 //=========================citizen-registration-start===========================================
 router.post("/citizen-register", cors(), async function (req, res) {
   var registerobject = req.body;
@@ -250,108 +209,6 @@ router.post("/emailotpverification1", cors(), async function (req, res) {
  });
 //========================================citizen-registration-end=====================================
 
-<<<<<<< HEAD
-router.post("/General_Registration", cors(), (req, res) => {
-  const gr = req.body;
-  console.log("Routes_gr", gr);
-
-  if (!gr.Email || !gr.Password) {
-    return res.send({
-      status: 400,
-      message: "Invalid email id or password"
-    });
-  } else {
-    console.log("hiii");
-    gr_registration
-      .gr_registration(gr)
-      .then(result => {
-        console.log(result);
-
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
-//=====================================emailotpverification========================================
-router.post("/emailotpverification", cors(), async function (req, res) {
-
-  var otp = req.body.otp;
-  console.log(req.body);
-  var email_id = req.body.email_id;
-  console.log(otp);
-  con.query("SELECT * FROM Residents where otp = '" + otp + "'", function (
-    error,
-    results,
-    fields
-  ) {
-    if (error) {
-      throw error;
-    } else {
-      if (results.length != 0) {
-        if (results[0].otp == req.body.otp) {
-          var verify_email = "Y";
-          con.query(
-            "UPDATE Residents SET verify_email = '" +
-            verify_email +
-            "' WHERE otp = '" +
-            results[0].otp +
-            "'",
-            function (error, results, fields) { }
-          );
-          res.send({
-            status: "true",
-            message: "You are successfully registered",
-            الرسالة: "أنت مسجل بنجاح"
-          });
-        }
-      } else {
-        res.send({
-          status: "false",
-          message: "Invalid one time password",
-          رسالة: "كلمة مرور غير صالحة مرة واحدة"
-        });
-      }
-    }
-  });
-  });
-
-//=================================================================================================
-router.post("/consentform", cors(), async function (req, res) {
-  var id = await check.checkToken(req);
-
-  if (id.status == 400 || id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
-    var consentformobject = req.body;
-    consentform
-      .consentform(consentformobject)
-      .then(result => {
-        res.send({
-          result: result
-        });
-      })
-      .catch(err =>
-        res.status(err.status).json({
-          message: err.message
-        })
-      );
-  }
-});
-=======
->>>>>>> 640ba8f8419755ddc4485bb66d287e43b127c250
 
 router.post("/getdetails", cors(), async function (req, res) {
   var id = await check.checkToken(req);
