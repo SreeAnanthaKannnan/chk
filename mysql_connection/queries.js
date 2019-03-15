@@ -24,11 +24,13 @@ module.exports.coursenames =
 module.exports.session=
 "SELECT * FROM Session where token =?";
 module.exports.Appeal=
-"INSERT INTO Appeal (service_en,service_ar,Description_en,Description_ar,Appeal_date) VALUES ?";
+"INSERT INTO Appeal (service_en,service_ar,Description_en,Description_ar,Appeal_date,Compliant_NO) VALUES ?";
 module.exports.trainerid=
 "SELECT id FROM Trainer where Name_en = ?";
 module.exports.trainerid_ar=
 "SELECT id FROM Trainer where Name_ar = ?";
+module.exports.appealidcount =
+"SELECT count(id) as count FROM Appeal"
 
   module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
