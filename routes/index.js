@@ -24,10 +24,6 @@ var express = require("express"),
 
 var con = require("../mysql_connection/dbConfig.js"),
   login = require("../core/login.js"),
-  login1 = require("../core/login1.js"),
-  consentform = require("../core/consentform.js"),
-  register = require("../core/register.js"),
-  aregister = require("../core/aregister.js"),
   cregister = require("../core/cregister.js"),
   history = require("../core/history"),
   building = require("../core/building"),
@@ -38,7 +34,6 @@ var con = require("../mysql_connection/dbConfig.js"),
   profile = require("../core/profile"),
   check = require("../utils/checkToken"),
   phone = require("../utils/phonecheck.js"),
-  image = require("../core/image.js"),
   pdf = require("../core/pdf.js"),
   upload = require("../core/upload.js"),
   pdf1 = require("../core/pdfviewer.js"),
@@ -50,31 +45,25 @@ var con = require("../mysql_connection/dbConfig.js"),
 let moment = require("moment");
 
 let Appeal = require("../core/Appeal"),
-  hr_login = require("../core/Hr_login"),
-  trainer_login = require("../core/Trainer_login"),
-  hr_registration = require("../core/Hr_registration"),
+ 
+ 
+
   Employee_profile = require("../core/Employee_profile"),
-  email_otp_verify = require("../core/Email_otp_verify"),
-  hr_forget_password = require("../core/Hr_Forget_password"),
-  trainer_forget_password = require("../core/Trainer_forget_password"),
-  hr_forget_password_otp_verify = require("../core/Hr_forget_password_otp_verify"),
-  trainer_forget_password_otp_verify = require("../core/Trainer_forget_password_otp_verify"),
+
+ 
   safety_officer_details = require("../core/Employee_safetyofficer_profile_showup"),
   other_employee_details = require("../core/Employee_other_category_showup"),
-  loginValidation = require("../validation/hr_login"),
+
   classroom = require("../core/Classroom"),
   scheduling = require("../core/Scheduling"),
   availability = require("../core/Classroom_availability"),
   available_date1 = require("../core/Available_date_showup"),
-  photo = require("../core/Photo_upload"),
+//  photo = require("../core/Photo_upload"),
   seat_availability = require("../core/seat_availability"),
-  trainer_trainee_view = require("../core/Trainer_trainee_view"),
   company_profile = require("../core/Company_profile"),
   company_trading_license = require("../core/Company_trade_license"),
   trainer_account = require("../core/Trainer_registration"),
-  training_booking = require("../core/Booking_for_training"),
   safety_officer = require("../core/Safety_officer_direct_exam"),
-  partial_booking = require("../core/Partial_booking"),
   course_view = require("../core/Course_view"),
   trainer_names = require("../core/Trainer_names"),
   course_creation = require("../core/Course_creation"),
@@ -85,9 +74,7 @@ let Appeal = require("../core/Appeal"),
   bulk_booking = require("../core/Bulk_booking"),
   certificate = require("../core/certificate"),
   uploadSalama = require("../core/uploadbulkemployee"),
-  general_login = require("../core/General_login"),
-  gr_registration = require("../core/General_register"),
-  general_registration_otp_verify = require("../core/General_registration_otp_verify"),
+  
   Untrained_Employees_schedule = require("../core/Untrained_Employees_showup_schedule"),
   number_validation_schedule = require("../core/Number_validation_schedule"),
   ip = require("ip");
@@ -142,55 +129,8 @@ router.post("/login", cors(), function (req, res) {
     );
 });
 
-//=======================loginservice==================================================//
-router.post("/login-supplier", cors(), function (req, res) {
-  var loginobject = req.body;
-  login1
-    .loginuser(loginobject)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
-      })
-    );
-});
 
-//=======================registerservice===============================================//
-router.post("/register", cors(), function (req, res) {
-  var registerobject = req.body;
-  register
-    .register(registerobject)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
-      })
-    );
-});
-//=======================registerservice==========================================================//
-router.post("/admin-register", cors(), function (req, res) {
-  var registerobject = req.body;
-  console.log(registerobject, "registerobject");
-  aregister
-    .aregister(registerobject)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
-      }))
-})
+
 //=========================citizen-registration-start===========================================
 
 //=========================citizen-registration-start===========================================
@@ -287,113 +227,6 @@ router.post("/emailotpverification1", cors(), async function (req, res) {
 });
 //========================================citizen-registration-end=====================================
 
-router.post("/General_Registration", cors(), (req, res) => {
-  const gr = req.body;
-  console.log("Routes_gr", gr);
-
-  if (!gr.Email || !gr.Password) {
-    return res.send({
-      status: 400,
-      message: "Invalid email id or password"
-    });
-  } else {
-    console.log("hiii");
-    gr_registration
-      .gr_registration(gr)
-      .then(result => {
-        console.log(result);
-
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
-//=====================================emailotpverification========================================
-router.post("/emailotpverification", cors(), async function (req, res) {
-  //var id = await check.checkToken(req);
-
-  // if(id.status==400 || id.status==403){
-  //     res.send({
-  //         result:id
-  //     })
-  // }
-  // else{
-  var otp = req.body.otp;
-  console.log(req.body);
-  var email_id = req.body.email_id;
-  console.log(otp);
-  con.query("SELECT * FROM Residents where otp = '" + otp + "'", function (
-    error,
-    results,
-    fields
-  ) {
-    if (error) {
-      throw error;
-    } else {
-      if (results.length != 0) {
-        if (results[0].otp == req.body.otp) {
-          var verify_email = "Y";
-          con.query(
-            "UPDATE Residents SET verify_email = '" +
-            verify_email +
-            "' WHERE otp = '" +
-            results[0].otp +
-            "'",
-            function (error, results, fields) { }
-          );
-          res.send({
-            status: "true",
-            message: "You are successfully registered",
-            الرسالة: "أنت مسجل بنجاح"
-          });
-        }
-      } else {
-        res.send({
-          status: "false",
-          message: "Invalid one time password",
-          رسالة: "كلمة مرور غير صالحة مرة واحدة"
-        });
-      }
-    }
-  });
-  // }
-});
-
-//=================================================================================================
-router.post("/consentform", cors(), async function (req, res) {
-  var id = await check.checkToken(req);
-
-  if (id.status == 400 || id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
-    var consentformobject = req.body;
-    consentform
-      .consentform(consentformobject)
-      .then(result => {
-        res.send({
-          result: result
-        });
-      })
-      .catch(err =>
-        res.status(err.status).json({
-          message: err.message
-        })
-      );
-  }
-});
 
 router.post("/getdetails", cors(), async function (req, res) {
   var id = await check.checkToken(req);
@@ -472,33 +305,7 @@ router.post("/getBuildings", cors(), async function (req, res) {
       );
   }
 });
-//==============================Residentsdetails===========================================//
-router.post("/profile", cors(), async function (req, res) {
-  // var id =await check.checkToken(req);
-  // if(id.status==400 || id.status==403){
-  //     res.send({
-  //         result:id
-  //     })
-  // }
-  // else{
-  //var buildingobject= id.result;
-  var buildingobject = req.body.email;
-  console.log(buildingobject, "data");
-  profile
-    .getbuildings(buildingobject)
-    .then(result => {
-      res.send({
-        result: result,
-        message: "mock mock"
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
-      })
-    );
-  // }
-});
+
 //=======================================================================================================
 router.post("/installationdetails", cors(), function (req, res) {
   var installation = req.body;
@@ -757,162 +564,6 @@ router.post("/textimage", cors(), (req, res, next) => {
       )
   );
 });
-//======================================forgetpassword===========================================
-//===============================forgetpassword==============================================//
-router.post("/forgetpassword", (req, res) => {
-  let forgetpassword = req.body;
-  console.log("body", forgetpassword);
-  let password = req.body.password;
-  console.log(password);
-  let confirmpassword = req.body.confirmpassword;
-  let username = req.body.email;
-  if (!username || !password || !confirmpassword) {
-    res.send({
-      message: "Please fill all the details"
-    });
-  } else {
-    console.log(username);
-    let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
-
-    con.query(sql, function (err, result) {
-      // console.log(result,"select")
-      if (err) throw err;
-      // dbFunc.connectionRelease;
-      // console.log("DataBase ERR:",err)
-      //console.log("Database Error while selecting from register table:",err)
-      if (result.length == 0) {
-        console.log("i am here");
-        res.send({
-          message: "Invalid User Name",
-          الرسالة: "اسم المستخدم غير صالح"
-        });
-        // dbFunc.connectionRelease;
-      } else {
-        if (password != confirmpassword) {
-          res.send({
-            message: "password doesn't match",
-            الرسالة: "كلمة المرور غير متطابقة"
-          });
-        } else {
-          if (cryptr.decrypt(result[0].password) == password) {
-            console.log("previous");
-            res.send({
-              message: "Password should not be a previously used one",
-              رسالة: "مرور سبق استخدامهاكلمة المرور لا يجب أن تكون كلمة"
-            });
-            //dbFunc.connectionRelease;
-          }
-          // });
-          else {
-            var otp = "";
-            var possible = "0123456789";
-            var namea;
-            var namen;
-            for (var i = 0; i < 4; i++)
-              otp += possible.charAt(
-                Math.floor(Math.random() * possible.length)
-              );
-
-            console.log(otp, "otp");
-            // var encodedMail = new Buffer(req.body.email).toString('base64');
-            let sql =
-              "SELECT * FROM citizens where email_id ='" + username + "'";
-            con.query(sql, function (err, result) {
-              if (err) throw err;
-              //dbFunc.connectionRelease;
-              namen = result[0].name_en;
-              namea = result[0].name_ar;
-
-              //  })
-              console.log("datanames", result[0].name_en);
-              console.log(result[0].name_ar);
-              console.log("copy", namen);
-              var transporter = nodemailer.createTransport({
-                host: "smtp.gmail.com",
-                port: 587,
-                secure: false,
-                auth: {
-                  user: "sanedservices2019@gmail.com",
-                  pass: "Sanedwebservices1!"
-                }
-              });
-              var mailOptions = {
-                transport: transporter,
-                from: "Saned Services" + "<sanedservices2019@gmail.com>",
-                to: req.body.email,
-                subject: "Saned Service-OTP Verification",
-
-                html:
-                  "Dear  " +
-                  result[0].name_en +
-                  "/" +
-                  result[0].name_ar +
-                  "<br>Your one Time Password for forgotPassword recovery for Saned services,<br> Your one time password is.<br> " +
-                  otp +
-                  "<br>" +
-                  "كلمة المرور الخاصة بك مرة واحدة نسيت استرداد كلمة المرور لخدمات Saned" +
-                  namea +
-                  "  العزيز,<br> Your One time password is. <br> " +
-                  otp +
-                  "<br>"
-              };
-
-              transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                  console.log("Mail send error: ", error);
-                }
-              });
-              var sql =
-                "UPDATE citizens SET otp = '" +
-                otp +
-                "' WHERE email_id = '" +
-                username +
-                "'";
-              con.query(sql, function (err) {
-                if (err) throw err;
-                // dbFunc.connectionRelease;
-                // console.log("DataBase ERR:",err)
-                res.send({
-                  message: "Please check your mail for One time Password",
-                  رسالة: "يرجى التحقق من بريدك مرة واحدة لكلمة المرور"
-                });
-              });
-              // dbFunc.connectionRelease;
-            });
-          }
-        }
-      }
-    });
-  }
-});
-
-router.post("/textimage", cors(), (req, res, next) => {
-  const uploadFile = req.files.file;
-  const fileName = req.files.file.name;
-  //   console.log(Appeal_Object)
-  const Image = uploadFile.mv(
-    `${__dirname}/public/files/${fileName}`,
-    image
-      .Image(Image)
-      .then(result => {
-        console.log(result);
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      )
-  );
-});
-//======================================forgetpassword===========================================
 //===============================forgetpassword==============================================//
 router.post("/forgetpassword", (req, res) => {
   let forgetpassword = req.body;
@@ -1364,66 +1015,6 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
     );
 });
 
-//=========================================Login=============================================//
-
-router.post("/Hr_login", cors(), async (req, res) => {
-  const login = req.body;
-  let Company_Email = req.body.Company_Email;
-  let Password = req.body.Password;
-
-  if (!Company_Email || !Password) {
-    return res.send({
-      status: 402,
-      message: "Please fill all the fields"
-    });
-  } else {
-    hr_login
-      .hr_login(login)
-      .then(result => {
-        console.log(result);
-
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
-
-//=================================TrainerLogin=============================================//
-router.post("/Trainer_login", cors(), (req, res) => {
-  const trainer_login_Object = req.body;
-  console.log("Routes_console", trainer_login_Object);
-
-  trainer_login
-    .trainer_login(trainer_login_Object)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 //=======================Appeal===============================================//
 router.post("/Appeal", cors(), (req, res) => {
   const Appeal_Object = req.body;
@@ -1460,97 +1051,7 @@ router.post("/Appeal", cors(), (req, res) => {
       );
   }
 });
-//=======================================General Registartion======================================================//
-router.post("/General_Registration", cors(), (req, res) => {
-  const gr = req.body;
-  console.log("Routes_gr", gr);
 
-  if (!gr.Email || !gr.Password) {
-    return res.send({
-      status: 400,
-      message: "Invalid email id or password"
-    });
-  } else {
-    console.log("hiii");
-    gr_registration
-      .gr_registration(gr)
-      .then(result => {
-        console.log(result);
-
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
-//=======================================General Registartion======================================================//
-router.post("/General_registration_otp_verify", cors(), (req, res) => {
-  const otp_verify_request = req.body;
-  console.log(otp_verify_request);
-  if (!req.body.otp) {
-    return res.send({
-      status: 400,
-      message: "Please provide a valid otp"
-    });
-  } else {
-    general_registration_otp_verify
-      .General_registration_otp_verify(otp_verify_request)
-      .then(result => {
-        console.log(result);
-
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
-
-//==============================================================================================//
-//=================================TrainerLogin=============================================//
-router.post("/General_Login", cors(), (req, res) => {
-  const general_login_Object = req.body;
-  console.log("Routes_console", general_login_Object);
-
-  general_login
-    .general_login(general_login_Object)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 
 //=============================================Trainer account creation============
 router.post("/Trainer_account_creation", cors(), (req, res) => {
@@ -1579,67 +1080,8 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
 });
 
 //=============================================================================//
-router.post("/Hr_Registration", cors(), (req, res) => {
-  const hr = req.body;
-  console.log(hr);
-  if (!hr.Company_Email || !hr.Password) {
-    return res.send({
-      status: 400,
-      message: "Invalid email id or password"
-    });
-  } else {
-    hr_registration
-      .hr_registration(hr)
-      .then(result => {
-        console.log(result);
 
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
-//=============================================================================================//
-router.post("/Hr_registration_otp_verify", cors(), (req, res) => {
-  const otp_verify_request = req.body;
-  console.log(otp_verify_request);
-  if (!req.body.otp) {
-    return res.send({
-      status: 400,
-      message: "Please provide a valid otp"
-    });
-  } else {
-    hr_registration_otp_verify
-      .hr_registration_otp_verify(otp_verify_request)
-      .then(result => {
-        console.log(result);
 
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
 
 //=============================================================================================//
 router.post("/Untrained_Employees_list", cors(), (req, res) => {
@@ -1669,52 +1111,7 @@ router.post("/Untrained_Employees_list", cors(), (req, res) => {
 });
 //=============================================================================================//
 
-//=======================================Schedule=================================================//
-router.post("/Classroom", cors(), (req, res) => {
-  const data = req.body;
-  const token = req.headers.token;
-  const language = req.headers.language;
-  console.log(data, "request data");
-  console.log(token, "token");
-  let classroom_id = data.classroom_id;
-  let trainer_name = data.trainer_name;
-  // let trainer_email_id = data.trainer_email_id;
-  let address = data.address;
-  let number_of_seats = data.number_of_seats;
-  let available_date = data.available_date;
 
-  if (
-    !classroom_id ||
-    !trainer_name ||
-    !address ||
-    !number_of_seats ||
-    !available_date
-  ) {
-    return res.send({
-      status: 402,
-      message: "Please fill all the fields"
-    });
-  } else {
-    classroom
-      .classroom(data, token, language)
-      .then(result => {
-        console.log(result);
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
 //=============================================================================================//
 router.post("/Schedule", cors(), (req, res) => {
   const data = req.headers;
@@ -1823,38 +1220,7 @@ router.post("/Classroom", cors(), (req, res) => {
   }
 });
 //=============================================================================================//
-router.post("/Schedule", cors(), (req, res) => {
-  const data = req.headers;
-  const request = req.body;
-  console.log(data);
-  console.log(request, "<======request");
 
-  if (!data) {
-    return res.send({
-      status: 400,
-      message: "Please fill required the fields"
-    });
-  } else {
-    scheduling
-      .scheduling(data, request)
-      .then(result => {
-        console.log(result);
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
 //====================================================================================//
 router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
   const token = req.headers.token;
@@ -1956,37 +1322,7 @@ router.post(
       );
   }
 );
-//====================================email-otp-verify========================================//
-router.post("/Email_otp_verification", cors(), (req, res) => {
-  const email_otp_verify_request = req.body;
-  console.log(email_otp_verify_request);
-  if (!req.body.otp) {
-    return res.send({
-      status: 400,
-      message: "Please provide a valid otp"
-    });
-  } else {
-    email_otp_verify
-      .email_otp_verify(email_otp_verify_request)
-      .then(result => {
-        console.log(result);
 
-        res.status(result.status).json({
-          message: result
-        });
-      })
-      .catch(err =>
-        res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
-      );
-  }
-});
 
 //====================================Company_Profile============================================//
 router.get("/Company_trading_license", cors(), (req, res) => {
@@ -2497,33 +1833,7 @@ router.post("/Company_Profile", cors(), (req, res) => {
     );
 });
 //====================================Company_Profile============================================//
-router.get("/Company_trading_license", cors(), (req, res) => {
-  let data = req.headers;
 
-  console.log(data);
-
-  console.log(data);
-
-  company_trading_license
-    .company_trading_license(data)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 
 //================================================================================================//
 router.post("/Booked_for_training", cors(), (req, res) => {
@@ -2574,59 +1884,10 @@ router.post("/Booked_for_training", cors(), (req, res) => {
 
 // });
 //================================================================================================//
-router.post("/Trained_Employees_list", cors(), (req, res) => {
-  const token = req.headers.token;
-  const language = req.headers.language;
-  const data = req.body;
-  console.log(data, token, language);
 
-  Trained_Employees.Trained_Employees(data, token, language)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 
 //=============================================================================================//
-router.post("/Partial_booking", cors(), (req, res) => {
-  let data = req.body;
-  let token = req.headers.token;
 
-  console.log(data);
-
-  partial_booking
-    .partial_booking(data, token)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 //==========================================================================================//
 router.post("/Course_names", cors(), (req, res) => {
   const token = req.headers.token;
@@ -2796,32 +2057,7 @@ router.post("/Bulk_booking", cors(), (req, res) => {
 //   .then(result => {
 //     console.log(result);
 
-//====================================Company_Profile============================================//
-router.get("/Company_trading_license", cors(), (req, res) => {
-  let data = req.headers;
 
-  console.log(data);
-
-  company_trading_license
-    .company_trading_license(data)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 
 //====================================EXAM RESULTS============================================//
 router.use("/static", express.static(path.join(__dirname, "upload")));
@@ -2872,34 +2108,7 @@ router.post("/getAttendance", cors(), (request, response) => {
 });
 
 //=================================Trainer Attendance=============================================//
-router.post("/Trainer_employee_list", cors(), (req, res) => {
-  const trainer_employee = req.body;
-  const language = req.body.language;
-  console.log("Trainer_employee_list_routes", trainer_employee);
 
-  const Trainer_Email = req.body.Trainer_emailid;
-  console.log("Trainer_Company_Email_routes", Trainer_Email);
-
-  trainer_attendance
-    .trainer_attendance(Trainer_Email, language)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 // =================================================================================
 router.post("/Selecting_date_trainer", cors(), (req, res) => {
   const trainer_employee = req.body;
