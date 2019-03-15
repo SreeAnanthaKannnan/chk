@@ -1,11 +1,13 @@
+/* 
+@ Manoj savaram
+*/
 
 let insertquery = require('../daos/scheduleDao');
 var supplier = require('../daos/getsupplierlist');
 var auto = require('../daos/autoDao');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
-var t = ["8-10 am", "11-12 am","12-2 pm","2-4 pm","4-6 pm","6-8 pm","8-10 pm"];
-//var s=["a@a.com","b@a.com"];
+var t = ["8-10 am", "11-12 am", "12-2 pm", "2-4 pm", "4-6 pm", "6-8 pm", "8-10 pm"];
 let moment = require('moment');
 async function sup(time, rdate, building_id) {
     const idate = rdate;
@@ -33,10 +35,10 @@ async function sup(time, rdate, building_id) {
             var status1 = "open";
             let data = [schedule_time, requestdate, suplier_id, building_id, status1]
             let query = await insertquery.schedule_insert(data)
-        var date22 = moment(requestdate).format("YYYY-MM-DD");    
-	return resolve({
+            var date22 = moment(requestdate).format("YYYY-MM-DD");
+            return resolve({
                 result: {
-        "message":"Your Building is Scheduled for service on" + " " + date22 + " " + schedule_time +"   As requested slot is available"
+                    "message": "Your Building is Scheduled for service on" + " " + date22 + " " + schedule_time + "   As requested slot is available"
 
                 }
             })
@@ -56,14 +58,14 @@ async function sup(time, rdate, building_id) {
                             var suplier_id = suparray[j];
                             var requestdate = sdate;
                             logger.fatal("assigned to", suparray[j]);
-                            let status1="open";
+                            let status1 = "open";
                             logger.fatal("date", sdate);
                             let data = [schedule_time, requestdate, suplier_id, building_id, status1]
                             let query = await insertquery.schedule_insert(data)
-			var date22 = moment(requestdate).format("YYYY-MM-DD");                            
-return resolve({
+                            var date22 = moment(requestdate).format("YYYY-MM-DD");
+                            return resolve({
                                 result: {
-             "message":"done"
+                                    "message": "done"
 
                                 }
                             });

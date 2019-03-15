@@ -1,11 +1,12 @@
-
+/* 
+@ Manoj savaram
+*/
 let insertquery = require('../daos/scheduleDao');
 var supplier = require('../daos/getsupplierlist');
 var auto = require('../daos/autoDao');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 var t = ["8-10 am", "11-12 am","12-2 pm","2-4 pm","4-6 pm","6-8 pm","8-10 pm"];
-//var s=["a@a.com","b@a.com"];
 let moment = require('moment');
 async function sup(time, rdate, building_id) {
     const idate = rdate;
