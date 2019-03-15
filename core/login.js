@@ -22,9 +22,9 @@ function loginuser(loginobject) {
     var result = await login.login(loginobject)
 
     //var resultadmin = await login.loginadmin(loginobject)
-    //logger.fatal(result.result[0].password,"test")
-    logger.fatal(result.result.length == 0)
-    if (result.result.length == 0) {
+    //logger.fatal(result.result.password,"test")
+    logger.fatal(result.result)
+    if (!result.result) {
       return reject({
         "message": "Invalid User name",
         "status": 401,
@@ -41,12 +41,12 @@ function loginuser(loginobject) {
       // }
       // else{
 
-      logger.fatal(result.result[0].password, "test")
-      let registered_password = cryptr.decrypt(result.result[0].password);
+      logger.fatal(result.result.password, "test")
+      let registered_password = cryptr.decrypt(result.result.password);
       logger.fatal(registered_password, "db password")
-      let registered_user = result.result[0].email_id;
+      let registered_user = result.result.email_id;
       logger.fatal(registered_user, "user nameeeeeeeee");
-      var user = result.result[0].user_type;
+      var user = result.result.user_type;
       if (registered_user == email_id && registered_password == password) {
         let token = jwt.sign({ email_id },
           secret,
@@ -66,10 +66,10 @@ function loginuser(loginobject) {
           "user_type": user,
           "token": token,
           "email_id": registered_user,
-          "first_name_en": result.result[0].firstname_en,
-          "first_name_ar": result.result[0].firstname_ar,
-          "company_name_en": result.result[0].company_en,
-          "company_name_ar": result.result[0].company_ar,
+          "first_name_en": result.result.firstname_en,
+          "first_name_ar": result.result.firstname_ar,
+          "company_name_en": result.result.company_en,
+          "company_name_ar": result.result.company_ar,
           "النتيجة": "تسجيل الدخول ناجح"
         });
       }

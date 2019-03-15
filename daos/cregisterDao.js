@@ -53,9 +53,7 @@ function insert_user(registerobject,otp){
   var verify_email ="N";
   var verify_mobile ="N";
   let password = cryptr.encrypt(registerobject.password);
-        var sql = "SELECT  * FROM citizens where email_id ='" + email_id + "'";
-        dbFunc.connectionRelease;
-        value = await langdetect.languageDetect(firstname)
+ value = await langdetect.languageDetect(firstname)
     
         if(firstname ==""){
             firstname_ar = firstname;

@@ -32,4 +32,8 @@ module.exports.trainerid_ar=
 module.exports.appealidcount =
 "SELECT count(id) as count FROM Appeal"
 
- 
+  module.exports.getdatedetails =
+  "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
+ module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
+module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
+  
