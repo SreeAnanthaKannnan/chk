@@ -8,7 +8,7 @@ function assesserview(){
     return new Promise(async (resolve, reject) => {
 
     var result = await asser.assement_get()
-    logger.fatal("result in core",result)
+    logger.fatal("result in core file",result)
     if(result){
         resolve({
             status:200,

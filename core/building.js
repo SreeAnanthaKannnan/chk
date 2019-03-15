@@ -8,7 +8,6 @@ function buildings(buildingobject,email_id) {
     logger.fatal(buildingobject,"buildingobject")
    return new Promise(async (resolve, reject) => {
        var responseObj = {};
-
        var user = building.building(buildingobject,email_id).then((data) => {
            logger.fatal(user, "user")
            responseObj.data = data;

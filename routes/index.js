@@ -24,7 +24,6 @@ var express = require("express"),
 
 var con = require("../mysql_connection/dbConfig.js"),
   login = require("../core/login.js"),
-  login1 = require("../core/login1.js"),
   consentform = require("../core/consentform.js"),
   register = require("../core/register.js"),
   aregister = require("../core/aregister.js"),
@@ -48,7 +47,6 @@ var con = require("../mysql_connection/dbConfig.js"),
   image_upload= require('../core/image_upload');
 
 let moment = require("moment");
-
 let Appeal = require("../core/Appeal"),
   hr_login = require("../core/Hr_login"),
   trainer_login = require("../core/Trainer_login"),
@@ -141,24 +139,6 @@ router.post("/login", cors(), function (req, res) {
       })
     );
 });
-
-//=======================loginservice==================================================//
-router.post("/login-supplier", cors(), function (req, res) {
-  var loginobject = req.body;
-  login1
-    .loginuser(loginobject)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
-      })
-    );
-});
-
 //=======================registerservice===============================================//
 router.post("/register", cors(), function (req, res) {
   var registerobject = req.body;
@@ -191,8 +171,6 @@ router.post("/admin-register", cors(), function (req, res) {
         message: err.message
       }))
 })
-//=========================citizen-registration-start===========================================
-
 //=========================citizen-registration-start===========================================
 router.post("/citizen-register", cors(), async function (req, res) {
   var registerobject = req.body;
@@ -238,14 +216,6 @@ router.post("/number_validation_schedule", cors(), function (req, res) {
 
 //======================================================================================//
 router.post("/emailotpverification1", cors(), async function (req, res) {
-  //var id = await check.checkToken(req);
-
-  // if(id.status==400 || id.status==403){
-  //     res.send({
-  //         result:id
-  //     })
-  // }
-  // else{
   var otp = req.body.otp;
   console.log(req.body);
   var email_id = req.body.email;
@@ -256,7 +226,6 @@ router.post("/emailotpverification1", cors(), async function (req, res) {
       if (error) {
         throw error;
       } else {
-        // if (results.length != 0) {
         if (results[0].otp == req.body.otp) {
           var verify_email = "Y";
           con.query(
@@ -272,8 +241,7 @@ router.post("/emailotpverification1", cors(), async function (req, res) {
             message: "You are successfully registered",
             الرسالة: "أنت مسجل بنجاح"
           });
-          // }
-        } else {
+          } else {
           res.send({
             status: 401,
             message: "Invalid one time password",
@@ -283,8 +251,7 @@ router.post("/emailotpverification1", cors(), async function (req, res) {
       }
     }
   );
-  // }
-});
+ });
 //========================================citizen-registration-end=====================================
 
 router.post("/General_Registration", cors(), (req, res) => {
@@ -321,14 +288,7 @@ router.post("/General_Registration", cors(), (req, res) => {
 });
 //=====================================emailotpverification========================================
 router.post("/emailotpverification", cors(), async function (req, res) {
-  //var id = await check.checkToken(req);
 
-  // if(id.status==400 || id.status==403){
-  //     res.send({
-  //         result:id
-  //     })
-  // }
-  // else{
   var otp = req.body.otp;
   console.log(req.body);
   var email_id = req.body.email_id;
@@ -367,8 +327,7 @@ router.post("/emailotpverification", cors(), async function (req, res) {
       }
     }
   });
-  // }
-});
+  });
 
 //=================================================================================================
 router.post("/consentform", cors(), async function (req, res) {
@@ -647,13 +606,6 @@ router.post("/serviceHistory", cors(), async function (req, res) {
 });
 //==============================================================================================
 router.post("/Assessment", cors(), async function (req, res) {
-  // var id = await check.checkToken(req);
-  //  if(id.status==400 || id.status==403){
-  //  res.send({
-  //     result:id
-  //   })
-  // }
-  //  else{
   console.log(req.body);
   var id = req.body.id;
   var status = req.body.status;
@@ -677,8 +629,7 @@ router.post("/Assessment", cors(), async function (req, res) {
         })
       );
   }
-  //    }
-});
+ });
 
 //=======================================================================================
 router.get("/Schedule_summary", cors(), (req, res) => {
@@ -1092,10 +1043,9 @@ router.post("/schedules", cors(), async function (req, res) {
   var time = req.body.schedule_time;
   var reqdate = req.body.requestdate;
   var building_id = req.body.building_id;
-  //console.log("id",req.body.id);
   console.log("building_id", building_id);
   var date = moment(new Date(reqdate.substr(0, 16)));
-  var rdate = date.format("YYYY-MM-DD HH:mm:ss");
+  var rdate = date.format("YYYY-MM-DD");
   schedule
     .sup(time, rdate, building_id)
     .then(result => {
@@ -1234,14 +1184,6 @@ router.post("/Convert_Pdf", cors(),function(req, res) {
 //=========================================pdfviewer=============================================
 
 router.post("/pdfviewer", cors(), async function (req, res) {
-  //     var id = await check.checkToken(req);
-
-  // if(id.status==400 || id.status==403){
-  //     res.send({
-  //         result:id
-  //     })
-  // }
-  //else{
   const email = req.body.email;
   pdf1
     .pdf1(email)
@@ -1261,7 +1203,6 @@ router.post("/pdfviewer", cors(), async function (req, res) {
           status: err.status
         })
     );
-  // }
 });
 //================================installationdetails=================================//
 router.post("/installationdetails", cors(), function (req, res) {
