@@ -52,18 +52,14 @@ let Appeal = require("../core/Appeal"),
 
  
   safety_officer_details = require("../core/Employee_safetyofficer_profile_showup"),
-  other_employee_details = require("../core/Employee_other_category_showup"),
 
   classroom = require("../core/Classroom"),
   scheduling = require("../core/Scheduling"),
-  availability = require("../core/Classroom_availability"),
   available_date1 = require("../core/Available_date_showup"),
 //  photo = require("../core/Photo_upload"),
-  seat_availability = require("../core/seat_availability"),
   company_profile = require("../core/Company_profile"),
   company_trading_license = require("../core/Company_trade_license"),
   trainer_account = require("../core/Trainer_registration"),
-  safety_officer = require("../core/Safety_officer_direct_exam"),
   course_view = require("../core/Course_view"),
   trainer_names = require("../core/Trainer_names"),
   course_creation = require("../core/Course_creation"),
@@ -993,10 +989,11 @@ router.post("/blockchain", cors(), async function (req, res) {
 router.post("/Trainer_account_creation", cors(), (req, res) => {
   const data = req.body;
   const token = req.headers.token;
+  const language = req.headers.language
   console.log(token, "initialtest");
 
   trainer_account
-    .trainer_account(data, token)
+    .trainer_account(data, token,language)
     .then(result => {
       console.log(result);
       res.status(result.status).json({
@@ -1473,31 +1470,7 @@ router.post("/Safetyofficer_details", cors(), (req, res) => {
 });
 
 //==================================================================================================//
-router.post("/Other_employee_details", cors(), (req, res) => {
-  const token = req.headers.token;
-  const request = req.body;
-  console.log(request);
 
-  other_employee_details
-    .other_employee_details(request, token)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 //=============================================================================================//
 router.post("/Untrained_Employees_list", cors(), (req, res) => {
   const token = req.headers.token;
@@ -1634,32 +1607,7 @@ router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
     );
 });
 //====================================================================================//
-router.post("/Classroom_availability", cors(), (req, res) => {
-  let data = req.body;
-  let token = req.headers.token;
 
-  console.log(data);
-
-  availability
-    .availability(data, token)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 //==============================================================================================//
 router.post("/Classroom_available_date", cors(), (req, res) => {
   const token = req.headers.token;
@@ -1836,38 +1784,7 @@ router.post("/Company_Profile", cors(), (req, res) => {
 
 
 //================================================================================================//
-router.post("/Booked_for_training", cors(), (req, res) => {
-  const data = req.body;
-  const value = req.headers;
-  const token = req.headers.token;
-  console.log(data, "Booked_employee_training");
-  if (!data) {
-    return res.send({
-      status: 400,
-      message: "Please fill all the fields"
-    });
-  }
 
-  training_booking
-    .training_booking(data, value)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 //================================================================================================//
 //   router.post("/Safety_officer_direct_exam", cors(), (req, res) => {
 //     let data = req.body;
