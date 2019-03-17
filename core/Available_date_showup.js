@@ -25,7 +25,7 @@ exports.available_date1 = (token, data, language) => new Promise(async (resolve,
     } else {
 
       /*==============================Session time checking==============================*/
-        console.log(query[0].session_created_at)
+        console.log(query[0].session_created_at,"session created time<=====")
         let now = new Date();
         let Db_time = query[0].session_created_at;
         let time_difference_minutes = await session_time.Session_time_difference(Db_time, now)
@@ -40,13 +40,13 @@ exports.available_date1 = (token, data, language) => new Promise(async (resolve,
                 message: "session expired"
             })
         } else {
-          /*======================selecting Trainer id===================================*/
+          /*======================selecting Trainer id from the given trainer_name===================================*/
             await TrainerDao.Trainer_id_select(trainer_name, language)
                 .then(async function(result) {
                     console.log("result_trainerid", result.result);
                     let trainer_id = result.result[0].id
                     console.log(trainer_id, "trainer_id")
-          /*======================selecting course id ===================================*/
+          /*======================selecting course id from the given course_name===================================*/
 
                     await CourseDao.Course_id_select(course_name, language)
                         .then(async function(result) {
@@ -73,7 +73,9 @@ exports.available_date1 = (token, data, language) => new Promise(async (resolve,
                 .catch(async function(err) {
                     return resolve({
                         status: 400,
-                        message: "something went wrong"
+                         message: "something went wrong"
+                        // message:err
+                        
                     });
                 });
         }

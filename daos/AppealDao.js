@@ -5,11 +5,11 @@ const query = require("../mysql_connection/queries");
 
 function Appeal_insert(param) {
     return new Promise(async function(resolve, reject) {
-      /*============================Getting row count for compliance number===============*/
+        /*============================Getting row count for compliance number===============*/
         var res = await mysqlConnection.query_execute(query.appealidcount, [])
         console.log(res.data[0].count, "count result")
         console.log(JSON.parse(param[5]), "param")
-        /*=========================chaning the json value to number========================*/
+        /*=========================changing the json value to number abd increase the row count by one========================*/
         var Compliant_NO = Number(param[5] + (res.data[0].count + 1))
         console.log(Compliant_NO, "compliance no")
         let service = param[0];
@@ -30,13 +30,14 @@ function Appeal_insert(param) {
             return reject("something went wrong")
         }
 
-   /*=======================Inserting Appeal values in the db========================*/
+        /*=======================Inserting Appeal values in the db========================*/
         let res1 = await mysqlConnection
             .insert_query(query.Appeal, query_Value)
         console.log(res1, "dbresult")
         if (res1.data.errno) {
             return reject("something went wrong")
         } else {
+            /*=======sending Compliant_NO to the Appeal.js======*/
             return resolve({
                 status: 200,
                 result: Compliant_NO

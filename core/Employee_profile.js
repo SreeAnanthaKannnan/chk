@@ -88,9 +88,11 @@ exports.Employee_profile = (
               });
             } else {
    /*=====================insering Employee details in the Employee_profile table=========*/           
-              let query =  await Employee_profileDao.Employee_insert(query_value);
+               await Employee_profileDao.Employee_insert(query_value)
+               .then(async function(result) {
+                console.log("already exits insert=====>",result)
+                        if (result.result.data.affectedRows==1) {
               var messagevalue = await  message.getmessage(language.result,"S02")
-              console.log(query,"======>queryvalue")
 
 
               return resolve({
@@ -99,6 +101,14 @@ exports.Employee_profile = (
               });
             }
           })
+        }
+        
+        })
+      
+        
+      
+        
+        
      /*==============Error Capturing================*/     
         
           .catch(async function (err) {
@@ -107,7 +117,10 @@ exports.Employee_profile = (
             return resolve({ status: 400, message: messagevalue });
           });
         
+        
+        
       }
+    
     }
   });
   /************************************Code Ends**********************************************/

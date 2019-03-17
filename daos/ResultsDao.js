@@ -3,104 +3,106 @@ const log4js = require("log4js");
 const logger = log4js.getLogger("Salama_project");
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
-// const Promise = require('bluebird')
 
+//====Inserting the results in result table====//
 async function Result_insert(params) {
-  return new Promise(function(resolve, reject) {
-    // console.log("hiiiii", params);
-    // params = [params];
-    // sql =
-    //   "INSERT INTO Results (date_attended,employee_id,attendance_id,score,result_en,result_ar,certificate,emirates_id) VALUES ? ";
-    // con.query(sql, [params], function(err, result) {
-    //   if (err) {
-    //     logger.fatal(err);
-    //     console.log(err);
-    //     return resolve(err);
-    //   }
-    //   return resolve(result);
-    // });
-    mysqlConnection
-      .insert_query(query.insertemployeeResults, params)
-      .then(function(result, err) {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          console.log(result);
-          return resolve({ status: 200, message: result });
-        }
-      });
-  });
-}
-async function Result_select(params) {
-  return new Promise(async function(resolve, reject) {
-
-    mysqlConnection
-      .query_execute(query.findemployeeResults, [params])
-      .then(function(result, err) {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          console.log(result);
-          return resolve({ status: 200, message: result });
-        }
-      });
-  });
-}
-async function Attendance_select(params) {
-  return new Promise(async function(resolve, reject) {
-    await con.query(
-      "SELECT * FROM Attendance where trainer_id ='" +
-        params +
-        "' AND attendance_status='Present'",
-      (err, result) => {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          // console.log(result);
-          return resolve({ status: 200, message: result });
-        }
-      }
+  return new Promise(async function (resolve, reject) {
+    var res = await mysqlConnection.insert_query(
+      query.insertemployeeResults,
+      params
     );
+    console.log("response", res)
+    if (res.data.errno) {
+      return reject({
+        status: 400,
+        message: "something went wrong"
+      });
+    } else {
+
+      return resolve({
+        status: 200,
+        message: res.data
+      });
+    }
+  });
+}
+//====Fetching the result from the result table by passing parameter national_id====//
+async function Result_select(params) {
+  return new Promise(async function (resolve, reject) {
+    var res = await mysqlConnection.query_execute(query.findemployeeResults, [
+      params
+    ]);
+
+    if (res.data.errno) {
+      return reject({
+        status: 400,
+        message: "something went wrong"
+      });
+    } else {
+      return resolve({
+        status: 200,
+        message: res.data
+      });
+    }
+  });
+}
+//====Fetching the records from the attendance table by passing parameter trainer_id====//
+async function Attendance_select(params) {
+  return new Promise(async function (resolve, reject) {
+    var res = await mysqlConnection.query_execute(query.findemployeeAttendance, [
+      params
+    ]);
+
+    if (res.data.errno) {
+      return reject({
+        status: 400,
+        message: "something went wrong"
+      });
+    } else {
+      return resolve({
+        status: 200,
+        message: res.data
+      });
+    }
+
   });
 }
 async function Attendance_delete(params) {
-  return new Promise(async function(resolve, reject) {
-    mysqlConnection
+  return new Promise(async function (resolve, reject) {
+    var res = await mysqlConnection
       .query_execute(query.deleteattendance, [params])
-      .then(function(result, err) {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          console.log(result);
-          return resolve({ status: 200, message: result });
-        }
+    console.log("res", res)
+    if (res.data.errno) {
+      return reject({
+        status: 400,
+        message: "something went wrong"
+      })
+    } else {
+
+      return resolve({
+        status: 200,
+        message: res.data
       });
+    }
   });
+
 }
 
 async function result_national_id(params) {
-  return new Promise(async function(resolve, reject) {
-    mysqlConnection
+  return new Promise(async function (resolve, reject) {
+    var res = mysqlConnection
       .query_execute(query.getcoursename, [params])
-      .then(function(result, err) {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          console.log(result);
-          return resolve({ result });
-        }
+
+    if (res.data.errno) {
+      return reject({
+        status: 400,
+        message: "something went wrong"
       });
+    } else {
+      return resolve(res.data);
+    }
   });
+
 }
 
 module.exports = {
