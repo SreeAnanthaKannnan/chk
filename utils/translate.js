@@ -14,7 +14,6 @@ function translate_ar(params) {
         source: 'en',
         target: 'ar'
       }, function(result,err) {
-        console.log(err,"translate error")
         return resolve({ result:result.sentences[0].trans });
       });
     } else {

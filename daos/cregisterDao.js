@@ -1,5 +1,7 @@
 var con = require('../mysql_connection/dbConfig.js');
 var dbFunc = require('../mysql_connection/connection.js');
+const mysqlConnection = require("../config/Connection");
+const query = require("../mysql_connection/queries");
 var translate = require('../utils/translate.js');
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
@@ -39,7 +41,7 @@ function insert_user(registerobject,otp){
   var firstname = registerobject.firstname;
   var lastname = registerobject.lastname;
   var company = registerobject.company;
-  var nationality = registerobject.nationality;
+  var nationality = registerobject.nationality.value;
   var alter_number = registerobject.phone;
   var mobile_number = registerobject.mobile;
   var address = registerobject.address;
@@ -53,7 +55,16 @@ function insert_user(registerobject,otp){
   var value;
   var verify_email ="N";
   var verify_mobile ="N";
-  let password = cryptr.encrypt(registerobject.password);
+  var password = cryptr.encrypt(registerobject.password);
+  var reg_date = now;
+  console.log(nationality,"in line 60")
+  if(nationality==undefined){
+    var nationality="united arab emirates"
+  }
+  else{
+    var nationality=registerobject.nationality.value;
+  }
+  console.log(nationality,"in line 66")
   //Here the Registration Details converted into both arabic and english languages and stored in Data Base
  value = await langdetect.languageDetect(firstname)
     
@@ -142,7 +153,7 @@ function insert_user(registerobject,otp){
     logger.fatal(firstname_en,firstname_ar,"test 124")
     var params=[firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp]
     mysqlConnection
-    .insert_query(query.addbuilding,[params])
+    .insert_query(query.resgister,params)
     .then(function(result, err) {
       if (err) {
         //  console.log(result,"achieved")
@@ -154,15 +165,5 @@ function insert_user(registerobject,otp){
       }
     });
   
-    //var sql = "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ('" + firstname_en + "','" + firstname_ar + "','" + lastname_en + "','" + lastname_ar + "','" +company_en + "','" + company_ar + "','" + nationality_en + "','" + nationality_ar + "','" + alter_number + "','" + address_en + "','" + address_ar + "', '" + po_box + "', '" + emirates_id + "', '" + mobile_number + "', '" + email_id + "', '" + password + "','" + verify_mobile + "','" + verify_email + "', '" + language + "', '" + newsletter + "','" + user_type + "','" + date.format(now, 'YYYY/MM/DD HH:mm:ss') +"','" + otp + "')";
-  // con.query(sql,function(err,result){
-  //   if(err) { logger.fatal("something",err)
-  //       return reject({ "status": 400, "body": 'Cannot fetch the data' })}
-  //       else{
-  //             logger.fatal(result,"achieved")
-  //       return resolve({ result});
-  //       }
-        
-  //   }); 
   })
 }

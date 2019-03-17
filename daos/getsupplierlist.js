@@ -1,20 +1,26 @@
 var con = require('../mysql_connection/dbConfig.js');
 var dbFunc = require('../mysql_connection/connection.js');
+const mysqlConnection = require("../config/Connection");
+const query = require("../mysql_connection/queries");
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 //Here we get the installers details from the DataBase
 async function supplier(){
   return new Promise((resolve, reject)=>{
-      var sql = "SELECT email_id FROM admin";
-        con.query(sql, function (err, result) {
-      if (err) throw err;
-      dbFunc.connectionRelease;
-      logger.fatal("DataBase ERR:",err)
-      logger.fatal(result,"inserted.......")
-     resolve({
-          Message: "get suppliers list done",
-           result:result
-        })
+    var value="installer"
+     // var sql = "SELECT email_id FROM citizens where user_type=";
+      mysqlConnection
+      .query_execute(query.getinstallers,value)
+      .then(function (result, err) {
+        
+          if (err) {
+              logger.fatal("something", err)
+              return reject({ "status": 400, "body": 'Cannot insert the data' })
+          }
+          else {
+              console.log(result, "achieved")
+              return resolve({ status:200});
+          }
       })
   })
 }
