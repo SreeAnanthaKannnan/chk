@@ -32,6 +32,14 @@ module.exports.trainerid_ar=
 module.exports.appealidcount =
 "SELECT count(id) as count FROM Appeal"
 
+/* Fetching the list of trained employees from "Results" table */
+module.exports.trained_employees=
+"select * from Employee_Profile where Company_Trade_Lincense_No=? and National_Id in (select National_Id from Results where result_en=?) ";
+
+/* Fetching the list of untrained employees from "Results" table */
+module.exports.untrained_employees=
+"select * from Employee_Profile where Company_Trade_Lincense_No=? and Employee_ID in (select National_Id from Results where result_ar=?) ";
+
   module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
  module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
