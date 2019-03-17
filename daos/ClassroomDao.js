@@ -5,7 +5,7 @@ var TimeFormat = require("hh-mm-ss");
 var start_time = "";
 var groupArray = require("group-array");
 const query = require("../mysql_connection/queries");
-// const mysqlConnection = require("../config/Connection");
+/*=================Insering the params into classroom table=================*/
 function Classroom_insert(params, duration, insert_count) {
   return new Promise(async function(resolve, reject) {
     // console.log("hiiiii",params)
@@ -15,9 +15,10 @@ function Classroom_insert(params, duration, insert_count) {
     console.log(duration, "inside the function");
 
     var ended_time = "";
-
+/*================Auto allocation based on the time difference between the start time and end time with the course duration(inert_count)======*/
     start_time = params[0][7];
     for (i = 0; i < insert_count; i++) {
+      /*======adding the duration and the start time and saved as started_time=======*/
       var res = await mysqlConnection.query_execute(
         "SELECT ADDTIME( '" +
           duration +
@@ -26,14 +27,11 @@ function Classroom_insert(params, duration, insert_count) {
           "') as started_time",
         []
       );
-      // if (res.data.length == 0) {
-      //     return false
-      // }
-      // return res
       console.log(res);
+      /*==========assign the started_time to ended_time for next class room end time===*/
       ended_time = res.data[0].started_time;
       console.log(ended_time, "ended_time");
-
+/*=======================Inserting the classroom information into classroom table========*/
       var res1 = await mysqlConnection.insert_query(
         "INSERT INTO Classroom (classroom_id,trainer_id,address_en,address_ar,number_of_seats,number_of_available_seats,available_date,start_time,end_time,course_id)Values ?",
         [
@@ -51,9 +49,11 @@ function Classroom_insert(params, duration, insert_count) {
       );
 
       console.log("start_time", res1);
+      /*============next class starting time is the previous class ended time======*/
       start_time = ended_time;
-      console.log("startTIme123456", start_time);
+      console.log("startTIme", start_time);
     }
+  /*==================returning the value returned from db to the classroom.js function======*/  
     return resolve({ result: res1.data[0] });
   });
 }
@@ -68,7 +68,6 @@ function trainer_update(param1, param2) {
         param1 +
         "'",
       (err, result) => {
-        //  await con.query(sql,  [params] ,function(err,result){
         if (!result) {
           //  console.log(result,"achieved")
           console.log("something", err);
@@ -84,6 +83,7 @@ function trainer_update(param1, param2) {
     );
   });
 }
+//==================================================================================//
 function Classroom_select(param1, param2, param3) {
   return new Promise(async function(resolve, reject) {
     console.log("hiiiii", param2);
@@ -141,28 +141,20 @@ function Availability(classroom_id, available_date, start_time, end_time) {
 //================================================================================================//
 function Availability_Date(no_of_seats_selected, trainer_id, course_id) {
   return new Promise(async function(resolve, reject) {
-    //  console.log("hiiiii",params)
-    // params =[params]
-    var res1 = await mysqlConnection.query_execute(
-      "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?",
+  /*================fetching distinct available dates from classroom with respect to particular trainer and the course=======*/  
+    var res1 = await mysqlConnection.query_execute(query.availabledate,
       ["0", trainer_id, course_id]
     );
     console.log(res1, "res1====>");
-
-    // await con.query("SELECT  available_date FROM Classroom where no_of_available_seats >='" + param + "'" , (err, result) => {
-
-    if (res1.data.errno == 1054) {
-      //  console.log(result,"achieved")
+    if (res1.data.errno) {
       return resolve({ status: 400, err: "Internal server Error" });
     } else {
-      console.log("message", res1.data);
       let result = res1.data;
-      console.log(result.length, "testing");
       var value = [];
       var result1 = "";
 
       for (i = 0; i < result.length; i++) {
-        console.log(result[i].available_date, "kavitha");
+        console.log(result[i].available_date, "available_Date in loop");
         var date = result[i].available_date;
         // console.log(date,"success")
         var value1 = date + 1;
@@ -199,6 +191,7 @@ function time_slots_lists(available_date, trainer_id) {
       [available_date, trainer_id]
     );
     console.log(res, "res");
+    /*==========assigning the objects in the array of res.data in a variable categories====*/
     const categories = [...new Set(res.data.map(bill => bill.classroom_id))];
     console.log(categories, "test");
     for (i = 0; i < categories.length; i++) {
@@ -432,6 +425,7 @@ async function classroom_details_for_training(params) {
     }
   });
 }
+//===========================================================================================//
 function classroom_for_exam(param) {
   return new Promise(async function(resolve, reject) {
     console.log("hiiiii", param);
@@ -516,154 +510,7 @@ function insert_count(start_time, end_time, duration) {
   });
 }
 //==============================================================================================//
-function bulk_booking1(
-  course_id,
-  no_of_seats_selected,
-  language,
-  Emirates_ID,
-  Company_Trade_Lincense_No,
-  scheduling_date,
-  amount
-) {
-  return new Promise(async function(resolve, reject) {
-    // if (language == 'en'){
-    console.log(Emirates_ID.length, "length of the employees");
 
-    var res_value = await mysqlConnection.query_execute(
-      "select * from Classroom where number_of_available_seats <> 0 and course_id=? order by available_date asc",
-      [course_id]
-    );
-    console.log("kavitha_res_value", res_value.data);
-    var classroom_id;
-    let classrooms = res_value.data;
-    let classroom_array = [];
-    let noOfClassRooms = classrooms.length;
-    var total_seats = 0;
-    for (i = 0; i < noOfClassRooms; i++) {
-      console.log(classrooms[i].number_of_available_seats, "tesing");
-      total_seats = total_seats + classrooms[i].number_of_available_seats;
-      console.log(total_seats, " in loop");
-    }
-    console.log(total_seats, "totalseats");
-    if (total_seats < no_of_seats_selected) {
-      return resolve({ result: "Booking Slots are not available" });
-    } else {
-      if (classrooms[0].number_of_available_seats >= no_of_seats_selected) {
-        classroom_array.push(classrooms[0].classroom_id);
-        return resolve({ result: classroom_array });
-      } else {
-        var obj = {};
-        var obj2 = {};
-        //    while(no_of_seats_selected =0){
-        //        for(i=0;i<length;i++){
-        //            obj ={classroom_id:classrooms[i].classroom_id,no_available_seats:classrooms[i].number_of_available_seats}
-        //            classroom_array.push(obj)
-        //             no_of_seats_selected=no_of_seats_selected-classrooms[i].number_of_available_seats
-        //             console.log(no_of_seats_selected,"weldone")
-
-        //        }
-        //    }
-
-        for (i of classrooms) {
-        }
-        for (j = 0; no_of_seats_selected > 0; j++) {
-          console.log(no_of_seats_selected, "working");
-          //   if(param[0][1]<=result[j].no_available_seats){value.push(result[j].classroom_id)}
-
-          console.log(classrooms[j].number_of_available_seats, "goood");
-          console.log(no_of_seats_selected, "paramssssssssssss");
-          obj = {
-            classroom_id: classrooms[j].classroom_id,
-            no_available_seats: classrooms[j].number_of_available_seats,
-            start_time: classrooms[j].start_time,
-            end_time: classrooms[j].end_time,
-            trainer_id: classrooms[j].trainer_id,
-            course_id: classrooms[j].course_id
-          };
-          //   for(i=0;i<classrooms[j].number_of_available_seats;i++){
-          //   query_value=[
-          //       classrooms[j].classroom_id,
-          //       Emirates_ID[i],
-          //       classrooms[j].start_time,
-          //       classrooms[j].end_time,
-          //       classrooms[j].course_id,
-          //       classrooms[j].trainer_id,
-          //       Company_Trade_Lincense_No,
-          //       classrooms[j].number_of_available_seats,
-          //       scheduling_date,
-          //       classrooms[j].available_date,
-          //       "pending",
-          //       amount,
-          //       "Booked"
-
-          //   ]
-          //   var res2= await mysqlConnection.insert_query("INSERT INTO Schedule(classroom_id,Emirates_ID,start_time,end_time,course_id,trainer_id,Company_Trade_Lincense_No,number_of_seats_selected,scheduling_date,scheduled_date,payment_status,amount,status)VALUES ?",query_value)
-          //      console.log("resvalue=========>res2",res2)
-          // }
-
-          classroom_array.push(obj);
-          no_of_seats_selected =
-            no_of_seats_selected - classrooms[j].number_of_available_seats;
-          console.log(no_of_seats_selected, "welldone");
-          if (j != 0) {
-            if (no_of_seats_selected != 0) {
-              if (
-                no_of_seats_selected <
-                classrooms[j - 1].number_of_available_seats
-              ) {
-                obj2 = {
-                  classroom_id: classrooms[j - 1].classroom_id,
-                  no_available_seats: no_of_seats_selected
-                };
-
-                classroom_array.push(obj2);
-                no_of_seats_selected = 0;
-              }
-            }
-          }
-        }
-        return resolve({ result: classroom_array });
-
-        return resolve({ result: classroom_array });
-      }
-      //            for(i=0;i<length;i++){
-      //                console.log(classrooms[i].number_of_available_seats,"tesing")
-      //                total_seats = total_seats + classrooms[i].number_of_available_seats;
-      //                console.log(total_seats," in loop")
-      //            }
-      //            console.log(total_seats,"totalseats")
-      //            if(value){
-      //            for(i=0;i<length;i++){
-      //                if(classrooms[i].number_of_available_seats >=no_of_seats_selected){
-      //                    classroom_array.push(classrooms[i].classroom_id)
-      //                }
-      //                console.log(classroom_array,"<===========classroom_array")
-      //                return resolve({result:classroom_array})
-      //         }
-      // }
-
-      //                else{
-      //                 let auto = [];
-      //                 let obj ={}
-      //                 for(j=0;no_of_seats_selected>0;j++){
-      //                     console.log(no_of_seats_selected,"working")
-      //                   //   if(param[0][1]<=result[j].no_available_seats){value.push(result[j].classroom_id)}
-
-      //                     console.log(classrooms[i].number_of_available_seats,"goood")
-      //                     obj={classroom_id:classrooms[j].classroom_id,no_available_seats:classrooms[j].number_of_available_seats}
-      //                     // auto.push(classrooms[j].classroom_id)
-      //                     auto.push(obj)
-      //                     no_of_seats_selected=no_of_seats_selected-classrooms[j].number_of_available_seats
-      //                     console.log(no_of_seats_selected,"welldone")
-
-      //                }
-
-      //                return resolve({result:auto})
-
-      //            }
-    }
-  });
-}
 //=====================================================================================//
 function bulk_booking(
   course_id,

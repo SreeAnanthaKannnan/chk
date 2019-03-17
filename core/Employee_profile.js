@@ -3,7 +3,6 @@ const Employee_profileDao = require("../daos/Employee_profileDao");
 const session_time = require("../utils/session_time_difference");
 const message = require("../utils/messages");
 let date = require("date-and-time");
-// let now = new Date();
 var datetime = require("node-datetime");
 let moment = require("moment");
 const language_detect = require("../utils/language_detect");
@@ -18,27 +17,24 @@ exports.Employee_profile = (
 ) =>
   new Promise(async (resolve, reject) => {
     let Employee_ID = EmployeeProfile.employee_id;
-    // console.log(EmployeeProfile,"woowwwwwww")
     let Name = EmployeeProfile.name;
     let Position = EmployeeProfile.position;
     let Category = EmployeeProfile.category;
     let National_ID = EmployeeProfile.national_id;
-    // let Safety_Officer = EmployeeProfile.safety_officer
     let Company_Trade_Lincense_No = EmployeeProfile.company_trade_lincense_no;
     let token = EmployeeProfile.token;
+    let language = EmployeeProfile.language;
     let assigend_for_training ="NO"
-    // let profile_photo_url = path;
-    // let base64data = filename_blob.toString('base64');
-    // console.log(base64data,"==============================>")
+   /*============token validation===================*/
     console.log(token, "test");
     let query = await SessionDao.Session_select(token);
-    console.log(query, "testinggggggggg");
     if (query.length == 0) {
       resolve({
         status: 402,
         message: "Invalid token"
       });
     } else {
+      /*===================Session validation======================*/
       console.log(query[0].session_created_at);
       let Name_ar, Name_en, query_value;
       let now = new Date();
@@ -48,25 +44,16 @@ exports.Employee_profile = (
         Db_time,
         now
       );
-      console.log(time_difference_minutes, "function");
-      // console.log(session_time,"session_time")
-      // let session_created_time = moment(session_time,"YYYY-MM-DD HH:mm:ss").format("LT")
-      //  session_created_time = session_created_time.split(' ')[0]
-      //  let Entry_time = moment(now,"YYYY-MM-DD HH:mm:ss").format("LT")
-      //  Entry_time = Entry_time.split(' ')[0]
-      //  var mins = moment.utc(moment(Entry_time, "HH:mm:ss").diff(moment(session_created_time, "HH:mm:ss"))).format("hh:mm")
-
-      console.log(time_difference_minutes <= "01:00", "wwwwwwwwwwwwwwwwwwww");
-
+      console.log(time_difference_minutes, "session time difference");
       if (time_difference_minutes <= "01:00") {
         return resolve({
           status: 440,
           message: "session expired"
         });
       } else {
-        let language = await language_detect.languageDetect(Name);
-        console.log(language.result, "language");
-        if (language.result == "en") {
+    /*================Translation form arabic to English and vice versa==============*/    
+        console.log(language, "language");
+        if (language == "en") {
           let temp = await translate.translate_ar(Name);
           console.log(temp);
           Name_ar = temp.result;
@@ -88,6 +75,7 @@ exports.Employee_profile = (
           Category
         ];
         console.log(query_value, "query_value");
+  /*==================Checking whether employee already exists or not==============*/      
         await Employee_profileDao.Employee_select(National_ID)
           .then(async function (result,err) {
             console.log("result======>", result.message.data.length);
@@ -99,6 +87,7 @@ exports.Employee_profile = (
                 message: messagevalue
               });
             } else {
+   /*=====================insering Employee details in the Employee_profile table=========*/           
               let query =  await Employee_profileDao.Employee_insert(query_value);
               var messagevalue = await  message.getmessage(language.result,"S02")
               console.log(query,"======>queryvalue")
@@ -110,6 +99,7 @@ exports.Employee_profile = (
               });
             }
           })
+     /*==============Error Capturing================*/     
         
           .catch(async function (err) {
             var messagevalue = await  message.getmessage(language.result,"E01")
@@ -120,3 +110,4 @@ exports.Employee_profile = (
       }
     }
   });
+  /************************************Code Ends**********************************************/
