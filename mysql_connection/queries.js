@@ -38,5 +38,76 @@ module.exports.appealidcount =
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
 module.exports.availabledate =
 "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
+module.exports.addtime=
+"SELECT ADDTIME(?,?)as started_time";
+module.exports.classroominsert =
+"INSERT INTO Classroom (classroom_id,trainer_id,address_en,address_ar,number_of_seats,number_of_available_seats,available_date,start_time,end_time,course_id)Values ?";
+module.exports.classroomidselect =
+"SELECT classroom_id FROM Classroom where available_date =? and trainer_id=? ";
+module.exports.classroomdataselect = 
+"SELECT start_time,end_time,number_of_available_seats FROM Classroom where classroom_id =?";
+module.exports.starttimeformat =
+"SELECT TIME_FORMAT(?, '%h:%i %p') as start_time";
+module.exports.endtimeformat =
+"SELECT TIME_FORMAT(?, '%h:%i %p') as end_time";
+module.exports.alldatafromclassroom =
+"SELECT * FROM Classroom where classroom_id=?";
+module.exports.courseidselect =
+"SELECT course_id FROM Course where name_ar =?";
+module.exports.timedifference =
+"SELECT TIMEDIFF( ? ,?) as starting_time";
+module.exports.classroomdataforbulkbooking =
+"select * from Classroom where number_of_available_seats <> 0 and course_id=? order by available_date asc"
+module.exports.scheduleinsertbulkbooking =
+"INSERT INTO Schedule(classroom_id,National_Id,start_time,end_time,course_id,trainer_id,Company_Trade_Lincense_No,number_of_seats_selected,scheduling_date,scheduled_date,payment_status,amount,status)VALUES ?";
+module.exports.updateemployeetablebulkbooking =
+"UPDATE Employee_Profile SET assigned_for_training =? where National_Id=?";
+module.exports.companyprofileselect =
+"SELECT Company_Trade_License_No FROM Company_Profile where Company_Email =?";
+module.exports.companyprofileinsert =
+"INSERT INTO Company_Profile (Company_Trade_License_No,Mandatory_Training_Percentage,Category,Company_Email,Number_of_employees) VALUES ?";
+module.exports.trainingamount =
+"SELECT training_amount FROM Course where course_id=?";
+module.exports.courseidforenglish =
+"SELECT * FROM Course where name_en=?";
+module.exports.courseidforarabic =
+"SELECT * FROM Course where name_ar=?";
+module.exports.arabiccoursename =
+"SELECT name_ar FROM Course where course_id=?";
+module.exports.englishcoursename =
+"SELECT name_en FROM Course where course_id=?";
+module.exports.selectingemployeeprofile =
+"SELECT * FROM Employee_Profile where Company_Trade_Lincense_No =? and Category =?";
+module.exports.numbervalidation =
+"SELECT count(National_Id) as count from Employee_Profile where  National_Id not in(select National_Id from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ";
+module.exports.notbooked =
+"SELECT * from Employee_Profile where Category=? and assigned_for_training <> ? ";
+module.exports.employeeupdate =
+"update Employee_Profile set assigned_for_training =? where Company_Trade_Lincense_No = ? and National_Id =?";
+module.exports.untrainedschedule =
+"SELECT * from Employee_Profile where  National_Id not in(select National_Id from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ";
+module.exports.employeenameschedule =
+"SELECT Name_en from Employee_Profile where National_Id =?";
+module.exports.employeenameschedulearabic =
+"SELECT Name_ar from Employee_Profile where National_Id =?";
+module.exports.scheduleinsertpartialbooking =
+"INSERT INTO Schedule(classroom_id,National_Id,start_time,end_time,course_id,trainer_id,Company_Trade_Lincense_No,number_of_seats_selected,scheduling_date,scheduled_date,payment_status,amount,status)VALUES ?";
+module.exports.schedulesummary =
+"SELECT * from Schedule where Company_Trade_Lincense_No=? and status =? ";
+module.exports.sessioninsert =
+"INSERT INTO Session (user_ID,token,session_created_at) VALUES ? ";
+module.exports.sessiondelete =
+"Delete from Session where user_ID =?";
+
+
+
+
+
+
+
+
+
+
+
 
   
