@@ -44,4 +44,7 @@ module.exports.untrained_employees=
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
  module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
+module.exports.availabledate =
+"SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
+
   
