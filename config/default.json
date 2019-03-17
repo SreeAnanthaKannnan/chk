@@ -1,7 +1,7 @@
 {
   "mysqlConnection": {
-    "host": "127.0.0.1",
-  "user": "root",
+    "host": "68.183.86.120",
+  "user": "rapiduser",
   "password": "Rpqb$2018",
   "database": "SHARJAH"
   }

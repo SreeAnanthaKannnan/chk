@@ -2,21 +2,12 @@ var con = require('../mysql_connection/dbConfig.js');
 var dbFunc = require('../mysql_connection/connection.js');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
+//Here we fetch the Building details of the user
 function buildings(buildingobject){
   return new Promise((resolve, reject)=>{
       logger.fatal(buildingobject,"=>buildingobject");
-     // var id = buildingobject.id;
-    //  var email_id=buildingobject.email_id;
-   //   var type=buildingobject.type;
-   //   var address=buildingobject.address;
-   //   var buildingname=buildingobject.buildingname;
-
-
       var sql = "SELECT  * FROM Buildings where email_id= '" + buildingobject + "'";
-     // var sql= "SELECT *,Residents.mobile_number FROM Buildings INNER JOIN Residents ON Buildings.owner_id=Residents.email_id;"
-
-      //var sql = await("INSERT INTO Buildings(owner_id ,type,address,Buildingname) VALUES ('"+ owner_id + "','" +type + "','" + address + "','" + Buildingname +"')");
-      con.query(sql, function (err, result) {
+     con.query(sql, function (err, result) {
       if (err) throw err;
       dbFunc.connectionRelease;
       logger.fatal("DataBase ERR:",err)
@@ -28,20 +19,11 @@ function buildings(buildingobject){
       })
   })
 }
+//Here we get the mobile number of citizens from citizen table
 function phone(buildingobject){
   return new Promise((resolve, reject)=>{
       logger.fatal(buildingobject,"=>buildingobject");
-     // var id = buildingobject.id;
-    //  var email_id=buildingobject.email_id;
-   //   var type=buildingobject.type;
-   //   var address=buildingobject.address;
-   //   var buildingname=buildingobject.buildingname;
-
-
-      var sql = "SELECT * FROM citizens where email_id = '" + buildingobject + "'";
-     // var sql= "SELECT *,Residents.mobile_number FROM Buildings INNER JOIN Residents ON Buildings.owner_id=Residents.email_id;"
-
-      //var sql = await("INSERT INTO Buildings(owner_id ,type,address,Buildingname) VALUES ('"+ owner_id + "','" +type + "','" + address + "','" + Buildingname +"')");
+       var sql = "SELECT * FROM citizens where email_id = '" + buildingobject + "'";
       con.query(sql, function (err, result) {
       if (err) throw err;
       dbFunc.connectionRelease;

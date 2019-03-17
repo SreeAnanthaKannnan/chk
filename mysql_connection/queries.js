@@ -32,8 +32,11 @@ module.exports.trainerid_ar=
 module.exports.appealidcount =
 "SELECT count(id) as count FROM Appeal"
 
-  module.exports.getdatedetails =
-  "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
+module.exports.getdatedetails =
+"SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
  module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
+module.exports.addbuilding = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
+module.exports.resgister = "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ?";
+
   

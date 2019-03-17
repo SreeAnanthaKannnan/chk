@@ -15,6 +15,7 @@ module.exports={
   insert_user:insert_user
 
 }
+//Here verify the user already exits or not, if exits through error
  function verify_user(registerobject){
   return new Promise( async function (resolve,reject){
    logger.fatal("i am in daos of verifyuser")
@@ -31,7 +32,7 @@ module.exports={
     }); 
   })
 }
-
+//if new user insert the data into DataBase
 function insert_user(registerobject,otp){
   return new Promise(async function (resolve,reject){
   var email_id = registerobject.email;
@@ -53,6 +54,7 @@ function insert_user(registerobject,otp){
   var verify_email ="N";
   var verify_mobile ="N";
   let password = cryptr.encrypt(registerobject.password);
+  //Here the Registration Details converted into both arabic and english languages and stored in Data Base
  value = await langdetect.languageDetect(firstname)
     
         if(firstname ==""){
@@ -138,15 +140,29 @@ function insert_user(registerobject,otp){
     nationality_ar = temp.result}
     }
     logger.fatal(firstname_en,firstname_ar,"test 124")
-  var sql = "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ('" + firstname_en + "','" + firstname_ar + "','" + lastname_en + "','" + lastname_ar + "','" +company_en + "','" + company_ar + "','" + nationality_en + "','" + nationality_ar + "','" + alter_number + "','" + address_en + "','" + address_ar + "', '" + po_box + "', '" + emirates_id + "', '" + mobile_number + "', '" + email_id + "', '" + password + "','" + verify_mobile + "','" + verify_email + "', '" + language + "', '" + newsletter + "','" + user_type + "','" + date.format(now, 'YYYY/MM/DD HH:mm:ss') +"','" + otp + "')";
-  con.query(sql,function(err,result){
-    if(err) { logger.fatal("something",err)
-        return reject({ "status": 400, "body": 'Cannot fetch the data' })}
-        else{
-              logger.fatal(result,"achieved")
-        return resolve({ result});
-        }
+    var params=[firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp]
+    mysqlConnection
+    .insert_query(query.addbuilding,[params])
+    .then(function(result, err) {
+      if (err) {
+        //  console.log(result,"achieved")
+        console.log("something", err);
+        return resolve({ status: 400, err: err });
+      } else {
+        console.log(result);
+        return resolve({ status: 200, message: result });
+      }
+    });
+  
+    //var sql = "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ('" + firstname_en + "','" + firstname_ar + "','" + lastname_en + "','" + lastname_ar + "','" +company_en + "','" + company_ar + "','" + nationality_en + "','" + nationality_ar + "','" + alter_number + "','" + address_en + "','" + address_ar + "', '" + po_box + "', '" + emirates_id + "', '" + mobile_number + "', '" + email_id + "', '" + password + "','" + verify_mobile + "','" + verify_email + "', '" + language + "', '" + newsletter + "','" + user_type + "','" + date.format(now, 'YYYY/MM/DD HH:mm:ss') +"','" + otp + "')";
+  // con.query(sql,function(err,result){
+  //   if(err) { logger.fatal("something",err)
+  //       return reject({ "status": 400, "body": 'Cannot fetch the data' })}
+  //       else{
+  //             logger.fatal(result,"achieved")
+  //       return resolve({ result});
+  //       }
         
-    }); 
+  //   }); 
   })
 }
