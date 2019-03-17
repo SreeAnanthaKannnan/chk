@@ -214,7 +214,6 @@ function Trainer_id_select(params, language) {
       }
       else{
         return resolve({ status: 200, result: res1.data});
-
       }
     } else {
       

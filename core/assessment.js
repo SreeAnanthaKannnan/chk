@@ -12,12 +12,12 @@ var bcSdk = require('../fabric_SDK/invoke')
             logger.fatal(id,"query")
             logger.fatal(data,"assessment")
             let query= await insertquery.assessment_insert(data)
-               logger.fatal(query !=0,"data inserted")
+               logger.fatal(query !=0,"data updated in Mysql ")
                var data1={
                    "userId":id,
             "transactionstring":status       
         }
-        logger.fatal(data1,"data1")
+        logger.fatal(data1,"This data is stored in Blockchain")
         bcSdk.savetransaction({ TransactionDetails: data1})
 return  resolve({
                 status: 200,

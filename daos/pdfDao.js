@@ -10,7 +10,7 @@ function pdf_insert(path,email) {
         // console.log("hiiiii",params)
         // console.log(params,"pdfewrere")
         var owner_id=email
-        console.log(owner_id,"djfjdj")
+        console.log(owner_id,"email id in pdfDao file")
         console.log(path,"path")
         var sql = "SELECT * FROM Buildings where email_id ='" + owner_id + "'";
     
@@ -33,7 +33,7 @@ function pdf_insert(path,email) {
 
             }
         }); 
-        console.log(result,"pbppb")
+        console.log(result,"in first function")
 
     }
    else if(result[0].path1==null) {
