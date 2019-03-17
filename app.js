@@ -50,15 +50,15 @@ var swaggerDefinition = {
 
 log4js.configure({
     appenders: {
-        Salama_project: {
+        SPSA_project: {
             type: 'dateFile', 
-            filename: './log/Salama_Project_' + 
+            filename: './log/SPSA_project_' + 
                     new Date().getFullYear() + "-"+ (new Date().getMonth()+ 1) + "-" + 
                     new Date().getDate() + '.log'
         }
     },
     categories: {
-      default: { appenders: [ 'Salama_project' ], level: 'debug' }
+      default: { appenders: [ 'SPSA_project' ], level: 'debug' }
     }
 });
 

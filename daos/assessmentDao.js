@@ -1,23 +1,22 @@
-var con = require('../mysql_connection/dbConfig.js');
-var dbFunc = require('../mysql_connection/connection.js');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
+const mysqlConnection = require("../config/Connection");
+const query = require("../mysql_connection/queries");
 function assessment_insert(values){
         return new Promise((resolve, reject)=>{
-            var id=values.id
-       var status=values.status
-       logger.fatal("dkfhd",status)
-       logger.fatal(values,"hiii")
-        var sql = "UPDATE Schedules SET status = '" + status + "' WHERE id = '" + id + "'";
-        logger.fatal(sql,"dql")
-                con.query(sql, function (err, result) {
-                if (err) throw err;
-                dbFunc.connectionRelease;
-        //logger.fatal("DataBase ERR:",err)
-        logger.fatal(result,"update.......")
-       resolve({
-            Message: "assessment done",
-                  })
+      console.log("vlaues in dao",values);
+        mysqlConnection
+        .query_execute(query.updatestatus,values)
+        .then(function (result, err) {
+          
+            if (err) {
+                logger.fatal("something", err)
+                return reject({ "status": 400, "body": 'Cannot insert the data' })
+            }
+            else {
+                console.log(result, "achieved")
+                return resolve({ status:200});
+            }
         })
     })
 }

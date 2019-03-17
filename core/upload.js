@@ -15,7 +15,7 @@ async function upload(filepath,email_id){    // logger.fatal("body " + req.body)
 return new Promise( function (resolve,reject){
 
 logger.fatal(filepath)
-   
+ //Reading .csv file which uploaded from UI.  
 
 fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
 
@@ -33,14 +33,14 @@ fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
         } 
         else 
         {  
-               
+       //Removing the Header from the template which contains the field values        
         console.log(data.length);  
         for(var i=1;i<data.length;i++){
             params.push(data[i])
 
         } 
         console.log(params); 
-       // var owner_id=email_id
+       //storing the csv content into DataBase
             var sql = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
             await con.query(sql, [params], async function(err,result) {
                 if(err) { 
