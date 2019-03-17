@@ -15,23 +15,23 @@ module.exports.deleteemployee =
 module.exports.getclassroom = "SELECT * FROM Classroom where classnum =?";
 module.exports.insertattendance =
   "INSERT INTO Attendance (employee_id, attendance_status, National_id, Name_en, trainer_id, Attended_date, start_time, end_time, classroom, course_name) VALUES ? ";
-module.exports.courseinsert=
- "INSERT INTO Course (name_ar,name_en,exam_amount,training_amount,duration) VALUES ?" ;
+module.exports.courseinsert =
+  "INSERT INTO Course (name_ar,name_en,exam_amount,training_amount,duration) VALUES ?";
 module.exports.courseselect =
-"SELECT name_en FROM Course where name_en=?";
+  "SELECT name_en FROM Course where name_en=?";
 module.exports.coursenames =
-"SELECT * FROM Course ";
-module.exports.session=
-"SELECT * FROM Session where token =?";
-module.exports.Appeal=
-"INSERT INTO Appeal (service_en,service_ar,Description_en,Description_ar,Appeal_date) VALUES ?";
-module.exports.trainerid=
-"SELECT id FROM Trainer where Name_en = ?";
-module.exports.trainerid_ar=
-"SELECT id FROM Trainer where Name_ar = ?";
+  "SELECT * FROM Course ";
+module.exports.session =
+  "SELECT * FROM Session where token =?";
+module.exports.Appeal =
+  "INSERT INTO Appeal (service_en,service_ar,Description_en,Description_ar,Appeal_date) VALUES ?";
+module.exports.trainerid =
+  "SELECT id FROM Trainer where Name_en = ?";
+module.exports.trainerid_ar =
+  "SELECT id FROM Trainer where Name_ar = ?";
 
-  module.exports.getdatedetails =
+module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
- module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
+module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
-  
+module.exports.findemployeeAttendance = "SELECT * FROM Attendance where trainer_id =? AND attendance_status='Present'"
