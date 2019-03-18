@@ -4,11 +4,11 @@ const logger = log4js.getLogger('Aman_project');
 module.exports={
     assesserview:assesserview
 }
+//Here fetching the details from the Daos both building and schedule information
 function assesserview(){
     return new Promise(async (resolve, reject) => {
-
     var result = await asser.assement_get()
-    logger.fatal("result in core",result)
+    logger.fatal("result in core file",result)
     if(result){
         resolve({
             status:200,

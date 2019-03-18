@@ -33,6 +33,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 })
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -49,15 +50,15 @@ var swaggerDefinition = {
 
 log4js.configure({
     appenders: {
-        Salama_project: {
+        SPSA_project: {
             type: 'dateFile', 
-            filename: './log/Salama_Project_' + 
+            filename: './log/SPSA_project_' + 
                     new Date().getFullYear() + "-"+ (new Date().getMonth()+ 1) + "-" + 
                     new Date().getDate() + '.log'
         }
     },
     categories: {
-      default: { appenders: [ 'Salama_project' ], level: 'debug' }
+      default: { appenders: [ 'SPSA_project' ], level: 'debug' }
     }
 });
 
@@ -81,7 +82,7 @@ app.get('/swagger.json', function(request, response) {
     response.send(swaggerSpec);
 });
 
-app.use(cors({origin: 'http://localhost:4200'}));
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

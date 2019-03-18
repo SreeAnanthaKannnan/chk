@@ -15,24 +15,16 @@ const logger = log4js.getLogger('Aman_project');
 
 
 function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,email)  {
-    // var yesValue = checked == "yes" ? "checked" : ""
-    // var noValue = checked === "no" ? "checked" : ""
+   
 
     return new Promise(async function(resolve,reject){
     try{
-        // var yesvalue1 = checked1 == "yes" ? "checked" : ""
-        // var novalue1 = checked1== "no" ? "checked" : ""
-        // var yesvalue2 = checked2 == "yes" ? "checked" : ""
-        // var novalue2 = checked2== "no" ? "checked" : ""
-        // var yesvalue3=checked3=="yes"?"checked":""
-
+     
+//html code for pdf generation
 
         const browser= await puppeteer.launch();
         const page=await browser.newPage();
-       // const HeadingName="Hall Ticket"
-        // const ImgSrc=__dirname+'/survey.png'
-        // console.log("ImgSrc==========",ImgSrc)
-        // console.log(yesvalue3)
+   
 
         await page.setContent(`<!DOCTYPE html>
         <html>
@@ -243,17 +235,12 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
         </body>
         </html>
         `);
-        // <input type="checkbox" style="margin-right=293px" name="vehicle1" value="Bike" ${yesvalue3}><p style="text-align:justify;margin:3px;margin-left: 20px;
-        // margin-top: -18px;">All the information provided above is true <br>the best of my knowledge.I understand I will be<br>levied a penality if found to be incorrect
-        //   <div style="margin-top: 53px;
-//     margin-left: 182px;">
-//   <input type="submit" value="Submit">
-//   </div>
+      
         await page.emulateMedia('screen');
         var datetime = dateFormat (new Date(),"yyyy-mm-dd h:MM:ss");
         console.log(datetime);
         var  path='/pdf'+datetime+email+'.pdf';
-
+      //Here the path of the pdf will be stored in DataBase
         let query= await insertquery.pdf_insert(path,email)
         console.log(query !=0,"data inserted")
          console.log("guess done");
@@ -264,10 +251,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
             printBackground:true
            
         }).then(result=>{
-            // var path1=[path1]
-            // var path=upload.array('filepath')
-            // let query_value =[path,email]
-            // console.log(query_value,"query_value")
+
          
             return resolve({
             message:"pdf conversion done",
@@ -275,17 +259,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
            
         })
     })
-  
-        // await browser.close();
-        //  var result=await process.exit(    
-        //  )
-      
-    
 
-  
-    // function mail(email){
-    //   var datetime = dateFormat (new Date(),"yyyy-mm-dd h:MM:ss");
-    //   console.log(datetime);
 
     var transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -321,10 +295,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
             })
 
             return resolve({message:""})
-        
-          // await browser.close();
-          //  var result=await process.exit(    
-          //  )
+      
         
         } catch(e){
           console.log('our error',e)

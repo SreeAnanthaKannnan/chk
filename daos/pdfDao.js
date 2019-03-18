@@ -7,11 +7,11 @@ const logger = log4js.getLogger('Aman_project');
 function pdf_insert(path,email) {
 
     return new Promise( function (resolve,reject){
-        // logger.fatal("hiiiii",params)
-        // logger.fatal(params,"pdfewrere")
+        // console.log("hiiiii",params)
+        // console.log(params,"pdfewrere")
         var owner_id=email
-        logger.fatal(owner_id,"djfjdj")
-        logger.fatal(path,"path")
+        console.log(owner_id,"email id in pdfDao file")
+        console.log(path,"path")
         var sql = "SELECT * FROM Buildings where email_id ='" + owner_id + "'";
     
         con.query(sql,function(err,result){
@@ -19,31 +19,31 @@ function pdf_insert(path,email) {
              throw err;
              
          } 
-            logger.fatal(!result[0].path)
+            console.log(!result[0].path)
              if(result[0].path==null){
-                 logger.fatal("line 25")
+                 console.log("line 25")
                    var sql= "UPDATE Buildings SET path ='"+path+"' where email_id='"+owner_id+"'";
        con.query(sql,function(err,result)
        {
-        if(err) { logger.fatal("something",err)
+        if(err) { console.log("something",err)
             return reject({ "status": 400, "body": 'Cannot insert the data' })}
             else{
-                //  logger.fatal(result,"achieved")
+                //  console.log(result,"achieved")
             return resolve({ result});
 
             }
         }); 
-        logger.fatal(result,"pbppb")
+        console.log(result,"in first function")
 
     }
    else if(result[0].path1==null) {
-       logger.fatal("line in 41")
+       console.log("line in 41")
     var sql= "UPDATE Buildings SET path1 ='"+path+"' where email_id='"+owner_id+"'";
     con.query(sql, result[0].path1 ,function(err,result){
-     if(err) { logger.fatal("something",err)
+     if(err) { console.log("something",err)
          return reject({ "status": 400, "body": 'Cannot insert the data' })}
          else{
-             //  logger.fatal(result,"achieved")
+             //  console.log(result,"achieved")
          return resolve({ result});
          }
      
@@ -51,13 +51,13 @@ function pdf_insert(path,email) {
 
    }
    else if(result[0].path2==null) {
-    logger.fatal("line in 55")
+    console.log("line in 55")
     var sql= "UPDATE Buildings SET path2 ='"+path+"' where email_id='"+owner_id+"'";
     con.query(sql,result[0].path2 ,function(err,result){
-     if(err) { logger.fatal("something",err)
+     if(err) { console.log("something",err)
          return reject({ "status": 400, "body": 'Cannot insert the data' })}
          else{
-             //  logger.fatal(result,"achieved")
+             //  console.log(result,"achieved")
          return resolve({ result});
          }
      
@@ -65,7 +65,7 @@ function pdf_insert(path,email) {
 
    }
    else{
-       logger.fatal("in 69");
+       console.log("in 69");
        return resolve( 0 );
    }
          //}

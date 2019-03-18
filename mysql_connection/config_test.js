@@ -6,13 +6,13 @@ var mysql = require("mysql");
 
 
 // const con = require("../mysql_connection/dbConfig");
-// var dbConfig = {
-//   connectionLimit: 100,
-//   host: "127.0.0.1",
-//   user: "root",
-//   password: "Rpqb$2018",
-//   database: "SHARJAH"
-// };
+var dbConfig = {
+  connectionLimit: 100,
+  host: "68.183.86.120",
+  user: "rapiduser",
+  password: "Rpqb$2018",
+  database: "SHARJAH"
+};
 
 // module.exports = mysql.createPool({
 //   connectionLimit: 100,
@@ -21,13 +21,13 @@ var mysql = require("mysql");
 //   password: 'Rpqb$2018',
 //   database: 'SHARJAH'
 // })
-var dbConfig = {
-  connectionLimit: 100,
-  host: '68.183.86.120',
-  user: 'rapiduser',
-  password: 'Rpqb$2018',
-  database: 'SHARJAH'
-};
+// var dbConfig = {
+//   connectionLimit: 100,
+//   host: '68.183.86.120',
+//   user: 'rapiduser',
+//   password: 'Rpqb$2018',
+//   database: 'SHARJAH'
+// };
 exports.getConnection = () => {
   return new Promise(resolve => {
     var connection = mysql.createConnection(dbConfig);

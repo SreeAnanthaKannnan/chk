@@ -1,24 +1,25 @@
 const con = require("../mysql_connection/dbConfig");
 var log4js = require("log4js");
 const logger = log4js.getLogger("Aman_project");
+const mysqlConnection = require("../config/Connection");
+const query = require("../mysql_connection/queries");
 
 function schedule_insert(values) {
   return new Promise(function(resolve, reject) {
     values = [values];
     logger.fatal("values", values);
-    let qry =
-      "INSERT INTO Schedules(schedule_time,requestdate,suplier_id,building_id,status) VALUES ? ";
-    con.query(qry, [values], function(err, result) {
-      if (err) {
-        logger.fatal("something", err);
-        return reject({
-          status: 400,
-          body: "Cannot insert the data"
-        });
-      } else {
-        return resolve({ result });
-      }
-    });
+      mysqlConnection
+      .insert_query(query.scheduleinfo,values)
+      .then(function(result, err) {
+        if (err) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          console.log(result);
+          return resolve({ status: 200, message: result });
+        }
+      });
   });
 }
 
