@@ -1,24 +1,33 @@
 const con = require("../mysql_connection/dbConfig");
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
-async function Trainer_information(params) {
-  return new Promise(function (resolve, reject) {
-    console.log(params, "params======>");
 
-    con.query(
-      "SELECT * FROM Trainer where trainer_email_id ='" + params + "'",
-      (err, result) => {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          return resolve({ result: result });
-        }
-      }
-    );
+
+
+//===============Checking the trainer email in the trainer table===start======
+async function Trainer_information(params) {
+  console.log("DAO_Trainer_information_params======>", params);
+  return new Promise(async function (resolve, reject) {
+    var res = await mysqlConnection
+      .query_execute(query.verify_email, params)
+
+    if (res.data.errno) {
+      //console.log("something", err);
+      return reject({ status: 400, message: "something went wrong" });
+    } else {
+      //console.log({ result: result });
+      return resolve({ status: 200, message: res });
+    }
   });
+
 }
+//===============Checking the trainer email in the trainer table===End======
+
+
+
+
+
+
 function email_otp_update(params1, params2) {
   console.log(params1, "params1");
   console.log(params2, "params2");
@@ -235,57 +244,54 @@ function Trainer_id_select(params, language) {
 }
 
 
-
+//==============================Trainer date select ===Start=============
 async function Scheduler_date_select(params, params1, params2, params3) {
-  return new Promise(function (resolve, reject) {
-    console.log("params======>", params);
-    console.log("params======>", params1);
-    console.log("params======>", params2);
-    console.log("params======>", params3);
+  console.log("DAO_params======>", params);
+  console.log("DAO_params1======>", params1);
+  console.log("DAO_params2======>", params2);
+  console.log("DAO_params3======>", params3);
+  var paramsval = [params, params1, params2, params3]
 
-    con.query(
-      "SELECT * FROM Schedule where Trainer_id ='" +
-      params +
-      "' AND scheduled_date='" +
-      params1 +
-      "' AND start_time='" +
-      params2 +
-      "' AND end_time='" +
-      params3 +
-      "'",
+  return new Promise(async function (resolve, reject) {
+    var res = await mysqlConnection
+      .query_execute(query.getschedulerdateselect, paramsval)
+    console.log("res===>>>", res)
+    if (res.data.errno) {
+      //console.log("something", err);
+      return reject({ status: 400, message: "something went wrong" });
+    } else {
+      //console.log({ result: result });
+      return resolve({ status: 200, message: res });
+    }
 
-      (err, result) => {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          return resolve({ result: result });
-        }
-      }
-    );
   });
-}
 
+}
+//==============================Trainer date select ===end=============
+
+
+//==================================sending trainer ID to the scheduler table===start===========
 async function Scheduler_information(params) {
-  return new Promise(function (resolve, reject) {
-    console.log(params, "params======>");
+  console.log("DAO_Scheduler_information_params======>", params);
+  return new Promise(async function (resolve, reject) {
+    var res = await mysqlConnection
+      .query_execute(query.getschedule, params)
 
-    con.query(
-      "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id ='" + params + "'",
-      (err, result) => {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          console.log("result_DAO",result)
-          return resolve({ result: result });
-        }
-      }
-    );
+    if (res.data.errno) {
+      return reject({ status: 400, message: "something went wrong" });
+    } else {
+      //console.log({ result: result });
+      return resolve({ status: 200, message: res });
+    }
+
   });
+
 }
+//==================================sending trainer ID to the scheduler table===END===========
+
+
+
+
 
 function trainer_name_schedule(trainer_id, language) {
   return new Promise(async function (resolve, reject) {
@@ -358,18 +364,19 @@ async function Trainer_attendence_list(
       params9
     ];
 
-    await mysqlConnection
+    var res = await mysqlConnection
       .insert_query(query.insertattendance, values)
-      .then(function (result, err) {
-        if (err) {
-          //  console.log(result,"achieved")
-          console.log("something", err);
-          return resolve({ status: 400, err: err });
-        } else {
-          console.log(result);
-          return resolve({ status: 200, message: result });
-        }
-      });
+    console.log("Res========>>", res)
+    if (res.data.errno) {
+      //console.log("something", err);
+      return reject({ status: 400, message: "something went wrong" });
+    } else if (res) {
+      //console.log(result);
+      return resolve({ status: 200, message: res });
+    } else {
+      return resolve({ status: 401, message: res });
+    }
+
   });
 }
 

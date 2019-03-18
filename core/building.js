@@ -11,7 +11,7 @@ function buildings(buildingobject,email_id) {
        var responseObj = {};
 //=======================================passing values to Dao to store the Building details==============================================================//        
        var user = building.building(buildingobject,email_id).then((data) => {
-           logger.fatal(user, "user")
+            logger.fatal(user, "user")
            responseObj.data = data;
            responseObj.errors = [];
            responseObj.meta = {};
