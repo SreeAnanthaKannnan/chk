@@ -31,9 +31,10 @@ async function Session_select(params){
     return  new Promise( async function (resolve,reject){
 
      logger.fatal("achie",params)
-     var res1= await mysqlConnection
-        .query_execute(query.session,[params])
-        if(res1.data.errno){
+     var res1= await mysqlConnection.query_execute(query.session,[params])
+     console.log(res1.data,'jeryey')
+
+        if(res1.data.errno){ 
             return reject("something went wrong")
         }
       
