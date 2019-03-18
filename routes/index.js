@@ -45,7 +45,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   update = require("../core/update"),
   assessment = require("../core/assessment"),
   book = require("../core/servicehistory"),
-  image_upload= require('../core/image_upload');
+  image_upload = require('../core/image_upload');
 
 let moment = require("moment");
 
@@ -1141,7 +1141,7 @@ router.post("/schedules", cors(), async function (req, res) {
 });
 //============================================convert pdf===================================================//
 
-router.post("/Convert_Pdf", cors(),function(req, res) {
+router.post("/Convert_Pdf", cors(), function (req, res) {
   //var flag=0;
   let checked1 = req.body.SelectedValues1;
   let checked2 = req.body.SelectedValues2;
@@ -1156,31 +1156,31 @@ router.post("/Convert_Pdf", cors(),function(req, res) {
   let flag = 0;
   // let checked3=req.body.SelectedValues3;
   if (checked1 == "1") {
-   var  yesvalue1 = "checked";
-   var  novalue1 = "unchecked";
+    var yesvalue1 = "checked";
+    var novalue1 = "unchecked";
   } else {
-   var yesvalue1 = "unchecked";
-   var novalue1 = "checked";
+    var yesvalue1 = "unchecked";
+    var novalue1 = "checked";
     flag = 1;
   }
   if (checked2 == "1") {
     var yesvalue2 = "checked";
     var novalue2 = "unchecked";
   } else {
-   var yesvalue2 = "unchecked";
-   var novalue2 = "checked";
+    var yesvalue2 = "unchecked";
+    var novalue2 = "checked";
     flag = 1;
   }
   if (checked3 == "1") {
-   var yesvalue3 = "checked";
+    var yesvalue3 = "checked";
     var novalue3 = "unchecked";
   } else {
     var yesvalue3 = "unchecked";
-   var novalue3 = "checked";
+    var novalue3 = "checked";
     flag = 1;
   }
   if (checked4 == "1") {
-   var yesvalue4 = "checked";
+    var yesvalue4 = "checked";
     var novalue4 = "unchecked";
   } else {
     var yesvalue4 = "unchecked";
@@ -1207,7 +1207,7 @@ router.post("/Convert_Pdf", cors(),function(req, res) {
     var yesvalue7 = "checked";
     var novalue7 = "unchecked";
   } else {
-   var yesvalue7 = "unchecked";
+    var yesvalue7 = "unchecked";
     var novalue7 = "checked";
     flag = 1;
   }
@@ -1221,7 +1221,7 @@ router.post("/Convert_Pdf", cors(),function(req, res) {
   }
   if (checked9 == "1") {
     var yesvalue9 = "checked";
-   var novalue9 = "unchecked";
+    var novalue9 = "unchecked";
   } else {
     var yesvalue9 = "unchecked";
     var novalue9 = "checked";
@@ -1231,7 +1231,7 @@ router.post("/Convert_Pdf", cors(),function(req, res) {
 
   console.log("in 781", flag);
   //console.log("All data=====>>", checked1,checked2,checked3);
-   pdf.Pdf(
+  pdf.Pdf(
     yesvalue1,
     novalue1,
     yesvalue2,
@@ -1456,9 +1456,9 @@ router.post("/Trainer_login", cors(), (req, res) => {
 //=======================Appeal===============================================//
 router.post("/Appeal", cors(), (req, res) => {
   const Appeal_Object = req.body;
-  const token= req.headers.token;
+  const token = req.headers.token;
   console.log(Appeal_Object);
-  console.log(token,"token")
+  console.log(token, "token")
   let service = Appeal_Object.service;
   let Description = Appeal_Object.Description;
   if (!service || !Description) {
@@ -1467,7 +1467,7 @@ router.post("/Appeal", cors(), (req, res) => {
       message: "Please fill all the fields"
     });
   } else {
-    Appeal.Appeal(Appeal_Object,token)
+    Appeal.Appeal(Appeal_Object, token)
       .then(result => {
         console.log(result);
 
@@ -2898,15 +2898,12 @@ router.post("/getAttendance", cors(), (request, response) => {
 
 //=================================Trainer Attendance=============================================//
 router.post("/Trainer_employee_list", cors(), (req, res) => {
-  const trainer_employee = req.body;
-  const language = req.body.language;
-  console.log("Trainer_employee_list_routes", trainer_employee);
+  const trainer_data = req.body;
+  console.log("Trainer_data_Index===>", trainer_data)
 
-  const Trainer_Email = req.body.Trainer_emailid;
-  console.log("Trainer_Company_Email_routes", Trainer_Email);
 
   trainer_attendance
-    .trainer_attendance(Trainer_Email, language)
+    .trainer_attendance(trainer_data)
     .then(result => {
       console.log(result);
 
@@ -2927,23 +2924,11 @@ router.post("/Trainer_employee_list", cors(), (req, res) => {
 });
 // =================================================================================
 router.post("/Selecting_date_trainer", cors(), (req, res) => {
-  const trainer_employee = req.body;
-  console.log("Trainer_date_list_routes", trainer_employee);
-
-  const Trainer_id = req.body.Trainer_id;
-  console.log("Trainer_Trainer_id_routes", Trainer_id);
-
-  const selected_date = req.body.select_date;
-  console.log("Trainer_Company_selected_date_routes", selected_date);
-
-  const start_time = req.body.start_time;
-  console.log("Trainer_Company_Email_routes", start_time);
-
-  const end_time = req.body.end_time;
-  console.log("Trainer_Company_Email_routes", end_time);
+  const Trainer_selecting_date = req.body;
+  console.log("Trainer_selecting_date_INDEX", Trainer_selecting_date);
 
   trainer_attendance
-    .trainer_date_select(Trainer_id, selected_date, start_time, end_time)
+    .trainer_date_select(Trainer_selecting_date)
     .then(result => {
       console.log(result);
 
@@ -2967,46 +2952,12 @@ router.post("/Selecting_date_trainer", cors(), (req, res) => {
 
 //=================================Trainer Attendance=============================================//
 router.post("/attendence", cors(), (req, res) => {
-  const trainer_employee = req.body;
-  console.log("Trainer_attendance_list_routes", trainer_employee);
-
-  const getdata = req.body.getdata;
-  console.log("Trainer_Company_employee_id_routes", getdata);
-
-  const attendance_status = "Present";
-  console.log("Trainer_Company_attendance_status_routes", attendance_status);
-
-  const trainer_id = req.body.Trainer_id;
-  console.log("Trainer_Company_trainer_id_routes", trainer_id);
-
-  const Attended_date_val = req.body.attended_date;
-
-  var Attended_date = moment(Attended_date_val).format("YYYY/MM/DD");
-
-  console.log("Trainer_Company_Attended_date_routes", Attended_date);
-
-  const start_time = req.body.start_time;
-  console.log("Trainer_Company_start_time_routes", start_time);
-
-  const end_time = req.body.end_time;
-  console.log("Trainer_Company_end_time_routes", end_time);
-
-  const classroom = req.body.classroom_id;
-  console.log("Trainer_Company_classroom_routes", classroom);
-
-  const course_name = req.body.course_name;
-  console.log("Trainer_Company_course_name_routes", course_name);
+  const Employee_attendance = req.body;
+  console.log("Employee_attendance_ROUTES", Employee_attendance)
 
   trainer_attendance
     .trainer_attendance_list(
-      getdata,
-      attendance_status,
-      trainer_id,
-      Attended_date,
-      start_time,
-      end_time,
-      classroom,
-      course_name
+      Employee_attendance
     )
     .then(result => {
       console.log(result);

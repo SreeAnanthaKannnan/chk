@@ -12,9 +12,34 @@ module.exports.insertemployee =
   "INSERT INTO Employee_Profile (Employee_ID,Name_en,Name_ar,Position,National_Id,Company_Trade_Lincense_No,assigned_for_training,Category) VALUES ?";
 module.exports.deleteemployee =
   "delete from Employee_Profile where National_Id = ?";
+
+
+
+
+module.exports.getdatedetails =
+  "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
+
+//======================Trainer Attendance start================================
+module.exports.verify_email =
+  "SELECT * FROM Trainer where trainer_email_id =? "
+
+module.exports.getschedule =
+  "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id =? "
+
+module.exports.getcoursear =
+  "SELECT name_ar FROM Course where course_id =? "
+
+module.exports.getcourseen =
+  "SELECT name_en FROM Course where course_id =? "
+
+module.exports.getschedulerdateselect =
+  "SELECT * FROM Schedule where trainer_id =?  AND scheduled_date=? AND start_time=? AND end_time=?"
+
 module.exports.getclassroom = "SELECT * FROM Classroom where classnum =?";
+
 module.exports.insertattendance =
   "INSERT INTO Attendance (employee_id, attendance_status, National_id, Name_en, trainer_id, Attended_date, start_time, end_time, classroom, course_name) VALUES ? ";
 
-  module.exports.getdatedetails =
-  "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
+
+
+  //======================Trainer Attendance End================================

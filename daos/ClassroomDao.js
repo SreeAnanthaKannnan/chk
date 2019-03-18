@@ -7,7 +7,7 @@ var groupArray = require("group-array");
 const query = require("../mysql_connection/queries");
 // const mysqlConnection = require("../config/Connection");
 function Classroom_insert(params, duration, insert_count) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     // console.log("hiiiii",params)
     params = [params];
     console.log(params[0][0], "classroom_id");
@@ -20,10 +20,10 @@ function Classroom_insert(params, duration, insert_count) {
     for (i = 0; i < insert_count; i++) {
       var res = await mysqlConnection.query_execute(
         "SELECT ADDTIME( '" +
-          duration +
-          "' , '" +
-          start_time +
-          "') as started_time",
+        duration +
+        "' , '" +
+        start_time +
+        "') as started_time",
         []
       );
       // if (res.data.length == 0) {
@@ -60,13 +60,13 @@ function Classroom_insert(params, duration, insert_count) {
 
 //=============================================================================================//
 function trainer_update(param1, param2) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     await con.query(
       "UPDATE Trainer SET classroom_id ='" +
-        param2 +
-        "' where trainer_email_id ='" +
-        param1 +
-        "'",
+      param2 +
+      "' where trainer_email_id ='" +
+      param1 +
+      "'",
       (err, result) => {
         //  await con.query(sql,  [params] ,function(err,result){
         if (!result) {
@@ -85,19 +85,19 @@ function trainer_update(param1, param2) {
   });
 }
 function Classroom_select(param1, param2, param3) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.log("hiiiii", param2);
     param2 = moment(param2).format("YYYY-MM-DD");
     console.log(param2);
 
     await con.query(
       "SELECT classroom_id FROM Classroom where (classroom_id ='" +
-        param1 +
-        "')AND (available_date ='" +
-        param2 +
-        "')AND (time_slot = '" +
-        param3 +
-        "')",
+      param1 +
+      "')AND (available_date ='" +
+      param2 +
+      "')AND (time_slot = '" +
+      param3 +
+      "')",
       (err, result) => {
         if (!result) {
           //  console.log(result,"achieved")
@@ -112,19 +112,19 @@ function Classroom_select(param1, param2, param3) {
   });
 }
 function Availability(classroom_id, available_date, start_time, end_time) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.log("hiiiii", classroom);
     // params =[params]
     await con.query(
       "SELECT * FROM Classroom where available_date ='" +
-        available_date +
-        "' and start_time ='" +
-        start_time +
-        "' and end_time = '" +
-        end_time +
-        "' and classroom_id = '" +
-        classroom_id +
-        "' ",
+      available_date +
+      "' and start_time ='" +
+      start_time +
+      "' and end_time = '" +
+      end_time +
+      "' and classroom_id = '" +
+      classroom_id +
+      "' ",
       (err, result) => {
         if (err) {
           //  console.log(result,"achieved")
@@ -140,7 +140,7 @@ function Availability(classroom_id, available_date, start_time, end_time) {
 }
 //================================================================================================//
 function Availability_Date(no_of_seats_selected, trainer_id, course_id) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     //  console.log("hiiiii",params)
     // params =[params]
     var res1 = await mysqlConnection.query_execute(
@@ -187,7 +187,7 @@ function Availability_Date(no_of_seats_selected, trainer_id, course_id) {
 }
 //===================================================================================================//
 function time_slots_lists(available_date, trainer_id) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     //  console.log("hiiiii",params)
     // params =[params]
     var value = [];
@@ -296,17 +296,17 @@ function time_slots_lists(available_date, trainer_id) {
 }
 //================================================================================================//
 function Seat_count(param) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.log("hiiiii", param);
     param = moment(param).format("YYYY-MM-DD");
     console.log(param, "date");
 
     await con.query(
       "SELECT SUM(number_of_available_seats) as no_of_available_seats FROM Classroom where available_date ='" +
-        param +
-        "' and status ='" +
-        "not filled" +
-        "'",
+      param +
+      "' and status ='" +
+      "not filled" +
+      "'",
       (err, result) => {
         if (!result) {
           //  console.log(result,"achieved")
@@ -323,15 +323,15 @@ function Seat_count(param) {
 //=================================================================================================//
 
 function auto_allocation(param) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.log("params=====>", param);
     param = [param];
     console.log("params============>", param[0][1]);
 
     await con.query(
       "SELECT classroom_id,no_of_available_seats FROM Classroom where (available_date='" +
-        param[0][0] +
-        "')AND (no_of_available_seats !=0)",
+      param[0][0] +
+      "')AND (no_of_available_seats !=0)",
       (err, result) => {
         if (!result) {
           //  console.log(result,"achieved")
@@ -371,7 +371,7 @@ function auto_allocation(param) {
 }
 //================================================================================================//
 function Classroom_num(classroom_id, language) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     //  param = moment(param).format("YYYY-MM-DD")
 
     if (language == "en") {
@@ -400,7 +400,7 @@ async function classroom_details_for_training(params) {
   params = params.result;
 
   //  let retArr = [];
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     var value = [];
     var length = params.length;
     console.log(length, "length");
@@ -410,7 +410,7 @@ async function classroom_details_for_training(params) {
 
       await con.query(
         "SELECT * FROM Classroom where classroom_id = '" + params[i] + "'",
-        async function(err, result) {
+        async function (err, result) {
           if (err) {
             //  console.log(result,"achieved")
             console.log("something", err);
@@ -433,15 +433,15 @@ async function classroom_details_for_training(params) {
   });
 }
 function classroom_for_exam(param) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.log("hiiiii", param);
     date1 = moment(param).format("YYYY-MM-DD");
     console.log(date1, "date");
 
     await con.query(
       "SELECT address,available_date,time_slot FROM Classroom where available_date ='" +
-        date1 +
-        "'",
+      date1 +
+      "'",
       (err, result) => {
         if (!result) {
           //  console.log(result,"achieved")
@@ -487,7 +487,7 @@ function seat_update(param) {
 }
 //===============================================================================================//
 function insert_count(start_time, end_time, duration) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.log("hiiiii", start_time);
     let sql =
       "SELECT TIMEDIFF( '" +
@@ -498,7 +498,7 @@ function insert_count(start_time, end_time, duration) {
 
     console.log(sql);
 
-    await con.query(sql, function(err, result) {
+    await con.query(sql, function (err, result) {
       if (err) {
         return resolve({ status: 400, err: err });
       }
@@ -525,7 +525,7 @@ function bulk_booking1(
   scheduling_date,
   amount
 ) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     // if (language == 'en'){
     console.log(Emirates_ID.length, "length of the employees");
 
@@ -674,7 +674,7 @@ function bulk_booking(
   scheduling_date,
   amount
 ) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     // if (language == 'en'){
     console.log(Emirates_ID.length, "length of the employees");
 
@@ -802,12 +802,12 @@ function bulk_booking(
     return resolve({ result: res2.data });
   });
 }
-//===============================================================================================/ /
+//========================================Trainer_classroom ==Start=====================================================/ /
 async function classroom_id(params) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     mysqlConnection
       .query_execute(query.getclassroom, [params])
-      .then(function(result, err) {
+      .then(function (result, err) {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
@@ -819,6 +819,7 @@ async function classroom_id(params) {
       });
   });
 }
+//========================================Trainer_classroom ==END=========================
 module.exports = {
   Classroom_insert: Classroom_insert,
   Classroom_select: Classroom_select,

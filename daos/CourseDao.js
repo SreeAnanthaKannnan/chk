@@ -2,183 +2,196 @@
 const con = require('../mysql_connection/dbConfig');
 const moment = require('moment')
 const mysqlConnection = require('../mysql_connection/config_test')
+const query = require("../mysql_connection/queries");
 
 
 function Course_insert(param) {
 
-    return new Promise( async function (resolve,reject){
-         console.log("hiiiii",param)
-         param =[param]
+    return new Promise(async function (resolve, reject) {
+        console.log("hiiiii", param)
+        param = [param]
         //  param = moment(param).format("YYYY-MM-DD")
         //  console.log(param,"date")
-                
-         sql= "INSERT INTO Course (name_ar,name_en,exam_amount,training_amount,duration) VALUES ?";
-         await con.query(sql,  [param] ,function(err,result){
-            if(!result) { 
+
+        sql = "INSERT INTO Course (name_ar,name_en,exam_amount,training_amount,duration) VALUES ?";
+        await con.query(sql, [param], function (err, result) {
+            if (!result) {
                 //  console.log(result,"achieved")
-                console.log("something",err)
-                return resolve({ status: 400, err : err })
-        }
-          
-        else{
-            console.log(result)
-            return resolve({ result:result});
+                console.log("something", err)
+                return resolve({ status: 400, err: err })
             }
-            
-        }); 
+
+            else {
+                console.log(result)
+                return resolve({ result: result });
+            }
+
+        });
     })
 
 }
 function Course_display() {
 
-    return new Promise( async function (resolve,reject){
+    return new Promise(async function (resolve, reject) {
         //  param = moment(param).format("YYYY-MM-DD")
         //  console.log(param,"date")
-                
-        await  con.query("SELECT name_en FROM Course ", (err, result) => {
-            
-            if(err) { 
+
+        await con.query("SELECT name_en FROM Course ", (err, result) => {
+
+            if (err) {
                 //  console.log(result,"achieved")
-                console.log("something",err)
-                return resolve({ status: 400, err : err })
-        }
-          
-        else{
-            console.log(result.length,"name")
-            let value =[]
-            let myobject = new Object;
-            for(i=0;i<result.length;i++){
-            //    let b= myobject[result[i].name] ;
-            //     // value.push(myobject[result[i].name])
-            //     console.log(b,"value===========>")
-            //     value.push (b)
-            var data = {}
-            data = {id:i+1 , name :result[i].name_en}
-            value.push(data)
-            
+                console.log("something", err)
+                return resolve({ status: 400, err: err })
             }
-            console.log(value,"value")
-              
-            return resolve({ result:value});
+
+            else {
+                console.log(result.length, "name")
+                let value = []
+                let myobject = new Object;
+                for (i = 0; i < result.length; i++) {
+                    //    let b= myobject[result[i].name] ;
+                    //     // value.push(myobject[result[i].name])
+                    //     console.log(b,"value===========>")
+                    //     value.push (b)
+                    var data = {}
+                    data = { id: i + 1, name: result[i].name_en }
+                    value.push(data)
+
+                }
+                console.log(value, "value")
+
+                return resolve({ result: value });
             }
-            
-        }); 
+
+        });
     })
 
 }
 function Course_display_arabic() {
 
-    return new Promise( async function (resolve,reject){
+    return new Promise(async function (resolve, reject) {
         //  param = moment(param).format("YYYY-MM-DD")
         //  console.log(param,"date")
-                
-        await  con.query("SELECT name_ar,course_id FROM Course ", (err, result) => {
-            if(!result) { 
+
+        await con.query("SELECT name_ar,course_id FROM Course ", (err, result) => {
+            if (!result) {
                 //  console.log(result,"achieved")
-                console.log("something",err)
-                return resolve({ status: 400, err : err })
-        }
-          
-        else{
-            console.log(result.length,"name")
-            let value =[]
-            let myobject = new Object;
-            for(i=0;i<result.length;i++){
-            //    let b= myobject[result[i].name] ;
-            //     // value.push(myobject[result[i].name])
-            //     console.log(b,"value===========>")
-            //     value.push (b)
-            var data = {}
-            data = {id:result[i].course_id , name :result[i].name_ar}
-            value.push(data)
-            
+                console.log("something", err)
+                return resolve({ status: 400, err: err })
             }
-            console.log(value,"value")
-              
-            return resolve({ result:value});
+
+            else {
+                console.log(result.length, "name")
+                let value = []
+                let myobject = new Object;
+                for (i = 0; i < result.length; i++) {
+                    //    let b= myobject[result[i].name] ;
+                    //     // value.push(myobject[result[i].name])
+                    //     console.log(b,"value===========>")
+                    //     value.push (b)
+                    var data = {}
+                    data = { id: result[i].course_id, name: result[i].name_ar }
+                    value.push(data)
+
+                }
+                console.log(value, "value")
+
+                return resolve({ result: value });
             }
-            
-        }); 
+
+        });
     })
 
 }
 //===========================================================================================//
-function Course_amount(course_id,language) {
+function Course_amount(course_id, language) {
 
-    return new Promise( async function (resolve,reject){
+    return new Promise(async function (resolve, reject) {
         //  param = moment(param).format("YYYY-MM-DD")
-       
-         
-            var res1= await mysqlConnection.query_execute("SELECT training_amount FROM Course where course_id=?",[course_id])
-            
-            console.log("res1===>",res1.data)
-            return resolve({result:res1.data})
-             
+
+
+        var res1 = await mysqlConnection.query_execute("SELECT training_amount FROM Course where course_id=?", [course_id])
+
+        console.log("res1===>", res1.data)
+        return resolve({ result: res1.data })
+
     })
 
 }
 
-function Course_id_select(course_name,language) {
+function Course_id_select(course_name, language) {
 
-    return new Promise( async function (resolve,reject){
+    return new Promise(async function (resolve, reject) {
         //  param = moment(param).format("YYYY-MM-DD")
-       
-         if(language =="en"){
-            var res1= await mysqlConnection.query_execute("SELECT * FROM Course where name_en=?",[course_name])
-            
-            console.log("res1===>",res1.data)
-            return resolve({result:res1.data})
-        }        
-          
-       
-    
-    else{
-        var res1= await mysqlConnection.query_execute("SELECT course_id FROM Course where name_ar =?",[course_name])
-            
-            console.log("res1===>",res1.data)
-            return resolve({result:res1.data})
-        }    
-          
+
+        if (language == "en") {
+            var res1 = await mysqlConnection.query_execute("SELECT * FROM Course where name_en=?", [course_name])
+
+            console.log("res1===>", res1.data)
+            return resolve({ result: res1.data })
+        }
+
+
+
+        else {
+            var res1 = await mysqlConnection.query_execute("SELECT course_id FROM Course where name_ar =?", [course_name])
+
+            console.log("res1===>", res1.data)
+            return resolve({ result: res1.data })
+        }
+
     })
 
 }
-//=====================================================================================//
-function course_name_schedule(course_id,language) {
+//=================================Trainer_couse name from course_id==start==================================================//
+function course_name_schedule(params, language) {
 
-    return new Promise( async function (resolve,reject){
+    return new Promise(async function (resolve, reject) {
         //  param = moment(param).format("YYYY-MM-DD")
-       
-         if(language =="ar"){
-            var res1= await mysqlConnection.query_execute("SELECT name_ar FROM Course where course_id=?",[course_id])
-            
-            console.log("res1===>",res1.data)
-            return resolve({result:res1.data})
-        }        
-          
-       
-    
-    else{
-        var res1= await mysqlConnection.query_execute("SELECT name_en FROM Course where course_id =?",[course_id])
-            
-            console.log("res1===>",res1.data)
-            return resolve({result:res1.data})
-        }    
-        
-          
-      
-            
-      
 
-    
-          
+        if (language == "ar") {
+            var res1 = await mysqlConnection.query_execute(query.getcourse, params)
+            if (res1.data.errno) {
+                //console.log("something", err);
+                return reject({ status: 400, message: "something went wrong" });
+            } else {
+                console.log({ result: result });
+                return resolve({ status: 200, result: res1.data });
+            }
+            // console.log("res1===>", res1.data)
+            // return resolve({ result: res1.data })
+        }
+
+
+
+        else {
+            var res1 = await mysqlConnection.query_execute(query.getcourseen, params)
+            if (res1.data.errno) {
+                //console.log("something", err);
+                return reject({ status: 400, message: "something went wrong" });
+            } else {
+                //console.log({ result: result });
+                return resolve({ status: 200, result: res1.data });
+            }
+            // console.log("res1===>", res1.data)
+            // return resolve({ result: res1.data })
+        }
+
+        //=================================Trainer_couse name from course_id==END==================================================//
+
+
+
+
+
+
     })
 
 }
-module.exports ={
-   Course_insert : Course_insert,
-    Course_display : Course_display,
-    Course_display_arabic : Course_display_arabic,
-    Course_id_select : Course_id_select,
-    Course_amount : Course_amount,
-    course_name_schedule : course_name_schedule
-    }
+module.exports = {
+    Course_insert: Course_insert,
+    Course_display: Course_display,
+    Course_display_arabic: Course_display_arabic,
+    Course_id_select: Course_id_select,
+    Course_amount: Course_amount,
+    course_name_schedule: course_name_schedule
+}

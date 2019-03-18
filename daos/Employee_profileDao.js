@@ -404,7 +404,7 @@ function number_validation_schedule(Company_Trade_Lincense_No) {
     return resolve({ result: res2.data });
   });
 }
-//===============================================================================================//
+//==================================Trainer_attendance =============================================================//
 
 async function national_id(Emirates_ID, class_id) {
   return new Promise(async function(resolve, reject) {
