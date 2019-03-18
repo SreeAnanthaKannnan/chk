@@ -237,6 +237,7 @@ router.post("/getdetails", cors(), async function (req, res) {
 //===================================addbuilding=============================================//
 router.post("/AddsingleBuilding", cors(), async function (req, res) {
   var id = await check.checkToken(req);
+  const token = req.headers['authorization'];
   console.log(id);
   if (id.status == 400 && id.status == 403) {
     res.send({
@@ -247,7 +248,7 @@ router.post("/AddsingleBuilding", cors(), async function (req, res) {
     var buildingobject = req.body;
 
     building
-      .buildings(buildingobject, email_id)
+      .buildings(buildingobject, email_id,token)
       .then(result => {
         res.send({
           result: result,

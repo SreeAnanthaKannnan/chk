@@ -170,4 +170,4 @@ module.exports.installationdetails = "UPDATE Schedules SET FACP = ?,CSI = ?,BRAN
 
 
   
-  "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
+ 
