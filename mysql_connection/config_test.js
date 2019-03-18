@@ -8,8 +8,8 @@ var mysql = require("mysql");
 // const con = require("../mysql_connection/dbConfig");
 var dbConfig = {
   connectionLimit: 100,
-  host: "127.0.0.1",
-  user: "root",
+  host: "68.183.86.120",
+  user: "rapiduser",
   password: "Rpqb$2018",
   database: "SHARJAH"
 };
@@ -97,7 +97,9 @@ exports.query_execute = (query, params, connection = "") => {
 exports.insert_query = (query, params, connection = "") => {
   return new Promise(resolve => {
     if (connection) {
-      connection.query(query, [[params]], function (error, result, fields) {
+      connection.query(query, [
+        [params]
+      ], function (error, result, fields) {
         if (error) {
           resolve({
             status: 401,
@@ -123,7 +125,9 @@ exports.insert_query = (query, params, connection = "") => {
           });
         }
         console.log(query, params);
-        connection.query(query, [[params]], function (error, result, fields) {
+        connection.query(query, [
+          [params]
+        ], function (error, result, fields) {
           if (error) {
             resolve({
               status: 401,

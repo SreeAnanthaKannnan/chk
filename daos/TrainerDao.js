@@ -11,14 +11,20 @@ async function Trainer_information(params) {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
-          return resolve({ status: 400, err: err });
+          return resolve({
+            status: 400,
+            err: err
+          });
         } else {
-          return resolve({ result: result });
+          return resolve({
+            result: result
+          });
         }
       }
     );
   });
 }
+
 function email_otp_update(params1, params2) {
   console.log(params1, "params1");
   console.log(params2, "params2");
@@ -36,10 +42,15 @@ function email_otp_update(params1, params2) {
       if (!result) {
         //  console.log(result,"achieved")
         console.log("something", err);
-        return resolve({ status: 400, err: err });
+        return resolve({
+          status: 400,
+          err: err
+        });
       } else {
         //  console.log(result,"achieved")
-        return resolve({ result });
+        return resolve({
+          result
+        });
       }
     });
   });
@@ -59,6 +70,7 @@ async function Trainer_email_otp_verification(params) {
     );
   });
 }
+
 function password_update(params1, params2) {
   console.log(params1, "params1");
   console.log(params2, "params2");
@@ -74,73 +86,94 @@ function password_update(params1, params2) {
       if (!result) {
         //  console.log(result,"achieved")
         console.log("something", err);
-        return resolve({ status: 400, err: err });
+        return resolve({
+          status: 400,
+          err: err
+        });
       }
       // callback(false, results);
       else {
         //  console.log(result,"achieved")
-        return resolve({ result });
+        return resolve({
+          result
+        });
       }
     });
   });
 }
 //=================================================================================================//
 function Trainer_names_display(language) {
-  return new Promise(async function(resolve, reject) {
-    console.log("language===>",language)
+  return new Promise(async function (resolve, reject) {
+    console.log("language===>", language)
 
-    if(language=="en"){
-    await con.query("SELECT id,Name_en FROM Trainer ", (err, result) => {
-      if (!result) {
-        //  console.log(result,"achieved")
-        console.log("something", err);
-        return resolve({ status: 400, err: err });
-      } else {
-        console.log(result.length, "name");
-        let value = [];
-        let myobject = new Object();
-        for (i = 0; i < result.length; i++) {
-          //    let b= myobject[result[i].name] ;
-          //     // value.push(myobject[result[i].name])
-          //     console.log(b,"value===========>")
-          //     value.push (b)
-          var data = {};
-          data = { id: result[i].id, name: result[i].Name_en };
-          value.push(data);
+    if (language == "en") {
+      await con.query("SELECT id,Name_en FROM Trainer ", (err, result) => {
+        if (!result) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({
+            status: 400,
+            err: err
+          });
+        } else {
+          console.log(result.length, "name");
+          let value = [];
+          let myobject = new Object();
+          for (i = 0; i < result.length; i++) {
+            //    let b= myobject[result[i].name] ;
+            //     // value.push(myobject[result[i].name])
+            //     console.log(b,"value===========>")
+            //     value.push (b)
+            var data = {};
+            data = {
+              id: result[i].id,
+              name: result[i].Name_en
+            };
+            value.push(data);
+          }
+          console.log(value, "value");
+
+          return resolve({
+            result: value
+          });
         }
-        console.log(value, "value");
-
-        return resolve({ result: value });
-      }
-    });
-  }
+      });
+    }
     //  param = moment(param).format("YYYY-MM-DD")
     //  console.log(param,"date")
-  else{
-    await con.query("SELECT id,Name_ar FROM Trainer ", (err, result) => {
-      if (!result) {
-        //  console.log(result,"achieved")
-        console.log("something", err);
-        return resolve({ status: 400, err: err });
-      } else {
-        console.log(result.length, "name");
-        let value = [];
-        let myobject = new Object();
-        for (i = 0; i < result.length; i++) {
-          //    let b= myobject[result[i].name] ;
-          //     // value.push(myobject[result[i].name])
-          //     console.log(b,"value===========>")
-          //     value.push (b)
-          var data = {};
-          data = { id: result[i].id, name: result[i].Name_ar };
-          value.push(data);
-        }
-        console.log(value, "value");
+    else {
+      await con.query("SELECT id,Name_ar FROM Trainer ", (err, result) => {
+        if (!result) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({
+            status: 400,
+            err: err
+          });
+        } else {
+          console.log(result.length, "name");
+          let value = [];
+          let myobject = new Object();
+          for (i = 0; i < result.length; i++) {
+            //    let b= myobject[result[i].name] ;
+            //     // value.push(myobject[result[i].name])
+            //     console.log(b,"value===========>")
+            //     value.push (b)
+            var data = {};
+            data = {
+              id: result[i].id,
+              name: result[i].Name_ar
+            };
+            value.push(data);
+          }
+          console.log(value, "value");
 
-        return resolve({ result: value });
-      }
-    });
-  }
+          return resolve({
+            result: value
+          });
+        }
+      });
+    }
   });
 
 }
@@ -168,10 +201,15 @@ function employee_attendence(
       if (!result) {
         //  console.log(result,"achieved")
         console.log("something", err);
-        return resolve({ status: 400, err: err });
+        return resolve({
+          status: 400,
+          err: err
+        });
       } else {
         console.log(result);
-        return resolve({ result: result });
+        return resolve({
+          result: result
+        });
       }
     });
   });
@@ -192,10 +230,15 @@ function Trainer_insert(param) {
       if (!result) {
         //  console.log(result,"achieved")
         console.log("something", err);
-        return resolve({ status: 400, err: err });
+        return resolve({
+          status: 400,
+          err: err
+        });
       } else {
         console.log(result);
-        return resolve({ result: result });
+        return resolve({
+          result: result
+        });
       }
     });
   });
@@ -206,30 +249,34 @@ function Trainer_id_select(params, language) {
     //  param = moment(param).format("YYYY-MM-DD")
     console.log(params, "date");
     if (language == "en") {
-      var res1= await mysqlConnection
-        .query_execute(query.trainerid,[params])
-      console.log(res1,"dbresult")
-      if(res1.data.errno){
-          return reject("something went wrong")
-      }
-      else{
-        return resolve({ status: 200, result: res1.data});
+      var res1 = await mysqlConnection
+        .query_execute(query.trainerid, [params])
+      console.log(res1, "dbresult")
+      if (res1.data.errno) {
+        return reject("something went wrong")
+      } else {
+        return resolve({
+          status: 200,
+          result: res1.data
+        });
       }
     } else {
-      
-   
-      var res1= await mysqlConnection
-        .query_execute(query.trainerid_ar,[params])
-      console.log(res1,"dbresult")
-      if(res1.data.errno){
-          return reject("something went wrong")
-      }
-      else{
-        return resolve({ status: 200, result: res1.data});
+
+
+      var res1 = await mysqlConnection
+        .query_execute(query.trainerid_ar, [params])
+      console.log(res1, "dbresult")
+      if (res1.data.errno) {
+        return reject("something went wrong")
+      } else {
+        return resolve({
+          status: 200,
+          result: res1.data
+        });
 
       }
-      
-     
+
+
     }
   });
 }
@@ -258,9 +305,14 @@ async function Scheduler_date_select(params, params1, params2, params3) {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
-          return resolve({ status: 400, err: err });
+          return resolve({
+            status: 400,
+            err: err
+          });
         } else {
-          return resolve({ result: result });
+          return resolve({
+            result: result
+          });
         }
       }
     );
@@ -272,15 +324,21 @@ async function Scheduler_information(params) {
     console.log(params, "params======>");
 
     con.query(
-      "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id ='" + params + "'",
+
+      "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where  Scheduled_date >= now()+1 AND Trainer_id ='" + params + "'",
       (err, result) => {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
-          return resolve({ status: 400, err: err });
+          return resolve({
+            status: 400,
+            err: err
+          });
         } else {
-          console.log("result_DAO",result)
-          return resolve({ result: result });
+          console.log("result_DAO", result)
+          return resolve({
+            result: result
+          });
         }
       }
     );
@@ -296,9 +354,14 @@ function trainer_name_schedule(trainer_id, language) {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
-          return resolve({ status: 400, err: err });
+          return resolve({
+            status: 400,
+            err: err
+          });
         } else {
-          return resolve({ result: result });
+          return resolve({
+            result: result
+          });
         }
       });
     } else {
@@ -307,9 +370,14 @@ function trainer_name_schedule(trainer_id, language) {
         if (!result) {
           //  console.log(result,"achieved")
           console.log("something", err);
-          return resolve({ status: 400, err: err });
+          return resolve({
+            status: 400,
+            err: err
+          });
         } else {
-          return resolve({ result: result });
+          return resolve({
+            result: result
+          });
         }
       });
     }
@@ -323,10 +391,16 @@ async function get_employee_list(params) {
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
-          return resolve({ status: 400, err: err });
+          return resolve({
+            status: 400,
+            err: err
+          });
         } else {
           console.log(result);
-          return resolve({ status: 200, message: result });
+          return resolve({
+            status: 200,
+            message: result
+          });
         }
       });
   });
@@ -364,10 +438,16 @@ async function Trainer_attendence_list(
         if (err) {
           //  console.log(result,"achieved")
           console.log("something", err);
-          return resolve({ status: 400, err: err });
+          return resolve({
+            status: 400,
+            err: err
+          });
         } else {
           console.log(result);
-          return resolve({ status: 200, message: result });
+          return resolve({
+            status: 200,
+            message: result
+          });
         }
       });
   });

@@ -22,11 +22,11 @@ module.exports = {
   trainer_date_select: trainer_date_select,
   trainer_attendance_list: trainer_attendance_list
 };
-async function trainer_attendance(Trainer_Email,language) {
+async function trainer_attendance(Trainer_Email, language) {
   return new Promise(async (resolve, reject) => {
     //let Trainer_Email = Trainer_Email
     console.log("core_Trainer_Email", Trainer_Email);
-    console.log(language,"arjjjjjjjjjjjjjjjjjj")
+    console.log(language, "arjjjjjjjjjjjjjjjjjj")
 
     let select_query = await TrainerDao.Trainer_information(Trainer_Email);
     console.log("Core_selectQuery _Trainer_Table===>", select_query);
@@ -42,7 +42,7 @@ async function trainer_attendance(Trainer_Email,language) {
         Trainer_id
       );
       //console.log("Core_selectQuery_scheduler===>", select_query_scheduler);
-console.log("length===>>",select_query_scheduler.result.length)
+      console.log("length===>>", select_query_scheduler.result.length)
 
       if (select_query_scheduler.result != 0) {
         for (i = 0; i < select_query_scheduler.result.length; i++) {
@@ -80,16 +80,15 @@ console.log("length===>>",select_query_scheduler.result.length)
           console.log("select_query_coursename", course_name);
 
 
-        
+
           let course_Name = await CourseDao.course_name_schedule(
-           select_query_scheduler.result[i].course_id,
+            select_query_scheduler.result[i].course_id,
             language
           );
           console.log(course_Name, "testing1=============================");
 
           obj = {
-            name:
-              select_query_scheduled_date +
+            name: select_query_scheduled_date +
               "" +
               "(" +
               start_time +
