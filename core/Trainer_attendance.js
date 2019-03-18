@@ -7,195 +7,219 @@ const SchedulerDao = require("../daos/TrainerDao");
 const ClassroomDao = require("../daos/ClassroomDao");
 const Employee_profileDao = require("../daos/Employee_profileDao");
 const CourseDao = require("../daos/CourseDao")
-
-// const EmployeeDao = require("../DAO/Employee_profile");
 var moment = require("moment");
-// const message = require('../Util/messages')
-// const token_gen = require('../Util/token')
-// const sessionDao = require ('../DAO/SessionDao')
-// let date = require('date-and-time');
-// let now = new Date();
+
 
 module.exports = {
   trainer_attendance: trainer_attendance,
-
   trainer_date_select: trainer_date_select,
   trainer_attendance_list: trainer_attendance_list
 };
-async function trainer_attendance(Trainer_Email,language) {
-  return new Promise(async (resolve, reject) => {
-    //let Trainer_Email = Trainer_Email
-    console.log("core_Trainer_Email", Trainer_Email);
-    console.log(language,"arjjjjjjjjjjjjjjjjjj")
 
+//===========================Getting date and time and shown to the attendance page ===start===============
+async function trainer_attendance(trainer_data) {
+  return new Promise(async (resolve, reject) => {
+
+    var Trainer_Email = trainer_data.Trainer_emailid
+    console.log("core_Trainer_Email", Trainer_Email);
+
+    var language = trainer_data.language
+    console.log("core_language", language)
+
+
+    //=====================Trainer_email send to trainer table ===start=====================
     let select_query = await TrainerDao.Trainer_information(Trainer_Email);
     console.log("Core_selectQuery _Trainer_Table===>", select_query);
-    if (select_query.result != 0) {
-      let Trainer_id = select_query.result[0].id;
-      console.log("core_T_id===>", Trainer_id);
 
-      // var date_testing = new Date(Date.now()).toLocaleString();
-      // current_date = moment(date_testing).format("YYYY-MM-DD");
-      // console.log("current_date", current_date);
+    //==============Error handling trainer table ===start===============
+    if (select_query.message.length == 0) {
+      var error = {
+        status: 400,
+        message: "Record not found"
+      }
+      callback(error)
 
-      let select_query_scheduler = await SchedulerDao.Scheduler_information(
-        Trainer_id
-      );
-      //console.log("Core_selectQuery_scheduler===>", select_query_scheduler);
-console.log("length===>>",select_query_scheduler.result.length)
+    } else {
 
-      if (select_query_scheduler.result != 0) {
-        for (i = 0; i < select_query_scheduler.result.length; i++) {
-          var date = select_query_scheduler.result[i].scheduling_date + 1;
-          var newdate = moment(date).format("YYYY/MM/DD");
-          select_query_scheduler.result[i].scheduling_date = newdate;
+      if (select_query.message != 0) {
+        let Trainer_id = select_query.message.data[0].id;
+        console.log("core_Trainer_id===>", Trainer_id);
+        //=====================Trainer_email send to trainer table ===end======================
 
-          var date1 = select_query_scheduler.result[i].Scheduled_date + 1;
-          var schedulleddate = moment(date1).format("YYYY/MM/DD");
-          select_query_scheduler.result[i].scheduled_date = schedulleddate;
-          console.log("schedulleddate=======>", schedulleddate);
-        }
-        console.log(
-          "core testing select_query_scheduler",
-          select_query_scheduler
+        //====================Sending Trainer_id to scheduler table ===start===================
+        let select_query_scheduler = await SchedulerDao.Scheduler_information(
+          Trainer_id
         );
-        let obj = {};
-        let data = [];
+        console.log("core_select_query_scheduler_length===>>", select_query_scheduler.message.data.length)
 
-        for (i = 0; i < select_query_scheduler.result.length; i++) {
-          var select_query_scheduled_date =
-            select_query_scheduler.result[i].scheduled_date;
+        //====================Sending Trainer_id to scheduler table ===end====================================
+
+        //=============================converting  date Table format to our format ===start===============================
+        if (select_query_scheduler.message.data.length != 0) {
+          for (i = 0; i < select_query_scheduler.message.data.length; i++) {
+            console.log("Enter in to the for loop")
+            var date = select_query_scheduler.message.data[i].scheduling_date + 1;
+            var newdate = moment(date).format("YYYY/MM/DD");
+            select_query_scheduler.message.data[i].scheduling_date = newdate;
+
+            var date1 = select_query_scheduler.message.data[i].Scheduled_date + 1;
+            var schedulleddate = moment(date1).format("YYYY/MM/DD");
+            select_query_scheduler.message.data[i].scheduled_date = schedulleddate;
+            console.log("schedulleddate=======>", schedulleddate);
+          }
           console.log(
-            "select_query_scheduled_date",
-            select_query_scheduled_date
+            "core  select_query_scheduler",
+            select_query_scheduler
           );
+          //=============================converting  date Table format to our format ===End===============================
 
-          var start_time = select_query_scheduler.result[i].start_time;
-          console.log("select_query_scheduled_date", start_time);
+          //==================Getting scheduled_date, start_time,end_time,course_id from Scheduler table 
+          //, course_id send to the course table  and getting course name from the table and push in to the one array ==start======================== 
+          let obj = {};
+          let data = [];
+          for (i = 0; i < select_query_scheduler.message.data.length; i++) {
+            var select_query_scheduled_date =
+              select_query_scheduler.message.data[i].scheduled_date;
+            console.log(
+              "select_query_scheduled_date",
+              select_query_scheduled_date
+            );
 
-          var end_time = select_query_scheduler.result[i].end_time;
-          console.log("select_query_scheduled_date", end_time);
+            var start_time = select_query_scheduler.message.data[i].start_time;
+            console.log("Core_for_loop_select_query_start_time", start_time);
 
-          var course_name = select_query_scheduler.result[i].course_id;
-          console.log("select_query_coursename", course_name);
+            var end_time = select_query_scheduler.message.data[i].end_time;
+            console.log("Core_for_loop_select_query_end_time", end_time);
+
+            var course_name = select_query_scheduler.message.data[i].course_id;
+            console.log("Core_for_loop_select_query_coursename", course_name);
+
+            let course_Name = await CourseDao.course_name_schedule(
+              select_query_scheduler.message.data[i].course_id,
+              language
+            );
+            console.log("core_couse_name", course_Name);
+
+            obj = {
+              name:
+                select_query_scheduled_date +
+                "" +
+                "(" +
+                start_time +
+                "-" +
+                end_time +
+                ")",
+              id: Trainer_id,
+              course_name: course_Name.result[0].name_en
+            };
+
+            data.push(obj);
+          }
+
+          console.log("Core_data", data);
+          //==================Getting scheduled_date, start_time,end_time,course_id from Scheduler table 
+          //, course_id send to the course table  and getting course name from the table and push in to the one array ==end======================== 
 
 
-        
-          let course_Name = await CourseDao.course_name_schedule(
-           select_query_scheduler.result[i].course_id,
-            language
-          );
-          console.log(course_Name, "testing1=============================");
-
-          obj = {
-            name:
-              select_query_scheduled_date +
-              "" +
-              "(" +
-              start_time +
-              "-" +
-              end_time +
-              ")",
-            id: Trainer_id,
-            course_name: course_Name.result[0].name_en
-          };
-
-          data.push(obj);
+          return resolve({
+            statuscode: "E08",
+            status: 200,
+            message: data
+          });
+        } else {
+          return resolve({
+            status: 400,
+            message: "Record not found"
+          });
         }
-
-        console.log("data", data);
-
-        // for (i = 0; i < select_query_scheduler.result.length; i++) {
-        //   var scheduled_date_val = select_query_scheduler.result[i].schdeuled_date
-        //   data
-        // }
-        return resolve({
-          statuscode: "E08",
-          status: 200,
-          //Token: token,
-          message: data
-        });
       } else {
         return resolve({
           status: 400,
-          //Token: token,
           message: "Record not found"
         });
       }
-    } else {
-      return resolve({
-        status: 400,
-        //Token: token,
-        message: "Record not found"
-      });
     }
+    //==============Error handling trainer table ===END===============
+
+
   });
 }
+//===========================Getting date and time and shown to the attendance page ===end===============
 
+//==========================Trainer select the date ===start====================================
 async function trainer_date_select(
-  Trainer_id,
-  selected_date,
-  start_time,
-  end_time
+  Trainer_selecting_date,
+
 ) {
   return new Promise(async (resolve, reject) => {
-    //let Trainer_Email = Trainer_Email
-    //console.log("core_Trainer_Email", Trainer_Email);
+    const Trainer_id = Trainer_selecting_date.Trainer_id;
+    console.log("core_TDS_Trainer_id", Trainer_id);
 
+    const selected_date = Trainer_selecting_date.select_date;
+    console.log("core_TDS_Company_selected_date", selected_date);
+
+    const start_time = Trainer_selecting_date.start_time;
+    console.log("core_TDS_start_time", start_time);
+
+    const end_time = Trainer_selecting_date.end_time;
+    console.log("Core_TDS_end_time", end_time);
+
+    //===========================Sending the selected date and time and send to the schedule table ==start===============
     let select_query = await TrainerDao.Scheduler_date_select(
       Trainer_id,
       selected_date,
       start_time,
       end_time
     );
-    console.log("schdule_table_date_select_query===>", select_query);
+    console.log("core_TDS_select_query===>", select_query);
 
     //let select_query = await TrainerDao.Scheduler_date_select(Trainer_id, selected_date, start_time, end_time);
 
-    var classroom_id = await select_query.result[0].classroom_id;
-    console.log("classroom_id_core", classroom_id);
+    var classroom_id = await select_query.message.data[0].classroom_id;
+    console.log("core_TDS_classroom_id", classroom_id);
 
+
+    //======sending classroom id to classroom table and get in to the entire list===start=============
     var select_query_classroom_id = await ClassroomDao.classroom_id(
       classroom_id
     );
     if (select_query_classroom_id.result.length != 0) {
       var class_id = select_query_classroom_id.result.data[0].classroom_id;
-      console.log("Core_selectQuery classroom_id===>", class_id);
+      console.log("core_TDS_classroom_id===>", class_id);
 
-      console.log("schedule_table_length", select_query.result);
+      console.log("core_TDS_select_query_result", select_query.message.data);
 
       var data = [];
-      for (var i = 0; i < select_query.result.length; i++) {
+      for (var i = 0; i < select_query.message.data.length; i++) {
         console.log("i", i);
-        var national_id = await select_query.result[i].National_Id;
-        // console.log("national_id_core", national_id)
-
-        // var select_query_national_id = await Employee_profileDao.national_id(national_id);
-        // console.log("Core_selectQuery _emplyeeselect_Table===>", select_query_national_id.result.data[0]);
-
+        var national_id = await select_query.message.data[i].National_Id;
+        console.log("core_emirates_id", national_id)
         data.push(national_id);
       }
+      //======sending classroom id to classroom table and get in to the entire list===end=============
+
+
+      //=====getting national id from classroom table and send to the emplyee_profile table ===start=============
       let Emirates_ID = data;
+      console.log("core_emirates_id", Emirates_ID)
       var final_result = await Employee_profileDao.national_id(
         Emirates_ID,
         class_id
       );
       if (final_result.result.length != 0) {
-        console.log(final_result, "Final result");
+        console.log("core_TDS_Final result", final_result);
+        //=====getting national id from classroom table and send to the emplyee_profile table ===end=============
 
-        //console.log("select_query_classroom_id============>>", select_query_classroom_id)
 
         return resolve({
           statuscode: "E08",
           status: 200,
-          //Token: token,
           message: final_result
         });
       } else {
         return resolve({
           statuscode: "E08",
           status: 400,
-          //Token: token,
           message: "Record not found"
         });
       }
@@ -209,27 +233,47 @@ async function trainer_date_select(
     }
   });
 }
+//==========================Trainer select the date ===END====================================
+
+//=====================Trainer select the employee  ===start===============================
 async function trainer_attendance_list(
-  getdata,
-  attendance_status,
-  trainer_id,
-  Attended_date,
-  start_time,
-  end_time,
-  classroom,
-  course_name
+  Employee_attendance,
+
 ) {
   return new Promise(async (resolve, reject) => {
-    // var select_query = [employee_id, attendance_status, National_id, Name_en, trainer_id, Attended_date, start_time, end_time, classroom, course_name]
 
-    //let Trainer_Email = Trainer_Email
-    //console.log("core_Trainer_Email", Trainer_Email);
+    console.log("Trainer_attendance_list", Employee_attendance);
 
-    // let select_query = {employee_id, attendance_status, National_id, Name_en, trainer_id, Attended_date, start_time, end_time, classroom, course_name};
-    // console.log("select_queryyyy===>", select_query);
+    const getdata = Employee_attendance.getdata;
+    console.log("Core_TDL_getdata", getdata);
 
-    //let select_query = await TrainerDao.Scheduler_date_select(Trainer_id, selected_date, start_time, end_time);
+    const attendance_status = "Present";
+    console.log("Core_TDL_attendance_status", attendance_status);
 
+    const trainer_id = Employee_attendance.Trainer_id;
+    console.log("Core_TDL_trainer_id", trainer_id);
+
+    const Attended_date_val = Employee_attendance.attended_date;
+
+    var Attended_date = moment(Attended_date_val).format("YYYY/MM/DD");
+
+    console.log("Core_TDL_Attended_date", Attended_date);
+
+    const start_time = Employee_attendance.start_time;
+    console.log("Core_TDL_start_time", start_time);
+
+    const end_time = Employee_attendance.end_time;
+    console.log("Core_TDL_end_time", end_time);
+
+    const classroom = Employee_attendance.classroom_id;
+    console.log("Core_TDL_classroom", classroom);
+
+    const course_name = Employee_attendance.course_name;
+    console.log("Core_TDL_course_name", course_name);
+
+
+    //====================getdata values comes for array ,here I have split 
+    //and get the employee_id,name_en,national_id=======start===============
     for (i = 0; i < getdata.length; i++) {
       var employee_id = getdata[i].data_value.Employee_ID;
       console.log("employee_id", employee_id);
@@ -241,6 +285,9 @@ async function trainer_attendance_list(
       console.log("National_ID", National_id);
 
       console.log("getdata===>", getdata);
+
+      //==========Employee person values send to the attendance table 
+      //and store the wheather the person is present ====start============
       var select_query = await TrainerDao.Trainer_attendence_list(
         employee_id,
         attendance_status,
@@ -254,6 +301,13 @@ async function trainer_attendance_list(
         course_name
       );
       console.log("select_query==================>>>>", select_query);
+
+      //==========Employee person values send to the attendance table 
+      //and store the wheather the person is present ====end============
+
+
+
+
       if (select_query.message.data.affectedRows == 1) {
         var select_query = select_query;
       } else {
@@ -262,6 +316,10 @@ async function trainer_attendance_list(
           message: "Something went wrong while storing records"
         };
       }
+
+      //====================getdata values comes for array ,here I have split
+      //and get the employee_id,name_en,national_id=======end===============
+
     }
     return resolve({
       statuscode: "E08",
@@ -272,3 +330,4 @@ async function trainer_attendance_list(
     });
   });
 }
+//=====================Trainer select the employee  ===end===============================
