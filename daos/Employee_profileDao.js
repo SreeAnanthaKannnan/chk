@@ -12,7 +12,7 @@ function Employee_insert(params) {
         if (res1.data.errno) {
             return reject("something went wrong")
         } else {
-            console.log(result);
+            // console.log(result);
             return resolve({
                 status: 200,
                 message: res1

@@ -4,6 +4,8 @@ const Employee_profileDao = require('../daos/Employee_profileDao')
 const CourseDao = require('../daos/CourseDao')
 const TrainerDao = require('../daos/TrainerDao')
 const date = require('date-and-time');
+const SessionDao = require('../daos/SessionDao')
+const session_time = require('../utils/session_time_difference')
 const moment = require('moment')
 const now = new Date();
 

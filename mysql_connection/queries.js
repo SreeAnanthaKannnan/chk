@@ -51,7 +51,7 @@ module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
 /*================fetching the availabledate for the number of available seats greater than the selected seats and particular trainer
 course id========*/
 module.exports.availabledate =
-"SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
+"SELECT distinct available_date FROM Classroom where number_of_available_seats >0 and trainer_id=? and course_id =?";
 /*==========Add the two times and displayed as started_time========*/
 module.exports.addtime=
 "SELECT ADDTIME(?,?)as started_time";
@@ -158,8 +158,8 @@ module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
 module.exports.findemployeeAttendance = "SELECT * FROM Attendance where trainer_id =? AND attendance_status='Present'"
 /*=========selecting the distinct available date for the number of available seats greater then the selected seats and particular trainerid and course id=======*/
-module.exports.availabledate =
-"SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
+//module.exports.availabledate =
+//"SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
 module.exports.getinstallers = "SELECT email_id FROM citizens where user_type=?";
 module.exports.imagepdf = "UPDATE Schedules SET filepath =? WHERE id =?";
 module.exports.pdfviewer = "SELECT path,path1,path2,path3 FROM Buildings where email_id= ?";
@@ -170,4 +170,4 @@ module.exports.installationdetails = "UPDATE Schedules SET FACP = ?,CSI = ?,BRAN
 
 
   
-  "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
+  

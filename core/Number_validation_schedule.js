@@ -69,7 +69,7 @@ exports.number_validation_schedule = (
 
                         return resolve({
                             status: 400,
-                            message: ""
+                            message: "Something went wrong"
                         });
                     });
 

@@ -24,6 +24,7 @@ exports.Employee_profile = (
     let Company_Trade_Lincense_No = EmployeeProfile.company_trade_lincense_no;
     let token = EmployeeProfile.token;
     let language = EmployeeProfile.language;
+    console.log("language===>",language)
     let assigend_for_training ="NO"
    /*============token validation===================*/
     console.log(token, "test");
@@ -80,7 +81,7 @@ exports.Employee_profile = (
           .then(async function (result,err) {
             console.log("result======>", result.message.data.length);
             if (result.message.data.length != 0) {
-              var messagevalue = await  message.getmessage(language.result,"E02")
+              var messagevalue = await  message.getmessage(language,"E02")
 
               return resolve({
                 status: 200,
@@ -91,8 +92,8 @@ exports.Employee_profile = (
                await Employee_profileDao.Employee_insert(query_value)
                .then(async function(result) {
                 console.log("already exits insert=====>",result)
-                        if (result.result.data.affectedRows==1) {
-              var messagevalue = await  message.getmessage(language.result,"S02")
+                        if (result.message.data.affectedRows==1) {
+              var messagevalue = await  message.getmessage(language,"S02")
 
 
               return resolve({
@@ -112,9 +113,9 @@ exports.Employee_profile = (
      /*==============Error Capturing================*/     
         
           .catch(async function (err) {
-            var messagevalue = await  message.getmessage(language.result,"E01")
+            var messagevalue = await  message.getmessage(language,"E01")
 
-            return resolve({ status: 400, message: messagevalue });
+            return resolve({ status: 400, message:messagevalue });
           });
         
         

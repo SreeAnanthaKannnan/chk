@@ -1,10 +1,11 @@
 const con = require("../mysql_connection/dbConfig");
-const mysqlConnection = require("../mysql_connection/config_test");
 const moment = require("moment");
 var TimeFormat = require("hh-mm-ss");
 var start_time = "";
 var groupArray = require("group-array");
 const query = require("../mysql_connection/queries");
+const mysqlConnection = require("../config/Connection");
+
 /*=================Insering the params into classroom table=================*/
 function Classroom_insert(params, duration, insert_count) {
     return new Promise(async function(resolve, reject) {
@@ -61,7 +62,7 @@ function Availability_Date(no_of_seats_selected, trainer_id, course_id) {
     return new Promise(async function(resolve, reject) {
         /*================fetching distinct available dates from classroom with respect to particular trainer and the course=======*/
         var res1 = await mysqlConnection.query_execute(query.availabledate,
-            ["0", trainer_id, course_id]
+            [trainer_id, course_id]
         );
         console.log(res1, "res1====>");
         if (res1.data.errno) {
