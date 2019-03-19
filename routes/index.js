@@ -248,7 +248,7 @@ router.post("/AddsingleBuilding", cors(), async function (req, res) {
     var buildingobject = req.body;
 
     building
-      .buildings(buildingobject, email_id,token)
+      .buildings(buildingobject,token,email_id)
       .then(result => {
         res.send({
           result: result,
@@ -265,6 +265,7 @@ router.post("/AddsingleBuilding", cors(), async function (req, res) {
 //===================================getbuildings======================================================//
 router.post("/getBuildings", cors(), async function (req, res) {
   var id = await check.checkToken(req);
+  const token = req.headers['authorization'];
   if (id.status == 400 || id.status == 403) {
     res.send({
       result: id
@@ -273,7 +274,7 @@ router.post("/getBuildings", cors(), async function (req, res) {
     var buildingobject = id.result;
     console.log(buildingobject, "data");
     getBuildings
-      .getbuildings(buildingobject)
+      .getbuildings(buildingobject,token)
       .then(result => {
         res.send({
           result: result,
@@ -307,6 +308,7 @@ router.post("/installationdetails", cors(), function (req, res) {
 //==============================Residentsdetails===========================================//
 router.post("/profile", cors(), async function (req, res) {
   var id = await check.checkToken(req);
+  const token = req.headers['authorization'];
   if (id.status == 400 || id.status == 403) {
     res.send({
       result: id
@@ -316,7 +318,7 @@ router.post("/profile", cors(), async function (req, res) {
     //var buildingobject=req.body.email;
     console.log(buildingobject, "data");
     profile
-      .getbuildings(buildingobject)
+      .getbuildings(buildingobject,token)
       .then(result => {
         res.send({
           result: result,
@@ -414,6 +416,7 @@ router.post("/image_upload", uploads.single("file"), function (req, res) {
 //==============================Booking-History============================================//
 router.post("/serviceHistory", cors(), async function (req, res) {
   var id = await check.checkToken(req);
+  const token = req.headers['authorization'];
   console.log(id);
   if (id.status == 400 && id.status == 403) {
     res.send({
@@ -422,7 +425,7 @@ router.post("/serviceHistory", cors(), async function (req, res) {
   } else {
     var email_id = id.result;
     book
-      .bookservice(email_id)
+      .bookservice(email_id,token)
       .then(result => {
         res.send({
           result: result

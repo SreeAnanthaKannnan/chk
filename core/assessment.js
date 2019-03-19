@@ -6,7 +6,7 @@ var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 var bcSdk = require('../fabric_SDK/invoke')
     return new Promise( async (resolve, reject)=>{
-        exports.assessment =(id,status) =>{
+        exports.assessment =(status,id) =>{
             return new Promise(async(resolve, reject) => {
             let data =[status,id]
             logger.fatal(id,"query")
@@ -26,5 +26,6 @@ return  resolve({
                 
             })
         })
-                   };
+                  
+    };
                 })
