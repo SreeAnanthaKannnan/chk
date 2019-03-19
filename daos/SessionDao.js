@@ -33,8 +33,11 @@ async function Session_select(params){
      logger.fatal("achie",params)
      var res1= await mysqlConnection
         .query_execute(query.session,[params])
-        if(res1.data.errno){
-            return reject("something went wrong")
+        if (res1.data.errno) {
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         }
       
         else{
@@ -51,8 +54,11 @@ async function Session_update(params){
     // logger.fatal("achie")
     var res1= await mysqlConnection
         .query_execute(query.sessiondelete,[params])
-        if(res1.data.errno){
-            return reject("something went wrong")
+        if (res1.data.errno) {
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         }
       
         else{

@@ -10,7 +10,10 @@ function Employee_insert(params) {
             .insert_query(query.insertemployee, params)
         /*==========db error capturing================*/
         if (res1.data.errno) {
-            return reject("something went wrong")
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         } else {
             console.log(result);
             return resolve({
@@ -50,11 +53,10 @@ async function Employee_select(params) {
             .query_execute(query.findemployee, [params])
         /*===================db error capturing====================*/
         if (res1.data.errno) {
-            return resolve({
-                status: 400,
-                err: "Internal server Error"
-            });
-
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         } else {
             return resolve({
                 status: 200,
@@ -78,11 +80,10 @@ function Employee_update(Emirates_ID, Company_Trade_Lincense_No, language) {
                 );
                 /*==============db error capture====================*/
                 if (res1.data.errno) {
-                    return resolve({
-                        status: 400,
-                        err: "Internal server Error"
-                    });
-
+                    return reject({
+                        status:400,
+                        message:"something went wrong"
+                    })
                 }
                 console.log("res1===>", res1.data);
             }
@@ -90,6 +91,28 @@ function Employee_update(Emirates_ID, Company_Trade_Lincense_No, language) {
                 result: res1.data
             });
         }
+        if (language == "ar") {
+            console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
+            console.log(Emirates_ID, "Emirates_ID");
+            for (i = 0; i < Emirates_ID.length; i++) {
+                /*=================updating the employee table for specific emirates id for assigned for training  as booked =========*/
+                var res1 = await mysqlConnection.query_execute(
+                    query.employeeupdate, ["Booked", Company_Trade_Lincense_No, Emirates_ID[i]]
+                );
+                /*==============db error capture====================*/
+                if (res1.data.errno) {
+                    return reject({
+                        status:400,
+                        message:"something went wrong"
+                    })
+                }
+                console.log("res1===>", res1.data);
+            }
+            return resolve({
+                result: res1.data
+            });
+        }
+
     });
 }
 
@@ -101,9 +124,18 @@ function Untrained_Employees_schedule(Company_Trade_Lincense_No, language) {
             var res2 = await mysqlConnection.query_execute(
                 query.untrainedschedule, ["pass", "NO", Company_Trade_Lincense_No, "Others"]
             );
+            if (res2.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
+            }
+            else{
+
             return resolve({
                 result: res2.data
             });
+        }
         }
         if (language == "ar") {
             console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
@@ -111,10 +143,18 @@ function Untrained_Employees_schedule(Company_Trade_Lincense_No, language) {
             var res2 = await mysqlConnection.query_execute(
                 query.untrainedschedule, ["pass", "NO", Company_Trade_Lincense_No, "Others"]
             );
+            if (res2.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
+            }
+            else{
             console.log("res1===>", res2);
             return resolve({
                 result: res2.data
             });
+        }
         }
     });
 }
@@ -167,7 +207,7 @@ function Employee_name_schedule(value, language) {
                     /*================pusing the employee names in english in the array myresult=======*/
                     myresult.push(res1.data[0].Name_en);
 
-                }
+               // }
 
                 console.log(myresult, "<=========myresult");
             }
@@ -175,6 +215,7 @@ function Employee_name_schedule(value, language) {
             return resolve({
                 result: myresult
             });
+        }
 
         }
         if (language == "ar") {
@@ -193,22 +234,23 @@ function Employee_name_schedule(value, language) {
                     )
                 /*================db error capture==================*/
                 if (res1.data.errno) {
-                    return resolve({
-                        status: 400,
-                        err: "Internal server Error"
-                    });
+                    return reject({
+                        status:400,
+                        message:"something went wrong"
+                    })
                 } else {
                     /*=================pushing the arabic names of the particular emirates id into the myresult array======*/
 
                     myresult.push(res1.data[0].Name_ar);
 
-                }
+                //}
 
                 console.log(myresult, "<=========myresult");
             }
             return resolve({
                 result: myresult
             });
+        }
         }
     });
 }
@@ -220,21 +262,37 @@ function trainer_id(trainer_name, language) {
                 "select * from Employee_Profile where  Company_Trade_Lincense_No=? and Category=? and  National_Id not in(select National_Id from Results where result_en=?) ",
                 [Company_Trade_Lincense_No, "Others", "pass"]
             );
-            console.log("kavitha", res2.data);
+            if (res1.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
+            }
+            else{
             return resolve({
                 result: res2.data
             });
-        } else {
+        }
+        } 
+        if(language =="ar") {
             console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
 
             var res1 = await mysqlConnection.query_execute(
                 "select * from Employee_Profile where Company_Trade_Lincense_No=? and Employee_ID in (select National_Id from Results where result_ar=?) ",
                 [Company_Trade_Lincense_No, status]
             );
+            if (res1.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
+            }
+            else{
             console.log("res1===>", res1);
             return resolve({
                 result: res1.data
             });
+        }
         }
     });
 }
@@ -294,11 +352,10 @@ function number_validation_schedule(Company_Trade_Lincense_No) {
         );
         /*=================db error capture==================*/
         if (res2.data.errno) {
-            return resolve({
-                status: 400,
-                err: "Internal server Error"
-            });
-
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         } else {
             return resolve({
                 result: res2.data

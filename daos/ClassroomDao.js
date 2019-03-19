@@ -1,5 +1,4 @@
-const con = require("../mysql_connection/dbConfig");
-const mysqlConnection = require("../mysql_connection/config_test");
+const mysqlConnection = require("../config/Connection");
 const moment = require("moment");
 var TimeFormat = require("hh-mm-ss");
 var start_time = "";
@@ -42,6 +41,12 @@ function Classroom_insert(params, duration, insert_count) {
                     params[0][9]
                 ]
             );
+            if (res1.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
+            } else{
 
             console.log("start_time", res1);
             /*============next class starting time is the previous class ended time======*/
@@ -52,7 +57,9 @@ function Classroom_insert(params, duration, insert_count) {
         return resolve({
             result: res1.data[0]
         });
+    }
     });
+
 }
 
 
@@ -65,9 +72,9 @@ function Availability_Date(no_of_seats_selected, trainer_id, course_id) {
         );
         console.log(res1, "res1====>");
         if (res1.data.errno) {
-            return resolve({
+            return reject({
                 status: 400,
-                err: "Internal server Error"
+                message:"something went wrong"
             });
         } else {
             let result = res1.data;
@@ -110,6 +117,13 @@ function time_slots_lists(available_date, trainer_id) {
         var res = await mysqlConnection.query_execute(
             query.classroomidselect, [available_date, trainer_id]
         );
+        if (res.data.errno) {
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
+        }
+        else{
         console.log(res, "res");
         /*==========assigning the objects in the array of res.data in a variable categories====*/
         const categories = [...new Set(res.data.map(bill => bill.classroom_id))];
@@ -149,6 +163,7 @@ function time_slots_lists(available_date, trainer_id) {
         return resolve({
             result: value
         });
+    }
 
 
     });
@@ -163,16 +178,32 @@ function Classroom_num(classroom_id, language) {
             var res1 = await mysqlConnection.query_execute(
                 query.alldatafromclassroom, [classroom_id]
             );
+            if (res1.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
+            }
+            else{
 
             console.log("res1===>", res1.data);
             return resolve({
                 result: res1.data
             });
-        } else {
+        }
+        } 
+        if(language =="ar") {
             /*========selecting the courseid from the course table for the given course_name and assign to res1 variable=====*/
             var res1 = await mysqlConnection.query_execute(
                 query.courseidselect, [course_name]
             );
+            if (res1.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
+            }
+            else{
 
             console.log("res1===>", res1.data);
             /*======returning the course_id array which is the res1.data array to core=====*/
@@ -180,6 +211,7 @@ function Classroom_num(classroom_id, language) {
                 result: res1.data
             });
         }
+    }
     });
 }
 
@@ -193,8 +225,11 @@ function insert_count(start_time, end_time, duration) {
             [end_time, start_time]
         );
         /*=====throw the db error if error exists=========*/
-        if (res1.data.errno) {
-            return reject("something went wrong")
+        if (res.data.errno) {
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         } else {
             /*======assing the *=====*/
 
@@ -236,6 +271,13 @@ function bulk_booking(
         var res_value = await mysqlConnection.query_execute(
             query.classroomdataforbulkbooking, [course_id]
         );
+        if (res_value.data.errno) {
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
+        }
+        else{
         console.log("query length", res_value.data.length);
         var classroom_id;
         /*======taking the query result array into a variable classrooms=====*/
@@ -321,6 +363,7 @@ function bulk_booking(
         return resolve({
             result: res2.data
         });
+    }
     });
 }
 //===============================================================================================/ /
