@@ -85,18 +85,7 @@ const Cryptr = require("cryptr"),
 
 let ipAddress = ip.address();
 console.log("ips====>", ipAddress);
-// const storage = multer.diskStorage({
-//     // notice you are calling the multer.diskStorage() method here, not multer()
-//     // destination: function(req, file, cb) {
-//     //     cb(null, '/home/kavitha/Videos/salama_docs/Salama_backend_v0.1/uploads/')
-//     // },
-//     destination: function(req, file, cb) {
-//         cb(null, "/var/www/html/");
-//     },
-//     filename: function(req, file, cb) {
-//         cb(null, file.originalname);
-//     }
-// });
+
 
 var multipartMiddleware = multipart();
 
@@ -1997,26 +1986,37 @@ router.post("/getAttendance", cors(), (request, response) => {
 });
 
 //=================================Trainer Attendance=============================================//
+router.post("/Trainer_employee_list", cors(), (req, res) => {
+  const trainer_data = req.body;
+  console.log("Trainer_data_Index===>", trainer_data)
 
-// =================================================================================
-router.post("/Selecting_date_trainer", cors(), (req, res) => {
-  const trainer_employee = req.body;
-  console.log("Trainer_date_list_routes", trainer_employee);
-
-  const Trainer_id = req.body.Trainer_id;
-  console.log("Trainer_Trainer_id_routes", Trainer_id);
-
-  const selected_date = req.body.select_date;
-  console.log("Trainer_Company_selected_date_routes", selected_date);
-
-  const start_time = req.body.start_time;
-  console.log("Trainer_Company_Email_routes", start_time);
-
-  const end_time = req.body.end_time;
-  console.log("Trainer_Company_Email_routes", end_time);
 
   trainer_attendance
-    .trainer_date_select(Trainer_id, selected_date, start_time, end_time)
+    .trainer_attendance(trainer_data)
+    .then(result => {
+      console.log(result);
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
+    );
+})
+// =================================================================================
+router.post("/Selecting_date_trainer", cors(), (req, res) => {
+  const Trainer_selecting_date = req.body;
+  console.log("Trainer_selecting_date_INDEX", Trainer_selecting_date);
+
+  trainer_attendance
+    .trainer_date_select(Trainer_selecting_date)
     .then(result => {
       console.log(result);
 
@@ -2040,46 +2040,12 @@ router.post("/Selecting_date_trainer", cors(), (req, res) => {
 
 //=================================Trainer Attendance=============================================//
 router.post("/attendence", cors(), (req, res) => {
-  const trainer_employee = req.body;
-  console.log("Trainer_attendance_list_routes", trainer_employee);
-
-  const getdata = req.body.getdata;
-  console.log("Trainer_Company_employee_id_routes", getdata);
-
-  const attendance_status = "Present";
-  console.log("Trainer_Company_attendance_status_routes", attendance_status);
-
-  const trainer_id = req.body.Trainer_id;
-  console.log("Trainer_Company_trainer_id_routes", trainer_id);
-
-  const Attended_date_val = req.body.attended_date;
-
-  var Attended_date = moment(Attended_date_val).format("YYYY/MM/DD");
-
-  console.log("Trainer_Company_Attended_date_routes", Attended_date);
-
-  const start_time = req.body.start_time;
-  console.log("Trainer_Company_start_time_routes", start_time);
-
-  const end_time = req.body.end_time;
-  console.log("Trainer_Company_end_time_routes", end_time);
-
-  const classroom = req.body.classroom_id;
-  console.log("Trainer_Company_classroom_routes", classroom);
-
-  const course_name = req.body.course_name;
-  console.log("Trainer_Company_course_name_routes", course_name);
+  const Employee_attendance = req.body;
+  console.log("Employee_attendance_ROUTES", Employee_attendance)
 
   trainer_attendance
     .trainer_attendance_list(
-      getdata,
-      attendance_status,
-      trainer_id,
-      Attended_date,
-      start_time,
-      end_time,
-      classroom,
-      course_name
+      Employee_attendance
     )
     .then(result => {
       console.log(result);

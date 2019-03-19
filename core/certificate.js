@@ -1,3 +1,10 @@
+/**
+ * @author: Manoj V
+ * @version: 1.0.0
+ * @date: March 05, 2019
+ * @description: This would be the core file where all the API definitions and xertificates for the employee will be generated.
+ */
+
 const Util = require("../utils/language_detect");
 const certificate = require("../utils/certificategenerate");
 const Result = require("../daos/ResultsDao");

@@ -1,3 +1,9 @@
+/**
+ * @author: Manoj V
+ * @version: 1.0.0
+ * @date: March 05, 2019
+ * @description: This would be the core file where all the API definitions and implementations are described.
+ */
 var express = require("express");
 var multer = require("multer");
 var fs = require("fs");
@@ -12,12 +18,15 @@ const Employee = require("../daos/Employee_profileDao");
 // var app = express();
 var count = 0;
 var length = 0;
+
 function uploadbulkemployee(filepath, email_id) {
   // console.log("body " + req.body);
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.log(filepath);
 
-    await fs.readFile(filepath, { encoding: "utf-8" }, async function(
+    await fs.readFile(filepath, {
+      encoding: "utf-8"
+    }, async function (
       err,
       csvData
     ) {
@@ -29,7 +38,9 @@ function uploadbulkemployee(filepath, email_id) {
         .slice(1)
         .join("\n");
       fs.writeFile(filepath, linesExceptFirst);
-      await csvParser(linesExceptFirst, { delimiter: "," }, async function(
+      await csvParser(linesExceptFirst, {
+        delimiter: ","
+      }, async function (
         err,
         data
       ) {
@@ -58,46 +69,25 @@ function uploadbulkemployee(filepath, email_id) {
                 count++;
                 console.log("count numb======>", count);
               }
-              // count = 0;
 
-              // if (insert_employee.message.data.affectedRows != 0) {
-              //   var read_record = await Employee.Employee_select("National_Id");
-              //   console.log("read_record", read_record);
-              //   if (read_record.message.data.length != 0) {
-              //     var delete_employee = await Employee.delete_Employee(
-              //       read_record.message.data[0].National_Id
-              //     );
-              //     console.log("deleterecord", delete_employee);
-              //   }
-
-              //   // } else {
-              //   //   return resolve({
-              //   //     // statuscode: "E08",
-              //   //     status: 404,
-              //   //     message: "User has already exists"
-              //   //   });
-              //   // }
-              // }
             } else if (select_record.message.data.length != 0) {
-              // length + 1;
+
               length++;
               console.log("length numb======>", length);
 
-              // length = 0;
             }
           }
           return resolve({
-            // statuscode: "E08",
+
             status: 200,
-            message:
-              count +
+            message: count +
               " employee records were captured and " +
               length +
               " employee records were found to be duplicate."
           });
         } else {
           return resolve({
-            // statuscode: "E08",
+
             status: 400,
             message: "Records not found in Employee List.csv File"
           });

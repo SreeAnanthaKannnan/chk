@@ -3,7 +3,7 @@ const Employee_profileDao = require("../daos/Employee_profileDao");
 const session_time = require("../utils/session_time_difference");
 var base64ToImage = require("base64-to-image");
 const ab2str = require("arraybuffer-to-string");
-
+const message = require("../utils/messages");
 const language_detect = require("../utils/language_detect");
 const translate = require("../utils/translate");
 const fs = require("fs");
@@ -17,7 +17,6 @@ exports.safety_officer_details = (request, token) =>
         /*==============token vaidation================*/
 
         let query = await SessionDao.Session_select(token);
-        console.log(query, "testinggggggggg");
         if (query.length == 0) {
             resolve({
                 status: 402,
@@ -46,17 +45,30 @@ exports.safety_officer_details = (request, token) =>
                     Category
                 ];
                 /*=======================Fetching safety officer details baed on category====================*/
-                let safety_officer_details = await Employee_profileDao.Safety_officer_details(
+                await Employee_profileDao.Safety_officer_details(
                     query_value
-                );
-                let result = safety_officer_details[0];
-                console.log(result, "result");
+                )
+                
+                .then(async function (result,err) {
+                    console.log("result======>", result);
+                    if (result.result.data.length != 0) {
+
+            
 
                 return resolve({
                     status: 200,
-                    message: safety_officer_details
+                    message: result.result.data
                 });
+              
             }
+        })
+            .catch(async function (err) {
+                var messagevalue = await  message.getmessage(language,"E01")
+    
+                return resolve({ status: 400, message: messagevalue });
+              });
+        }
+    
         }
     });
 /*********************************Code Ends******************************************/
