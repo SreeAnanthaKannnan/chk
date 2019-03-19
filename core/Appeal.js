@@ -29,7 +29,7 @@ exports.Appeal = (Appeal_Object, token, language) => new Promise(async (resolve,
                     message: "Invalid token"
                 });
             } else {
-                /*===================Translation from english to arabic vice versa================*/
+                //====================Translation from english to arabic vice versa================*/
                 if (language == "en") {
                     let temp = await translate.translate_ar(Description);
                     let temp1 = await translate.translate_ar(service)

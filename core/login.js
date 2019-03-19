@@ -38,10 +38,11 @@ function loginuser(loginobject) {
       logger.fatal(registered_user, "email_id from DataBase");
       var user = result.result.user_type;
       if (registered_user == email_id && registered_password == password) {
+        //generating the token
         let token = jwt.sign({ email_id },
           secret,
           {
-            expiresIn: '500000000000000000000000' // expires in 24 hours
+            expiresIn: '50000000000000' // expires in 24 hours
           }
         );
         let query_value = [

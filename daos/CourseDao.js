@@ -4,7 +4,7 @@ const query = require("../mysql_connection/queries");
 /*========insering data into course table==========*/
 function Course_insert(param) {
 
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         console.log("param", param)
 
         let res1 = await mysqlConnection
@@ -25,7 +25,7 @@ function Course_insert(param) {
 /*====================course select function================*/
 function Course_select(param) {
 
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
 
         var res1 = await mysqlConnection
             /*==============selecting the course name for the given course id=============*/
@@ -47,7 +47,7 @@ function Course_select(param) {
 /*===========displaying the course data for english version======*/
 function Course_display() {
 
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         /*======selecting the course names form the course table==========*/
         var res1 = await mysqlConnection
             .query_execute(query.coursenames, [])
@@ -86,7 +86,7 @@ function Course_display() {
 /*===================display the course names in arabic===========*/
 function Course_display_arabic() {
 
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         /*======selecting the course names form the course table and assign into res1 variable==========*/
 
         var res1 = await mysqlConnection
@@ -121,7 +121,7 @@ function Course_display_arabic() {
 //===========================================================================================//
 function Course_amount(course_id, language) {
 
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         /*============selecting training amount from course table for the given course id==========*/
         var res1 = await mysqlConnection.query_execute(query.trainingamount, [course_id])
         if (res1.data.errno) {
@@ -141,7 +141,7 @@ function Course_amount(course_id, language) {
 
 function Course_id_select(course_name, language) {
 
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         /*=========selecting course name in english for given course name========*/
         if (language == "en") {
             var res1 = await mysqlConnection.query_execute(query.courseidforenglish, [course_name])
@@ -177,7 +177,7 @@ function Course_id_select(course_name, language) {
 //=====================================================================================//
 function course_name_schedule(course_id, language) {
 
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         /*=====================selecting course name in arabic for the given course id=============*/
         if (language == "ar") {
             var res1 = await mysqlConnection.query_execute(query.arabiccoursename, [course_id])
@@ -190,16 +190,22 @@ function course_name_schedule(course_id, language) {
 
 
 
-        if (language == "en") {
-            /*=====================selecting course name in english for the given course id=============*/
-
-            var res1 = await mysqlConnection.query_execute(query.englishcoursename, [course_id])
-
-            console.log("res1===>", res1.data)
-            return resolve({
-                result: res1.data
-            })
+        else {
+            var res1 = await mysqlConnection.query_execute(query.getcourseen, course_id)
+            if (res1.data.errno) {
+                //console.log("something", err);
+                return reject({ status: 400, message: "something went wrong" });
+            } else {
+                //console.log({ result: result });
+                return resolve({ status: 200, result: res1.data });
+            }
+            // console.log("res1===>", res1.data)
+            // return resolve({ result: res1.data })
         }
+
+        //=================================Trainer_couse name from course_id==END==================================================//
+
+
 
 
 

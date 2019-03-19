@@ -4,6 +4,7 @@ const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 function assessment_insert(values){
         return new Promise((resolve, reject)=>{
+//=========================================Update status information into Schedules Tables==================================================//
       console.log("vlaues in dao",values);
         mysqlConnection
         .query_execute(query.updatestatus,values)
@@ -23,3 +24,4 @@ function assessment_insert(values){
 module.exports={
    assessment_insert: assessment_insert
 }
+//=========================================Code End==================================================//
