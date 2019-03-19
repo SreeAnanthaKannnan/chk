@@ -7,11 +7,11 @@ const logger = log4js.getLogger('Aman_project');
 function pdf_insert(path,email) {
 
     return new Promise( function (resolve,reject){
-        // console.log("hiiiii",params)
-        // console.log(params,"pdfewrere")
+       
         var owner_id=email
         console.log(owner_id,"email id in pdfDao file")
         console.log(path,"path")
+//========================================Using Buildings id get for corresponding pdf information===========================================//     
         var sql = "SELECT * FROM Buildings where email_id ='" + owner_id + "'";
     
         con.query(sql,function(err,result){
@@ -38,6 +38,7 @@ function pdf_insert(path,email) {
     }
    else if(result[0].path1==null) {
        console.log("line in 41")
+ //=========================================================Update pdf information for Assessment Building details using condition=================================================================//    
     var sql= "UPDATE Buildings SET path1 ='"+path+"' where email_id='"+owner_id+"'";
     con.query(sql, result[0].path1 ,function(err,result){
      if(err) { console.log("something",err)
@@ -50,6 +51,8 @@ function pdf_insert(path,email) {
      }); 
 
    }
+ //=========================================================Update pdf information for Assessment Building details using condition=================================================================//    
+
    else if(result[0].path2==null) {
     console.log("line in 55")
     var sql= "UPDATE Buildings SET path2 ='"+path+"' where email_id='"+owner_id+"'";
@@ -75,3 +78,4 @@ function pdf_insert(path,email) {
 module.exports={
     pdf_insert : pdf_insert
 }
+//=====================================================================Code End================================================================//

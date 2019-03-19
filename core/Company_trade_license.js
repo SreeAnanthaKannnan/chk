@@ -39,7 +39,7 @@ exports.company_trading_license = (data, token) => new Promise(async (resolve, r
             await CompanyDao.company_trading_license(Company_Email)
                 .then(async function(result) {
                     console.log("result===>", result);
-                    if (result.result.length != 0) {
+                    if (result.result.data.length != 0) {
                         return resolve({
                             status: 200,
                             message: result

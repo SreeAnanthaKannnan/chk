@@ -73,7 +73,7 @@ exports.available_date1 = (token, data, language) => new Promise(async (resolve,
                 .catch(async function(err) {
                     return resolve({
                         status: 400,
-                         message: "something went wrong"
+                         message: err
                         // message:err
                         
                     });
