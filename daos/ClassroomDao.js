@@ -354,16 +354,32 @@ function bulk_booking(
             var res2 = await mysqlConnection.insert_query(
                 query.scheduleinsertbulkbooking, query_values
             );
+            if (res2.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
+            }else{
             console.log("resvalue=========>res2", res2);
             /*=======updating the employees as booked those are scheduled=======*/
             var Employee_update = await mysqlConnection.query_execute(
                 query.updateemployeetablebulkbooking, ["Booked", Emirates_ID[i]]
             );
-        }
+            if (Employee_update.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
+            }
+            
+        else{
         return resolve({
             result: res2.data
         });
     }
+}
+}
+        }
     });
 }
 //===============================================================================================/ /

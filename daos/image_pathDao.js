@@ -10,7 +10,7 @@ async function image_path(filepath,id) {
    return new Promise( async function (resolve,reject){
     var params=[filepath,id]
      console.log(params,"in line 12")
-   
+//====================================================Insert pdf file path into Buildings Table====================================================//   
     mysqlConnection
     .query_execute(query.imagepdf,params)
     .then(function(result, err) {
@@ -25,7 +25,7 @@ async function image_path(filepath,id) {
     });
    })
 }
-
 module.exports={
    image_path : image_path
 }
+//====================================================Code End====================================================//   

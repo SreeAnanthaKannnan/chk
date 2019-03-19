@@ -4,22 +4,29 @@ const logger = log4js.getLogger('Aman_project');
 
 function Image_insert(Image) {
 
-    return new Promise( function (resolve,reject){
-        // logger.fatal("hiiiii",params)
-       // var image=image;
-        sql= "INSERT INTO Image (uploadFile,fileName) VALUES ? ";
-       con.query(sql, Image ,function(err,result){
-        if(err) { logger.fatal("something",err)
-            return reject({ "status": 400, "body": 'Cannot insert the data' })}
-            else{
+    return new Promise(function(resolve, reject) {
+//======================================================Insert Image path into Schedules Table================================================//
+        sql = "INSERT INTO Image (uploadFile,fileName) VALUES ? ";
+        con.query(sql, Image, function(err, result) {
+            if (err) {
+                logger.fatal("something", err)
+                return reject({
+                    "status": 400,
+                    "body": 'Cannot insert the data'
+                })
+            } else {
                 //  logger.fatal(result,"achieved")
-            return resolve({ result});
+                return resolve({
+                    result
+                });
             }
-            
-        }); 
+
+        });
     })
 }
 
-module.exports={
-    Image_insert : Image_insert
+module.exports = {
+    Image_insert: Image_insert
 }
+
+//======================================================Code End================================================//
