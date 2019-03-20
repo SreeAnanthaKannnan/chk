@@ -90,7 +90,7 @@ exports.Appeal = (Appeal_Object, token, language) => new Promise(async (resolve,
 
                     })
                     .catch(async function(err) {
-                        var messagevalue = await message.getmessage(language.result, "E01")
+                        var messagevalue = await message.getmessage(language, "E01")
 
 
                         return resolve({

@@ -33,7 +33,10 @@ function company_trading_license(param) {
             .query_execute(query.companyprofileselect, [param])
         console.log(res1, "dbresult")
         if (res1.data.errno) {
-            return reject("something went wrong")
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         } else {
             console.log("<=======result", res1.data);
             return resolve({
