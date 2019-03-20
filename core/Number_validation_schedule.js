@@ -33,7 +33,7 @@ exports.number_validation_schedule = (
                 now
             );
 
-            if (time_difference_minutes <= "01:00") {
+            if (time_difference_minutes >= "00:30:00") {
                 return resolve({
                     status: 440,
                     message: "session expired"
@@ -42,7 +42,7 @@ exports.number_validation_schedule = (
 
                 /*=====================Checking number of untrained employees to the selected count======*/
                 await Employee_profileDao.number_validation_schedule(Company_Trade_Lincense_No)
-                    .then(async function(result, err) {
+                    .then(async function (result, err) {
                         console.log("result======>", result.result[0].count)
                         console.log(result.result[0].count, "<+++++++++count")
                         console.log("DFFFFFFFFFFFff")
@@ -65,7 +65,7 @@ exports.number_validation_schedule = (
                     })
                     /*==================Error capturing=================*/
 
-                    .catch(async function(err) {
+                    .catch(async function (err) {
 
                         return resolve({
                             status: 400,

@@ -20,7 +20,7 @@ function loginuser(loginobject) {
   return new Promise(async (resolve, reject) => {
     var email_id = loginobject.email;
     var password = loginobject.password;
-//Query DataBase for verify    
+    //Query DataBase for verify    
     var result = await login.login(loginobject)
     logger.fatal(result.result)
     if (!result.result) {
@@ -29,8 +29,7 @@ function loginuser(loginobject) {
         "status": 401,
 
       })
-    }
-    else {
+    } else {
       logger.fatal(result.result.password, "password from Data Base")
       let registered_password = cryptr.decrypt(result.result.password);
       logger.fatal(registered_password, "db password decripted")
@@ -39,10 +38,11 @@ function loginuser(loginobject) {
       var user = result.result.user_type;
       if (registered_user == email_id && registered_password == password) {
         //generating the token
-        let token = jwt.sign({ email_id },
-          secret,
-          {
-            expiresIn: '50000000000000' // expires in 24 hours
+        let token = jwt.sign({
+            email_id
+          },
+          secret, {
+            expiresIn: '300000' // expires in 24 hours
           }
         );
         let query_value = [
@@ -63,8 +63,7 @@ function loginuser(loginobject) {
           "company_name_ar": result.result.company_ar,
           "النتيجة": "تسجيل الدخول ناجح"
         });
-      }
-      else {
+      } else {
         logger.fatal("pass ")
         return reject({
           "message": "Password is Incorrect",
@@ -72,6 +71,6 @@ function loginuser(loginobject) {
           النتيجة: "اسم المستخدم أو كلمة المرور غير صحيح"
         })
       }
-   }
+    }
   })
 }
