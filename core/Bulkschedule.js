@@ -88,7 +88,7 @@ async function sup(time, rdate, building_id) {
         }
     })
 }
-//Here the Date increment logic*/
+//Here the Date increment logic
 async function incrementDate(dateInput, increment) {
     logger.fatal("Date increment function")
     var dateFormatTotime = new Date(dateInput);

@@ -2,6 +2,8 @@ const db = require('./dbConfig.js');
 var mysql = require("mysql");
 var config = require("config");
 var dbConfig = config.get("mysqlConnection");
+// const connection= require('./dbConfig.js');
+
 
 function connectionCheck() {
     return new Promise((resolve, reject) => {
@@ -43,7 +45,11 @@ function getConnection() {
     return new Promise(resolve => {
       if (connection) {
         console.log(connection.threadId);
-        connection.query(query, params, function(error, result, fields) {
+        var connection = mysql.createConnection(dbConfig);
+
+        var results=connection.query(query, params, function(error, result, fields) {
+          console.log(results,"ytytytyty")
+
           if (error) {
             resolve({
               status: 401,
@@ -92,6 +98,8 @@ function getConnection() {
   function insert_query (query, params, connection = "")  {
     return new Promise((resolve, reject) => {
       if (connection) {
+        var connection = mysql.createConnection(dbConfig);
+
         connection.query(query, [[params]], function(error, result, fields) {
           if (error) {
             resolve({

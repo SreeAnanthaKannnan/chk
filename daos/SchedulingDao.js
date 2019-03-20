@@ -68,13 +68,12 @@ function schedule_summary_value(Company_Trade_Lincense_No, language, status) {
             .query_execute(
                 query.schedulesummary, [Company_Trade_Lincense_No, status]
             )
-        if (res1.data.errno) {
-            return resolve({
-                status: 400,
-                err: "Internal server Error"
-            });
-
-        } else {
+            if (res1.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
+            } else {
             return resolve({
                 result: res1
             });
@@ -97,10 +96,11 @@ function Schedule_select(classroom_id, Emirates_id, Company_Trade_Lincense_No) {
                 query_value
             );
             /*==================if the response contains data then returning the response into scheduling.js=======*/
-            if (res1.data != []) {
-                return resolve({
-                    result: res1.data
-                });
+            if (res1.data.errno) {
+                return reject({
+                    status:400,
+                    message:"something went wrong"
+                })
             } else {
                 return resolve({
                     result: value

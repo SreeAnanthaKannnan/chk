@@ -1,6 +1,6 @@
 var express = require('express');
-var multer  = require('multer');
-var fs  = require('fs');
+var multer = require('multer');
+var fs = require('fs');
 var formidable = require('formidable');
 var csvParser = require('csv-parse');
 var cm = require('csv-mysql');
@@ -11,53 +11,71 @@ const logger = log4js.getLogger('Aman_project');
 
 var app = express();
 
-async function upload(filepath,email_id){    // logger.fatal("body " + req.body);
-return new Promise( function (resolve,reject){
+async function upload(filepath, email_id,token) {
+    return new Promise(function(resolve, reject) {
+ /*============================Token Validation========================================*/  
+   SessionDao.Session_select(token)
+   .then(async function(result) {
+       console.log("token-result<======", result);
+       console.log(result[0], "token");
+       let query = result
+       if (query.length == 0) {
+           resolve({
+               status: 402,
+               message: "Invalid token"
+           });
+       }
+       else{
+        logger.fatal(filepath) // logger.fatal("body " + req.body);
+  //========================================Reading .csv file which uploaded from UI.==========================================================//  
 
-logger.fatal(filepath)
- //Reading .csv file which uploaded from UI.  
+        fs.readFile(filepath, {
+            encoding: 'utf-8'
+        }, function(err, csvData) {
 
-fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
-
-    if (err) 
-    {
-        logger.fatal(err);
-    }
+            if (err) {
+                logger.fatal(err);
+            }
 
 
-    csvParser(csvData, { delimiter: ',' },async function(err, data) {
-        var params=[]; 
-        if (err)
-        {
-            console.log(err);
-        } 
-        else 
-        {  
-       //Removing the Header from the template which contains the field values        
-        console.log(data.length);  
-        for(var i=1;i<data.length;i++){
-            params.push(data[i])
+            csvParser(csvData, {
+                delimiter: ','
+            }, async function(err, data) {
+                var params = [];
+                if (err) {
+                    console.log(err);
+                } else {
+  //================================Removing the Header from the template which contains the field values============================================================//        
+                    console.log(data.length);
+                    for (var i = 1; i < data.length; i++) {
+                        params.push(data[i])
 
-        } 
-        console.log(params); 
-       //storing the csv content into DataBase
-            var sql = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-            await con.query(sql, [params], async function(err,result) {
-                if(err) { 
-                return resolve({ "status": 200, "message": 'file uploaded successfully' })}
-                else{
-                return resolve({ result});
+                    }
+                    console.log(params);
+ //==================================================storing the csv content into DataBase==============================================================================//
+                    var sql = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
+                    await con.query(sql, [params], async function(err, result) {
+                        if (err) {
+                            return resolve({
+                                "status": 200,
+                                "message": 'file uploaded successfully'
+                            })
+                        } else {
+                            return resolve({
+                                result
+                            });
+                        }
+                    });
+
                 }
-            });   
-
-        }
-    });
-});
+            });
+        });
+    }
+})
 })
 };
+module.exports = {
 
-
-module.exports={
-    
-   upload:upload
- }
+    upload: upload
+}
+//===============================================================Code End=============================================================================================//

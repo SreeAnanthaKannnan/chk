@@ -8,7 +8,7 @@ function update(installation) {
     logger.fatal(installation,"installation")
    return new Promise(async (resolve, reject) => {
        var responseObj = {};
-
+//updatin
        var user = updatedao.updatedao(installation).then((data) => {
            logger.fatal(user, "user")
            responseObj.data = data;

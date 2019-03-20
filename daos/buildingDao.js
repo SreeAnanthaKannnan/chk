@@ -7,6 +7,7 @@ const query = require("../mysql_connection/queries");
 //Here the Data from UI is separated and stored in DATA BASE
 function building(buildingobject,email_id){
     return new Promise(async(resolve, reject)=>{
+      
         logger.fatal(buildingobject,"=>buildingobject");
         var params=[email_id,buildingobject.type,buildingobject.address,buildingobject.Buildingname,buildingobject.lat,buildingobject.lon,buildingobject.cdccn,buildingobject.AMC,buildingobject.NSP,buildingobject.SPCN]
         mysqlConnection

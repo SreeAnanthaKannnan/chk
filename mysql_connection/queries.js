@@ -193,6 +193,10 @@ module.exports.findemployeeAttendance = "SELECT * FROM Attendance where trainer_
 /*=========selecting the distinct available date for the number of available seats greater then the selected seats and particular trainerid and course id=======*/
 module.exports.availabledate =
   "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
+
+  module.exports.getcoursename =
+  "SELECT course_name_en FROM Results where National_Id =?"  
+
 module.exports.getinstallers = "SELECT email_id FROM citizens where user_type=?";
 module.exports.imagepdf = "UPDATE Schedules SET filepath =? WHERE id =?";
 module.exports.pdfviewer = "SELECT path,path1,path2,path3 FROM Buildings where email_id= ?";
@@ -202,5 +206,5 @@ module.exports.installationdetails = "UPDATE Schedules SET FACP = ?,CSI = ?,BRAN
 
 
 
-
-"SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
+  
+ 

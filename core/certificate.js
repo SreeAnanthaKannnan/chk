@@ -222,15 +222,15 @@ async function getCertificate(req, callback) {
     callback(err);
   } else {
     var certificate = await Result.Result_select(emirates_id);
-
-    if (certificate.message.data.length == 0) {
+    console.log("certificate===>",certificate)
+    if (certificate.message.length == 0) {
       var error = {
         status: 400,
         message: "Record not found"
       };
       callback(error);
     } else {
-      var cert = certificate.message.data[0].certificate;
+      var cert = certificate.message[0].certificate;
 
       var result = {
         status: 200,

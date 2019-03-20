@@ -8,7 +8,7 @@ const logger = log4js.getLogger('Aman_project');
 function pdf1(email){
   return new Promise((resolve, reject)=>{
       logger.fatal(email,"=>email");
-      
+//===============================================================query the pdf information get from pdf path=====================================================================//      
       mysqlConnection
     .query_execute(query.pdfviewer,email)
     .then(function(result, err) {
@@ -27,3 +27,4 @@ function pdf1(email){
 module.exports={
  pdf1:pdf1
 }
+//===========================================================Code End==================================================================//
