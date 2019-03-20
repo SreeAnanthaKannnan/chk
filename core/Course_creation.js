@@ -23,7 +23,7 @@ exports.course_creation = (data, token, language) =>
                 message: "Invalid token"
             });
         } else {
-          /*=======================Session validation=======================*/
+            /*=======================Session validation=======================*/
             console.log(query[0].session_created_at);
             let Name_ar, Name_en, query_value;
             let now = new Date();
@@ -35,15 +35,15 @@ exports.course_creation = (data, token, language) =>
             );
             console.log(time_difference_minutes, "function");
 
-            console.log(time_difference_minutes <= "01:00", "session time difference validation");
+            console.log(time_difference_minutes >= "00:30:00", "session time difference validation");
 
-            if (time_difference_minutes <= "01:00") {
+            if (time_difference_minutes <= "00:30:00") {
                 return resolve({
                     status: 440,
                     message: "session expired"
                 });
             } else {
-              /*====================Transaltion for arabic to english and vice versa===========*/
+                /*====================Transaltion for arabic to english and vice versa===========*/
 
                 if (language == "en") {
                     let temp = await translate.translate_ar(name);
@@ -65,7 +65,7 @@ exports.course_creation = (data, token, language) =>
                 ];
                 /*==================Checking whether course is already exists or not=============*/
                 await CourseDao.Course_select(name_en)
-                    .then(async function(result) {
+                    .then(async function (result) {
                         console.log("result<======", result);
                         if (result.result.length !== 0) {
                             return resolve({
@@ -74,9 +74,9 @@ exports.course_creation = (data, token, language) =>
                             })
 
                         } else {
-          /*======================Inserting the query value into coure table=============*/
+                            /*======================Inserting the query value into coure table=============*/
                             await CourseDao.Course_insert(query_value)
-                                .then(async function(result) {
+                                .then(async function (result) {
                                     console.log("result===>", result);
                                     return resolve({
                                         status: 200,
@@ -84,11 +84,11 @@ exports.course_creation = (data, token, language) =>
                                     })
 
                                 })
-                          }
+                        }
                     })
-        /*=========Error Capturing===========*/
-                   
-                    .catch(async function(err) {
+                    /*=========Error Capturing===========*/
+
+                    .catch(async function (err) {
                         var messagevalue = await message.getmessage(language.result, "E01");
                         return resolve({
                             status: 400,
@@ -98,4 +98,4 @@ exports.course_creation = (data, token, language) =>
             }
         }
     });
-    /******************************Code Ends******************************************/
+/******************************Code Ends******************************************/

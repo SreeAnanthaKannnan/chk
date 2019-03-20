@@ -4,11 +4,13 @@ const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
+
 //Here we get the installers details from the DataBase
 async function supplier(){
   return new Promise((resolve, reject)=>{
     var value="installer"
-     // var sql = "SELECT email_id FROM citizens where user_type=";
+
+ // var sql = "SELECT email_id FROM citizens where user_type=";
       mysqlConnection
       .query_execute(query.getinstallers,value)
       .then(function (result, err) {

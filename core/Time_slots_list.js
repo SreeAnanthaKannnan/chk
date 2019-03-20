@@ -33,7 +33,7 @@ exports.time_slots_list = (data, token, language) =>
                 now
             );
 
-            if (time_difference_minutes <= "01:00") {
+            if (time_difference_minutes >= "00:30:00") {
                 return resolve({
                     status: 440,
                     message: "session expired"
@@ -41,14 +41,14 @@ exports.time_slots_list = (data, token, language) =>
             } else {
                 /*==================fetching the trainer id from the trainer table who is selected=======*/
                 await TrainerDao.Trainer_id_select(trainer_name, language)
-                    .then(async function(result) {
+                    .then(async function (result) {
                         console.log("result", result.result[0].id);
                         let trainer_id = result.result[0].id;
                         /*================fetching the time slots for the selected trainer and the available date=======*/
                         await ClassroomDao.time_slots_lists(
                             available_date,
                             trainer_id
-                        ).then(async function(result) {
+                        ).then(async function (result) {
 
                             if (result.result.length != 0) {
                                 return resolve({
@@ -59,7 +59,7 @@ exports.time_slots_list = (data, token, language) =>
                         });
                     })
                     /*====================Error Capturing======================*/
-                    .catch(async function(err) {
+                    .catch(async function (err) {
                         var messagevalue = await message.getmessage(language.result, "E01");
                         return resolve({
                             status: 400,

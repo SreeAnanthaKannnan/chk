@@ -6,7 +6,7 @@ module.exports={
 }
 function bookservice(email_id){
     return new Promise(async (resolve, reject) => {
-
+//============================================Fetching History of Assessment Service=============================================================//
     var result = await asser.historyget(email_id)
     logger.fatal("result in core",result)
     if(result){
@@ -20,5 +20,5 @@ function bookservice(email_id){
     })
     
     })
-
 }
+//==============================================================Code End==============================================================================//

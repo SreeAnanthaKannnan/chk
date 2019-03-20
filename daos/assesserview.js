@@ -5,8 +5,11 @@ const logger = log4js.getLogger('Aman_project');
 module.exports={
     assement_get:assement_get
 }
+
 function assement_get(){
     return new Promise(async(resolve, reject)=>{
+
+//=============================================Select Schedules details form Schedules Table================================================================//        
 var sql= "SELECT Schedules.schedule_time,Schedules.status, Buildings.buildingname,Buildings.email_id,Schedules.id,Buildings.address,Buildings.lat,Buildings.lon, Schedules.requestdate FROM Schedules INNER JOIN Buildings ON Schedules.building_id=Buildings.id;"
 con.query(sql,function(err,result){
     if(err) { logger.fatal("something",err)
@@ -18,3 +21,5 @@ con.query(sql,function(err,result){
     });  
 });
 }
+//=============================================Code End================================================================//        
+

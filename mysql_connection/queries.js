@@ -200,8 +200,3 @@ module.exports.pdfviewer = "SELECT path,path1,path2,path3 FROM Buildings where e
 module.exports.scheduleinfo = "INSERT INTO Schedules(schedule_time,requestdate,suplier_id,building_id,status) VALUES ? ";
 module.exports.servicehistory = "SELECT * FROM Schedules INNER JOIN Buildings ON Schedules.building_id=Buildings.id AND Buildings.email_id=?";
 module.exports.installationdetails = "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ? WHERE id = ?";
-
-
-
-
-"SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";

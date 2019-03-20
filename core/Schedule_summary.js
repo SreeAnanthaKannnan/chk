@@ -31,7 +31,7 @@ exports.schedule_summary = request =>
             );
             /*****************Session Validation****************************/
 
-            if (time_difference_minutes <= "01:00") {
+            if (time_difference_minutes >= "00:30:00") {
                 return resolve({
                     status: 440,
                     message: "session expired"
@@ -43,7 +43,7 @@ exports.schedule_summary = request =>
                         language,
                         status
                     )
-                    .then(async function(result) {
+                    .then(async function (result) {
                         console.log("result", result.result.data.length);
                         if (result.result.data.length == 0) {
                             return resolve({
@@ -67,7 +67,7 @@ exports.schedule_summary = request =>
                             await Employee_ProfileDao.Employee_name_schedule(
                                 value,
                                 language
-                            ).then(async function(result) {
+                            ).then(async function (result) {
                                 let final_array = [];
                                 let final_array1 = [];
                                 /*========pusing the scheduled summary in the final_arry if the language is arabic==============*/
@@ -180,7 +180,7 @@ exports.schedule_summary = request =>
 
                     })
                     /*=======================Error Capturing==========================================*/
-                    .catch(async function(err) {
+                    .catch(async function (err) {
                         console.log(err, "err");
                         return resolve({
                             status: 400,

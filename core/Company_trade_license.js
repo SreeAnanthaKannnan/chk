@@ -25,10 +25,10 @@ exports.company_trading_license = (data, token) => new Promise(async (resolve, r
         let time_difference_minutes = await session_time.Session_time_difference(Db_time, now)
         console.log(time_difference_minutes, "function")
 
-        console.log(time_difference_minutes <= "01:00", "session time difference validation")
+        console.log(time_difference_minutes >= "00:30:00", "session time difference validation")
 
 
-        if (time_difference_minutes <= "01:00") {
+        if (time_difference_minutes >= "00:30:00") {
             return resolve({
                 status: 440,
                 message: "session expired"
@@ -37,9 +37,9 @@ exports.company_trading_license = (data, token) => new Promise(async (resolve, r
 
             /*=======================checking whether company already exists or not=================*/
             await CompanyDao.company_trading_license(Company_Email)
-                .then(async function(result) {
+                .then(async function (result) {
                     console.log("result===>", result);
-                    if (result.result.length != 0) {
+                    if (result.result.data.length != 0) {
                         return resolve({
                             status: 200,
                             message: result
@@ -52,7 +52,7 @@ exports.company_trading_license = (data, token) => new Promise(async (resolve, r
                     }
                 })
                 /*=========Error Capturing===========*/
-                .catch(async function(err) {
+                .catch(async function (err) {
                     return resolve({
                         status: 400,
                         message: "something went wrong"

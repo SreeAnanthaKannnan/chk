@@ -10,11 +10,11 @@ const translate = require("../utils/translate");
 const fs = require("fs");
 
 exports.Employee_profile = (
-  EmployeeProfile
-  // filename_blob,
-  // filename_url,
-  // path
-) =>
+    EmployeeProfile
+    // filename_blob,
+    // filename_url,
+    // path
+  ) =>
   new Promise(async (resolve, reject) => {
     let Employee_ID = EmployeeProfile.employee_id;
     let Name = EmployeeProfile.name;
@@ -24,8 +24,9 @@ exports.Employee_profile = (
     let Company_Trade_Lincense_No = EmployeeProfile.company_trade_lincense_no;
     let token = EmployeeProfile.token;
     let language = EmployeeProfile.language;
-    let assigend_for_training ="NO"
-   /*============token validation===================*/
+    console.log("language===>", language)
+    let assigend_for_training = "NO"
+    /*============token validation===================*/
     console.log(token, "test");
     let query = await SessionDao.Session_select(token);
     if (query.length == 0) {
@@ -45,13 +46,13 @@ exports.Employee_profile = (
         now
       );
       console.log(time_difference_minutes, "session time difference");
-      if (time_difference_minutes <= "01:00") {
+      if (time_difference_minutes >= "00:30:00") {
         return resolve({
           status: 440,
           message: "session expired"
         });
       } else {
-    /*================Translation form arabic to English and vice versa==============*/    
+        /*================Translation form arabic to English and vice versa==============*/
         console.log(language, "language");
         if (language == "en") {
           let temp = await translate.translate_ar(Name);
@@ -70,57 +71,60 @@ exports.Employee_profile = (
           Position,
           National_ID,
           Company_Trade_Lincense_No,
-           assigend_for_training,
+          assigend_for_training,
           // profile_photo_url,
           Category
         ];
         console.log(query_value, "query_value");
-  /*==================Checking whether employee already exists or not==============*/      
+        /*==================Checking whether employee already exists or not==============*/
         await Employee_profileDao.Employee_select(National_ID)
-          .then(async function (result,err) {
+          .then(async function (result, err) {
             console.log("result======>", result.message.data.length);
             if (result.message.data.length != 0) {
-              var messagevalue = await  message.getmessage(language.result,"E02")
+              var messagevalue = await message.getmessage(language, "E02")
 
               return resolve({
                 status: 200,
                 message: messagevalue
               });
             } else {
-   /*=====================insering Employee details in the Employee_profile table=========*/           
-               await Employee_profileDao.Employee_insert(query_value)
-               .then(async function(result) {
-                console.log("already exits insert=====>",result)
-                        if (result.result.data.affectedRows==1) {
-              var messagevalue = await  message.getmessage(language.result,"S02")
+              /*=====================insering Employee details in the Employee_profile table=========*/
+              await Employee_profileDao.Employee_insert(query_value)
+                .then(async function (result) {
+                  console.log("already exits insert=====>", result)
+                  if (result.message.data.affectedRows == 1) {
+                    var messagevalue = await message.getmessage(language, "S02")
 
 
-              return resolve({
-                status: 200,
-                message: messagevalue
-              });
+                    return resolve({
+                      status: 200,
+                      message: messagevalue
+                    });
+                  }
+                })
             }
-          })
-        }
-        
-        })
-      
-        
-      
-        
-        
-     /*==============Error Capturing================*/     
-        
-          .catch(async function (err) {
-            var messagevalue = await  message.getmessage(language.result,"E01")
 
-            return resolve({ status: 400, message: messagevalue });
+          })
+
+
+
+
+
+          /*==============Error Capturing================*/
+
+          .catch(async function (err) {
+            var messagevalue = await message.getmessage(language, "E01")
+
+            return resolve({
+              status: 400,
+              message: messagevalue
+            });
           });
-        
-        
-        
+
+
+
       }
-    
+
     }
   });
-  /************************************Code Ends**********************************************/
+/************************************Code Ends**********************************************/

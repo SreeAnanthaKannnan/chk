@@ -7,7 +7,7 @@ const logger = log4js.getLogger('Aman_project');
 function Session_insert(params) {
 
     return new Promise( async function (resolve,reject){
-        params =[params]
+       // params =[params]
         var res1 = await mysqlConnection.insert_query(
             query.sessioninsert, params
         );
@@ -30,14 +30,18 @@ function Session_insert(params) {
 async function Session_select(params){
     return  new Promise( async function (resolve,reject){
 
-     logger.fatal("achie",params)
+     console.log("achie",params)
      var res1= await mysqlConnection
         .query_execute(query.session,[params])
-        if(res1.data.errno){
-            return reject("something went wrong")
+        if (res1.data.errno) {
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         }
       
         else{
+            console.log("res1 in line 41 ",res1)
         return resolve (res1.data);
         }
         
@@ -51,8 +55,11 @@ async function Session_update(params){
     // logger.fatal("achie")
     var res1= await mysqlConnection
         .query_execute(query.sessiondelete,[params])
-        if(res1.data.errno){
-            return reject("something went wrong")
+        if (res1.data.errno) {
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         }
       
         else{

@@ -27,7 +27,7 @@ exports.course_view = (token, language) =>
             );
             console.log(time_difference_minutes, "function");
 
-            if (time_difference_minutes <= "01:00") {
+            if (time_difference_minutes >= "00:30:00") {
                 return resolve({
                     status: 440,
                     message: "session expired"
@@ -38,7 +38,7 @@ exports.course_view = (token, language) =>
                 if (language == "en") {
                     /*====================Displaying the course names in english====================*/
                     await CourseDao.Course_display()
-                        .then(async function(result, err) {
+                        .then(async function (result, err) {
                             if (result) {
                                 console.log("result", result);
 
@@ -50,7 +50,7 @@ exports.course_view = (token, language) =>
 
                         })
                         /*============Error Capturing===============*/
-                        .catch(async function(err) {
+                        .catch(async function (err) {
 
                             return resolve({
                                 status: 400,
@@ -60,7 +60,7 @@ exports.course_view = (token, language) =>
                 } else {
                     /*=================Displaying the course names in arabic===========================*/
                     await CourseDao.Course_display_arabic()
-                        .then(async function(result) {
+                        .then(async function (result) {
                             console.log("result", result);
 
                             return resolve({
@@ -71,7 +71,7 @@ exports.course_view = (token, language) =>
                         })
                         /*============Error Capturing===============*/
 
-                        .catch(async function(err) {
+                        .catch(async function (err) {
 
                             return resolve({
                                 status: 400,

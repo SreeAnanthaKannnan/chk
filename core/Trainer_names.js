@@ -24,7 +24,7 @@ exports.trainer_names = (token, language) =>
                 now
             );
 
-            if (time_difference_minutes <= "01:00") {
+            if (time_difference_minutes >= "00:30:00") {
                 return resolve({
                     status: 440,
                     message: "session expired"
@@ -32,7 +32,7 @@ exports.trainer_names = (token, language) =>
             } else {
                 /*================fetching available trainer names from the trainer table========*/
                 await TrainerDao.Trainer_names_display(language)
-                    .then(async function(result) {
+                    .then(async function (result) {
                         console.log("result", result);
 
                         return resolve({
@@ -42,7 +42,7 @@ exports.trainer_names = (token, language) =>
 
                     })
                     /*===================Error Capturing========================*/
-                    .catch(async function(err) {
+                    .catch(async function (err) {
 
                         return resolve({
                             status: 400,

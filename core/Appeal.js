@@ -17,9 +17,9 @@ exports.Appeal = (Appeal_Object, token, language) => new Promise(async (resolve,
     let compliance = value.slice(1, 5) + value.slice(6, 8) + value.slice(9, 11)
     console.log(compliance, "compliance")
     console.log(token, "test");
-  /*============================Token checking========================================*/  
-   await SessionDao.Session_select(token)
-        .then(async function(result) {
+    /*============================Token checking========================================*/
+    await SessionDao.Session_select(token)
+        .then(async function (result) {
             console.log("token-result<======", result);
             console.log(result[0], "token");
             let query = result
@@ -29,7 +29,25 @@ exports.Appeal = (Appeal_Object, token, language) => new Promise(async (resolve,
                     message: "Invalid token"
                 });
             } else {
-                /*===================Translation from english to arabic vice versa================*/
+                /*=====================Session validation==========================*/
+                console.log(query[0].session_created_at);
+                let Name_ar, Name_en, query_value;
+                let now = new Date();
+
+                let Db_time = query[0].session_created_at;
+                let time_difference_minutes = await session_time.Session_time_difference(
+                    Db_time,
+                    now
+                );
+            }
+
+            if (time_difference_minutes >= "00:30:00") {
+                return resolve({
+                    status: 440,
+                    message: "session expired"
+                });
+            } else {
+                //====================Translation from english to arabic vice versa================*/
                 if (language == "en") {
                     let temp = await translate.translate_ar(Description);
                     let temp1 = await translate.translate_ar(service)
@@ -43,7 +61,7 @@ exports.Appeal = (Appeal_Object, token, language) => new Promise(async (resolve,
                     console.log(language, "language");
                     if (language == "en") {
                         await translate.translate_ar(Description)
-                            .then(async function(result) {
+                            .then(async function (result) {
                                 console.log("result_translate", result)
                                 temp = result
                                 Description_ar = temp.result;
@@ -53,7 +71,7 @@ exports.Appeal = (Appeal_Object, token, language) => new Promise(async (resolve,
                                 Description_en = Description;
                                 service_en = service;
                             })
-                            .catch(async function(err) {
+                            .catch(async function (err) {
                                 var messagevalue = await message.getmessage(language, "E01");
                                 return resolve({
                                     status: 400,
@@ -74,7 +92,7 @@ exports.Appeal = (Appeal_Object, token, language) => new Promise(async (resolve,
                 let query_value = [service_en, service_ar, Description_en, Description_ar, Appeal_date, compliance]
                 console.log(query_value, "query_value")
                 await AppealDAO.Appeal_insert(query_value)
-                    .then(async function(result) {
+                    .then(async function (result) {
                         console.log("result=======>", result);
 
                         /*==============================message value if it is arabic arabic message vice versa======*/
@@ -89,8 +107,8 @@ exports.Appeal = (Appeal_Object, token, language) => new Promise(async (resolve,
 
 
                     })
-                    .catch(async function(err) {
-                        var messagevalue = await message.getmessage(language.result, "E01")
+                    .catch(async function (err) {
+                        var messagevalue = await message.getmessage(language, "E01")
 
 
                         return resolve({
@@ -103,7 +121,7 @@ exports.Appeal = (Appeal_Object, token, language) => new Promise(async (resolve,
         })
 
         /*===========================Error capture=======================================*/
-        .catch(async function(err) {
+        .catch(async function (err) {
             var messagevalue = await message.getmessage(language, "E01");
             return resolve({
                 status: 400,

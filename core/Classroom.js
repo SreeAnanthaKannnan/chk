@@ -40,10 +40,10 @@ exports.classroom = (data, token, language) => new Promise(async (resolve, rejec
         let time_difference_minutes = await session_time.Session_time_difference(Db_time, now)
         console.log(time_difference_minutes, "function")
 
-        console.log(time_difference_minutes <= "01:00", "session durationchecking")
+        console.log(time_difference_minutes <= "00:30:00", "session durationchecking")
 
 
-        if (time_difference_minutes <= "01:00") {
+        if (time_difference_minutes >= "00:30:00") {
             return resolve({
                 status: 440,
                 message: "session expired"
@@ -66,12 +66,12 @@ exports.classroom = (data, token, language) => new Promise(async (resolve, rejec
             }
             /*==================trainer id selection for particular trainer name=============*/
             await TrainerDao.Trainer_id_select(trainer_name, language)
-                .then(async function(result) {
+                .then(async function (result) {
                     console.log("result", result.result[0].id);
                     let trainer_id = result.result[0].id;
                     /*==================course id selection for particular course===============*/
                     await CourseDao.Course_id_select(course_name, language)
-                        .then(async function(result) {
+                        .then(async function (result) {
                             let course_id = result.result[0].course_id;
                             let duration = result.result[0].duration;
                             console.log("course duration", duration)
@@ -89,12 +89,12 @@ exports.classroom = (data, token, language) => new Promise(async (resolve, rejec
                             ]
                             /*=================calulating the number of classroom cration based on the duration of the course========*/
                             await classroomDao.insert_count(start_time, end_time, duration)
-                                .then(async function(result) {
+                                .then(async function (result) {
                                     let insert_count = result.result
                                     console.log(insert_count, "insert_count")
                                     /*=====================query value inserting into class room(auto allocation)===========*/
                                     await classroomDao.Classroom_insert(query_value, duration, insert_count)
-                                        .then(async function(result) {
+                                        .then(async function (result) {
 
                                             return resolve({
                                                 status: 200,
@@ -105,7 +105,7 @@ exports.classroom = (data, token, language) => new Promise(async (resolve, rejec
                         })
                 })
                 /*========================Error capturing==============================*/
-                .catch(async function(err) {
+                .catch(async function (err) {
                     console.log(err)
                     return resolve({
                         status: 400,

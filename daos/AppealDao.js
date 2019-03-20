@@ -27,7 +27,10 @@ function Appeal_insert(param) {
 
         ]
         if (res.data.errno) {
-            return reject("something went wrong")
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         }
 
         /*=======================Inserting Appeal values in the db========================*/
@@ -35,7 +38,10 @@ function Appeal_insert(param) {
             .insert_query(query.Appeal, query_Value)
         console.log(res1, "dbresult")
         if (res1.data.errno) {
-            return reject("something went wrong")
+            return reject({
+                status:400,
+                message:"something went wrong"
+            })
         } else {
             /*=======sending Compliant_NO to the Appeal.js======*/
             return resolve({

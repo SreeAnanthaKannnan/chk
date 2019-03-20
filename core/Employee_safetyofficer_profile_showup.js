@@ -34,7 +34,7 @@ exports.safety_officer_details = (request, token) =>
             );
             /*======================Session validation=====================================*/
 
-            if (time_difference_minutes <= "01:00") {
+            if (time_difference_minutes >= "00:30:00") {
                 return resolve({
                     status: 440,
                     message: "session expired"
@@ -46,29 +46,32 @@ exports.safety_officer_details = (request, token) =>
                 ];
                 /*=======================Fetching safety officer details baed on category====================*/
                 await Employee_profileDao.Safety_officer_details(
-                    query_value
-                )
-                
-                .then(async function (result,err) {
-                    console.log("result======>", result);
-                    if (result.result.data.length != 0) {
+                        query_value
+                    )
 
-            
+                    .then(async function (result, err) {
+                        console.log("result======>", result);
+                        if (result.result.data.length != 0) {
 
-                return resolve({
-                    status: 200,
-                    message: result.result.data
-                });
-              
+
+
+                            return resolve({
+                                status: 200,
+                                message: result.result.data
+                            });
+
+                        }
+                    })
+                    .catch(async function (err) {
+                        var messagevalue = await message.getmessage(language, "E01")
+
+                        return resolve({
+                            status: 400,
+                            message: messagevalue
+                        });
+                    });
             }
-        })
-            .catch(async function (err) {
-                var messagevalue = await  message.getmessage(language,"E01")
-    
-                return resolve({ status: 400, message: messagevalue });
-              });
-        }
-    
+
         }
     });
 /*********************************Code Ends******************************************/

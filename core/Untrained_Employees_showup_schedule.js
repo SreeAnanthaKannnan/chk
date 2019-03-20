@@ -28,7 +28,7 @@ exports.Untrained_Employees_schedule = (data, token, language) => new Promise(as
         /*===========================fetching the time difference=============*/
         let time_difference_minutes = await session_time.Session_time_difference(Db_time, now)
 
-        if (time_difference_minutes <= "01:00") {
+        if (time_difference_minutes >= "00:30:00") {
             return resolve({
                 status: 440,
                 message: "session expired"

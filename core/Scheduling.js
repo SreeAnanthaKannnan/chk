@@ -4,6 +4,8 @@ const Employee_profileDao = require('../daos/Employee_profileDao')
 const CourseDao = require('../daos/CourseDao')
 const TrainerDao = require('../daos/TrainerDao')
 const date = require('date-and-time');
+const SessionDao = require('../daos/SessionDao')
+const session_time = require('../utils/session_time_difference')
 const moment = require('moment')
 const now = new Date();
 
@@ -41,7 +43,7 @@ exports.scheduling = (data, request) => new Promise(async (resolve, reject) => {
             now
         );
 
-        if (time_difference_minutes <= "01:00") {
+        if (time_difference_minutes >= "00:30:00") {
             return resolve({
                 status: 440,
                 message: "session expired"
@@ -57,28 +59,28 @@ exports.scheduling = (data, request) => new Promise(async (resolve, reject) => {
             /*=============Updating the Employees as booked in the employee_profile table======*/
 
             await Employee_profileDao.Employee_update(Emirates_id, Company_Trade_Lincense_No, language)
-                .then(async function(result) {
+                .then(async function (result) {
                     console.log("result", result);
                     /*================selecting the courseid based on course name from course table==================*/
                     await CourseDao.Course_id_select(course_name, language)
-                        .then(async function(result) {
+                        .then(async function (result) {
                             console.log("result", result.result[0].course_id);
                             let course_id = result.result[0].course_id;
 
                             /*===============fetching the training fees from course table===============*/
                             await CourseDao.Course_amount(course_id, language)
-                                .then(async function(result) {
+                                .then(async function (result) {
                                     console.log("result", result.result[0].training_amount);
                                     let amount = result.result[0].training_amount;
                                     /*==============fetching the trainer id from trainer table====================*/
                                     await TrainerDao.Trainer_id_select(trainer_name, language)
 
 
-                                        .then(async function(result) {
+                                        .then(async function (result) {
                                             console.log("result===trainer", result);
                                             let trainer_id = result.result[0].id
                                             await ClassroomDao.Classroom_num(classroom_id, language)
-                                                .then(async function(result) {
+                                                .then(async function (result) {
                                                     console.log("result<=====================", result);
                                                     classroom_id = result.result[0].classnum;
                                                     var query_value = [classroom_id,
@@ -97,7 +99,7 @@ exports.scheduling = (data, request) => new Promise(async (resolve, reject) => {
                                                     ]
                                                     /*===================validating whether the selected employee already scheduled or not==========*/
                                                     await scheduleDao.Schedule_select(classroom_id, Emirates_id, Company_Trade_Lincense_No)
-                                                        .then(async function(result) {
+                                                        .then(async function (result) {
                                                             console.log(result.result != "")
                                                             if (result.result != "") {
                                                                 return resolve({
@@ -108,7 +110,7 @@ exports.scheduling = (data, request) => new Promise(async (resolve, reject) => {
 
                                                                 /*=======================inserting the selected employees in the schedule table========*/
                                                                 await scheduleDao.Schedule(query_value)
-                                                                    .then(async function(result) {
+                                                                    .then(async function (result) {
                                                                         console.log("result", result);
                                                                         if (result.result.length != 0) {
                                                                             return resolve({
@@ -130,7 +132,7 @@ exports.scheduling = (data, request) => new Promise(async (resolve, reject) => {
 
                 /*=======================Error Capturing===============================*/
 
-                .catch(async function(err) {
+                .catch(async function (err) {
                     return resolve({
                         status: 400,
                         message: err

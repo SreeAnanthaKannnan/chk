@@ -4,25 +4,31 @@ const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 
 function login(loginobject) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         var email_id = loginobject.email;
         logger.fatal("in dao", email_id);
+//====================================================Get Login Information form Citizens Table==================================================================//       
         mysqlConnection
-        .query_execute(query.getlogindetails,email_id)
-        .then(function (result, err) {
-          
-            if (err) {
-                logger.fatal("something", err)
-                return reject({ "status": 400, "body": 'Cannot insert the data' })
-            }
-            else {
-                console.log(result.data[0], "achieved")
-                return resolve({ result:result.data[0]});
-            }
-        })
-      
+            .query_execute(query.getlogindetails, email_id)
+            .then(function(result, err) {
+
+                if (err) {
+                    logger.fatal("something", err)
+                    return reject({
+                        "status": 400,
+                        "body": 'Cannot insert the data'
+                    })
+                } else {
+                    console.log(result.data[0], "achieved")
+                    return resolve({
+                        result: result.data[0]
+                    });
+                }
+            })
+
     })
 }
 module.exports = {
     login: login,
 }
+//====================================================Code End==================================================================//       

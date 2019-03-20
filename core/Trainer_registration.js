@@ -39,7 +39,7 @@ exports.trainer_account = (data, token, language) =>
             );
 
 
-            if (time_difference_minutes <= "01:00") {
+            if (time_difference_minutes >= "00:30:00") {
                 return resolve({
                     status: 440,
                     message: "session expired"
@@ -83,7 +83,7 @@ exports.trainer_account = (data, token, language) =>
                 ];
                 /*=============checking whether trainer is already exists or not==============*/
                 await TrainerDao.Trainer_information(trainer_email_id)
-                    .then(async function(result) {
+                    .then(async function (result) {
                         console.log("result", result);
 
                         if (result.result.length != 0) {
@@ -98,7 +98,7 @@ exports.trainer_account = (data, token, language) =>
                             });
                         } else {
                             /*==================Inserting trainer information into trainer table==========*/
-                            await TrainerDao.Trainer_insert(query_value).then(async function(
+                            await TrainerDao.Trainer_insert(query_value).then(async function (
                                 result
                             ) {
                                 console.log("result", result);
@@ -118,7 +118,7 @@ exports.trainer_account = (data, token, language) =>
 
                     /*=======================Error capturing========================*/
 
-                    .catch(async function(err) {
+                    .catch(async function (err) {
                         var messagevalue = await message.getmessage(language.result, "E01");
                         return resolve({
                             status: 400,

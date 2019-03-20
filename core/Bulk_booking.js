@@ -34,10 +34,10 @@ exports.bulk_booking = (request, data) => new Promise(async (resolve, reject) =>
         let Db_time = query[0].session_created_at;
         let time_difference_minutes = await session_time.Session_time_difference(Db_time, now)
         console.log(time_difference_minutes, "function")
-        console.log(time_difference_minutes <= "01:00", "session time difference")
+        console.log(time_difference_minutes >= "00:30:00", "session time difference")
 
 
-        if (time_difference_minutes <= "01:00") {
+        if (time_difference_minutes >= "00:30:00") {
             return resolve({
                 status: 440,
                 message: "session expired"
@@ -45,7 +45,7 @@ exports.bulk_booking = (request, data) => new Promise(async (resolve, reject) =>
         }
         /*==============================selecting untrained Employees for schedule=====================*/
         await Employee_ProfileDao.Untrained_Employees_schedule(Company_Trade_Lincense_No, language)
-            .then(async function(result) {
+            .then(async function (result) {
                 console.log("untrained employee result", result);
 
                 let Emirates_array = []
@@ -61,17 +61,17 @@ exports.bulk_booking = (request, data) => new Promise(async (resolve, reject) =>
                 console.log(Emirates_ID, "Emirates_ID")
                 /*===============selecting Course_id based on course_name========*/
                 await CourseDao.Course_id_select(course_name, language)
-                    .then(async function(result) {
+                    .then(async function (result) {
                         console.log("result", result.result[0].course_id);
                         let course_id = result.result[0].course_id;
                         /*===============selecting training amount from course table====*/
                         await CourseDao.Course_amount(course_id, language)
-                            .then(async function(result) {
+                            .then(async function (result) {
                                 console.log("result", result.result[0].training_amount);
                                 let amount = result.result[0].training_amount;
                                 /*====================Entering into bulk booking logic========================*/
                                 await classroomDao.bulk_booking(course_id, no_of_Seats_selected, language, Emirates_ID, Company_Trade_Lincense_No, scheduling_date, amount)
-                                    .then(async function(result) {
+                                    .then(async function (result) {
 
                                         console.log("Result", result.result.affectedRows == 1)
                                         if (result.result.affectedRows == 1) {
