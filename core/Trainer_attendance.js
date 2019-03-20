@@ -13,7 +13,8 @@ var moment = require("moment");
 module.exports = {
   trainer_attendance: trainer_attendance,
   trainer_date_select: trainer_date_select,
-  trainer_attendance_list: trainer_attendance_list
+  trainer_attendance_list: trainer_attendance_list,
+  trainer_attendance_absent_list:trainer_attendance_absent_list
 };
 
 //===========================Getting date and time and shown to the attendance page ===start===============
@@ -235,7 +236,7 @@ async function trainer_date_select(
 }
 //==========================Trainer select the date ===END====================================
 
-//=====================Trainer select the employee  ===start===============================
+//=====================Trainer select the employee present  ===start===============================
 async function trainer_attendance_list(
   Employee_attendance,
 
@@ -247,7 +248,7 @@ async function trainer_attendance_list(
     const getdata = Employee_attendance.getdata;
     console.log("Core_TDL_getdata", getdata);
 
-    const attendance_status = "Present";
+    const attendance_status = "present";
     console.log("Core_TDL_attendance_status", attendance_status);
 
     const trainer_id = Employee_attendance.Trainer_id;
@@ -330,4 +331,101 @@ async function trainer_attendance_list(
     });
   });
 }
-//=====================Trainer select the employee  ===end===============================
+//=====================Trainer select the employee present  ===end===============================
+
+//=====================Trainer select the employee absent  ===start===============================
+async function trainer_attendance_absent_list(
+  Employee_attendance,
+
+) {
+  return new Promise(async (resolve, reject) => {
+
+    console.log("Trainer_attendance_list", Employee_attendance);
+
+    const getdata = Employee_attendance.getdata;
+    console.log("Core_TDL_getdata", getdata);
+
+    const attendance_status = "Absent";
+    console.log("Core_TDL_attendance_status", attendance_status);
+
+    const trainer_id = Employee_attendance.Trainer_id;
+    console.log("Core_TDL_trainer_id", trainer_id);
+
+    const Attended_date_val = Employee_attendance.attended_date;
+
+    var Attended_date = moment(Attended_date_val).format("YYYY/MM/DD");
+
+    console.log("Core_TDL_Attended_date", Attended_date);
+
+    const start_time = Employee_attendance.start_time;
+    console.log("Core_TDL_start_time", start_time);
+
+    const end_time = Employee_attendance.end_time;
+    console.log("Core_TDL_end_time", end_time);
+
+    const classroom = Employee_attendance.classroom_id;
+    console.log("Core_TDL_classroom", classroom);
+
+    const course_name = Employee_attendance.course_name;
+    console.log("Core_TDL_course_name", course_name);
+
+
+    //====================getdata values comes for array ,here I have split 
+    //and get the employee_id,name_en,national_id=======start===============
+    for (i = 0; i < getdata.length; i++) {
+      var employee_id = getdata[i].data_value.Employee_ID;
+      console.log("employee_id", employee_id);
+
+      var Name_en = getdata[i].data_value.Name_en;
+      console.log("Name_en", Name_en);
+
+      var National_id = getdata[i].data_value.National_Id;
+      console.log("National_ID", National_id);
+
+      console.log("getdata===>", getdata);
+
+      //==========Employee person values send to the attendance table 
+      //and store the wheather the person is present ====start============
+      var select_query = await TrainerDao.Trainer_attendence_list(
+        employee_id,
+        attendance_status,
+        National_id,
+        Name_en,
+        trainer_id,
+        Attended_date,
+        start_time,
+        end_time,
+        classroom,
+        course_name
+      );
+      console.log("select_query==================>>>>", select_query);
+
+      //==========Employee person values send to the attendance table 
+      //and store the wheather the person is present ====end============
+
+
+
+
+      if (select_query.message.data.affectedRows == 1) {
+        var select_query = select_query;
+      } else {
+        var select_query = {
+          status: 400,
+          message: "Something went wrong while storing records"
+        };
+      }
+
+      //====================getdata values comes for array ,here I have split
+      //and get the employee_id,name_en,national_id=======end===============
+
+    }
+    return resolve({
+      statuscode: "E08",
+      status: 200,
+      //Token: token,
+      message: select_query,
+      result: "Details saved sucessfully"
+    });
+  });
+}
+//=====================Trainer select the employee absent  ===end===============================

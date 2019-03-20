@@ -20,17 +20,15 @@ module.exports.deleteemployee =
 
 
 
-
-
-//======================Trainer Attendance start================================
-
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
+
+//======================Trainer Attendance start================================
 module.exports.verify_email =
   "SELECT * FROM Trainer where trainer_email_id =? "
 
 module.exports.getschedule =
-  "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id =? "
+  "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id =? AND Scheduled_date >= now()+1 "
 
 module.exports.getcoursear =
   "SELECT name_ar FROM Course where course_id =? "

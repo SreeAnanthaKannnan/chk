@@ -110,6 +110,7 @@ router.get("/", function (request, response, next) {
 //=======================loginservice==================================================//
 router.post("/login", cors(), function (req, res) {
   var loginobject = req.body;
+  console.log("login===>", loginobject)
   login
     .loginuser(loginobject)
     .then(result => {
@@ -124,6 +125,8 @@ router.post("/login", cors(), function (req, res) {
     );
 });
 
+
+;
 
 //=========================citizen-registration-start===========================================
 router.post("/citizen-register", cors(), async function (req, res) {
@@ -2076,12 +2079,16 @@ router.post("/attendence", cors(), (req, res) => {
         })
     );
 });
-//=====================================================
-router.post("/get_employee_attendance_list", cors(), (req, res) => {
-  const data = req.body;
-  const token = req.headers.token;
+
+//=================================Trainer Attendance=============================================//
+router.post("/attendence_absent", cors(), (req, res) => {
+  const Employee_attendance = req.body;
+  console.log("Employee_attendance_ROUTES", Employee_attendance)
+
   trainer_attendance
-    .get_employee_attendance(data)
+    .trainer_attendance_absent_list(
+      Employee_attendance
+    )
     .then(result => {
       console.log(result);
 
@@ -2100,6 +2107,8 @@ router.post("/get_employee_attendance_list", cors(), (req, res) => {
         })
     );
 });
+
+
 router.post("/uploadbulkemployee", multipartMiddleware, cors(), (req, res) => {
   const data = req.files.file.path;
   console.log("file", data);
@@ -2128,134 +2137,6 @@ router.post("/uploadbulkemployee", multipartMiddleware, cors(), (req, res) => {
 
 router.use("/download", express.static(path.join(__dirname, "../upload")));
 
-//=================================Trainer Attendance=============================================//
-router.post("/Trainer_employee_list", cors(), (req, res) => {
-  const trainer_employee = req.body;
-  console.log("Trainer_employee_list_routes", trainer_employee);
 
-  const Trainer_Email = req.body.Trainer_emailid;
-  console.log("Trainer_Company_Email_routes", Trainer_Email);
-
-  trainer_attendance
-    .trainer_attendance(Trainer_Email)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
-
-//select date================================================================
-router.post("/Selecting_date_trainer", cors(), (req, res) => {
-  const trainer_employee = req.body;
-  console.log("Trainer_date_list_routes", trainer_employee);
-
-  const Trainer_id = req.body.Trainer_id;
-  console.log("Trainer_Trainer_id_routes", Trainer_id);
-
-  const selected_date = req.body.select_date;
-  console.log("Trainer_Company_selected_date_routes", selected_date);
-
-  const start_time = req.body.start_time;
-  console.log("Trainer_Company_Email_routes", start_time);
-
-  const end_time = req.body.end_time;
-  console.log("Trainer_Company_Email_routes", end_time);
-
-  trainer_attendance
-    .trainer_date_select(Trainer_id, selected_date, start_time, end_time)
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
-//===========================================================
-
-//=================================Trainer Attendance=============================================//
-router.post("/attendence", cors(), (req, res) => {
-  const trainer_employee = req.body;
-  console.log("Trainer_attendance_list_routes", trainer_employee);
-
-  const getdata = req.body.getdata;
-  console.log("Trainer_Company_employee_id_routes", getdata);
-
-  const attendance_status = "Present";
-  console.log("Trainer_Company_attendance_status_routes", attendance_status);
-
-  const trainer_id = req.body.Trainer_id;
-  console.log("Trainer_Company_trainer_id_routes", trainer_id);
-
-  const Attended_date_val = req.body.attended_date;
-
-  var Attended_date = moment(Attended_date_val).format("YYYY/MM/DD");
-
-  console.log("Trainer_Company_Attended_date_routes", Attended_date);
-
-  const start_time = req.body.start_time;
-  console.log("Trainer_Company_start_time_routes", start_time);
-
-  const end_time = req.body.end_time;
-  console.log("Trainer_Company_end_time_routes", end_time);
-
-  const classroom = req.body.classroom_id;
-  console.log("Trainer_Company_classroom_routes", classroom);
-
-  const course_name = req.body.course_name;
-  console.log("Trainer_Company_course_name_routes", course_name);
-
-  trainer_attendance
-    .trainer_attendance_list(
-      getdata,
-      attendance_status,
-      trainer_id,
-      Attended_date,
-      start_time,
-      end_time,
-      classroom,
-      course_name
-    )
-    .then(result => {
-      console.log(result);
-
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-    );
-});
 
 module.exports = router;
