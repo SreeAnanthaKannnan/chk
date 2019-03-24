@@ -3,6 +3,7 @@ var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 const SessionDao = require("../daos/SessionDao");
 const session_time = require("../utils/session_time_difference");
+var bc = require('../fabcar/javascript/invoke');
 module.exports={
     buildings:buildings
 }
@@ -36,7 +37,14 @@ let query = await SessionDao.Session_select(token)
                 status: 440,
                 message: "session expired"
             })
-        } else {     
+        } else {
+            var params = {
+                id : email_id,
+                fun:"create",
+                data: buildingobject 
+            }
+         //   bcSdk.updatetransaction({ updatedetails: userdetails})
+         bc.main(params)
        var user = building.building(buildingobject,email_id).then((data) => {
             logger.fatal(user, "user")
            responseObj.data = data;

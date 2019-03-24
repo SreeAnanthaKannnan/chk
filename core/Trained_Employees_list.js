@@ -36,7 +36,7 @@ exports.Trained_Employees = (data,token,language) => new Promise(async(resolve, 
 var data_val=[];
             for (i = 0; i < Trained_Employees.result.length; i++) {
                 var result = Trained_Employees.result[i].National_Id
-                let national_id = await Result.result_national_id(result)
+                let national_id = await Result.result_national_id(result,language)
 data_val.push(national_id)
             }
                  return resolve({

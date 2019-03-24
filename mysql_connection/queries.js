@@ -20,17 +20,15 @@ module.exports.deleteemployee =
 
 
 
-
-
-//======================Trainer Attendance start================================
-
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
+
+//======================Trainer Attendance start================================
 module.exports.verify_email =
   "SELECT * FROM Trainer where trainer_email_id =? "
 
 module.exports.getschedule =
-  "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id =? "
+  "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id =? AND Scheduled_date >= now()+1 "
 
 module.exports.getcoursear =
   "SELECT name_ar FROM Course where course_id =? "
@@ -195,12 +193,19 @@ module.exports.findemployeeAttendance = "SELECT * FROM Attendance where trainer_
 /*=========selecting the distinct available date for the number of available seats greater then the selected seats and particular trainerid and course id=======*/
 module.exports.availabledate =
   "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
+
+  module.exports.getcoursename =
+  "SELECT course_name_en FROM Results where National_Id =?"  
+
 module.exports.getinstallers = "SELECT email_id FROM citizens where user_type=?";
 module.exports.imagepdf = "UPDATE Schedules SET filepath =? WHERE id =?";
 module.exports.pdfviewer = "SELECT path,path1,path2,path3 FROM Buildings where email_id= ?";
 module.exports.scheduleinfo = "INSERT INTO Schedules(schedule_time,requestdate,suplier_id,building_id,status) VALUES ? ";
 module.exports.servicehistory = "SELECT * FROM Schedules INNER JOIN Buildings ON Schedules.building_id=Buildings.id AND Buildings.email_id=?";
 module.exports.installationdetails = "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ? WHERE id = ?";
+module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
+module.exports.updateotp =   "UPDATE citizens SET verify_email = ? WHERE otp = ?";
+
 
 
 

@@ -22,16 +22,18 @@ module.exports={
   return new Promise( async function (resolve,reject){
    logger.fatal("i am in daos of verifyuser")
   var email_id= registerobject.email;
-  var sql = "SELECT  * FROM citizens where email_id ='" + email_id + "'";
-  con.query(sql,function(err,result){
-    if(err) { logger.fatal("something",err)
-        return reject({ "status": 400, "body": 'Cannot fetch the data' })}
-        else{
-              logger.fatal(result,"achieved")
-        return resolve({ result});
-        }
-        
-    }); 
+  
+  mysqlConnection
+  .query_execute(query.getlogindetails,email_id)
+  .then(function(result, err) {
+    if (err) {
+      console.log("something", err);
+      return resolve({ status: 400, err: err });
+    } else {
+      console.log(result.data[0],"in  dao 33");
+      return resolve({ status: 200, result: result.data[0] });
+    }
+  });
   })
 }
 //if new user insert the data into DataBase
@@ -152,7 +154,7 @@ function insert_user(registerobject,otp){
     }
     logger.fatal(firstname_en,firstname_ar,"test 124")
     var params=[firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp]
-    mysqlConnection
+    await mysqlConnection
     .insert_query(query.resgister,params)
     .then(function(result, err) {
       if (err) {

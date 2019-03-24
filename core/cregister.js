@@ -12,6 +12,7 @@ var bc = require('../fabcar/javascript/invoke');
 
 function cregister(registerobject){
     return new Promise( async (resolve, reject)=>{
+      console.log("success")
         var email_id = registerobject.email;
        
         logger.fatal("hai");
@@ -27,11 +28,12 @@ function cregister(registerobject){
         else{
    
            var result = await registerform.verify_user(registerobject)
+           console.log("result====>",result)
       
-        logger.fatal(result.result.length != 0);
+        logger.fatal(result.result);
        
         dbFunc.connectionRelease;
-        if(result.result.length != 0){
+        if(result.result){
       return reject({
           "status":409,
           "message":"User Already Registered",
