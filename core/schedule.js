@@ -13,13 +13,14 @@ async function sup(time, rdate, building_id) {
     const idate = rdate;
     let sdate = rdate;
 
-    console.warn("rdate", rdate);
+    console.log("rdate", rdate);
     return new Promise(async function(resolve, reject) {
 
-        console.warn("rdate", idate);
+        console.log("rdate", idate);
         var suparray = [];
-        //Here we are fecthing latest installers list from the DataBase and stored in an array 
+        //Here we are fetching latest installers list from the DataBase and stored in an array 
         var sup = await supplier.supplier();
+        console.log("sup count ",sup)
         for (var i = 0; i < sup.result.length; i++) {
             logger.fatal("supplier list", sup.result[i].email_id);
             suparray.push(sup.result[i].email_id)
@@ -35,7 +36,13 @@ async function sup(time, rdate, building_id) {
             var requestdate = idate;
             let status1="open";
             let data = [schedule_time, requestdate, suplier_id, building_id,status1]
-            let query = await insertquery.schedule_insert(data)
+            let query = await insertquery.schedule_insert(data);
+            var params = {
+                id : id,
+                fun:"create",
+                data: registerobject 
+            }
+         bc.main(params)
         var date22 = moment(requestdate).format("YYYY-MM-DD");
         //if the requested time slot available,schedule the building for installation    
 	return resolve({
@@ -96,5 +103,4 @@ async function incrementDate(dateInput, increment) {
 }
 module.exports = {
     sup: sup,
-
 }

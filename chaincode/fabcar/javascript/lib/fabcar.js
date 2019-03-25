@@ -36,19 +36,18 @@ class FabCar extends Contract {
         console.log(carAsBytes.toString());
         return carAsBytes.toString();
     }
-
+    
+    async queryHistory1(ctx, carNumber) {
+        const carAsBytes = await ctx.stub.getHistoryForKey(carNumber); // get the history from chaincode state
+        if (!carAsBytes || carAsBytes.length === 0) {
+            throw new Error(`${carNumber} does not exist`);
+        }
+        console.log(carAsBytes.toString());
+        return carAsBytes.toString();
+    }
     async create(ctx, carNumber, data) {
         console.info('============= START : Create Car ===========');
-
-        // const car = {
-        //     color,
-        //     docType: 'car',
-        //     make,
-        //     model,
-        //     owner,
-        // };
-
-        await ctx.stub.putState(carNumber, Buffer.from(data));
+       await ctx.stub.putState(carNumber, Buffer.from(data));
         console.info('============= END : Create Car ===========');
     }
 
@@ -97,7 +96,36 @@ class FabCar extends Contract {
         await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
         console.info('============= END : changeCarOwner ===========');
     }
+ async queryHistory(ctx,carNumber) {
+        
 
+        const iterator = await ctx.stub.getHistoryForKey(carNumber);
+
+        const allResults = [];
+        while (true) {
+            const res = await iterator.next();
+
+            if (res.value && res.value.value.toString()) {
+                console.log(res.value.value.toString('utf8'));
+
+                const Key = res.value.key;
+                let Record;
+                try {
+                    Record = JSON.parse(res.value.value.toString('utf8'));
+                } catch (err) {
+                    console.log(err);
+                    Record = res.value.value.toString('utf8');
+                }
+                allResults.push({ Key, Record });
+            }
+            if (res.done) {
+                console.log('end of data');
+                await iterator.close();
+                console.info(allResults);
+                return JSON.stringify(allResults);
+            }
+        }
+    }
 }
 
 module.exports = FabCar;

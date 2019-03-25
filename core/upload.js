@@ -8,10 +8,12 @@ const con = require('../mysql_connection/dbConfig');
 var dbFunc = require('../mysql_connection/connection.js');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
+const SessionDao = require("../daos/SessionDao");
+const session_time = require("../utils/session_time_difference");
 
 var app = express();
 
-async function upload(filepath, email_id,token) {
+async function upload(filepath,token) {
     return new Promise(function(resolve, reject) {
  /*============================Token Validation========================================*/  
    SessionDao.Session_select(token)

@@ -126,10 +126,6 @@ router.post("/login", cors(), function (req, res) {
       })
     );
 });
-
-
-;
-
 //=========================citizen-registration-start===========================================
 router.post("/citizen-register", cors(), async function (req, res) {
   var registerobject = req.body;
@@ -199,9 +195,9 @@ router.post("/getdetails", cors(), async function (req, res) {
       result: id
     });
   } else {
-    var id = req.body.id;
+    var email = req.body.email;
     history
-      .getHistory(id)
+      .getHistory(email)
       .then(result => {
         res.send({
           result: result
@@ -342,7 +338,7 @@ router.post("/file_upload", uploads.single("file"), function (req, res) {
   var file = "var/www/html/" + "/" + req.file.filename;
   console.log(req.file, "ffg");
   var email_id = "manoj";
-
+  const token = req.headers['authorization'];
   var filepath = req.file.path;
   fs.rename(filepath, file, function (err) {
     if (err) {
@@ -350,7 +346,7 @@ router.post("/file_upload", uploads.single("file"), function (req, res) {
       res.send(500);
     } else {
       upload
-        .upload(filepath, email_id)
+        .upload(filepath,token)
         .then(result => {
           res.send({
             message: "file uploaded successfully",
@@ -650,7 +646,7 @@ router.post("/forgetpassword", (req, res) => {
     });
   }
 });
-//========================forgetpassword-otp===============================//
+//========================forgetpassword-otp===========================================//
 router.post("/forgetotpverification", cors(), (req, res) => {
   var otp = req.body.otp;
   var password = cryptr.encrypt(req.body.password);

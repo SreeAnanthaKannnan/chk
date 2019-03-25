@@ -9,8 +9,9 @@ let secret = 'rapidqubepvtltd';
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 const sessionDao = require("../daos/SessionDao");
-let date = require("date-and-time");
-let now = new Date();
+// var date = require("date-and-time");
+// var now = new Date();
+var dateFormat = require('dateformat');
 module.exports = {
   loginuser: loginuser
 }
@@ -48,7 +49,7 @@ function loginuser(loginobject) {
         let query_value = [
           registered_user,
           token,
-          date.format(now, "YYYY/MM/DD HH:mm:ss")
+          dateFormat("yyyy-mm-dd HH:MM:ss")
         ];
         let Session = await sessionDao.Session_insert(query_value);
         return resolve({
