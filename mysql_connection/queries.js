@@ -205,6 +205,7 @@ module.exports.servicehistory = "SELECT * FROM Schedules INNER JOIN Buildings ON
 module.exports.installationdetails = "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ? WHERE id = ?";
 module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
 module.exports.updateotp =   "UPDATE citizens SET verify_email = ? WHERE otp = ?";
+module.exports.deleteBuilding = "Delete from Buildings where id = ?";
 
 
 
