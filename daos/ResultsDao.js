@@ -38,6 +38,7 @@ async function Result_select(params) {
     var res = await mysqlConnection.query_execute(query.findemployeeResults, [
       params
     ]);
+    
 
     if (res.data.errno) {
       return reject({
@@ -94,11 +95,11 @@ async function Attendance_delete(params) {
 
 }
 
-async function result_national_id(params) {
+async function result_national_id(params,language) {
   return new Promise(async function (resolve, reject) {
-    var res = mysqlConnection
+    var res = await mysqlConnection
       .query_execute(query.getcoursename, [params])
-
+console.log("res=====>",res)
     if (res.data.errno) {
       return reject({
         status: 400,

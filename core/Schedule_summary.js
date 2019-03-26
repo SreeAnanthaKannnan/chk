@@ -4,38 +4,28 @@ const ScheduleDao = require("../daos/SchedulingDao");
 const TrainerDao = require("../daos/TrainerDao");
 const CourseDao = require("../daos/CourseDao");
 const Employee_ProfileDao = require("../daos/Employee_profileDao");
+const checktoken = require("../utils/checkToken")
+
 
 exports.schedule_summary = request =>
     new Promise(async (resolve, reject) => {
-        let Company_Trade_Lincense_No = request.company_trade_lincense_no;
-        let token = request.token;
-        let language = request.language;
-        let status = "Booked";
+            let Company_Trade_Lincense_No = request.company_trade_lincense_no;
+            let token = request.authorization;
+            let language = request.language;
+            let status = "Booked";
 
-        /*====================Token validation======================*/
-        let query = await SessionDao.Session_select(token);
-        if (query.length == 0) {
-            resolve({
-                status: 400,
-                message: "Invalid token"
-            });
-        } else {
-            console.log(query[0].session_created_at);
-            let Name_ar, Name_en, query_value;
-            let now = new Date();
-
-            let Db_time = query[0].session_created_at;
-            let time_difference_minutes = await session_time.Session_time_difference(
-                Db_time,
-                now
-            );
-            /*****************Session Validation****************************/
-
-            if (time_difference_minutes >= "00:30:00") {
+            /*====================Token validation======================*/
+            var verifytoken = await checktoken.checkToken(token)
+            if (verifytoken.status == 402) {
                 return resolve({
-                    status: 440,
-                    message: "session expired"
-                });
+                    status: verifytoken.status,
+                    message: verifytoken.message
+                })
+            } else if (verifytoken.status == 403) {
+                return resolve({
+                    status: verifytoken.status,
+                    message: verifytoken.message
+                })
             } else {
                 /*******************fetching the number of employees in the schedule table*************/
                 await ScheduleDao.schedule_summary_value(
@@ -188,6 +178,6 @@ exports.schedule_summary = request =>
                         });
                     });
             }
-        }
+        
     });
 /********************************Code Ends*********************************************/

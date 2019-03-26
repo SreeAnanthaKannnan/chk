@@ -1,31 +1,45 @@
-let jwt = require('jsonwebtoken');
-let secret = 'rapidqubepvtltd';
-async function checkToken(req,res) {
-  return new Promise((resolve,reject)=>{
-  const token = req.headers['authorization'];
-  console.log(token,"token");
-  if (token) {
-    jwt.verify(token, secret, (err, decoded) => {
-      if (err) {
-        console.log("in not valid");
+const SessionDao = require("../daos/SessionDao");
+
+const session_time = require("../utils/session_time_difference");
+async function checkToken(token, res) {
+  return new Promise(async (resolve, reject) => {
+    console.log(token, "token");
+    if (token) {
+      let query = await SessionDao.check_token(token);
+      console.log("query", query);
+      if (query.length == 0) {
         return resolve({
-          status: 400,
-          message: 'Token not valid'
+          status: 405,
+          message: "Invalid token"
         });
       } else {
-        return resolve({
-          result:decoded.email_id
-        })
-       }
-    });
-  } else {
-    return resolve({
-      status: 403,
-      message: 'Auth token is not supplied'
-    });
-  }
-});
+        /*===================Session validation======================*/
+        console.log(query[0].session_created_at);
+        let now = new Date();
+
+        let Db_time = query[0].session_created_at;
+        let time_difference_minutes = await session_time.Session_time_difference(
+          Db_time,
+          now
+        );
+        console.log(
+          time_difference_minutes.Session_time_difference,
+          "session time difference"
+        );
+        if (time_difference_minutes.Session_time_difference >= "00:01") {
+          // let deletetoken = await SessionDao.Session_delete(Db_time)
+          // console.log("deletetoken", deletetoken)
+          return resolve({
+            status: 403,
+            message: "Token has expired"
+          });
+        } else {
+          return resolve(true);
+        }
+      }
+    }
+  });
 }
 module.exports = {
   checkToken: checkToken
-}
+};

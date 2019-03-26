@@ -152,7 +152,7 @@ function insert_user(registerobject,otp){
     }
     logger.fatal(firstname_en,firstname_ar,"test 124")
     var params=[firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp]
-    mysqlConnection
+    await mysqlConnection
     .insert_query(query.resgister,params)
     .then(function(result, err) {
       if (err) {

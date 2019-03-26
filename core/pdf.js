@@ -13,21 +13,33 @@ var upload = multer({
 var dateFormat = require('dateformat');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
+const checktoken = require("../utils/checkToken")
 
 
 
-function Pdf(yesvalue1, novalue1, yesvalue2, novalue2, yesvalue3, novalue3, yesvalue4, novalue4, yesvalue5, novalue5, yesvalue6, novalue6, yesvalue7, novalue7, yesvalue8, novalue8, yesvalue9, novalue9, email) {
+function Pdf(yesvalue1, novalue1, yesvalue2, novalue2, yesvalue3, novalue3, yesvalue4, novalue4, yesvalue5, novalue5, yesvalue6, novalue6, yesvalue7, novalue7, yesvalue8, novalue8, yesvalue9, novalue9, email, token) {
 
 
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
+        var verifytoken = await checktoken.checkToken(token)
+        if (verifytoken.status == 402) {
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            })
+        } else if (verifytoken.status == 403) {
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            })
+        } else {
+            try {
 
-        try {
+                const browser = await puppeteer.launch();
+                const page = await browser.newPage();
 
-            const browser = await puppeteer.launch();
-            const page = await browser.newPage();
-
- //==================================================Html File generation for creating pdf===================================================================//
-            await page.setContent(`<!DOCTYPE html>
+                //==================================================Html File generation for creating pdf===================================================================//
+                await page.setContent(`<!DOCTYPE html>
         <html>
                  
         </head>
@@ -235,75 +247,76 @@ function Pdf(yesvalue1, novalue1, yesvalue2, novalue2, yesvalue3, novalue3, yesv
         </html>
         `);
 
-            await page.emulateMedia('screen');
-            var datetime = dateFormat(new Date(), "yyyy-mm-dd h:MM:ss");
-            console.log(datetime);
+                await page.emulateMedia('screen');
+                var datetime = dateFormat(new Date(), "yyyy-mm-dd h:MM:ss");
+                console.log(datetime);
 
- //============================================================storing pdf file path==============================================================// 
-            var path = '/pdf' + datetime + email + '.pdf';
-            //Here the path of the pdf will be stored in DataBase
-            let query = await insertquery.pdf_insert(path, email)
-            console.log(query != 0, "data inserted")
-            console.log("guess done");
-            await page.pdf({
+                //============================================================storing pdf file path==============================================================// 
+                var path = '/pdf' + datetime + email + '.pdf';
+                //Here the path of the pdf will be stored in DataBase
+                let query = await insertquery.pdf_insert(path, email)
+                console.log(query != 0, "data inserted")
+                console.log("guess done");
+                await page.pdf({
 
-                path: './uploads/pdf' + datetime + email + '.pdf',
-                format: 'A4',
-                printBackground: true
+                    path: './uploads/pdf' + datetime + email + '.pdf',
+                    format: 'A4',
+                    printBackground: true
 
-            }).then(result => {
+                }).then(result => {
 
+
+                    return resolve({
+                        message: "pdf conversion done",
+                        result: (new Buffer(result)).toString('base64')
+
+                    })
+                })
+
+                //==========================================================pdf file sent through Building owner mail======================================================================//
+                var transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 587,
+                    secure: false,
+                    auth: {
+                        user: "Amanservice2019@gmail.com",
+                        pass: "Aman@2019"
+                    }
+                });
+                //=============================== filename and content type is derived from path=================================================================================//
+
+                var mailOptions = {
+                    transport: transporter,
+                    from: "Saned Services" + "<Amanservice2019@gmail.com>",
+                    to: email,
+                    subject: 'Saned Services',
+                    attachments: [{
+                        path: './uploads/pdf' + datetime + email + '.pdf'
+                    }, ],
+
+                    html: "Dear " + email + "<br>This is your survey Report for your building" + "" + email + "  with SANED as a Supplier.  SANED will be rolling out new services for Sharjah residents." + "<br><br>" + "We will contact you for further information.<br><br><br>" + "Best Regards,<br>" + "SANED Team."
+
+                };
+                console.log(path, "pathfghfff");
+                transporter.sendMail(mailOptions, (error, info) => {
+                    console.log("error", error)
+
+                    if (error) {
+                        console.log("Mail send error: ", error);
+                    }
+                })
 
                 return resolve({
-                    message: "pdf conversion done",
-                    result: (new Buffer(result)).toString('base64')
-
+                    message: ""
                 })
-            })
-            
- //==========================================================pdf file sent through Building owner mail======================================================================//
-            var transporter = nodemailer.createTransport({
-                host: 'smtp.gmail.com',
-                port: 587,
-                secure: false,
-                auth: {
-                    user: "Amanservice2019@gmail.com",
-                    pass: "Aman@2019"
-                }
-            });
-//=============================== filename and content type is derived from path=================================================================================//
-
-            var mailOptions = {
-                transport: transporter,
-                from: "Saned Services" + "<Amanservice2019@gmail.com>",
-                to: email,
-                subject: 'Saned Services',
-                attachments: [{
-                path: './uploads/pdf' + datetime + email + '.pdf'
-                }, ],
-
-                html: "Dear " + email + "<br>This is your survey Report for your building" + "" + email + "  with SANED as a Supplier.  SANED will be rolling out new services for Sharjah residents." + "<br><br>" + "We will contact you for further information.<br><br><br>" + "Best Regards,<br>" + "SANED Team."
-
-            };
-            console.log(path, "pathfghfff");
-            transporter.sendMail(mailOptions, (error, info) => {
-                console.log("error", error)
-
-                if (error) {
-                    console.log("Mail send error: ", error);
-                }
-            })
-
-            return resolve({
-                message: ""
-            })
 
 
-        } catch (e) {
-            console.log('our error', e)
-            return reject({
-                message: "not done"
-            })
+            } catch (e) {
+                console.log('our error', e)
+                return reject({
+                    message: "not done"
+                })
+            }
         }
 
 

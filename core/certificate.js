@@ -11,6 +11,7 @@ const Result = require("../daos/ResultsDao");
 const language_detect = require("../utils/language_detect");
 const translate = require("../utils/translate");
 const moment = require("moment");
+const checktoken = require("../utils/checkToken")
 
 module.exports = {
   Certificate: Certificate,
@@ -24,348 +25,306 @@ async function Certificate(req, callback) {
   var date_attended = req.body.date_attended;
   date_attended = moment(date_attended).format("YYYY/MM/DD");
   var output = req.body.result;
-  var language = req.headers.language;
-  const token = req.headers.token;
+  var lang = req.headers.lang;
+  const token = req.headers.authorization;
   var course_name = req.body.course_name;
   var queryresult;
   console.log("outputlength........>>>>>>>>", output.length);
-  let query = await SessionDao.Session_select(token);
-  if (query.length == 0) {
-    resolve({
-      status: 402,
-      message: "Invalid token"
-    });
+  var verifytoken = await checktoken.checkToken(token)
+  if (verifytoken.status == 402) {
+    return resolve({
+      status: verifytoken.status,
+      message: verifytoken.message
+    })
+  } else if (verifytoken.status == 403) {
+    return resolve({
+      status: verifytoken.status,
+      message: verifytoken.message
+    })
   } else {
-    /*====================session validation=================================*/
-    console.log(query[0].session_created_at);
-    let Name_ar, Name_en, query_value;
-    let now = new Date();
 
-    let Db_time = query[0].session_created_at;
-    let time_difference_minutes = await session_time.Session_time_difference(
-      Db_time,
-      now
-    );
-    console.log(time_difference_minutes, "function");
+    for (i = 0; i < output.length; i++) {
+      var employee_id = output[i].employee_id;
 
+      var employee_name = output[i].Name_en;
 
-    if (time_difference_minutes >= "00:30:00") {
-      return resolve({
-        status: 440,
-        message: "session expired"
-      });
-    } else {
+      var emirates_id = output[i].National_Id;
 
-      for (i = 0; i < output.length; i++) {
-        var employee_id = output[i].employee_id;
+      var result = output[i].result;
 
-        var employee_name = output[i].Name_en;
+      if (
+        !employee_name ||
+        !result ||
+        !lang ||
+        !employee_id ||
+        !date_attended ||
+        !emirates_id
+      ) {
+        var err = {
+          status: 400,
+          message: "Fields should not be empty"
+        };
+        callback(err);
+      } else {
+        let result_ar, result_en;
 
-        var emirates_id = output[i].National_Id;
+        if (lang == "en") {
+          let temp = await translate.translate_ar(result);
 
-        var result = output[i].result;
-
-        if (
-          !employee_name ||
-          !result ||
-          !language ||
-          !employee_id ||
-          !date_attended ||
-          !emirates_id
-        ) {
-          var err = {
-            status: 400,
-            message: "Fields should not be empty"
-          };
-          callback(err);
+          result_ar = temp.result;
+          result_en = result;
         } else {
-          let result_ar, result_en;
+          result_ar = result;
+          let temp = await translate.translate_en(result);
+          result_en = temp.result;
+        }
 
-          if (language == "en") {
-            let temp = await translate.translate_ar(result);
+        var value = {
+          employee_name: employee_name,
 
-            result_ar = temp.result;
-            result_en = result;
+          course_name: course_name
+        };
+
+        if (result == "Pass") {
+          let course_ar, course_en
+
+          if (lang == "en") {
+            let temp = await translate.translate_ar(course_name);
+
+            course_ar = temp.result;
+            course_en = course_name;
           } else {
-            result_ar = result;
-            let temp = await translate.translate_en(result);
-            result_en = temp.result;
+            course_ar = course_name;
+            let temp = await translate.translate_en(course_name);
+
+            course_en = temp.result;
           }
+          var score = 50;
+          console.log("value", value);
+          if (lang == "en") {
+            await certificate
+              .Pdf(value.employee_name, value.course_name)
+              .then(async function (result) {
+                var path = "/certificate" + employee_name + ".pdf";
 
-          var value = {
-            employee_name: employee_name,
+                var query_value = [
+                  date_attended,
+                  employee_id,
+                  score,
+                  result_en,
+                  result_ar,
+                  path,
+                  emirates_id,
+                  course_en,
+                  course_ar
+                ];
+                await Result.Result_select(emirates_id).then(async function (
+                  result
+                ) {
+                  console.log(result)
+                  if (result.message.length == 0) {
+                    let query = await Result.Result_insert(query_value);
 
-            course_name: course_name
-          };
-
-          if (result == "Pass") {
-            let course_ar, course_en
-
-            if (language == "en") {
-              let temp = await translate.translate_ar(course_name);
-
-              course_ar = temp.result;
-              course_en = course_name;
-            } else {
-              course_ar = course_name;
-              let temp = await translate.translate_en(course_name);
-
-              course_en = temp.result;
-            }
-            var score = 50;
-            console.log("value", value);
-            if (lang == "English") {
-              await certificate
-                .Pdf(value.employee_name, value.course_name)
-                .then(async function (result) {
-                  var path = "/certificate" + employee_name + ".pdf";
-
-                  var query_value = [
-                    date_attended,
-                    employee_id,
-                    score,
-                    result_en,
-                    result_ar,
-                    path,
-                    emirates_id,
-                    course_en,
-                    course_ar
-                  ];
-                  await Result.Result_select(emirates_id).then(async function (
-                    result
-                  ) {
-                    console.log(result)
-                    if (result.message.length == 0) {
-                      let query = await Result.Result_insert(query_value);
-
-                      if (query.message.affectedRows == 1) {
-                        queryresult = {
-                          status: 200,
-                          message: "Results has been successfully stored"
-                        };
-                        var deleteattendance = await Result.Attendance_delete(
-                          emirates_id
-                        );
-                      }
-                    } else if (result.message.length != 0) {
+                    if (query.message.affectedRows == 1) {
                       queryresult = {
-                        status: 404,
-                        message: "Results for this user is already exists."
+                        status: 200,
+                        message: "Results has been successfully stored"
                       };
+                      var deleteattendance = await Result.Attendance_delete(
+                        emirates_id
+                      );
                     }
-                  });
+                  } else if (result.message.length != 0) {
+                    queryresult = {
+                      status: 404,
+                      message: "Results for this user is already exists."
+                    };
+                  }
                 });
-            } else if (lang == "Arabic") {
-              let employee_ar;
+              });
+          } else if (lang == "ar") {
+            let employee_ar;
 
-              let temp = await translate.translate_ar(employee_name);
+            let temp = await translate.translate_ar(employee_name);
 
-              employee_ar = temp.result;
+            employee_ar = temp.result;
 
-              var value1 = {
-                employee_ar: employee_ar,
-                course_name_ar: course_ar
-              };
-              await certificate
-                .Pdf(value1.employee_ar, value1.course_name_ar)
-                .then(async function (result) {
-                  var path = "/certificate" + employee_name + ".pdf";
+            var value1 = {
+              employee_ar: employee_ar,
+              course_name_ar: course_ar
+            };
+            await certificate
+              .Pdf(value1.employee_ar, value1.course_name_ar)
+              .then(async function (result) {
+                var path = "/certificate" + employee_name + ".pdf";
 
-                  var query_value = [
-                    date_attended,
-                    employee_id,
-                    score,
-                    result_en,
-                    result_ar,
-                    path,
-                    emirates_id,
-                    course_en,
-                    course_ar
-                  ];
-                  await Result.Result_select(emirates_id).then(async function (
-                    result
-                  ) {
-                    if (result.message.length == 0) {
-                      let query = await Result.Result_insert(query_value);
+                var query_value = [
+                  date_attended,
+                  employee_id,
+                  score,
+                  result_en,
+                  result_ar,
+                  path,
+                  emirates_id,
+                  course_en,
+                  course_ar
+                ];
+                await Result.Result_select(emirates_id).then(async function (
+                  result
+                ) {
+                  if (result.message.length == 0) {
+                    let query = await Result.Result_insert(query_value);
 
-                      if (query.message.affectedRows == 1) {
-                        queryresult = {
-                          status: 200,
-                          message: "Results has been successfully stored"
-                        };
-                        var deleteattendance = await Result.Attendance_delete(
-                          emirates_id
-                        );
-                      }
-                    } else if (result.message.length != 0) {
+                    if (query.message.affectedRows == 1) {
                       queryresult = {
-                        status: 404,
-                        message: "Results for this user is already exists."
+                        status: 200,
+                        message: "Results has been successfully stored"
                       };
+                      var deleteattendance = await Result.Attendance_delete(
+                        emirates_id
+                      );
                     }
-                  });
+                  } else if (result.message.length != 0) {
+                    queryresult = {
+                      status: 404,
+                      message: "Results for this user is already exists."
+                    };
+                  }
                 });
-            }
-          } else if (result == "Fail") {
-            var score = 20;
-            var query_value = [
-              date_attended,
-              employee_id,
+              });
+          }
+        } else if (result == "Fail") {
+          var score = 20;
+          var query_value = [
+            date_attended,
+            employee_id,
 
-              score,
-              result_en,
-              result_ar,
-              null,
-              emirates_id
-            ];
-            await Result.Result_select(emirates_id).then(async function (result) {
-              if (result.message.length == 0) {
-                let query = await Result.Result_insert(query_value);
+            score,
+            result_en,
+            result_ar,
+            null,
+            emirates_id
+          ];
+          await Result.Result_select(emirates_id).then(async function (result) {
+            if (result.message.length == 0) {
+              let query = await Result.Result_insert(query_value);
 
-                if (query.message.affectedRows == 1) {
-                  queryresult = {
-                    status: 200,
-                    message: "Results has been successfully stored"
-                  };
-                  var deleteattendance = await Result.Attendance_delete(
-                    emirates_id
-                  );
-                }
-              } else if (result.message.length != 0) {
+              if (query.message.affectedRows == 1) {
                 queryresult = {
-                  status: 404,
-                  message: "Results for this user is already exists."
+                  status: 200,
+                  message: "Results has been successfully stored"
                 };
+                var deleteattendance = await Result.Attendance_delete(
+                  emirates_id
+                );
               }
-            });
-          }
+            } else if (result.message.length != 0) {
+              queryresult = {
+                status: 404,
+                message: "Results for this user is already exists."
+              };
+            }
+          });
         }
       }
-      callback(queryresult);
     }
+    callback(queryresult);
+
   }
 }
 //====getCertificate method is used to fetch the certificate path from DB and it sends to UI====//
 async function getCertificate(req, callback) {
   var emirates_id = req.body.national_id;
-  const token = req.headers.token;
+  const token = req.headers.authorization;
   const language = req.headers.language;
-  let query = await SessionDao.Session_select(token);
-  if (query.length == 0) {
-    resolve({
-      status: 402,
-      message: "Invalid token"
-    });
+  var verifytoken = await checktoken.checkToken(token)
+  if (verifytoken.status == 402) {
+    return resolve({
+      status: verifytoken.status,
+      message: verifytoken.message
+    })
+  } else if (verifytoken.status == 403) {
+    return resolve({
+      status: verifytoken.status,
+      message: verifytoken.message
+    })
   } else {
-    /*====================session validation=================================*/
-    console.log(query[0].session_created_at);
-    let Name_ar, Name_en, query_value;
-    let now = new Date();
-
-    let Db_time = query[0].session_created_at;
-    let time_difference_minutes = await session_time.Session_time_difference(
-      Db_time,
-      now
-    );
-    console.log(time_difference_minutes, "function");
-
-
-    if (time_difference_minutes >= "00:30:00") {
-      return resolve({
-        status: 440,
-        message: "session expired"
-      });
+    if (!emirates_id) {
+      var err = {
+        status: 400,
+        message: "Fields should not be empty"
+      };
+      callback(err);
     } else {
-      if (!emirates_id) {
-        var err = {
+      var certificate = await Result.Result_select(emirates_id);
+
+      if (certificate.message.data.length == 0) {
+        var error = {
           status: 400,
-          message: "Fields should not be empty"
+          message: "Record not found"
         };
-        callback(err);
+        callback(error);
       } else {
-        var certificate = await Result.Result_select(emirates_id);
+        var cert = certificate.message.data[0].certificate;
 
-        if (certificate.message.data.length == 0) {
-          var error = {
-            status: 400,
-            message: "Record not found"
-          };
-          callback(error);
-        } else {
-          var cert = certificate.message.data[0].certificate;
-
-          var result = {
-            status: 200,
-            message: cert
-          };
-          callback(result);
-        }
+        var result = {
+          status: 200,
+          message: cert
+        };
+        callback(result);
       }
     }
   }
+
 }
 
 //====getAttendance method will dtch the attendance list by providing trainer_id to DB====//
 async function getAttendance(req, callback) {
   var trainer_id = req.body.trainer_id;
-  const token = req.headers.token;
+  const token = req.headers.authorization;
   const language = req.headers.language;
-  let query = await SessionDao.Session_select(token);
-  if (query.length == 0) {
-    resolve({
-      status: 402,
-      message: "Invalid token"
-    });
+  var verifytoken = await checktoken.checkToken(token)
+  if (verifytoken.status == 402) {
+    return resolve({
+      status: verifytoken.status,
+      message: verifytoken.message
+    })
+  } else if (verifytoken.status == 403) {
+    return resolve({
+      status: verifytoken.status,
+      message: verifytoken.message
+    })
   } else {
-    /*====================session validation=================================*/
-    console.log(query[0].session_created_at);
-    let Name_ar, Name_en, query_value;
-    let now = new Date();
-
-    let Db_time = query[0].session_created_at;
-    let time_difference_minutes = await session_time.Session_time_difference(
-      Db_time,
-      now
-    );
-    console.log(time_difference_minutes, "function");
-
-
-    if (time_difference_minutes >= "00:30:00") {
-      return resolve({
-        status: 440,
-        message: "session expired"
-      });
+    if (!trainer_id) {
+      var err = {
+        status: 400,
+        message: "Fields should not be empty"
+      };
+      callback(err);
     } else {
-      if (!trainer_id) {
-        var err = {
+      var Attendance = await Result.Attendance_select(trainer_id);
+
+      if (Attendance.message.length == 0) {
+        var error = {
           status: 400,
-          message: "Fields should not be empty"
+          message: "Record not found"
         };
-        callback(err);
+        callback(error);
       } else {
-        var Attendance = await Result.Attendance_select(trainer_id);
-
-        if (Attendance.message.length == 0) {
-          var error = {
-            status: 400,
-            message: "Record not found"
-          };
-          callback(error);
-        } else {
-          var date_attended;
-          for (i = 0; i < Attendance.message.length; i++) {
-            var cert = Attendance.message[i].Attended_date;
-            date_attended = moment(cert).format("YYYY/MM/DD");
-            Attendance.message[i].Attended_date = date_attended;
-          }
-
-          var result = {
-            status: 200,
-            message: Attendance
-          };
-          callback(result);
+        var date_attended;
+        for (i = 0; i < Attendance.message.length; i++) {
+          var cert = Attendance.message[i].Attended_date;
+          date_attended = moment(cert).format("YYYY/MM/DD");
+          Attendance.message[i].Attended_date = date_attended;
         }
+
+        var result = {
+          status: 200,
+          message: Attendance
+        };
+        callback(result);
       }
     }
   }
+
 }
