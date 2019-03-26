@@ -1,5 +1,5 @@
 /**
- * @author: Manoj V
+ * @author: Saned_team
  * @version: 1.0.0
  * @date: February 20, 2019
  * @description: This would be the routes file where all the API definitions and implementations are described.
@@ -13,71 +13,16 @@
  * 3. It disables features that are confusing or poorly thought out.
  */
 "use strict";
-var xlsx = require('node-xlsx');
+
 var express = require("express"),
-    router = express.Router(),
-    cors = require("cors"),
-    multipart = require("connect-multiparty"),
-    multer = require("multer"),
-    path = require("path");
+  router = express.Router(),
+  cors = require("cors"),
+  multipart = require("connect-multiparty"),
+  multer = require("multer"),
+  path = require("path");
 // log4js = require('log4js');
 
 var con = require("../mysql_connection/dbConfig.js"),
-<<<<<<< HEAD
-    login = require("../core/login.js"),
-    feedback = require("../core/Feedback"),
-    cregister = require("../core/cregister.js"),
-    history = require("../core/history"),
-    building = require("../core/building"),
-    delbuilding = require("../core/DeleteBuilding"),
-    assesserview = require("../core/assesserview"),
-    schedule = require("../core/schedule"),
-    schedulefun = require("../core/Bulkschedule"),
-    getBuildings = require("../core/getBuildings"),
-    profile = require("../core/profile"),
-    check = require("../utils/checkToken"),
-    phone = require("../utils/phonecheck.js"),
-    pdf = require("../core/pdf.js"),
-    upload = require("../core/upload.js"),
-    pdf1 = require("../core/pdfviewer.js"),
-    update = require("../core/update"),
-    assessment = require("../core/assessment"),
-    book = require("../core/servicehistory"),
-    image_upload = require("../core/image_upload"),
-    verify = require('../core/otpverify');
-
-let moment = require("moment");
-let Appeal = require("../core/Appeal"),
-
-
-
-    Employee_profile = require("../core/Employee_profile"),
-
-
-    safety_officer_details = require("../core/Employee_safetyofficer_profile_showup"),
-
-    classroom = require("../core/Classroom"),
-    scheduling = require("../core/Scheduling"),
-    available_date1 = require("../core/Available_date_showup"),
-    //  photo = require("../core/Photo_upload"),
-    company_profile = require("../core/Company_profile"),
-    company_trading_license = require("../core/Company_trade_license"),
-    trainer_account = require("../core/Trainer_registration"),
-    course_view = require("../core/Course_view"),
-    trainer_names = require("../core/Trainer_names"),
-    course_creation = require("../core/Course_creation"),
-    time_slots_list = require("../core/Time_slots_list"),
-    Trained_Employees = require("../core/Trained_Employees_list"),
-    Untrained_Employees = require("../core/Untrained_Employees_showup"),
-    schedule_summary = require("../core/Schedule_summary"),
-    bulk_booking = require("../core/Bulk_booking"),
-    certificate = require("../core/certificate"),
-    uploadSalama = require("../core/uploadbulkemployee"),
-    trainer = require("../core/Trainer_registration"),
-    Untrained_Employees_schedule = require("../core/Untrained_Employees_showup_schedule"),
-    number_validation_schedule = require("../core/Number_validation_schedule"),
-    ip = require("ip");
-=======
   login = require("../core/login.js"),
   feedback = require("../core/Feedback"),
   cregister = require("../core/cregister.js"),
@@ -97,12 +42,18 @@ let Appeal = require("../core/Appeal"),
   assessment = require("../core/assessment"),
   book = require("../core/servicehistory"),
   image_upload = require("../core/image_upload"),
-  verify = require("../core/otpverify");
+  verify = require('../core/otpverify');
 
 let moment = require("moment");
 let Appeal = require("../core/Appeal"),
+
+
+
   Employee_profile = require("../core/Employee_profile"),
+
+
   safety_officer_details = require("../core/Employee_safetyofficer_profile_showup"),
+
   classroom = require("../core/Classroom"),
   scheduling = require("../core/Scheduling"),
   available_date1 = require("../core/Available_date_showup"),
@@ -124,15 +75,14 @@ let Appeal = require("../core/Appeal"),
   Untrained_Employees_schedule = require("../core/Untrained_Employees_showup_schedule"),
   number_validation_schedule = require("../core/Number_validation_schedule"),
   ip = require("ip");
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
 
 const trainer_attendance = require("../core/Trainer_attendance");
 
 const Cryptr = require("cryptr"),
-    cryptr = new Cryptr("myTotalySecretKey"),
-    nodemailer = require("nodemailer"),
-    fs = require("fs"),
-    logger = require("morgan");
+  cryptr = new Cryptr("myTotalySecretKey"),
+  nodemailer = require("nodemailer"),
+  fs = require("fs"),
+  logger = require("morgan");
 //logger = log4js.getLogger('Aman_project');
 
 let ipAddress = ip.address();
@@ -153,37 +103,16 @@ console.log("ips====>", ipAddress);
 var multipartMiddleware = multipart();
 
 /* GET home page. */
-router.get("/", function(request, response, next) {
-<<<<<<< HEAD
-    response.render("index", {
-        title: "Express Page for Saneds SPSA application."
-    });
-=======
+router.get("/", function (request, response, next) {
   response.render("index", {
     title: "Express Page for Saneds SPSA application."
   });
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
 });
 
 //=======================loginservice==================================================//
-router.post("/login", cors(), function(req, res) {
-<<<<<<< HEAD
-    var loginobject = req.body;
-    console.log("login===>", loginobject)
-    login
-        .loginuser(loginobject)
-        .then(result => {
-            res.send({
-                result: result
-            });
-        })
-        .catch(err =>
-            res.status(err.status).json({
-                message: err.message
-            })
-        );
-=======
+router.post("/login", cors(), function (req, res) {
   var loginobject = req.body;
+  console.log("login===>", loginobject)
   login
     .loginuser(loginobject)
     .then(result => {
@@ -196,17 +125,9 @@ router.post("/login", cors(), function(req, res) {
         message: err.message
       })
     );
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
 });
 //=========================citizen-registration-start===========================================
-router.post("/citizen-register", cors(), async function(req, res) {
-<<<<<<< HEAD
-    var registerobject = req.body;
-    console.log(registerobject, "registerobject");
-    var mobile = registerobject.mobile;
-    var result = await phone.validateMobileNumber(mobile);
-    if (result == false) {
-=======
+router.post("/citizen-register", cors(), async function (req, res) {
   var registerobject = req.body;
   console.log(registerobject, "registerobject");
   var mobile = registerobject.mobile;
@@ -219,48 +140,23 @@ router.post("/citizen-register", cors(), async function(req, res) {
     await cregister
       .cregister(registerobject)
       .then(result => {
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
         res.send({
-            message: "Please check Your Mobile number"
+          result: result
         });
-    } else {
-        await cregister
-            .cregister(registerobject)
-            .then(result => {
-                res.send({
-                    result: result
-                });
-            })
-            .catch(err =>
-                res.status(err.status).json({
-                    message: err.message
-                })
-            );
-    }
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 //====================================================================================//
-router.post("/number_validation_schedule", cors(), function(req, res) {
-<<<<<<< HEAD
-    var data = req.body;
-    var request = req.headers;
-    number_validation_schedule
-        .number_validation_schedule(data, request)
-        .then(result => {
-            res.send({
-                result: result
-            });
-        })
-        .catch(err =>
-            res.status(err.status).json({
-                message: err.message
-            })
-        );
-=======
+router.post("/number_validation_schedule", cors(), function (req, res) {
   var data = req.body;
   var request = req.headers;
-  var token = req.headers.authorization;
   number_validation_schedule
-    .number_validation_schedule(data, request, token)
+    .number_validation_schedule(data, request)
     .then(result => {
       res.send({
         result: result
@@ -271,53 +167,12 @@ router.post("/number_validation_schedule", cors(), function(req, res) {
         message: err.message
       })
     );
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
 });
 
 //======================================================================================//
-router.post("/emailotpverification1", cors(), function(req, res) {
-<<<<<<< HEAD
-    var otpobject = req.body;
-    console.log("login===>", otpobject)
-    verify
-        .verifyuser(otpobject)
-        .then(result => {
-            res.send({
-                result: result
-            });
-        })
-        .catch(err =>
-            res.status(err.status).json({
-                message: err.message
-            })
-        );
-});
-//========================================citizen-registration-end=====================================
-router.post("/getdetails", cors(), async function(req, res) {
-    var id = await check.checkToken(req);
-
-    if (id.status == 400 || id.status == 403) {
-        res.send({
-            result: id
-        });
-    } else {
-        var id = req.body.id;
-        history
-            .getHistory(id)
-            .then(result => {
-                res.send({
-                    result: result
-                });
-            })
-            .catch(err =>
-                res.status(err.status).json({
-                    message: err.message
-                })
-            );
-    }
-=======
+router.post("/emailotpverification1", cors(), function (req, res) {
   var otpobject = req.body;
-  console.log("login===>", otpobject);
+  console.log("login===>", otpobject)
   verify
     .verifyuser(otpobject)
     .then(result => {
@@ -332,183 +187,91 @@ router.post("/getdetails", cors(), async function(req, res) {
     );
 });
 //========================================citizen-registration-end=====================================
-router.post("/getdetails", cors(), async function(req, res) {
-  var token = req.headers.authorization;
-  var id = req.body.id;
-  history
-    .getHistory(id, token)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+router.post("/getdetails", cors(), async function (req, res) {
+  var id = await check.checkToken(req);
+
+  if (id.status == 400 || id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var email = req.body.email;
+    history
+      .getHistory(email)
+      .then(result => {
+        res.send({
+          result: result
+        });
       })
-    );
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 //=================================Appeal====================================================
 
 //===================================addbuilding=============================================//
-router.post("/AddsingleBuilding", cors(), async function(req, res) {
-<<<<<<< HEAD
-    var id = await check.checkToken(req);
-    const token = req.headers['authorization'];
-    console.log(id);
-    if (id.status == 400 && id.status == 403) {
-        res.send({
-            result: id
-        });
-    } else {
-        var email_id = id.result;
-        var buildingobject = req.body;
+router.post("/AddsingleBuilding", cors(), async function (req, res) {
+  var id = await check.checkToken(req);
+  const token = req.headers['authorization'];
+  console.log(id);
+  if (id.status == 400 && id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var email_id = id.result;
+    var buildingobject = req.body;
 
-        building
-            .buildings(buildingobject, token, email_id)
-            .then(result => {
-                res.send({
-                    result: result,
-                    message: "Your Building Details added successfully"
-                });
-            })
-            .catch(err =>
-                res.status(err.status).json({
-                    message: err.message
-                })
-            );
-    }
+    building
+      .buildings(buildingobject, token, email_id)
+      .then(result => {
+        res.send({
+          result: result,
+          message: "Your Building Details added successfully"
+        });
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 //===================================getbuildings======================================================//
-router.post("/getBuildings", cors(), async function(req, res) {
-    var id = await check.checkToken(req);
-    const token = req.headers['authorization'];
-    if (id.status == 400 || id.status == 403) {
+router.post("/getBuildings", cors(), async function (req, res) {
+  var id = await check.checkToken(req);
+  const token = req.headers['authorization'];
+  if (id.status == 400 || id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var buildingobject = id.result;
+    console.log(buildingobject, "data");
+    getBuildings
+      .getbuildings(buildingobject, token)
+      .then(result => {
         res.send({
-            result: id
+          result: result,
+          message: "mock mock"
         });
-    } else {
-        var buildingobject = id.result;
-        console.log(buildingobject, "data");
-        getBuildings
-            .getbuildings(buildingobject, token)
-            .then(result => {
-                res.send({
-                    result: result,
-                    message: "mock mock"
-                });
-            })
-            .catch(err =>
-                res.status(err.status).json({
-                    message: err.message
-                })
-            );
-    }
-});
-//=======================================================================================================
-router.post("/installationdetails", cors(), function(req, res) {
-    var installation = req.body;
-    console.log(installation, "installation");
-    update
-        .update(installation)
-        .then(result => {
-            res.send({
-                result: result
-            });
-        })
-        .catch(err =>
-            res.status(err.status).json({
-                message: err.message
-            })
-        );
-});
-//==============================Residentsdetails===========================================//
-router.post("/profile", cors(), async function(req, res) {
-    var id = await check.checkToken(req);
-    const token = req.headers['authorization'];
-    if (id.status == 400 || id.status == 403) {
-        res.send({
-            result: id
-        });
-    } else {
-        var buildingobject = id.result;
-        //var buildingobject=req.body.email;
-        console.log(buildingobject, "data");
-        profile
-            .getbuildings(buildingobject, token)
-            .then(result => {
-                res.send({
-                    result: result,
-                    message: "mock mock"
-                });
-            })
-            .catch(err =>
-                res.status(err.status).json({
-                    message: err.message
-                })
-            );
-    }
-});
-//=======================================================================================================
-router.post("/installationdetails", cors(), function(req, res) {
-    var installation = req.body;
-    console.log(installation, "installation");
-    update
-        .update(installation)
-        .then(result => {
-            res.send({
-                result: result
-            });
-        })
-        .catch(err =>
-            res.status(err.status).json({
-                message: err.message
-            })
-        );
-=======
-  const token = req.headers.authorization;
-  building
-    .buildings(buildingobject, token, email_id)
-    .then(result => {
-      res.send({
-        result: result,
-        message: "Your Building Details added successfully"
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
       })
-    );
-});
-//===================================getbuildings======================================================//
-router.post("/getBuildings", cors(), async function(req, res) {
-  const token = req.headers.authorization;
-
-  var buildingobject = id.result;
-  console.log(buildingobject, "data");
-  getBuildings
-    .getbuildings(buildingobject, token)
-    .then(result => {
-      res.send({
-        result: result,
-        message: "mock mock"
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
-      })
-    );
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 //=======================================================================================================
-router.post("/installationdetails", cors(), function(req, res) {
+router.post("/installationdetails", cors(), function (req, res) {
   var installation = req.body;
   console.log(installation, "installation");
-  var token = req.headers.authorization;
   update
-    .update(installation, token)
+    .update(installation)
     .then(result => {
       res.send({
         result: result
@@ -521,18 +284,41 @@ router.post("/installationdetails", cors(), function(req, res) {
     );
 });
 //==============================Residentsdetails===========================================//
-router.post("/profile", cors(), async function(req, res) {
-  const token = req.headers.authorization;
-
-  var buildingobject = id.result;
-  //var buildingobject=req.body.email;
-  console.log(buildingobject, "data");
-  profile
-    .getbuildings(buildingobject, token)
+router.post("/profile", cors(), async function (req, res) {
+  var id = await check.checkToken(req);
+  const token = req.headers['authorization'];
+  if (id.status == 400 || id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var buildingobject = id.result;
+    //var buildingobject=req.body.email;
+    console.log(buildingobject, "data");
+    profile
+      .getbuildings(buildingobject, token)
+      .then(result => {
+        res.send({
+          result: result,
+          message: "mock mock"
+        });
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
+});
+//=======================================================================================================
+router.post("/installationdetails", cors(), function (req, res) {
+  var installation = req.body;
+  console.log(installation, "installation");
+  update
+    .update(installation)
     .then(result => {
       res.send({
-        result: result,
-        message: "mock mock"
+        result: result
       });
     })
     .catch(err =>
@@ -540,56 +326,27 @@ router.post("/profile", cors(), async function(req, res) {
         message: err.message
       })
     );
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
 });
-
 //=============================upload=====================================================
 var uploads = multer({
-    dest: "var/www/html/"
+  dest: "var/www/html/"
 });
 //router.use("/download", express.static(path.join(__dirname, "../upload")));
 // File input field name is simply 'file'
 router.use("/static", express.static(path.join(__dirname, "../uploads")));
-router.post("/file_upload", uploads.single("file"), function(req, res) {
-<<<<<<< HEAD
-    var file = "var/www/html/" + "/" + req.file.filename;
-    console.log(req.file, "ffg");
-    var email_id = "hiiiiiiii@gmail.com";
-
-    var filepath = req.file.path;
-    fs.rename(filepath, file, function(err) {
-        if (err) {
-            console.log(err);
-            res.send(500);
-        } else {
-            upload
-                .upload(filepath, email_id)
-                .then(result => {
-                    res.send({
-                        message: "file uploaded successfully",
-                        result: req.file.filename
-                    });
-                })
-                .catch(err =>
-                    res.status(err.status).json({
-                        message: err.message
-                    })
-                );
-        }
-    });
-=======
+router.post("/file_upload", uploads.single("file"), function (req, res) {
   var file = "var/www/html/" + "/" + req.file.filename;
   console.log(req.file, "ffg");
   var email_id = "manoj";
-  const token = req.headers.authorization;
+  const token = req.headers['authorization'];
   var filepath = req.file.path;
-  fs.rename(filepath, file, function(err) {
+  fs.rename(filepath, file, function (err) {
     if (err) {
       console.log(err);
       res.send(500);
     } else {
       upload
-        .upload(filepath, email_id, token)
+        .upload(filepath,token)
         .then(result => {
           res.send({
             message: "file uploaded successfully",
@@ -603,59 +360,23 @@ router.post("/file_upload", uploads.single("file"), function(req, res) {
         );
     }
   });
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
 });
 //=================================image===============================================//
 //=============================imageupload==================================================//
 
-router.post("/image_upload", uploads.single("file"), function(req, res) {
-<<<<<<< HEAD
-    var file = "var/www/html/" + "/" + req.file.filename;
-    console.log(req.file);
-    console.log(req.body);
-    var id = req.body.id;
-    var filepath = req.file.path;
-    fs.rename(filepath, file, function(err) {
-        if (err) {
-            console.log(err);
-            res.send(500);
-        } else {
-            image_upload
-                .image_upload(filepath, id)
-                .then(result => {
-                    res.send({
-                        message: "file uploaded successfully",
-                        result: req.file.filename
-                    });
-                })
-                .catch(err =>
-                    res.status(err.status).json({
-                        message: err.message
-                    })
-                );
-        }
-    });
-});
-//==============================Booking-History============================================//
-router.post("/serviceHistory", cors(), async function(req, res) {
-    var id = await check.checkToken(req);
-    const token = req.headers['authorization'];
-    console.log(id);
-    if (id.status == 400 && id.status == 403) {
-=======
+router.post("/image_upload", uploads.single("file"), function (req, res) {
   var file = "var/www/html/" + "/" + req.file.filename;
   console.log(req.file);
   console.log(req.body);
   var id = req.body.id;
   var filepath = req.file.path;
-  const token = req.headers.authorization;
-  fs.rename(filepath, file, function(err) {
+  fs.rename(filepath, file, function (err) {
     if (err) {
       console.log(err);
       res.send(500);
     } else {
       image_upload
-        .image_upload(filepath, id, token)
+        .image_upload(filepath, id)
         .then(result => {
           res.send({
             message: "file uploaded successfully",
@@ -671,9 +392,9 @@ router.post("/serviceHistory", cors(), async function(req, res) {
   });
 });
 //==============================Booking-History============================================//
-router.post("/serviceHistory", cors(), async function(req, res) {
+router.post("/serviceHistory", cors(), async function (req, res) {
   var id = await check.checkToken(req);
-  const token = req.headers["authorization"];
+  const token = req.headers['authorization'];
   console.log(id);
   if (id.status == 400 && id.status == 403) {
     res.send({
@@ -684,163 +405,46 @@ router.post("/serviceHistory", cors(), async function(req, res) {
     book
       .bookservice(email_id, token)
       .then(result => {
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
         res.send({
-            result: id
+          result: result
         });
-    } else {
-        var email_id = id.result;
-        book
-            .bookservice(email_id, token)
-            .then(result => {
-                res.send({
-                    result: result
-                });
-            })
-            .catch(err =>
-                res.status(err.status).json({
-                    message: err.message
-                })
-            );
-    }
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 //==============================================================================================
-router.post("/Assessment", cors(), async function(req, res) {
-<<<<<<< HEAD
-    console.log(req.body);
-    var id = req.body.id;
-    var status = req.body.status;
-    if (!id || !status.trim()) {
-        res.status(40).json({
-            message: "Please enter the details completely !"
-        });
-    } else {
-        assessment
-            .assessment(id, status)
-            .then(result => {
-                res.send({
-                    message: "schedule details saved",
-                    status: true,
-                    result: result
-                });
-            })
-            .catch(err =>
-                res.status(err.status).json({
-                    message: err.message
-                })
-            );
-    }
-=======
+router.post("/Assessment", cors(), async function (req, res) {
   console.log(req.body);
   var id = req.body.id;
   var status = req.body.status;
-  const token = req.headers.authorization;
-
-  assessment
-    .assessment(id, status, token)
-    .then(result => {
-      res.send({
-        message: "schedule details saved",
-        status: true,
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+  if (!id || !status.trim()) {
+    res.status(40).json({
+      message: "Please enter the details completely !"
+    });
+  } else {
+    assessment
+      .assessment(id, status)
+      .then(result => {
+        res.send({
+          message: "schedule details saved",
+          status: true,
+          result: result
+        });
       })
-    );
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 
 //=======================================================================================
 router.get("/Schedule_summary", cors(), (req, res) => {
-<<<<<<< HEAD
-    //let data = req.body;
-    let request = req.headers;
-    // console.log(data);
-
-    schedule_summary
-        .schedule_summary(request)
-        .then(result => {
-            console.log(result);
-
-            res.status(result.status).json({
-                message: result
-            });
-        })
-        .catch(err =>
-            res
-            .status(err.status)
-            .json({
-                message: err.message
-            })
-            .json({
-                status: err.status
-            })
-        );
-});
-//==========================assesser-view=====================================================//
-router.get("/assesser-view", cors(), async function(req, res) {
-    // var id = await check.checkToken(req);
-
-    // if(id.status==400 || id.status==403){
-    //     res.send({
-    //         result:id
-    //     })
-    // }
-    // else{
-    assesserview
-        .assesserview()
-        .then(result => {
-            res.send({
-                result: result.result.result
-            });
-        })
-        .catch(err =>
-            res.status(err.status).json({
-                message: err.message
-            })
-        );
-    // }
-});
-
-router.post("/textimage", cors(), (req, res, next) => {
-    const uploadFile = req.files.file;
-    const fileName = req.files.file.name;
-    //   console.log(Appeal_Object)
-    const Image = uploadFile.mv(
-        `${__dirname}/public/files/${fileName}`,
-        image
-        .Image(Image)
-        .then(result => {
-            console.log(result);
-            res.status(result.status).json({
-                message: result
-            });
-        })
-        .catch(err =>
-            res
-            .status(err.status)
-            .json({
-                message: err.message
-            })
-            .json({
-                status: err.status
-            })
-        )
-    );
-});
-//===============================forgetpassword==============================================//
-router.post("/forgetpassword", (req, res) => {
-    let forgetpassword = req.body;
-    console.log("body", forgetpassword);
-    let password = req.body.password;
-    console.log(password);
-    let confirmpassword = req.body.confirmpassword;
-    let username = req.body.email;
-    if (!username || !password || !confirmpassword) {
-=======
   //let data = req.body;
   let request = req.headers;
   // console.log(data);
@@ -856,20 +460,27 @@ router.post("/forgetpassword", (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 //==========================assesser-view=====================================================//
-router.get("/assesser-view", cors(), async function(req, res) {
-  var token = req.headers.authorization;
+router.get("/assesser-view", cors(), async function (req, res) {
+  // var id = await check.checkToken(req);
+
+  // if(id.status==400 || id.status==403){
+  //     res.send({
+  //         result:id
+  //     })
+  // }
+  // else{
   assesserview
-    .assesserview(token)
+    .assesserview()
     .then(result => {
       res.send({
         result: result.result.result
@@ -883,6 +494,32 @@ router.get("/assesser-view", cors(), async function(req, res) {
   // }
 });
 
+router.post("/textimage", cors(), (req, res, next) => {
+  const uploadFile = req.files.file;
+  const fileName = req.files.file.name;
+  //   console.log(Appeal_Object)
+  const Image = uploadFile.mv(
+    `${__dirname}/public/files/${fileName}`,
+    image
+    .Image(Image)
+    .then(result => {
+      console.log(result);
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
+    )
+  );
+});
 //===============================forgetpassword==============================================//
 router.post("/forgetpassword", (req, res) => {
   let forgetpassword = req.body;
@@ -899,7 +536,7 @@ router.post("/forgetpassword", (req, res) => {
     console.log(username);
     let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
 
-    con.query(sql, function(err, result) {
+    con.query(sql, function (err, result) {
       // console.log(result,"select")
       if (err) throw err;
       // dbFunc.connectionRelease;
@@ -907,162 +544,24 @@ router.post("/forgetpassword", (req, res) => {
       //console.log("Database Error while selecting from register table:",err)
       if (result.length == 0) {
         console.log("i am here");
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
         res.send({
-            message: "Please fill all the details"
+          message: "Invalid User Name",
+          الرسالة: "اسم المستخدم غير صالح"
         });
-    } else {
-        console.log(username);
-        let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
-
-        con.query(sql, function(err, result) {
-            // console.log(result,"select")
-            if (err) throw err;
-            // dbFunc.connectionRelease;
-            // console.log("DataBase ERR:",err)
-            //console.log("Database Error while selecting from register table:",err)
-            if (result.length == 0) {
-                console.log("i am here");
-                res.send({
-                    message: "Invalid User Name",
-                    الرسالة: "اسم المستخدم غير صالح"
-                });
-                // dbFunc.connectionRelease;
-            } else {
-                if (password != confirmpassword) {
-                    res.send({
-                        message: "password doesn't match",
-                        الرسالة: "كلمة المرور غير متطابقة"
-                    });
-                } else {
-                    if (cryptr.decrypt(result[0].password) == password) {
-                        console.log("previous");
-                        res.send({
-                            message: "Password should not be a previously used one",
-                            رسالة: "مرور سبق استخدامهاكلمة المرور لا يجب أن تكون كلمة"
-                        });
-                        //dbFunc.connectionRelease;
-                    }
-                    // });
-                    else {
-                        var otp = "";
-                        var possible = "0123456789";
-                        var namea;
-                        var namen;
-                        for (var i = 0; i < 4; i++)
-                            otp += possible.charAt(
-                                Math.floor(Math.random() * possible.length)
-                            );
-
-                        console.log(otp, "otp");
-                        // var encodedMail = new Buffer(req.body.email).toString('base64');
-                        let sql =
-                            "SELECT * FROM citizens where email_id ='" + username + "'";
-                        con.query(sql, function(err, result) {
-                            if (err) throw err;
-                            //dbFunc.connectionRelease;
-                            namen = result[0].name_en;
-                            namea = result[0].name_ar;
-
-                            //  })
-                            console.log("datanames", result[0].name_en);
-                            console.log(result[0].name_ar);
-                            console.log("copy", namen);
-                            var transporter = nodemailer.createTransport({
-                                host: "smtp.gmail.com",
-                                port: 587,
-                                secure: false,
-                                auth: {
-                                    user: "sanedservices2019@gmail.com",
-                                    pass: "Sanedwebservices1!"
-                                }
-                            });
-                            var mailOptions = {
-                                transport: transporter,
-                                from: "Saned Services" + "<sanedservices2019@gmail.com>",
-                                to: req.body.email,
-                                subject: "Saned Service-OTP Verification",
-
-                                html: "Dear  " +
-                                    result[0].name_en +
-                                    "/" +
-                                    result[0].name_ar +
-                                    "<br>Your one Time Password for forgotPassword recovery for Saned services,<br> Your one time password is.<br> " +
-                                    otp +
-                                    "<br>" +
-                                    "كلمة المرور الخاصة بك مرة واحدة نسيت استرداد كلمة المرور لخدمات Saned" +
-                                    namea +
-                                    "  العزيز,<br> Your One time password is. <br> " +
-                                    otp +
-                                    "<br>"
-                            };
-
-                            transporter.sendMail(mailOptions, (error, info) => {
-                                if (error) {
-                                    console.log("Mail send error: ", error);
-                                }
-                            });
-                            var sql =
-                                "UPDATE citizens SET otp = '" +
-                                otp +
-                                "' WHERE email_id = '" +
-                                username +
-                                "'";
-                            con.query(sql, function(err) {
-                                if (err) throw err;
-                                // dbFunc.connectionRelease;
-                                // console.log("DataBase ERR:",err)
-                                res.send({
-                                    message: "Please check your mail for One time Password",
-                                    رسالة: "يرجى التحقق من بريدك مرة واحدة لكلمة المرور"
-                                });
-                            });
-                            // dbFunc.connectionRelease;
-                        });
-                    }
-                }
-            }
-        });
-    }
-});
-//========================forgetpassword-otp===============================//
-router.post("/forgetotpverification", cors(), (req, res) => {
-    var otp = req.body.otp;
-    var password = cryptr.encrypt(req.body.password);
-
-    console.log(otp);
-
-    con.query("SELECT * FROM citizens where otp='" + otp + "'", function(
-        error,
-        results,
-        fields
-    ) {
-        if (error) {
-            res.send({
-                status: false,
-                message: "error"
-            });
-<<<<<<< HEAD
+        // dbFunc.connectionRelease;
+      } else {
+        if (password != confirmpassword) {
+          res.send({
+            message: "password doesn't match",
+            الرسالة: "كلمة المرور غير متطابقة"
+          });
         } else {
-            if (results.length > 0) {
-                if (results[0].otp == otp) {
-                    console.log(otp);
-                    con.query(
-                        "UPDATE citizens SET password = '" +
-                        password +
-                        "' WHERE otp = '" +
-                        otp +
-                        "'",
-                        function(error, results, fields) {}
-                    );
-                    res.send({
-                        status: "true",
-                        message: "one time password is verified and Password updated successfully",
-                        رسالة: "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
-                    });
-                }
-            } else {
-=======
+          if (cryptr.decrypt(result[0].password) == password) {
+            console.log("previous");
+            res.send({
+              message: "Password should not be a previously used one",
+              رسالة: "مرور سبق استخدامهاكلمة المرور لا يجب أن تكون كلمة"
+            });
             //dbFunc.connectionRelease;
           }
           // });
@@ -1080,7 +579,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
             // var encodedMail = new Buffer(req.body.email).toString('base64');
             let sql =
               "SELECT * FROM citizens where email_id ='" + username + "'";
-            con.query(sql, function(err, result) {
+            con.query(sql, function (err, result) {
               if (err) throw err;
               //dbFunc.connectionRelease;
               namen = result[0].name_en;
@@ -1105,8 +604,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
                 to: req.body.email,
                 subject: "Saned Service-OTP Verification",
 
-                html:
-                  "Dear  " +
+                html: "Dear  " +
                   result[0].name_en +
                   "/" +
                   result[0].name_ar +
@@ -1131,44 +629,21 @@ router.post("/forgetotpverification", cors(), (req, res) => {
                 "' WHERE email_id = '" +
                 username +
                 "'";
-              con.query(sql, function(err) {
+              con.query(sql, function (err) {
                 if (err) throw err;
                 // dbFunc.connectionRelease;
                 // console.log("DataBase ERR:",err)
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
                 res.send({
-                    status: "false",
-                    message: "Invalid one time password",
-                    رسالة: "كلمة مرور غير صالحة مرة واحدة"
+                  message: "Please check your mail for One time Password",
+                  رسالة: "يرجى التحقق من بريدك مرة واحدة لكلمة المرور"
                 });
-            }
-        }
-    });
-<<<<<<< HEAD
-});
-
-router.post("/schedules", cors(), async function(req, res) {
-    console.log(req.body);
-    var time = req.body.schedule_time;
-    var reqdate = req.body.requestdate;
-    var building_id = req.body.building_id;
-    console.log("building_id", building_id);
-    var date = moment(new Date(reqdate.substr(0, 16)));
-    var rdate = date.format("YYYY-MM-DD");
-    schedule
-        .sup(time, rdate, building_id)
-        .then(result => {
-            res.send({
-                result: result
+              });
+              // dbFunc.connectionRelease;
             });
-        })
-        .catch(err =>
-            res.status(err.status).json({
-                message: err.message
-            })
-        );
-    //}
-=======
+          }
+        }
+      }
+    });
   }
 });
 //========================forgetpassword-otp===========================================//
@@ -1178,7 +653,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
 
   console.log(otp);
 
-  con.query("SELECT * FROM citizens where otp='" + otp + "'", function(
+  con.query("SELECT * FROM citizens where otp='" + otp + "'", function (
     error,
     results,
     fields
@@ -1194,16 +669,15 @@ router.post("/forgetotpverification", cors(), (req, res) => {
           console.log(otp);
           con.query(
             "UPDATE citizens SET password = '" +
-              password +
-              "' WHERE otp = '" +
-              otp +
-              "'",
-            function(error, results, fields) {}
+            password +
+            "' WHERE otp = '" +
+            otp +
+            "'",
+            function (error, results, fields) {}
           );
           res.send({
             status: "true",
-            message:
-              "one time password is verified and Password updated successfully",
+            message: "one time password is verified and Password updated successfully",
             رسالة: "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
           });
         }
@@ -1218,17 +692,16 @@ router.post("/forgetotpverification", cors(), (req, res) => {
   });
 });
 
-router.post("/schedules", cors(), async function(req, res) {
+router.post("/schedules", cors(), async function (req, res) {
   console.log(req.body);
   var time = req.body.schedule_time;
   var reqdate = req.body.requestdate;
   var building_id = req.body.building_id;
   console.log("building_id", building_id);
   var date = moment(new Date(reqdate.substr(0, 16)));
-  const token = req.headers.authorization;
   var rdate = date.format("YYYY-MM-DD");
   schedule
-    .sup(time, rdate, building_id, token)
+    .sup(time, rdate, building_id)
     .then(result => {
       res.send({
         result: result
@@ -1240,129 +713,10 @@ router.post("/schedules", cors(), async function(req, res) {
       })
     );
   //}
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
 });
 //============================================convert pdf===================================================//
 
-router.post("/Convert_Pdf", cors(), function(req, res) {
-<<<<<<< HEAD
-    //var flag=0;
-    let checked1 = req.body.SelectedValues1;
-    let checked2 = req.body.SelectedValues2;
-    let checked3 = req.body.SelectedValues3;
-    let checked4 = req.body.SelectedValues4;
-    let checked5 = req.body.SelectedValues5;
-    let checked6 = req.body.SelectedValues6;
-    let checked7 = req.body.SelectedValues7;
-    let checked8 = req.body.SelectedValues8;
-    let checked9 = req.body.SelectedValues9;
-    let email = req.body.email;
-    let flag = 0;
-    // let checked3=req.body.SelectedValues3;
-    if (checked1 == "1") {
-        var yesvalue1 = "checked";
-        var novalue1 = "unchecked";
-    } else {
-        var yesvalue1 = "unchecked";
-        var novalue1 = "checked";
-        flag = 1;
-    }
-    if (checked2 == "1") {
-        var yesvalue2 = "checked";
-        var novalue2 = "unchecked";
-    } else {
-        var yesvalue2 = "unchecked";
-        var novalue2 = "checked";
-        flag = 1;
-    }
-    if (checked3 == "1") {
-        var yesvalue3 = "checked";
-        var novalue3 = "unchecked";
-    } else {
-        var yesvalue3 = "unchecked";
-        var novalue3 = "checked";
-        flag = 1;
-    }
-    if (checked4 == "1") {
-        var yesvalue4 = "checked";
-        var novalue4 = "unchecked";
-    } else {
-        var yesvalue4 = "unchecked";
-        var novalue4 = "checked";
-        flag = 1;
-    }
-    if (checked5 == "1") {
-        var yesvalue5 = "checked";
-        var novalue5 = "unchecked";
-    } else {
-        var yesvalue5 = "unchecked";
-        var novalue5 = "checked";
-        flag = 1;
-    }
-    if (checked6 == "1") {
-        var yesvalue6 = "checked";
-        var novalue6 = "unchecked";
-    } else {
-        var yesvalue6 = "unchecked";
-        var novalue6 = "checked";
-        flag = 1;
-    }
-    if (checked7 == "1") {
-        var yesvalue7 = "checked";
-        var novalue7 = "unchecked";
-    } else {
-        var yesvalue7 = "unchecked";
-        var novalue7 = "checked";
-        flag = 1;
-    }
-    if (checked8 == "1") {
-        var yesvalue8 = "checked";
-        var novalue8 = "unchecked";
-    } else {
-        var yesvalue8 = "unchecked";
-        var novalue8 = "checked";
-        flag = 1;
-    }
-    if (checked9 == "1") {
-        var yesvalue9 = "checked";
-        var novalue9 = "unchecked";
-    } else {
-        var yesvalue9 = "unchecked";
-        var novalue9 = "checked";
-        flag = 1;
-    }
-    //    var yesvalue3="checked";
-
-    console.log("in 781", flag);
-    //console.log("All data=====>>", checked1,checked2,checked3);
-    pdf.Pdf(
-        yesvalue1,
-        novalue1,
-        yesvalue2,
-        novalue2,
-        yesvalue3,
-        novalue3,
-        yesvalue4,
-        novalue4,
-        yesvalue5,
-        novalue5,
-        yesvalue6,
-        novalue6,
-        yesvalue7,
-        novalue7,
-        yesvalue8,
-        novalue8,
-        yesvalue9,
-        novalue9,
-        email
-    );
-    // pdf.mail(email)
-
-    res.send({
-        message: "success",
-        flag: flag
-    });
-=======
+router.post("/Convert_Pdf", cors(), function (req, res) {
   //var flag=0;
   let checked1 = req.body.SelectedValues1;
   let checked2 = req.body.SelectedValues2;
@@ -1375,7 +729,6 @@ router.post("/Convert_Pdf", cors(), function(req, res) {
   let checked9 = req.body.SelectedValues9;
   let email = req.body.email;
   let flag = 0;
-  let token = req.headers.authorization;
   // let checked3=req.body.SelectedValues3;
   if (checked1 == "1") {
     var yesvalue1 = "checked";
@@ -1472,8 +825,7 @@ router.post("/Convert_Pdf", cors(), function(req, res) {
     novalue8,
     yesvalue9,
     novalue9,
-    email,
-    token
+    email
   );
   // pdf.mail(email)
 
@@ -1481,54 +833,14 @@ router.post("/Convert_Pdf", cors(), function(req, res) {
     message: "success",
     flag: flag
   });
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
 });
 
 //=========================================pdfviewer=============================================
 
-router.post("/pdfviewer", cors(), async function(req, res) {
-<<<<<<< HEAD
-    const email = req.body.email;
-    pdf1
-        .pdf1(email)
-        .then(result => {
-            console.log(result);
-            res.status(result.status).json({
-                message: result
-            });
-        })
-        .catch(err =>
-            res
-            .status(err.status)
-            .json({
-                message: err.message
-            })
-            .json({
-                status: err.status
-            })
-        );
-});
-//================================installationdetails=================================//
-router.post("/installationdetails", cors(), function(req, res) {
-    var installation = req.body;
-    console.log(installation, "installation");
-    update
-        .update(installation)
-        .then(result => {
-            res.send({
-                result: result
-            });
-        })
-        .catch(err =>
-            res.status(err.status).json({
-                message: err.message
-            })
-        );
-=======
+router.post("/pdfviewer", cors(), async function (req, res) {
   const email = req.body.email;
-  const token = req.headers.authorization;
   pdf1
-    .pdf1(email, token)
+    .pdf1(email)
     .then(result => {
       console.log(result);
       res.status(result.status).json({
@@ -1537,76 +849,37 @@ router.post("/installationdetails", cors(), function(req, res) {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
 });
-
+//================================installationdetails=================================//
+router.post("/installationdetails", cors(), function (req, res) {
+  var installation = req.body;
+  console.log(installation, "installation");
+  update
+    .update(installation)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
 //==================================bulkschedules============================================//
-router.post("/BulkSchedules", cors(), async function(req, res) {
-<<<<<<< HEAD
-    console.log(req.body);
-    var schedules = req.body;
-
-    console.log("length of data from UI", schedules.schedule.schedule.length);
-    /*If data from UI is empty Error Message will be sent*/
-    if (schedules.schedule.schedule.length == 0) {
-        res.send({
-            message: "Please Schedule the selected Buildings",
-            flag: 1
-        });
-    } else {
-        /*Here the Bulk Buildings are scheduled one by one*/
-        for (let i = 0; i < schedules.schedule.length; i++) {
-            console.log(i, "i");
-            let uidate = schedules.schedule.schedule[i].selectedStartDate;
-            var date = moment(new Date(uidate.substr(0, 16)));
-            var rdate = date.format("YYYY-MM-DD");
-            await schedulefun.sup(
-                schedules.schedule.schedule[i].time,
-                rdate,
-                schedules.schedule.schedule[i].building_id
-            );
-        }
-
-        res.send({
-            message: "Your Buildings are scheduled for service. Please visit booking history for details"
-        });
-    }
-});
-//=============================Blockchain-API's============================================
-router.post("/blockchain", cors(), async function(req, res) {
-    var transaction = {
-        name: "manoj",
-        address: "chennai"
-    };
-    var params = {
-        id: "1",
-        fun: "create",
-        data: transaction
-    };
-
-    bc.main(params)
-        .then(result => {
-            res.send({
-                result: result
-            });
-        })
-        .catch(err =>
-            res.status(err.status).json({
-                message: err.message
-            })
-        );
-=======
+router.post("/BulkSchedules", cors(), async function (req, res) {
   console.log(req.body);
   var schedules = req.body;
-  var token = req.headers.authorization;
+
   console.log("length of data from UI", schedules.schedule.schedule.length);
   /*If data from UI is empty Error Message will be sent*/
   if (schedules.schedule.schedule.length == 0) {
@@ -1624,19 +897,17 @@ router.post("/blockchain", cors(), async function(req, res) {
       await schedulefun.sup(
         schedules.schedule.schedule[i].time,
         rdate,
-        schedules.schedule.schedule[i].building_id,
-        token
+        schedules.schedule.schedule[i].building_id
       );
     }
 
     res.send({
-      message:
-        "Your Buildings are scheduled for service. Please visit booking history for details"
+      message: "Your Buildings are scheduled for service. Please visit booking history for details"
     });
   }
 });
 //=============================Blockchain-API's============================================
-router.post("/blockchain", cors(), async function(req, res) {
+router.post("/blockchain", cors(), async function (req, res) {
   var transaction = {
     name: "manoj",
     address: "chennai"
@@ -1658,13 +929,14 @@ router.post("/blockchain", cors(), async function(req, res) {
         message: err.message
       })
     );
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
 });
+
+
 
 //=======================Appeal===============================================//
 router.post("/Appeal", cors(), (req, res) => {
   const Appeal_Object = req.body;
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
 
   console.log(Appeal_Object);
@@ -1687,26 +959,25 @@ router.post("/Appeal", cors(), (req, res) => {
       })
       .catch(err =>
         res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
       );
   }
 });
+
 
 //=============================================Trainer account creation============
 router.post("/Trainer_account_creation", cors(), (req, res) => {
   const trainer_Object = req.body;
   console.log(trainer_Object, "initialtest");
-  const token = req.headers.authorization;
-  const lang = req.headers.language;
 
   trainer
-    .trainer_account(trainer_Object, token, lang)
+    .trainer_account(trainer_Object)
     .then(result => {
       console.log(result);
 
@@ -1716,19 +987,22 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 
+
+
+
 //=============================================================================================//
 router.post("/Untrained_Employees_list", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   const data = req.body;
   console.log(data, token, language);
@@ -1743,22 +1017,21 @@ router.post("/Untrained_Employees_list", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
+
 
 //=============================================================================================//
 router.post("/Schedule", cors(), (req, res) => {
   const data = req.headers;
   const request = req.body;
-  const token = req.headers.authorization;
-  const lang = req.headers.language;
   console.log(data);
   console.log(request, "<======request");
 
@@ -1769,7 +1042,7 @@ router.post("/Schedule", cors(), (req, res) => {
     });
   } else {
     scheduling
-      .scheduling(data, request, token, lang)
+      .scheduling(data, request)
       .then(result => {
         console.log(result);
         res.status(result.status).json({
@@ -1778,28 +1051,28 @@ router.post("/Schedule", cors(), (req, res) => {
       })
       .catch(err =>
         res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
       );
   }
 });
 //====================================================================================//
 router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   const data = req.body;
   console.log(data, token, language);
 
   Untrained_Employees_schedule.Untrained_Employees_schedule(
-    data,
-    token,
-    language
-  )
+      data,
+      token,
+      language
+    )
     .then(result => {
       console.log(result);
 
@@ -1809,20 +1082,25 @@ router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
+
+
+
+
+
 
 //==========================Trained Employees List===============================//
 
 router.post("/Trained_Employees_list", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   const data = req.body;
   console.log(data, token, language);
@@ -1837,13 +1115,13 @@ router.post("/Trained_Employees_list", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 
@@ -1855,8 +1133,6 @@ router.post(
   (req, res) => {
     const EmployeeProfile = req.headers;
     console.log(EmployeeProfile);
-    let token = req.headers.authorization;
-    let language = req.headers.language;
     // let file = req.file;
     // var ipAddress = ip.address();
     // console.log("ips====>", ipAddress);
@@ -1873,15 +1149,13 @@ router.post(
     // console.log(req.file, "fileeeee");
 
     Employee_profile.Employee_profile(
-      EmployeeProfile,
-      token,
-      language
-      // filename_blob,
-      // filename_url,
-      // path
-    )
+        EmployeeProfile
+        // filename_blob,
+        // filename_url,
+        // path
+      )
       .then(result => {
-        console.log("result", result);
+        console.log(result);
 
         res.status(result.status).json({
           message: result
@@ -1890,27 +1164,27 @@ router.post(
 
       .catch(err =>
         res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
       );
   }
 );
 
+
 //====================================company_trading_license============================================//
 router.get("/Company_trading_license", cors(), (req, res) => {
   let data = req.headers;
-  var token = req.headers.authorization;
-  var lang = req.headers.language;
+
   console.log("routes===>", data);
   // console.log(data);
 
   company_trading_license
-    .company_trading_license(data, token, lang)
+    .company_trading_license(data)
     .then(result => {
       console.log(result);
 
@@ -1920,19 +1194,20 @@ router.get("/Company_trading_license", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 
+
 //========================================Safetyofficer_detail_showup===========================//
 router.post("/Safetyofficer_details", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const request = req.body;
   console.log(request);
 
@@ -1947,20 +1222,23 @@ router.post("/Safetyofficer_details", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
+
+
+
 
 //=======================================classroom=================================================//
 router.post("/Classroom", cors(), (req, res) => {
   const data = req.body;
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   console.log(data, "request data");
   console.log(token, "token");
@@ -1990,19 +1268,19 @@ router.post("/Classroom", cors(), (req, res) => {
       })
       .catch(err =>
         res
-          .status(err.status)
-          .json({
-            message: err.message
-          })
-          .json({
-            status: err.status
-          })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
       );
   }
 });
 //==============================================================================================//
 router.post("/Classroom_available_date", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   const data = req.body;
   console.log(language, "<=================language");
@@ -2018,13 +1296,13 @@ router.post("/Classroom_available_date", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 //========================Photo_upload===================================================================//
@@ -2062,11 +1340,10 @@ router.post("/Classroom_available_date", cors(), (req, res) => {
 // });
 
 //============================================//
-router.post("/Feedback", cors(), function(req, res) {
+router.post("/Feedback", cors(), function (req, res) {
   // var id= req.body.id
   var Company_Email = req.body.Company_Email;
   var comments = req.body.comments;
-  var token = req.headers.authorization;
   console.log(Company_Email, "fhdkhfd");
   if (!Company_Email || !comments.trim()) {
     res.status(400).json({
@@ -2074,41 +1351,31 @@ router.post("/Feedback", cors(), function(req, res) {
     });
   } else {
     feedback
-      .feedback(Company_Email, comments, token)
+      .feedback(Company_Email, comments)
       .then(result => {
         res.send({
           message: "schedule details saved",
           status: true,
           result: result
         });
-    } else {
-        feedback
-            .feedback(Company_Email, comments)
-            .then(result => {
-                res.send({
-                    message: "schedule details saved",
-                    status: true,
-                    result: result
-                });
-            })
-            .catch(err =>
-                res.status(err.status).json({
-                    message: err.message
-                })
-            );
-    }
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 
 //====================================Company_Profile============================================//
 router.post("/Company_Profile", cors(), (req, res) => {
   let data = req.body;
-  let token = req.headers.authorization;
-  let lang = req.headers.language;
+  let token = req.headers.token;
 
   console.log(data);
 
   company_profile
-    .company_profile(data, token, lang)
+    .company_profile(data, token)
     .then(result => {
       console.log(result);
 
@@ -2118,13 +1385,13 @@ router.post("/Company_Profile", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 
@@ -2145,8 +1412,10 @@ router.post("/Company_Profile", cors(), (req, res) => {
 // });
 //================================================================================================//
 
+
+
 router.post("/Course_names", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   console.log(token);
 
@@ -2161,19 +1430,19 @@ router.post("/Course_names", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 
 //=============================================================================================//
 router.get("/Trainer_names", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   console.log(token);
 
@@ -2188,20 +1457,20 @@ router.get("/Trainer_names", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 //===============================================================================================//
 
 router.post("/Course_creation", cors(), (req, res) => {
   let data = req.body;
-  let token = req.headers.authorization;
+  let token = req.headers.token;
   let language = req.headers.language;
   console.log(data);
 
@@ -2216,19 +1485,19 @@ router.post("/Course_creation", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 //============================================================================================//
 router.post("/Time_slots_list", cors(), (req, res) => {
   let data = req.body;
-  let token = req.headers.authorization;
+  let token = req.headers.token;
   let language = req.headers.language;
 
   console.log(data);
@@ -2244,13 +1513,13 @@ router.post("/Time_slots_list", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 //===========================================================================================//
@@ -2270,13 +1539,13 @@ router.get("/Schedule_summary", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 //========================================================================================//
@@ -2297,13 +1566,13 @@ router.post("/Bulk_booking", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 // console.log(data);
@@ -2313,12 +1582,14 @@ router.post("/Bulk_booking", cors(), (req, res) => {
 //   .then(result => {
 //     console.log(result);
 
+
+
 //====================================EXAM RESULTS===================================================================================//
 //====Static API is used for fetching the file and certificates which is located under a path of upload directory===================//
 router.use("/static", express.static(path.join(__dirname, "upload")));
 //====Results API is used for generating certificates which will navigate to utils and there will be certificategenerate file which consits the structure for creating certificate and after get inputs from UI store the results and certificate in DB====//
 router.post("/Results", cors(), (request, response) => {
-  certificate.Certificate(request, function(error, result) {
+  certificate.Certificate(request, function (error, result) {
     // console.log("result", result);
     if (error) {
       response.status(error.status).json({
@@ -2334,7 +1605,7 @@ router.post("/Results", cors(), (request, response) => {
 //====================================FETCH CERTIFICATE============================================//
 // ====Fetching the certificate which is stored in the DB and it picks the certificate under a upload directory====//
 router.post("/getCertificate", cors(), (request, response) => {
-  certificate.getCertificate(request, function(error, result) {
+  certificate.getCertificate(request, function (error, result) {
     if (error) {
       response.status(error.status).json({
         message: error.message
@@ -2349,7 +1620,8 @@ router.post("/getCertificate", cors(), (request, response) => {
 //====================================FETCH ATTENDANCE LIST============================================//
 //====Fetching the attendance list from attendance table from DB====//
 router.post("/getAttendance", cors(), (request, response) => {
-  certificate.getAttendance(request, function(error, result) {
+
+  certificate.getAttendance(request, function (error, result) {
     if (error) {
       response.status(error.status).json({
         message: error.message
@@ -2365,9 +1637,8 @@ router.post("/getAttendance", cors(), (request, response) => {
 //=================================Trainer Attendance=============================================//
 router.post("/Trainer_employee_list", cors(), (req, res) => {
   const trainer_data = req.body;
-  console.log("Trainer_data_Index===>", trainer_data);
-  const token = req.headers.authorization;
-  console.log("token", token);
+  console.log("Trainer_data_Index===>", trainer_data)
+  const token = req.headers.token;
   const language = req.headers.language;
 
   trainer_attendance
@@ -2380,20 +1651,20 @@ router.post("/Trainer_employee_list", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
-});
+})
 // =================================================================================
 router.post("/Selecting_date_trainer", cors(), (req, res) => {
   const Trainer_selecting_date = req.body;
   console.log("Trainer_selecting_date_INDEX", Trainer_selecting_date);
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   trainer_attendance
     .trainer_date_select(Trainer_selecting_date, token, language)
@@ -2406,13 +1677,13 @@ router.post("/Selecting_date_trainer", cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 
@@ -2421,11 +1692,41 @@ router.post("/Selecting_date_trainer", cors(), (req, res) => {
 //=================================Trainer Attendance=============================================//
 router.post("/attendence", cors(), (req, res) => {
   const Employee_attendance = req.body;
-  console.log("Employee_attendance_ROUTES", Employee_attendance);
-  const token = req.headers.authorization;
+  console.log("Employee_attendance_ROUTES", Employee_attendance)
+  const token = req.headers.token;
   const language = req.headers.language;
   trainer_attendance
-    .trainer_attendance_list(Employee_attendance, token, language)
+    .trainer_attendance_list(
+      Employee_attendance, token, language
+    )
+    .then(result => {
+      console.log(result);
+
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
+    );
+});
+
+//=================================Trainer Attendance=============================================//
+router.post("/attendence_absent", cors(), (req, res) => {
+  const Employee_attendance = req.body;
+  console.log("Employee_attendance_ROUTES", Employee_attendance)
+
+  trainer_attendance
+    .trainer_attendance_absent_list(
+      Employee_attendance
+    )
     .then(result => {
       console.log(result);
 
@@ -2444,46 +1745,14 @@ router.post("/attendence", cors(), (req, res) => {
         })
     );
 });
-//=================================Trainer Attendance=============================================//
-router.post("/attendence_absent", cors(), (req, res) => {
-  const Employee_attendance = req.body;
-  console.log("Employee_attendance_ROUTES", Employee_attendance);
-  const token = req.headers.authorization;
-  trainer_attendance
-    .trainer_attendance_absent_list(Employee_attendance, token)
-    .then(result => {
-      console.log(result);
 
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
-        .catch(err =>
-            res
-            .status(err.status)
-            .json({
-                message: err.message
-            })
-            .json({
-                status: err.status
-            })
-          });
-        
 
-//======================uploadbulkemployee===============================
+//=========================================================================================//
+
 router.post("/uploadbulkemployee", multipartMiddleware, cors(), (req, res) => {
   const data = req.files.file.path;
   console.log("file", data);
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   uploadSalama
     .uploadbulkemployee(data, token, language)
@@ -2495,17 +1764,19 @@ router.post("/uploadbulkemployee", multipartMiddleware, cors(), (req, res) => {
     })
     .catch(err =>
       res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+      .status(err.status)
+      .json({
+        message: err.message
+      })
+      .json({
+        status: err.status
+      })
     );
 });
 //=================================Certificate download========================================//
 
 router.use("/download", express.static(path.join(__dirname, "../upload")));
+
+
 
 module.exports = router;

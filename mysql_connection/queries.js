@@ -187,7 +187,6 @@ module.exports.servicehistory =
 module.exports.installationdetails =
   "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ? WHERE id = ?";
 module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
-<<<<<<< HEAD
 module.exports.updateotp =   "UPDATE citizens SET verify_email = ? WHERE otp = ?";
 module.exports.deleteBuilding = "Delete from Buildings where id = ?";
 
@@ -196,6 +195,3 @@ module.exports.deleteBuilding = "Delete from Buildings where id = ?";
 
   
  
-=======
-module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
->>>>>>> c31008ac11483723baf773ffbd958eabfe33fbfc
