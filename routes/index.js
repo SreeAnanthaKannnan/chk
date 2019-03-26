@@ -13,7 +13,6 @@
  * 3. It disables features that are confusing or poorly thought out.
  */
 "use strict";
-
 var express = require("express"),
   router = express.Router(),
   cors = require("cors"),
@@ -28,6 +27,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   cregister = require("../core/cregister.js"),
   history = require("../core/history"),
   building = require("../core/building"),
+  delbuilding = require("../core/DeleteBuilding"),
   assesserview = require("../core/assesserview"),
   schedule = require("../core/schedule"),
   schedulefun = require("../core/Bulkschedule"),
@@ -239,6 +239,33 @@ router.post("/AddsingleBuilding", cors(), async function (req, res) {
         })
       );
   }
+});
+//===========================================Delete Buidling================================================//
+router.post("/DeleteBuilding", cors(), async function (req, res) {
+  // var id = await check.checkToken(req);
+  // const token = req.headers['authorization'];
+  // console.log(id);
+  // if (id.status == 400 && id.status == 403) {
+  //   res.send({
+  //     result: id
+  //   });
+  // } else {
+    var buildingobject = req.body;
+
+   delbuilding
+      .buildings(buildingobject)
+      .then(result => {
+        res.send({
+          result: result,
+          message: "Your Building Details Deleted successfully"
+        });
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+ // }
 });
 //===================================getbuildings======================================================//
 router.post("/getBuildings", cors(), async function (req, res) {
