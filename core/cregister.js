@@ -5,17 +5,14 @@ var otpfun = require('../utils/otp.js');
 var emailotpfun = require('../utils/spsaemail');
 const SendOtp = require('sendotp');
 const sendOtp = new SendOtp('254625AbVGrmks5c2c92bd');
-//var bcSdk = require('../Fabric_SDK/invoke');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 var bc = require('../fabcar/javascript/invoke');
-
+//Here the verification of user details
 function cregister(registerobject){
     return new Promise( async (resolve, reject)=>{
       console.log("success")
         var email_id = registerobject.email;
-       
-        logger.fatal("hai");
         logger.fatal(!email_id)
         if(!email_id){
           logger.fatal("email is not null")
@@ -29,11 +26,9 @@ function cregister(registerobject){
    
            var result = await registerform.verify_user(registerobject)
            console.log("result====>",result)
-      
-        logger.fatal(result.result.length != 0);
-       
-        dbFunc.connectionRelease;
-        if(result.result.length != 0){
+        logger.fatal(result.result);
+       dbFunc.connectionRelease;
+        if(result.result){
       return reject({
           "status":409,
           "message":"User Already Registered",
@@ -52,12 +47,10 @@ function cregister(registerobject){
                fun:"create",
                data: registerobject 
            }
-        //    bcSdk.updatetransaction({ updatedetails: userdetails})
         bc.main(params)
         logger.fatal(result,"inserted.......")
        return resolve ({   status: 200,
        "message": "Please check your mail for otp verification",
-       
        }) 
        }
       }
