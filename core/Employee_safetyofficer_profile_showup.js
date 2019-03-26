@@ -7,6 +7,8 @@ const message = require("../utils/messages");
 const language_detect = require("../utils/language_detect");
 const translate = require("../utils/translate");
 const fs = require("fs");
+const checktoken = require("../utils/checkToken")
+
 
 exports.safety_officer_details = (request, token) =>
     new Promise(async (resolve, reject) => {
@@ -16,59 +18,50 @@ exports.safety_officer_details = (request, token) =>
         console.log(token, "token");
         /*==============token vaidation================*/
 
-        let query = await SessionDao.Session_select(token);
-        if (query.length == 0) {
-            resolve({
-                status: 402,
-                message: "Invalid token"
-            });
+        var verifytoken = await checktoken.checkToken(token)
+        if (verifytoken.status == 402) {
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            })
+        } else if (verifytoken.status == 403) {
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            })
         } else {
-            console.log(query[0].session_created_at);
-            let Name_ar, Name_en, query_value;
-            let now = new Date();
-
-            let Db_time = query[0].session_created_at;
-            let time_difference_minutes = await session_time.Session_time_difference(
-                Db_time,
-                now
-            );
-            /*======================Session validation=====================================*/
-
-            if (time_difference_minutes <= "01:00") {
-                return resolve({
-                    status: 440,
-                    message: "session expired"
-                });
-            } else {
-                console.log(Category, "Category");
-                let query_value = [Company_Trade_Lincense_No,
-                    Category
-                ];
-                /*=======================Fetching safety officer details baed on category====================*/
-                await Employee_profileDao.Safety_officer_details(
+            console.log(Category, "Category");
+            let query_value = [Company_Trade_Lincense_No,
+                Category
+            ];
+            /*=======================Fetching safety officer details baed on category====================*/
+            await Employee_profileDao.Safety_officer_details(
                     query_value
                 )
-                
-                .then(async function (result,err) {
+
+                .then(async function (result, err) {
                     console.log("result======>", result);
                     if (result.result.data.length != 0) {
 
-            
 
-                return resolve({
-                    status: 200,
-                    message: result.result.data
+
+                        return resolve({
+                            status: 200,
+                            message: result.result.data
+                        });
+
+                    }
+                })
+                .catch(async function (err) {
+                    var messagevalue = await message.getmessage(language, "E01")
+
+                    return resolve({
+                        status: 400,
+                        message: messagevalue
+                    });
                 });
-              
-            }
-        })
-            .catch(async function (err) {
-                var messagevalue = await  message.getmessage(language,"E01")
-    
-                return resolve({ status: 400, message: messagevalue });
-              });
         }
-    
-        }
+
+
     });
 /*********************************Code Ends******************************************/

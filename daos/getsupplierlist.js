@@ -21,7 +21,7 @@ async function supplier(){
           }
           else {
               console.log(result, "achieved")
-              return resolve({ status:200});
+              return resolve({ status:200, result:result.data});
           }
       })
   })

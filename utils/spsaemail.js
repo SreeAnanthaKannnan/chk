@@ -16,7 +16,7 @@ var transporter = nodemailer.createTransport({
   }
  });
 
-  // var link = "https://sanedbackend.herokuapp.com/email/verify?mail=" + encodedMail;
+  
  
 var mailOptions = {
   transport: transporter,

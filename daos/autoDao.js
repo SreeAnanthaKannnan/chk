@@ -25,7 +25,7 @@ function auto1(time,idate){
     logger.fatal("auto1 t",time);
     logger.fatal("auto1 D",idate);
     return new Promise(async function (resolve,reject){  
-var sql="select * from Schedules where schedule_time = '" + time + "' AND requestdate='"+ idate +"'";
+var sql="select * from Schedules where schedule_time = '" + time + "' AND requestdate='"+ idate +"'ORDER BY `schedule_time`,`requestdate` ASC";
 con.query(sql,function(err,result){
     if(err) { 
         return reject({ "status": 400, "body": 'Cannot insert the data' })}

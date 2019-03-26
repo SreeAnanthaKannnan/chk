@@ -13,10 +13,10 @@ function Course_insert(param) {
         /*======if db error exists throwing the error message=====*/
         if (res1.data.errno) {
             return reject({
-                status:400,
-                message:"something went wrong"
+                status: 400,
+                message: "something went wrong"
             })
-        }else {
+        } else {
             return resolve({
                 status: 200,
                 result: res1.data
@@ -37,10 +37,10 @@ function Course_select(param) {
         /*======if db error exists throwing the error message=====*/
         if (res1.data.errno) {
             return reject({
-                status:400,
-                message:"something went wrong"
+                status: 400,
+                message: "something went wrong"
             })
-        }else {
+        } else {
             return resolve({
                 status: 200,
                 result: res1.data
@@ -62,10 +62,10 @@ function Course_display() {
 
         if (res1.data.errno) {
             return reject({
-                status:400,
-                message:"something went wrong"
+                status: 400,
+                message: "something went wrong"
             })
-        }else {
+        } else {
             console.log(res1.data.length, "name")
             let value = []
             let myobject = new Object;
@@ -104,8 +104,8 @@ function Course_display_arabic() {
 
         if (res1.data.errno) {
             return reject({
-                status:400,
-                message:"هناك خطأ ما"
+                status: 400,
+                message: "هناك خطأ ما"
             })
         } else {
             console.log(res1.data.length, "name")
@@ -138,18 +138,17 @@ function Course_amount(course_id, language) {
         var res1 = await mysqlConnection.query_execute(query.trainingamount, [course_id])
         if (res1.data.errno) {
             return reject({
-                status:400,
-                message:"something went wrong"
+                status: 400,
+                message: "something went wrong"
+            })
+        } else {
+
+
+            console.log("res1===>", res1.data)
+            return resolve({
+                result: res1.data
             })
         }
-        else{
-
-
-        console.log("res1===>", res1.data)
-        return resolve({
-            result: res1.data
-        })
-    }
 
     })
 
@@ -163,19 +162,18 @@ function Course_id_select(course_name, language) {
         if (language == "en") {
             var res1 = await mysqlConnection.query_execute(query.courseidforenglish, [course_name])
 
-            if (res_value.data.errno) {
+            if (res1.data.errno) {
                 return reject({
-                    status:400,
-                    message:"something went wrong"
+                    status: 400,
+                    message: "something went wrong"
+                })
+            } else {
+                console.log("res1===>", res1.data)
+                return resolve({
+                    result: res1.data
                 })
             }
-            else{
-            console.log("res1===>", res1.data)
-            return resolve({
-                result: res1.data
-            })
         }
-    }
 
 
 
@@ -186,10 +184,10 @@ function Course_id_select(course_name, language) {
 
             if (res1.data.errno) {
                 return reject({
-                    status:400,
-                    message:"هناك خطأ ما"
+                    status: 400,
+                    message: "هناك خطأ ما"
                 })
-            } 
+            }
             console.log("res1===>", res1.data)
             return resolve({
                 result: res1.data
@@ -208,27 +206,29 @@ function course_name_schedule(course_id, language) {
             var res1 = await mysqlConnection.query_execute(query.arabiccoursename, [course_id])
             if (res1.data.errno) {
                 return reject({
-                    status:400,
-                    message:"هناك خطأ ما"
+                    status: 400,
+                    message: "هناك خطأ ما"
                 })
-            } else{    
-            console.log("res1===>", res1.data)
-            return resolve({
-                result: res1.data
-            })
-        }
-        }
-
-
-
-        else {
+            } else {
+                console.log("res1===>", res1.data)
+                return resolve({
+                    result: res1.data
+                })
+            }
+        } else {
             var res1 = await mysqlConnection.query_execute(query.getcourseen, course_id)
             if (res1.data.errno) {
                 //console.log("something", err);
-                return reject({ status: 400, message: "something went wrong" });
+                return reject({
+                    status: 400,
+                    message: "something went wrong"
+                });
             } else {
                 //console.log({ result: result });
-                return resolve({ status: 200, result: res1.data });
+                return resolve({
+                    status: 200,
+                    result: res1.data
+                });
             }
             // console.log("res1===>", res1.data)
             // return resolve({ result: res1.data })
@@ -241,7 +241,7 @@ function course_name_schedule(course_id, language) {
 
 
 
-  
+
 
 /*==========Exporting all the above functions to core function=============*/
 module.exports = {
