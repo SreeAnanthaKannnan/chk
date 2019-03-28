@@ -70,15 +70,25 @@ let Appeal = require("../core/Appeal"),
   bulk_booking = require("../core/Bulk_booking"),
   certificate = require("../core/certificate"),
   uploadSalama = require("../core/uploadbulkemployee"),
+  upload_aman_web = require("../core/upload_aman_web"),
+  upload_salama_web = require("../core/upload_salama_web"),
   trainer = require("../core/Trainer_registration"),
   Untrained_Employees_schedule = require("../core/Untrained_Employees_showup_schedule"),
   number_validation_schedule = require("../core/Number_validation_schedule"),
-  ip = require("ip");
+  allBuildings = require("../core/allBuildings");
+var ip = require("ip");
+
+
 
 const trainer_attendance = require("../core/Trainer_attendance");
 
-const Cryptr = require("cryptr"),
-  cryptr = new Cryptr("myTotalySecretKey"),
+var payment = require("../core/payment");
+let salama_order_details = require("../core/Company_profile");
+let Contactus_comments = require("../core/Appeal"),
+
+
+  // const Cryptr = require("cryptr"),
+  //   cryptr = new Cryptr("myTotalySecretKey"),
   nodemailer = require("nodemailer"),
   fs = require("fs"),
   logger = require("morgan");
@@ -98,6 +108,28 @@ console.log("ips====>", ipAddress);
 //         cb(null, file.originalname);
 //     }
 // });
+
+var storage = multer.diskStorage({
+  // notice you are calling the multer.diskStorage() method here, not multer()
+  // destination: function(req, file, cb) {
+  //     cb(null, '/home/kavitha/Videos/salama_docs/Salama_backend_v0.1/uploads/')
+  // },
+  destination: function (req, file, cb) {
+    cb(null, "./uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+const upload1 = multer({ storage })
+
+
+const upload_aman = multer({
+  dest: "./upload_aman"
+})
+
+
+
 
 var multipartMiddleware = multipart();
 
@@ -192,7 +224,7 @@ router.post("/emailotpverification1", cors(), async function (req, res) {
             "' WHERE otp = '" +
             results[0].otp +
             "'",
-            function (error, results, fields) {}
+            function (error, results, fields) { }
           );
           res.send({
             status: 200,
@@ -266,6 +298,25 @@ router.post("/AddsingleBuilding", cors(), async function (req, res) {
       );
   }
 });
+
+
+//===================================allbuildings======================================================//
+router.post("/allBuildings", cors(), async function (req, res) {
+
+  allBuildings
+    .getbuildings()
+    .then(result => {
+      res.send({
+        result: [result],
+        message: "mock mock"
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
 //===================================getbuildings======================================================//
 router.post("/getBuildings", cors(), async function (req, res) {
   var id = await check.checkToken(req);
@@ -275,7 +326,7 @@ router.post("/getBuildings", cors(), async function (req, res) {
       result: id
     });
   } else {
-    var buildingobject = id.result;
+    var buildingobject = req.body.email_id;
     console.log(buildingobject, "data");
     getBuildings
       .getbuildings(buildingobject, token)
@@ -486,13 +537,13 @@ router.get("/Schedule_summary", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 //==========================assesser-view=====================================================//
@@ -527,23 +578,23 @@ router.post("/textimage", cors(), (req, res, next) => {
   const Image = uploadFile.mv(
     `${__dirname}/public/files/${fileName}`,
     image
-    .Image(Image)
-    .then(result => {
-      console.log(result);
-      res.status(result.status).json({
-        message: result
-      });
-    })
-    .catch(err =>
-      res
-      .status(err.status)
-      .json({
-        message: err.message
+      .Image(Image)
+      .then(result => {
+        console.log(result);
+        res.status(result.status).json({
+          message: result
+        });
       })
-      .json({
-        status: err.status
-      })
-    )
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      )
   );
 });
 //===============================forgetpassword==============================================//
@@ -699,7 +750,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
             "' WHERE otp = '" +
             otp +
             "'",
-            function (error, results, fields) {}
+            function (error, results, fields) { }
           );
           res.send({
             status: "true",
@@ -875,13 +926,13 @@ router.post("/pdfviewer", cors(), async function (req, res) {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 //================================installationdetails=================================//
@@ -985,13 +1036,13 @@ router.post("/Appeal", cors(), (req, res) => {
       })
       .catch(err =>
         res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
       );
   }
 });
@@ -1013,13 +1064,13 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 
@@ -1043,13 +1094,13 @@ router.post("/Untrained_Employees_list", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 
@@ -1077,13 +1128,13 @@ router.post("/Schedule", cors(), (req, res) => {
       })
       .catch(err =>
         res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
       );
   }
 });
@@ -1095,10 +1146,10 @@ router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
   console.log(data, token, language);
 
   Untrained_Employees_schedule.Untrained_Employees_schedule(
-      data,
-      token,
-      language
-    )
+    data,
+    token,
+    language
+  )
     .then(result => {
       console.log(result);
 
@@ -1108,13 +1159,13 @@ router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 
@@ -1141,13 +1192,13 @@ router.post("/Trained_Employees_list", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 
@@ -1175,11 +1226,11 @@ router.post(
     // console.log(req.file, "fileeeee");
 
     Employee_profile.Employee_profile(
-        EmployeeProfile
-        // filename_blob,
-        // filename_url,
-        // path
-      )
+      EmployeeProfile
+      // filename_blob,
+      // filename_url,
+      // path
+    )
       .then(result => {
         console.log(result);
 
@@ -1190,13 +1241,13 @@ router.post(
 
       .catch(err =>
         res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
       );
   }
 );
@@ -1220,13 +1271,13 @@ router.get("/Company_trading_license", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 
@@ -1248,13 +1299,13 @@ router.post("/Safetyofficer_details", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 
@@ -1294,13 +1345,13 @@ router.post("/Classroom", cors(), (req, res) => {
       })
       .catch(err =>
         res
-        .status(err.status)
-        .json({
-          message: err.message
-        })
-        .json({
-          status: err.status
-        })
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
       );
   }
 });
@@ -1322,13 +1373,13 @@ router.post("/Classroom_available_date", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 //========================Photo_upload===================================================================//
@@ -1411,13 +1462,13 @@ router.post("/Company_Profile", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 
@@ -1456,13 +1507,13 @@ router.post("/Course_names", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 
@@ -1483,13 +1534,13 @@ router.get("/Trainer_names", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 //===============================================================================================//
@@ -1511,13 +1562,13 @@ router.post("/Course_creation", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 //============================================================================================//
@@ -1539,13 +1590,13 @@ router.post("/Time_slots_list", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 //===========================================================================================//
@@ -1565,13 +1616,13 @@ router.get("/Schedule_summary", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 //========================================================================================//
@@ -1592,13 +1643,13 @@ router.post("/Bulk_booking", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 // console.log(data);
@@ -1677,13 +1728,13 @@ router.post("/Trainer_employee_list", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 })
 // =================================================================================
@@ -1703,13 +1754,13 @@ router.post("/Selecting_date_trainer", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 
@@ -1734,13 +1785,13 @@ router.post("/attendence", cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 
@@ -1773,6 +1824,7 @@ router.post("/attendence_absent", cors(), (req, res) => {
 });
 
 
+
 //=====================================================
 
 router.post("/uploadbulkemployee", multipartMiddleware, cors(), (req, res) => {
@@ -1790,16 +1842,205 @@ router.post("/uploadbulkemployee", multipartMiddleware, cors(), (req, res) => {
     })
     .catch(err =>
       res
-      .status(err.status)
-      .json({
-        message: err.message
-      })
-      .json({
-        status: err.status
-      })
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
     );
 });
 //=================================Certificate download========================================//
+
+router.post("/uploadbulkemployee_web", upload1.single('file'), cors(), (req, res) => {
+  const data = req.file.path;
+  //const filename = req.files.file.originalFilename
+  const file = req.file
+  console.log("data", data);
+  console.log("file", file);
+  const token = req.headers.token;
+  const language = req.headers.language;
+
+  upload_salama_web
+    .upload_salama_web(data, token, language)
+    .then(result => {
+      console.log(result);
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+});
+
+//==============================================================//
+
+router.post("/file_upload_web", upload1.single("file"), function (req, res) {
+  // var filepath = "./upload_aman/" + req.file.originalname;
+  const file = req.file
+  console.log(req.file, "ffg");
+  const token = req.headers['authorization'];
+  // var email_id =req.body.email_id
+  //const filename = req.files.file.originalFilename
+  // const file = req.file
+  // console.log("file", file);
+  var filepath = req.file.path;
+  console.log(filepath, "filepath")
+
+
+  upload_aman_web
+    .upload_aman_web(filepath)
+    .then(result => {
+      res.send({
+        message: "file uploaded successfully",
+        result: req.file.filename,
+        order_Id: result.order_Id
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+
+
+});
+
+//=====================================================
+router.post("/uploadaman", upload_aman.single('file'), cors(), (req, res) => {
+  const data = req.file.path;
+  //const filename = req.files.file.originalFilename
+  const file = req.file
+  console.log("data", data);
+  console.log("file", file);
+  const token = req.headers.token;
+  const language = req.headers.language;
+
+  uploadaman
+    .uploadaman(data, token, language)
+    .then(result => {
+      console.log(result);
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+});
+
+//================================================================================================//
+
+router.get("/download1", express.static(path.join(__dirname, "../uploads")));
+
+//======================================================================================//
+router.get('/download1/:file(*)', function (req, res, next) { // this routes all types of file
+  var path = require('path');
+  var file = req.params.file;
+  var path = path.resolve(".") + '/uploads/' + file;
+  res.download(path); // magic of download fuction
+
+});
+
+
+//=================================Contactus_feedback=============================================//
+router.post("/Contactus_feedback", cors(), (req, res) => {
+  const contact_feedback = req.body;
+  console.log("contact_feedback_ROUTES", contact_feedback)
+
+  Contactus_comments
+    .Contactus_comments(
+      contact_feedback
+    )
+    .then(result => {
+      console.log(result);
+
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+});
+
+
+
+//=====================================================
+
+//=================================Contactus_feedback=============================================//
+router.post("/salama_order", cors(), (req, res) => {
+  const salama_order = req.body;
+  console.log("salama_order_ROUTES", salama_order)
+
+  salama_order_details
+    .salama_order(
+      salama_order
+    )
+    .then(result => {
+      console.log(result);
+
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+});
+//===========================================================================//
+router.post("/Payment", cors(), async function (req, res) {
+  const token = req.headers.authorization;
+  var payment1 = req.body;
+  console.log(payment1);
+  payment
+    .payment(payment1, token)
+    .then(result => {
+      res.send({
+        result: result,
+        message: "Your Payment Details added successfully"
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+
+//=====================================================
+
 
 router.use("/download", express.static(path.join(__dirname, "../upload")));
 

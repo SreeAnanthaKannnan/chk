@@ -44,6 +44,12 @@ module.exports.getclassroom = "SELECT * FROM Classroom where classnum =?";
 
 module.exports.insertattendance =
   "INSERT INTO Attendance (employee_id, attendance_status, National_id, Name_en, trainer_id, Attended_date, start_time, end_time, classroom, course_name) VALUES ? ";
+
+module.exports.insertcontactfeedback =
+  "INSERT INTO Appeal (service_en,service_ar,Description_en,Description_ar,Appeal_date,Compliant_NO) VALUES ?";
+
+module.exports.insertsalamaorder =
+  "INSERT INTO Company_Profile (Company_Trade_License_No,Company_Email,Company_name)Values ?";
 //======================Trainer Attendance End================================
 
 /*========inserting course details into course table=========*/
@@ -172,6 +178,12 @@ module.exports.schedulesummary =
 /*======================inserting the data into session table=========*/
 module.exports.sessioninsert =
   "INSERT INTO Session (user_ID,token,session_created_at) VALUES ? ";
+
+//==============================================================//
+module.exports.payment =
+  "INSERT INTO payment(email_id,paymenttype,trnxReference,Amount,Status) VALUES ?";
+
+
 /*======================delete the entry from session for the particular user id======*/
 module.exports.sessiondelete =
   "Delete from Session where user_ID =?";
@@ -194,8 +206,8 @@ module.exports.findemployeeAttendance = "SELECT * FROM Attendance where trainer_
 module.exports.availabledate =
   "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
 
-  module.exports.getcoursename =
-  "SELECT course_name_en FROM Results where National_Id =?"  
+module.exports.getcoursename =
+  "SELECT course_name_en FROM Results where National_Id =?"
 
 module.exports.getinstallers = "SELECT email_id FROM citizens where user_type=?";
 module.exports.imagepdf = "UPDATE Schedules SET filepath =? WHERE id =?";
@@ -206,5 +218,5 @@ module.exports.installationdetails = "UPDATE Schedules SET FACP = ?,CSI = ?,BRAN
 
 
 
-  
- 
+
+
