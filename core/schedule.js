@@ -28,7 +28,7 @@ async function sup(time, rdate, building_id, token) {
     console.warn("rdate", idate);
     /*============================Token Validation========================================*/
     var verifytoken = await checktoken.checkToken(token);
-    if (verifytoken.status == 402) {
+    if (verifytoken.status == 405) {
       return resolve({
         status: verifytoken.status,
         message: verifytoken.message

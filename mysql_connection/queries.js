@@ -60,7 +60,7 @@ module.exports.appealidcount = "SELECT count(id) as count FROM Appeal";
 
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
-module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
+module.exports.getlogindetails = "SELECT * FROM citizens where verify_email=Y  AND email_id =? ";
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
 /*================fetching the availabledate for the number of available seats greater than the selected seats and particular trainer
 course id========*/
@@ -164,7 +164,6 @@ module.exports.untrained_employees =
 
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
-module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
 module.exports.findemployeeAttendance =
   "SELECT * FROM Attendance where trainer_id =? AND attendance_status='Present'";
@@ -188,3 +187,4 @@ module.exports.installationdetails =
   "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ? WHERE id = ?";
 module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
 module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
+module.exports.checktoken = "SELECT * FROM Session where token =?";

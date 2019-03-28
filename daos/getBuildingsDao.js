@@ -26,7 +26,7 @@ function phone(buildingobject){
   return new Promise((resolve, reject)=>{
       logger.fatal(buildingobject,"=>buildingobject");
        var sql = "SELECT * FROM citizens where email_id = '" + buildingobject + "'";
-      con.query(sql, function (err, result) {
+      con.query(sql, function (err, result){
       if (err) throw err;
       dbFunc.connectionRelease;
       resolve({

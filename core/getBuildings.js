@@ -1,8 +1,6 @@
 var buildings = require('../daos/getBuildingsDao.js');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
-const SessionDao = require("../daos/SessionDao");
-const session_time = require("../utils/session_time_difference");
 const checktoken = require("../utils/checkToken")
 
 module.exports = {
@@ -13,7 +11,7 @@ function getbuildings(buildingobject, token) {
     logger.fatal(buildingobject, "buildingobject");
     return new Promise(async (resolve, reject) => {
         var verifytoken = await checktoken.checkToken(token)
-        if (verifytoken.status == 402) {
+        if (verifytoken.status == 405) {
             return resolve({
                 status: verifytoken.status,
                 message: verifytoken.message

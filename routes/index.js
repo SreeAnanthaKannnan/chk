@@ -34,6 +34,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   getBuildings = require("../core/getBuildings"),
   profile = require("../core/profile"),
   check = require("../utils/checkToken"),
+  email = require("../utils/emailbytoken"),
   phone = require("../utils/phonecheck.js"),
   pdf = require("../core/pdf.js"),
   upload = require("../core/upload.js"),
@@ -76,6 +77,7 @@ const Cryptr = require("cryptr"),
   cryptr = new Cryptr("myTotalySecretKey"),
   nodemailer = require("nodemailer"),
   fs = require("fs"),
+  checktoken = require("../utils/checkToken"),
   logger = require("morgan");
 //logger = log4js.getLogger('Aman_project');
 
@@ -202,12 +204,20 @@ router.post("/getdetails", cors(), async function(req, res) {
 //===================================addbuilding=============================================//
 router.post("/AddsingleBuilding", cors(), async function(req, res) {
   const token = req.headers.authorization;
+  var id = await email.checkToken(req);
+  if (id.status == 400 && id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var email_id = id.result;
+    var buildingobject = req.body;
   building
-    .buildings(buildingobject, token, email_id)
+    .buildings(buildingobject, token,email_id)
     .then(result => {
       res.send({
         result: result,
-        message: "Your Building Details added successfully"
+        message:"Your Building Details added successfully"
       });
     })
     .catch(err =>
@@ -215,12 +225,21 @@ router.post("/AddsingleBuilding", cors(), async function(req, res) {
         message: err.message
       })
     );
+    }
 });
 //===================================getbuildings======================================================//
 router.post("/getBuildings", cors(), async function(req, res) {
   const token = req.headers.authorization;
 
-  var buildingobject = id.result;
+  var id = await email.checkToken(req);
+ 
+  console.log(id);
+  if (id.status == 400 && id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var buildingobject = id.result;
   console.log(buildingobject, "data");
   getBuildings
     .getbuildings(buildingobject, token)
@@ -235,6 +254,7 @@ router.post("/getBuildings", cors(), async function(req, res) {
         message: err.message
       })
     );
+    }
 });
 //=======================================================================================================
 router.post("/installationdetails", cors(), function(req, res) {
@@ -257,9 +277,14 @@ router.post("/installationdetails", cors(), function(req, res) {
 //==============================Residentsdetails===========================================//
 router.post("/profile", cors(), async function(req, res) {
   const token = req.headers.authorization;
-
-  var buildingobject = id.result;
-  //var buildingobject=req.body.email;
+  var id = await email.checkToken(req);
+ console.log(id);
+  if (id.status == 400 && id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+     var buildingobject = id.result;
   console.log(buildingobject, "data");
   profile
     .getbuildings(buildingobject, token)
@@ -274,6 +299,7 @@ router.post("/profile", cors(), async function(req, res) {
         message: err.message
       })
     );
+    }
 });
 
 //=============================upload=====================================================
@@ -343,8 +369,8 @@ router.post("/image_upload", uploads.single("file"), function(req, res) {
 });
 //==============================Booking-History============================================//
 router.post("/serviceHistory", cors(), async function(req, res) {
-  var id = await check.checkToken(req);
-  const token = req.headers["authorization"];
+  var id = await email.checkToken(req);
+  const token = req.headers.authorization;
   console.log(id);
   if (id.status == 400 && id.status == 403) {
     res.send({
@@ -790,7 +816,21 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
       message: "Please Schedule the selected Buildings",
       flag: 1
     });
-  } else {
+  }
+ else {
+  var verifytoken = await checktoken.checkToken(token)
+  if (verifytoken.status == 405) {
+     res.send({
+          status: verifytoken.status,
+          message: verifytoken.message
+      })
+  } else if (verifytoken.status == 403) {
+     res.send({
+          status: verifytoken.status,
+          message: verifytoken.message
+      })
+  }
+  else{
     /*Here the Bulk Buildings are scheduled one by one*/
     for (let i = 0; i < schedules.schedule.length; i++) {
       console.log(i, "i");
@@ -800,15 +840,16 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
       await schedulefun.sup(
         schedules.schedule.schedule[i].time,
         rdate,
-        schedules.schedule.schedule[i].building_id,
-        token
-      );
+        schedules.schedule.schedule[i].building_id
+        );
     }
 
     res.send({
-      message:
-        "Your Buildings are scheduled for service. Please visit booking history for details"
+      status:200,
+      "message": "Your Buildings are scheduled for service. Please visit booking history for details"
+        
     });
+  }
   }
 });
 //=============================Blockchain-API's============================================

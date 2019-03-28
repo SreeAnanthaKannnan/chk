@@ -12,7 +12,7 @@ var t = ["8-10 am", "11-12 am", "12-2 pm", "2-4 pm", "4-6 pm", "6-8 pm", "8-10 p
 let moment = require('moment');
 const checktoken = require("../utils/checkToken")
 
-async function sup(time, rdate, building_id, token) {
+async function sup(time, rdate, building_id) {
     const idate = rdate;
     let sdate = rdate;
 
@@ -21,18 +21,7 @@ async function sup(time, rdate, building_id, token) {
 
         console.warn("rdate", idate);
         /*============================Token Validation========================================*/
-        var verifytoken = await checktoken.checkToken(token)
-        if (verifytoken.status == 402) {
-            return resolve({
-                status: verifytoken.status,
-                message: verifytoken.message
-            })
-        } else if (verifytoken.status == 403) {
-            return resolve({
-                status: verifytoken.status,
-                message: verifytoken.message
-            })
-        } else {
+     // {
             var suparray = [];
             //Here we are fecthing latest installers list from the DataBase and stored in an array*/ 
             var sup = await supplier.supplier();
@@ -84,7 +73,7 @@ async function sup(time, rdate, building_id, token) {
                                 var date22 = moment(requestdate).format("YYYY-MM-DD");
                                 return resolve({
                                     result: {
-                                        "message": "done"
+                                        "message": "Your Buildings are scheduled for service. Please visit booking history for details"
 
                                     }
                                 });
@@ -101,7 +90,7 @@ async function sup(time, rdate, building_id, token) {
                     }
                 }
             }
-        }
+       // }
 
     })
 }
