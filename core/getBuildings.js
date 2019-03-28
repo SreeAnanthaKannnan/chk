@@ -1,8 +1,6 @@
 var buildings = require("../daos/getBuildingsDao.js");
 var log4js = require("log4js");
 const logger = log4js.getLogger("Aman_project");
-const SessionDao = require("../daos/SessionDao");
-const session_time = require("../utils/session_time_difference");
 const checktoken = require("../utils/checkToken");
 
 module.exports = {

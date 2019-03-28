@@ -20,7 +20,7 @@ var t = [
 let moment = require("moment");
 const checktoken = require("../utils/checkToken");
 
-async function sup(time, rdate, building_id, token) {
+async function sup(time, rdate, building_id) {
   const idate = rdate;
   let sdate = rdate;
 
@@ -51,12 +51,14 @@ async function sup(time, rdate, building_id, token) {
       //Here we check the preferred time slot is available for the Building owner*/
       var result2 = await auto.auto1(time, idate);
 
-      if (result2.result == 0) {
-        logger.fatal("assigned req date");
-        var schedule_time = time;
-        var suplier_id = suparray[0];
-        var requestdate = idate;
-        var status1 = "open";
+      if (result.result.length != suparray.length) {
+        logger.fatal("assigned time", t[i]);
+        var schedule_time = t[i];
+        var suplier_id = suparray[j];
+        var requestdate = sdate;
+        logger.fatal("assigned to", suparray[j]);
+        let status1 = "open";
+        logger.fatal("date", sdate);
         let data = [
           schedule_time,
           requestdate,
@@ -66,16 +68,9 @@ async function sup(time, rdate, building_id, token) {
         ];
         let query = await insertquery.schedule_insert(data);
         var date22 = moment(requestdate).format("YYYY-MM-DD");
-        //if the requested time slot available,schedule the building for installation*/
         return resolve({
           result: {
-            message:
-              "Your Building is Scheduled for service on" +
-              " " +
-              date22 +
-              " " +
-              schedule_time +
-              "   As requested slot is available"
+            message: "done"
           }
         });
       } else {
@@ -107,7 +102,8 @@ async function sup(time, rdate, building_id, token) {
                 var date22 = moment(requestdate).format("YYYY-MM-DD");
                 return resolve({
                   result: {
-                    message: "done"
+                    message:
+                      "Your Buildings are scheduled for service. Please visit booking history for details"
                   }
                 });
               }

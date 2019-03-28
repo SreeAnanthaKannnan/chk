@@ -1,5 +1,5 @@
 /**
- * @author: Manoj V
+ * @author: Saned_team
  * @version: 1.0.0
  * @date: February 20, 2019
  * @description: This would be the routes file where all the API definitions and implementations are described.
@@ -13,7 +13,6 @@
  * 3. It disables features that are confusing or poorly thought out.
  */
 "use strict";
-
 var express = require("express"),
   router = express.Router(),
   cors = require("cors"),
@@ -28,12 +27,14 @@ var con = require("../mysql_connection/dbConfig.js"),
   cregister = require("../core/cregister.js"),
   history = require("../core/history"),
   building = require("../core/building"),
+  delbuilding = require("../core/DeleteBuilding"),
   assesserview = require("../core/assesserview"),
   schedule = require("../core/schedule"),
   schedulefun = require("../core/Bulkschedule"),
   getBuildings = require("../core/getBuildings"),
   profile = require("../core/profile"),
   check = require("../utils/checkToken"),
+  email = require("../utils/emailbytoken"),
   phone = require("../utils/phonecheck.js"),
   pdf = require("../core/pdf.js"),
   upload = require("../core/upload.js"),
@@ -76,6 +77,7 @@ const Cryptr = require("cryptr"),
   cryptr = new Cryptr("myTotalySecretKey"),
   nodemailer = require("nodemailer"),
   fs = require("fs"),
+  checktoken = require("../utils/checkToken"),
   logger = require("morgan");
 //logger = log4js.getLogger('Aman_project');
 
@@ -106,6 +108,7 @@ router.get("/", function(request, response, next) {
 //=======================loginservice==================================================//
 router.post("/login", cors(), function(req, res) {
   var loginobject = req.body;
+  console.log("login===>", loginobject);
   login
     .loginuser(loginobject)
     .then(result => {
@@ -151,9 +154,8 @@ router.post("/citizen-register", cors(), async function(req, res) {
 router.post("/number_validation_schedule", cors(), function(req, res) {
   var data = req.body;
   var request = req.headers;
-  var token = req.headers.authorization;
   number_validation_schedule
-    .number_validation_schedule(data, request, token)
+    .number_validation_schedule(data, request)
     .then(result => {
       res.send({
         result: result
@@ -185,67 +187,91 @@ router.post("/emailotpverification1", cors(), function(req, res) {
 });
 //========================================citizen-registration-end=====================================
 router.post("/getdetails", cors(), async function(req, res) {
-  var token = req.headers.authorization;
-  var id = req.body.id;
-  history
-    .getHistory(id, token)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+  var id = await check.checkToken(req);
+
+  if (id.status == 400 || id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var email = req.body.email;
+    history
+      .getHistory(email)
+      .then(result => {
+        res.send({
+          result: result
+        });
       })
-    );
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 //=================================Appeal====================================================
 
 //===================================addbuilding=============================================//
 router.post("/AddsingleBuilding", cors(), async function(req, res) {
   const token = req.headers.authorization;
-  building
-    .buildings(buildingobject, token, email_id)
-    .then(result => {
-      res.send({
-        result: result,
-        message: "Your Building Details added successfully"
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+  var id = await email.checkToken(req);
+  if (id.status == 400 && id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var email_id = id.result;
+    var buildingobject = req.body;
+    building
+      .buildings(buildingobject, token, email_id)
+      .then(result => {
+        res.send({
+          result: result,
+          message: "Your Building Details added successfully"
+        });
       })
-    );
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 //===================================getbuildings======================================================//
 router.post("/getBuildings", cors(), async function(req, res) {
   const token = req.headers.authorization;
 
-  var buildingobject = id.result;
-  console.log(buildingobject, "data");
-  getBuildings
-    .getbuildings(buildingobject, token)
-    .then(result => {
-      res.send({
-        result: result,
-        message: "mock mock"
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+  var id = await email.checkToken(req);
+
+  console.log(id);
+  if (id.status == 400 && id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var buildingobject = id.result;
+    console.log(buildingobject, "data");
+    getBuildings
+      .getbuildings(buildingobject, token)
+      .then(result => {
+        res.send({
+          result: result,
+          message: "mock mock"
+        });
       })
-    );
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 //=======================================================================================================
 router.post("/installationdetails", cors(), function(req, res) {
   var installation = req.body;
   console.log(installation, "installation");
-  var token = req.headers.authorization;
   update
-    .update(installation, token)
+    .update(installation)
     .then(result => {
       res.send({
         result: result
@@ -259,17 +285,40 @@ router.post("/installationdetails", cors(), function(req, res) {
 });
 //==============================Residentsdetails===========================================//
 router.post("/profile", cors(), async function(req, res) {
-  const token = req.headers.authorization;
-
-  var buildingobject = id.result;
-  //var buildingobject=req.body.email;
-  console.log(buildingobject, "data");
-  profile
-    .getbuildings(buildingobject, token)
+  var id = await check.checkToken(req);
+  const token = req.headers["authorization"];
+  if (id.status == 400 || id.status == 403) {
+    res.send({
+      result: id
+    });
+  } else {
+    var buildingobject = id.result;
+    //var buildingobject=req.body.email;
+    console.log(buildingobject, "data");
+    profile
+      .getbuildings(buildingobject, token)
+      .then(result => {
+        res.send({
+          result: result,
+          message: "mock mock"
+        });
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
+});
+//=======================================================================================================
+router.post("/installationdetails", cors(), function(req, res) {
+  var installation = req.body;
+  console.log(installation, "installation");
+  update
+    .update(installation)
     .then(result => {
       res.send({
-        result: result,
-        message: "mock mock"
+        result: result
       });
     })
     .catch(err =>
@@ -290,7 +339,7 @@ router.post("/file_upload", uploads.single("file"), function(req, res) {
   var file = "var/www/html/" + "/" + req.file.filename;
   console.log(req.file, "ffg");
   var email_id = "manoj";
-  const token = req.headers.authorization;
+  const token = req.headers["authorization"];
   var filepath = req.file.path;
   fs.rename(filepath, file, function(err) {
     if (err) {
@@ -298,7 +347,7 @@ router.post("/file_upload", uploads.single("file"), function(req, res) {
       res.send(500);
     } else {
       upload
-        .upload(filepath, email_id, token)
+        .upload(filepath, token)
         .then(result => {
           res.send({
             message: "file uploaded successfully",
@@ -322,14 +371,13 @@ router.post("/image_upload", uploads.single("file"), function(req, res) {
   console.log(req.body);
   var id = req.body.id;
   var filepath = req.file.path;
-  const token = req.headers.authorization;
   fs.rename(filepath, file, function(err) {
     if (err) {
       console.log(err);
       res.send(500);
     } else {
       image_upload
-        .image_upload(filepath, id, token)
+        .image_upload(filepath, id)
         .then(result => {
           res.send({
             message: "file uploaded successfully",
@@ -346,8 +394,8 @@ router.post("/image_upload", uploads.single("file"), function(req, res) {
 });
 //==============================Booking-History============================================//
 router.post("/serviceHistory", cors(), async function(req, res) {
-  var id = await check.checkToken(req);
-  const token = req.headers["authorization"];
+  var id = await email.checkToken(req);
+  const token = req.headers.authorization;
   console.log(id);
   if (id.status == 400 && id.status == 403) {
     res.send({
@@ -374,22 +422,26 @@ router.post("/Assessment", cors(), async function(req, res) {
   console.log(req.body);
   var id = req.body.id;
   var status = req.body.status;
-  const token = req.headers.authorization;
-
-  assessment
-    .assessment(id, status, token)
-    .then(result => {
-      res.send({
-        message: "schedule details saved",
-        status: true,
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+  if (!id || !status.trim()) {
+    res.status(40).json({
+      message: "Please enter the details completely !"
+    });
+  } else {
+    assessment
+      .assessment(id, status)
+      .then(result => {
+        res.send({
+          message: "schedule details saved",
+          status: true,
+          result: result
+        });
       })
-    );
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  }
 });
 
 //=======================================================================================
@@ -420,9 +472,16 @@ router.get("/Schedule_summary", cors(), (req, res) => {
 });
 //==========================assesser-view=====================================================//
 router.get("/assesser-view", cors(), async function(req, res) {
-  var token = req.headers.authorization;
+  // var id = await check.checkToken(req);
+
+  // if(id.status==400 || id.status==403){
+  //     res.send({
+  //         result:id
+  //     })
+  // }
+  // else{
   assesserview
-    .assesserview(token)
+    .assesserview()
     .then(result => {
       res.send({
         result: result.result.result
@@ -436,6 +495,32 @@ router.get("/assesser-view", cors(), async function(req, res) {
   // }
 });
 
+router.post("/textimage", cors(), (req, res, next) => {
+  const uploadFile = req.files.file;
+  const fileName = req.files.file.name;
+  //   console.log(Appeal_Object)
+  const Image = uploadFile.mv(
+    `${__dirname}/public/files/${fileName}`,
+    image
+      .Image(Image)
+      .then(result => {
+        console.log(result);
+        res.status(result.status).json({
+          message: result
+        });
+      })
+      .catch(err =>
+        res
+          .status(err.status)
+          .json({
+            message: err.message
+          })
+          .json({
+            status: err.status
+          })
+      )
+  );
+});
 //===============================forgetpassword==============================================//
 router.post("/forgetpassword", (req, res) => {
   let forgetpassword = req.body;
@@ -617,10 +702,9 @@ router.post("/schedules", cors(), async function(req, res) {
   var building_id = req.body.building_id;
   console.log("building_id", building_id);
   var date = moment(new Date(reqdate.substr(0, 16)));
-  const token = req.headers.authorization;
   var rdate = date.format("YYYY-MM-DD");
   schedule
-    .sup(time, rdate, building_id, token)
+    .sup(time, rdate, building_id)
     .then(result => {
       res.send({
         result: result
@@ -648,7 +732,6 @@ router.post("/Convert_Pdf", cors(), function(req, res) {
   let checked9 = req.body.SelectedValues9;
   let email = req.body.email;
   let flag = 0;
-  let token = req.headers.authorization;
   // let checked3=req.body.SelectedValues3;
   if (checked1 == "1") {
     var yesvalue1 = "checked";
@@ -745,8 +828,7 @@ router.post("/Convert_Pdf", cors(), function(req, res) {
     novalue8,
     yesvalue9,
     novalue9,
-    email,
-    token
+    email
   );
   // pdf.mail(email)
 
@@ -760,9 +842,8 @@ router.post("/Convert_Pdf", cors(), function(req, res) {
 
 router.post("/pdfviewer", cors(), async function(req, res) {
   const email = req.body.email;
-  const token = req.headers.authorization;
   pdf1
-    .pdf1(email, token)
+    .pdf1(email)
     .then(result => {
       console.log(result);
       res.status(result.status).json({
@@ -780,12 +861,28 @@ router.post("/pdfviewer", cors(), async function(req, res) {
         })
     );
 });
-
+//================================installationdetails=================================//
+router.post("/installationdetails", cors(), function(req, res) {
+  var installation = req.body;
+  console.log(installation, "installation");
+  update
+    .update(installation)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
 //==================================bulkschedules============================================//
 router.post("/BulkSchedules", cors(), async function(req, res) {
   console.log(req.body);
   var schedules = req.body;
-  var token = req.headers.authorization;
+
   console.log("length of data from UI", schedules.schedule.schedule.length);
   /*If data from UI is empty Error Message will be sent*/
   if (schedules.schedule.schedule.length == 0) {
@@ -794,24 +891,37 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
       flag: 1
     });
   } else {
-    /*Here the Bulk Buildings are scheduled one by one*/
-    for (let i = 0; i < schedules.schedule.length; i++) {
-      console.log(i, "i");
-      let uidate = schedules.schedule.schedule[i].selectedStartDate;
-      var date = moment(new Date(uidate.substr(0, 16)));
-      var rdate = date.format("YYYY-MM-DD");
-      await schedulefun.sup(
-        schedules.schedule.schedule[i].time,
-        rdate,
-        schedules.schedule.schedule[i].building_id,
-        token
-      );
-    }
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      res.send({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      res.send({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else {
+      /*Here the Bulk Buildings are scheduled one by one*/
+      for (let i = 0; i < schedules.schedule.length; i++) {
+        console.log(i, "i");
+        let uidate = schedules.schedule.schedule[i].selectedStartDate;
+        var date = moment(new Date(uidate.substr(0, 16)));
+        var rdate = date.format("YYYY-MM-DD");
+        await schedulefun.sup(
+          schedules.schedule.schedule[i].time,
+          rdate,
+          schedules.schedule.schedule[i].building_id
+        );
+      }
 
-    res.send({
-      message:
-        "Your Buildings are scheduled for service. Please visit booking history for details"
-    });
+      res.send({
+        status: 200,
+        message:
+          "Your Buildings are scheduled for service. Please visit booking history for details"
+      });
+    }
   }
 });
 //=============================Blockchain-API's============================================
@@ -842,7 +952,7 @@ router.post("/blockchain", cors(), async function(req, res) {
 //=======================Appeal===============================================//
 router.post("/Appeal", cors(), (req, res) => {
   const Appeal_Object = req.body;
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
 
   console.log(Appeal_Object);
@@ -880,11 +990,9 @@ router.post("/Appeal", cors(), (req, res) => {
 router.post("/Trainer_account_creation", cors(), (req, res) => {
   const trainer_Object = req.body;
   console.log(trainer_Object, "initialtest");
-  const token = req.headers.authorization;
-  const lang = req.headers.language;
 
   trainer
-    .trainer_account(trainer_Object, token, lang)
+    .trainer_account(trainer_Object)
     .then(result => {
       console.log(result);
 
@@ -906,7 +1014,7 @@ router.post("/Trainer_account_creation", cors(), (req, res) => {
 
 //=============================================================================================//
 router.post("/Untrained_Employees_list", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   const data = req.body;
   console.log(data, token, language);
@@ -935,8 +1043,6 @@ router.post("/Untrained_Employees_list", cors(), (req, res) => {
 router.post("/Schedule", cors(), (req, res) => {
   const data = req.headers;
   const request = req.body;
-  const token = req.headers.authorization;
-  const lang = req.headers.language;
   console.log(data);
   console.log(request, "<======request");
 
@@ -947,7 +1053,7 @@ router.post("/Schedule", cors(), (req, res) => {
     });
   } else {
     scheduling
-      .scheduling(data, request, token, lang)
+      .scheduling(data, request)
       .then(result => {
         console.log(result);
         res.status(result.status).json({
@@ -968,7 +1074,7 @@ router.post("/Schedule", cors(), (req, res) => {
 });
 //====================================================================================//
 router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   const data = req.body;
   console.log(data, token, language);
@@ -1000,7 +1106,7 @@ router.post("/Untrained_Employees_Schedule", cors(), (req, res) => {
 //==========================Trained Employees List===============================//
 
 router.post("/Trained_Employees_list", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   const data = req.body;
   console.log(data, token, language);
@@ -1033,8 +1139,6 @@ router.post(
   (req, res) => {
     const EmployeeProfile = req.headers;
     console.log(EmployeeProfile);
-    let token = req.headers.authorization;
-    let language = req.headers.language;
     // let file = req.file;
     // var ipAddress = ip.address();
     // console.log("ips====>", ipAddress);
@@ -1051,15 +1155,13 @@ router.post(
     // console.log(req.file, "fileeeee");
 
     Employee_profile.Employee_profile(
-      EmployeeProfile,
-      token,
-      language
+      EmployeeProfile
       // filename_blob,
       // filename_url,
       // path
     )
       .then(result => {
-        console.log("result", result);
+        console.log(result);
 
         res.status(result.status).json({
           message: result
@@ -1082,13 +1184,12 @@ router.post(
 //====================================company_trading_license============================================//
 router.get("/Company_trading_license", cors(), (req, res) => {
   let data = req.headers;
-  var token = req.headers.authorization;
-  var lang = req.headers.language;
+
   console.log("routes===>", data);
   // console.log(data);
 
   company_trading_license
-    .company_trading_license(data, token, lang)
+    .company_trading_license(data)
     .then(result => {
       console.log(result);
 
@@ -1110,7 +1211,7 @@ router.get("/Company_trading_license", cors(), (req, res) => {
 
 //========================================Safetyofficer_detail_showup===========================//
 router.post("/Safetyofficer_details", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const request = req.body;
   console.log(request);
 
@@ -1138,7 +1239,7 @@ router.post("/Safetyofficer_details", cors(), (req, res) => {
 //=======================================classroom=================================================//
 router.post("/Classroom", cors(), (req, res) => {
   const data = req.body;
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   console.log(data, "request data");
   console.log(token, "token");
@@ -1180,7 +1281,7 @@ router.post("/Classroom", cors(), (req, res) => {
 });
 //==============================================================================================//
 router.post("/Classroom_available_date", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   const data = req.body;
   console.log(language, "<=================language");
@@ -1271,13 +1372,12 @@ router.post("/Feedback", cors(), function(req, res) {
 //====================================Company_Profile============================================//
 router.post("/Company_Profile", cors(), (req, res) => {
   let data = req.body;
-  let token = req.headers.authorization;
-  let lang = req.headers.language;
+  let token = req.headers.token;
 
   console.log(data);
 
   company_profile
-    .company_profile(data, token, lang)
+    .company_profile(data, token)
     .then(result => {
       console.log(result);
 
@@ -1315,7 +1415,7 @@ router.post("/Company_Profile", cors(), (req, res) => {
 //================================================================================================//
 
 router.post("/Course_names", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   console.log(token);
 
@@ -1342,7 +1442,7 @@ router.post("/Course_names", cors(), (req, res) => {
 
 //=============================================================================================//
 router.get("/Trainer_names", cors(), (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   console.log(token);
 
@@ -1370,7 +1470,7 @@ router.get("/Trainer_names", cors(), (req, res) => {
 
 router.post("/Course_creation", cors(), (req, res) => {
   let data = req.body;
-  let token = req.headers.authorization;
+  let token = req.headers.token;
   let language = req.headers.language;
   console.log(data);
 
@@ -1397,7 +1497,7 @@ router.post("/Course_creation", cors(), (req, res) => {
 //============================================================================================//
 router.post("/Time_slots_list", cors(), (req, res) => {
   let data = req.body;
-  let token = req.headers.authorization;
+  let token = req.headers.token;
   let language = req.headers.language;
 
   console.log(data);
@@ -1536,8 +1636,7 @@ router.post("/getAttendance", cors(), (request, response) => {
 router.post("/Trainer_employee_list", cors(), (req, res) => {
   const trainer_data = req.body;
   console.log("Trainer_data_Index===>", trainer_data);
-  const token = req.headers.authorization;
-  console.log("token", token);
+  const token = req.headers.token;
   const language = req.headers.language;
 
   trainer_attendance
@@ -1563,7 +1662,7 @@ router.post("/Trainer_employee_list", cors(), (req, res) => {
 router.post("/Selecting_date_trainer", cors(), (req, res) => {
   const Trainer_selecting_date = req.body;
   console.log("Trainer_selecting_date_INDEX", Trainer_selecting_date);
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   trainer_attendance
     .trainer_date_select(Trainer_selecting_date, token, language)
@@ -1592,7 +1691,7 @@ router.post("/Selecting_date_trainer", cors(), (req, res) => {
 router.post("/attendence", cors(), (req, res) => {
   const Employee_attendance = req.body;
   console.log("Employee_attendance_ROUTES", Employee_attendance);
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   trainer_attendance
     .trainer_attendance_list(Employee_attendance, token, language)
@@ -1614,13 +1713,14 @@ router.post("/attendence", cors(), (req, res) => {
         })
     );
 });
+
 //=================================Trainer Attendance=============================================//
 router.post("/attendence_absent", cors(), (req, res) => {
   const Employee_attendance = req.body;
   console.log("Employee_attendance_ROUTES", Employee_attendance);
-  const token = req.headers.authorization;
+
   trainer_attendance
-    .trainer_attendance_absent_list(Employee_attendance, token)
+    .trainer_attendance_absent_list(Employee_attendance)
     .then(result => {
       console.log(result);
 
@@ -1639,11 +1739,13 @@ router.post("/attendence_absent", cors(), (req, res) => {
         })
     );
 });
-//======================uploadbulkemployee===============================
+
+//=========================================================================================//
+
 router.post("/uploadbulkemployee", multipartMiddleware, cors(), (req, res) => {
   const data = req.files.file.path;
   console.log("file", data);
-  const token = req.headers.authorization;
+  const token = req.headers.token;
   const language = req.headers.language;
   uploadSalama
     .uploadbulkemployee(data, token, language)

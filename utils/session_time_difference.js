@@ -15,8 +15,6 @@ function Session_time_difference(param1, param2) {
 
         return resolve({
             Session_time_difference
-
-
         })
     })
 }

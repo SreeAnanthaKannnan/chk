@@ -1,7 +1,7 @@
 var log4js = require("log4js");
 const logger = log4js.getLogger("Aman_project");
 const checktoken = require("../utils/checkToken");
-
+var bcSdk = require('../fabcar/javascript/query')
 exports.getHistory = (id, token) => {
   return new Promise(async (resolve, reject) => {
     var verifytoken = await checktoken.checkToken(token);
