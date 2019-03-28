@@ -185,6 +185,8 @@ module.exports.scheduleinfo =
 module.exports.servicehistory =
   "SELECT * FROM Schedules INNER JOIN Buildings ON Schedules.building_id=Buildings.id AND Buildings.email_id=?";
 module.exports.installationdetails =
+
   "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ? WHERE id = ?";
 module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
 module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
+module.exports.checktoken = "SELECT * FROM Session where token =?";

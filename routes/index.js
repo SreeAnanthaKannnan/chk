@@ -125,14 +125,17 @@ router.post("/citizen-register", cors(), async function(req, res) {
   console.log(registerobject, "registerobject");
   var mobile = registerobject.mobile;
   var result = await phone.validateMobileNumber(mobile);
+  console.log(result);
   if (result == false) {
     res.send({
+      status: 400,
       message: "Please check Your Mobile number"
     });
   } else {
     await cregister
       .cregister(registerobject)
       .then(result => {
+        console.log("result", result);
         res.send({
           result: result
         });
@@ -1242,6 +1245,7 @@ router.post("/Feedback", cors(), function(req, res) {
   var Company_Email = req.body.Company_Email;
   var comments = req.body.comments;
   var token = req.headers.authorization;
+  var language = req.headers.language;
   console.log(Company_Email, "fhdkhfd");
   if (!Company_Email || !comments.trim()) {
     res.status(400).json({
@@ -1249,12 +1253,11 @@ router.post("/Feedback", cors(), function(req, res) {
     });
   } else {
     feedback
-      .feedback(Company_Email, comments, token)
+      .feedback(Company_Email, comments, token, language)
       .then(result => {
-        res.send({
-          message: "schedule details saved",
-          status: true,
-          result: result
+        console.log("result", result);
+        res.status(result.status).json({
+          message: result
         });
       })
       .catch(err =>
@@ -1516,6 +1519,7 @@ router.post("/getCertificate", cors(), (request, response) => {
 //====Fetching the attendance list from attendance table from DB====//
 router.post("/getAttendance", cors(), (request, response) => {
   certificate.getAttendance(request, function(error, result) {
+    console.log("result", error);
     if (error) {
       response.status(error.status).json({
         message: error.message

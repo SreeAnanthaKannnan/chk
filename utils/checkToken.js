@@ -8,6 +8,7 @@ async function checkToken(token, res) {
       let query = await SessionDao.check_token(token);
       console.log("query", query);
       if (query.length == 0) {
+        console.log(query.length == 0);
         return resolve({
           status: 405,
           message: "Invalid token"
@@ -26,7 +27,7 @@ async function checkToken(token, res) {
           time_difference_minutes.Session_time_difference,
           "session time difference"
         );
-        if (time_difference_minutes.Session_time_difference >= "00:01") {
+        if (time_difference_minutes.Session_time_difference >= "00:30") {
           // let deletetoken = await SessionDao.Session_delete(Db_time)
           // console.log("deletetoken", deletetoken)
           return resolve({
