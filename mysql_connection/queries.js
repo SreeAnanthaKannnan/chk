@@ -188,3 +188,11 @@ module.exports.installationdetails =
 module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
 module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
 module.exports.checktoken = "SELECT * FROM Session where token =?";
+module.exports.updateotp =   "UPDATE citizens SET verify_email = ? WHERE otp = ?";
+module.exports.deleteBuilding = "Delete from Buildings where id = ?";
+
+
+
+
+  
+ 
