@@ -14,11 +14,12 @@ module.exports = {
 }
 //Here verify the user already exits or not, if exits through error
 function verify_user(registerobject) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         var email_id = registerobject.email;
- mysqlConnection
-            .query_execute(query.getlogindetails, email_id)
-            .then(function(result, err) {
+        var param = [email_id]
+        mysqlConnection
+            .query_execute(query.getlogindetails, param)
+            .then(function (result, err) {
                 if (err) {
                     console.log("something", err);
                     return resolve({
@@ -26,10 +27,10 @@ function verify_user(registerobject) {
                         err: err
                     });
                 } else {
-                    console.log(result.data[0], "in  dao 33");
+                    console.log(result, "in  dao 33");
                     return resolve({
                         status: 200,
-                        result: result.data[0]
+                        result: result
                     });
                 }
             });
@@ -37,7 +38,7 @@ function verify_user(registerobject) {
 }
 //if new user insert the data into DataBase
 function insert_user(registerobject, otp) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         var email_id = registerobject.email;
         var firstname = registerobject.firstname;
         var lastname = registerobject.lastname;
@@ -49,13 +50,14 @@ function insert_user(registerobject, otp) {
         var po_box = registerobject.po_box;
         var language = registerobject.language;
         var emirates_id = registerobject.emirates_id;
-        var newsletter = registerobject.newsletter;
+        var newsletter = "N";
         var user_type = registerobject.user_type;
         var type_description = registerobject.typedescription;
         var firstname_ar, firstname_en, lastname_ar, lastname_en, company_ar, company_en, nationality_ar, nationality_en, address_ar, address_en;
         var value;
         var verify_email = "N";
         var verify_mobile = "N";
+        var user_type = "Residence"
         var password = cryptr.encrypt(registerobject.password);
         var reg_date = now;
         if (nationality == undefined) {
@@ -65,6 +67,7 @@ function insert_user(registerobject, otp) {
         }
         //Here the Registration Details converted into both arabic and english languages and stored in Data Base
         value = await langdetect.languageDetect(firstname)
+        language = value.result;
         if (firstname == "") {
             firstname_ar = firstname;
             firstname_en = firstname;
@@ -134,10 +137,12 @@ function insert_user(registerobject, otp) {
                 nationality_ar = temp.result
             }
         }
+        console.log(user_type, "user_type=====>")
         var params = [firstname_en, firstname_ar, lastname_en, lastname_ar, company_en, company_ar, nationality_en, nationality_ar, alter_number, address_en, address_ar, emirates_id, po_box, mobile_number, email_id, password, verify_mobile, verify_email, language, newsletter, user_type, reg_date, otp]
+        console.log("params=====>", params)
         await mysqlConnection
             .insert_query(query.resgister, params)
-            .then(function(result, err) {
+            .then(function (result, err) {
                 if (err) {
                     logger.fatal("Data Base Err", err);
                     return resolve({
@@ -146,11 +151,12 @@ function insert_user(registerobject, otp) {
                     });
                 } else {
                     logger.fatal("query executed successfully");
+                    console.log(result, "result")
                     return resolve({
                         status: 200,
                         message: result
                     });
                 }
             });
-})
+    })
 }

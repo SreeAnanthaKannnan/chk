@@ -165,6 +165,9 @@ router.post("/login", cors(), function (req, res) {
 router.post("/citizen-register", cors(), async function (req, res) {
   var registerobject = req.body;
   console.log(registerobject, "registerobject");
+  var news = req.body.newsletter;
+  console.log("news======>", news)
+
   var mobile = registerobject.mobile;
   var result = await phone.validateMobileNumber(mobile);
   console.log(result);
