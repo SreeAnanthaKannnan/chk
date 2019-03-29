@@ -1,4 +1,3 @@
-
 //======================Result queries================================
 module.exports.findemployeeResults =
   "SELECT * FROM Results where National_Id  = ?";
@@ -17,28 +16,22 @@ module.exports.insertemployee =
 module.exports.deleteemployee =
   "delete from Employee_Profile where National_Id = ?";
 
-
-
-
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
 
 //======================Trainer Attendance start================================
 module.exports.verify_email =
-  "SELECT * FROM Trainer where trainer_email_id =? "
+  "SELECT * FROM Trainer where trainer_email_id =? ";
 
 module.exports.getschedule =
-  "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id =? AND Scheduled_date >= now()+1 "
+  "SELECT distinct Scheduled_date,start_time,end_time,course_id FROM Schedule where Trainer_id =? AND Scheduled_date >= now()+1 ";
 
-module.exports.getcoursear =
-  "SELECT name_ar FROM Course where course_id =? "
+module.exports.getcoursear = "SELECT name_ar FROM Course where course_id =? ";
 
-module.exports.getcourseen =
-  "SELECT name_en FROM Course where course_id =? "
+module.exports.getcourseen = "SELECT name_en FROM Course where course_id =? ";
 
 module.exports.getschedulerdateselect =
-  "SELECT * FROM Schedule where trainer_id =?  AND scheduled_date=? AND start_time=? AND end_time=?"
-
+  "SELECT * FROM Schedule where trainer_id =?  AND scheduled_date=? AND start_time=? AND end_time=?";
 
 module.exports.getclassroom = "SELECT * FROM Classroom where classnum =?";
 
@@ -56,44 +49,32 @@ module.exports.insertsalamaorder =
 module.exports.courseinsert =
   "INSERT INTO Course (name_ar,name_en,exam_amount,training_amount,duration) VALUES ?";
 /*============selecting course name=======*/
-module.exports.courseselect =
-  "SELECT name_en FROM Course where name_en=?";
+module.exports.courseselect = "SELECT name_en FROM Course where name_en=?";
 /*=================selecting all data from course ======*/
-module.exports.coursenames =
-  "SELECT * FROM Course ";
+module.exports.coursenames = "SELECT * FROM Course ";
 /*==================selecting all the data from session table for the particular token======*/
-module.exports.session =
-  "SELECT * FROM Session where token =?";
+module.exports.session = "SELECT * FROM Session where user_ID =?";
 /*=============inserting appeal data in to appeal table=========*/
 module.exports.Appeal =
   "INSERT INTO Appeal (service_en,service_ar,Description_en,Description_ar,Appeal_date,Compliant_NO) VALUES ?";
 /*=============selecting trainer id for the particular trainer name(english)=========*/
-module.exports.trainerid =
-  "SELECT id FROM Trainer where Name_en = ?";
+module.exports.trainerid = "SELECT id FROM Trainer where Name_en = ?";
 /*=====================selecting trainer id for the particular trainer name(Arabic)======*/
-module.exports.trainerid_ar =
-  "SELECT id FROM Trainer where Name_ar = ?";
+module.exports.trainerid_ar = "SELECT id FROM Trainer where Name_ar = ?";
 /*=======finding the row count from the Appeal table for compliant no=========*/
-module.exports.appealidcount =
-  "SELECT count(id) as count FROM Appeal"
-
-
-
-
-
-
+module.exports.appealidcount = "SELECT count(id) as count FROM Appeal";
 
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
-module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
+module.exports.getlogindetails =
+  "SELECT * FROM citizens where email_id =? AND verify_email='Y' ";
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
 /*================fetching the availabledate for the number of available seats greater than the selected seats and particular trainer
 course id========*/
 module.exports.availabledate =
   "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
 /*==========Add the two times and displayed as started_time========*/
-module.exports.addtime =
-  "SELECT ADDTIME(?,?)as started_time";
+module.exports.addtime = "SELECT ADDTIME(?,?)as started_time";
 /*==================inserting the classroom details into classroom table=========*/
 module.exports.classroominsert =
   "INSERT INTO Classroom (classroom_id,trainer_id,address_en,address_ar,number_of_seats,number_of_available_seats,available_date,start_time,end_time,course_id)Values ?";
@@ -107,20 +88,17 @@ module.exports.classroomdataselect =
 module.exports.starttimeformat =
   "SELECT TIME_FORMAT(?, '%h:%i %p') as start_time";
 /*===========changing the time format as the am and pm format and displayed as end_time=====*/
-module.exports.endtimeformat =
-  "SELECT TIME_FORMAT(?, '%h:%i %p') as end_time";
+module.exports.endtimeformat = "SELECT TIME_FORMAT(?, '%h:%i %p') as end_time";
 /*================fetching all the data from class room for the particular classroom_id=====*/
 module.exports.alldatafromclassroom =
   "SELECT * FROM Classroom where classroom_id=?";
 /*=======selecting course id for the paricular coure name(english)=====*/
-module.exports.courseidselect =
-  "SELECT course_id FROM Course where name_ar =?";
+module.exports.courseidselect = "SELECT course_id FROM Course where name_ar =?";
 /*=============finding the time difference and displyed as starting_time=====*/
-module.exports.timedifference =
-  "SELECT TIMEDIFF( ? ,?) as starting_time";
+module.exports.timedifference = "SELECT TIMEDIFF( ? ,?) as starting_time";
 /*=================classroom details for number of available seats not equla to 0 and given coure id by the available date as asc=======*/
 module.exports.classroomdataforbulkbooking =
-  "select * from Classroom where number_of_available_seats <> 0 and course_id=? order by available_date asc"
+  "select * from Classroom where number_of_available_seats <> 0 and course_id=? order by available_date asc";
 /*============inserting the data into schedule for the partial booking====*/
 module.exports.scheduleinsertbulkbooking =
   "INSERT INTO Schedule(classroom_id,National_Id,start_time,end_time,course_id,trainer_id,Company_Trade_Lincense_No,number_of_seats_selected,scheduling_date,scheduled_date,payment_status,amount,status)VALUES ?";
@@ -137,11 +115,9 @@ module.exports.companyprofileinsert =
 module.exports.trainingamount =
   "SELECT training_amount FROM Course where course_id=?";
 /*=========course id for the given course name in englsh=========*/
-module.exports.courseidforenglish =
-  "SELECT * FROM Course where name_en=?";
+module.exports.courseidforenglish = "SELECT * FROM Course where name_en=?";
 /*=========course id for the given course name in arabic==========*/
-module.exports.courseidforarabic =
-  "SELECT * FROM Course where name_ar=?";
+module.exports.courseidforarabic = "SELECT * FROM Course where name_ar=?";
 /*==================selecting course name in arabic for the particular course id=======*/
 module.exports.arabiccoursename =
   "SELECT name_ar FROM Course where course_id=?";
@@ -181,14 +157,30 @@ module.exports.sessioninsert =
 
 //==============================================================//
 module.exports.payment =
-  "INSERT INTO payment(email_id,paymenttype,trnxReference,Amount,Status) VALUES ?";
+  "UPDATE Buildings SET paymenttype = ?,trnx = ?,Amount = ?,status = ? WHERE email_id = ? ";
 
+// ===========================salama Payment======================//
+module.exports.Payment =
+  "INSERT INTO payment(email_id ,paymenttype,trnxReference,Amount,Status,id) VALUES ?";
+
+//=========================================================================//
+
+module.exports.employee_grid_view = "SELECT Company_Profile.company_Trade_License_No,Company_Profile.company_name,Employee_Profile.National_ID,Employee_Profile.id,Employee_Profile.Employee_ID,Employee_Profile.Category,Employee_Profile.Result,Employee_Profile.Name_en from Company_Profile inner join Employee_Profile on Company_Profile.company_Trade_License_No = Employee_Profile.Company_Trade_Lincense_No"
+
+module.exports.employee_grid_view1 = "SELECT Company_Profile.company_Trade_License_No,Company_Profile.company_name,Employee_Profile.National_ID,Employee_Profile.id,Employee_Profile.Employee_ID,Employee_Profile.Category,Employee_Profile.Result,Employee_Profile.Name_en from Company_Profile inner join Employee_Profile on Company_Profile.company_Trade_License_No = Employee_Profile.Company_Trade_Lincense_No Where Employee_Profile.Company_Trade_Lincense_NO=?"
 
 /*======================delete the entry from session for the particular user id======*/
 module.exports.sessiondelete =
   "Delete from Session where user_ID =?";
 module.exports.addbuilding = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
 module.exports.resgister = "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ?";
+/*======================update the entry from session for the particular user id======*/
+module.exports.sessionupdate =
+  "update Session set token=?,session_created_at=? where user_ID = ?";
+module.exports.addbuilding =
+  "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
+module.exports.resgister =
+  "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ?";
 /* Fetching the list of trained employees from "Results" table */
 module.exports.trained_employees =
   "select * from Employee_Profile where Company_Trade_Lincense_No=? and National_Id in (select National_Id from Results where result_en=?) ";
@@ -199,24 +191,29 @@ module.exports.untrained_employees =
 
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
-module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?";
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
-module.exports.findemployeeAttendance = "SELECT * FROM Attendance where trainer_id =? AND attendance_status='Present'"
+module.exports.findemployeeAttendance =
+  "SELECT * FROM Attendance where trainer_id =? AND attendance_status='Present'";
 /*=========selecting the distinct available date for the number of available seats greater then the selected seats and particular trainerid and course id=======*/
 module.exports.availabledate =
   "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
 
 module.exports.getcoursename =
-  "SELECT course_name_en FROM Results where National_Id =?"
+  "SELECT course_name_en FROM Results where National_Id =?";
 
-module.exports.getinstallers = "SELECT email_id FROM citizens where user_type=?";
+module.exports.getinstallers =
+  "SELECT email_id FROM citizens where user_type=?";
 module.exports.imagepdf = "UPDATE Schedules SET filepath =? WHERE id =?";
-module.exports.pdfviewer = "SELECT path,path1,path2,path3 FROM Buildings where email_id= ?";
-module.exports.scheduleinfo = "INSERT INTO Schedules(schedule_time,requestdate,suplier_id,building_id,status) VALUES ? ";
-module.exports.servicehistory = "SELECT * FROM Schedules INNER JOIN Buildings ON Schedules.building_id=Buildings.id AND Buildings.email_id=?";
-module.exports.installationdetails = "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ? WHERE id = ?";
-
-
-
-
-
+module.exports.pdfviewer =
+  "SELECT path,path1,path2,path3 FROM Buildings where email_id= ?";
+module.exports.scheduleinfo =
+  "INSERT INTO Schedules(schedule_time,requestdate,suplier_id,building_id,status) VALUES ? ";
+module.exports.servicehistory =
+  "SELECT * FROM Schedules INNER JOIN Buildings ON Schedules.building_id=Buildings.id AND Buildings.email_id=?";
+module.exports.installationdetails =
+  "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ? WHERE id = ?";
+module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
+module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
+module.exports.checktoken = "SELECT * FROM Session where token =?";
+module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
+module.exports.deleteBuilding = "Delete from Buildings where id = ?";

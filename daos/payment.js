@@ -10,10 +10,10 @@ const query = require("../mysql_connection/queries");
 
 function payment(param) {
     return new Promise(async function (resolve, reject) {
-        var params = [param.email_id, param.paymenttype, param.trnxReference, param.Amount, param.Status]
+        var params = [param.paymenttype, param.trnx, param.Amount, param.status, param.email_id]
         /*====================inserting employee's data into employee_Profile table========*/
         mysqlConnection
-            .insert_query(query.payment, params)
+            .query_execute(query.Payment, params)
             /*==========db error capturing================*/
             .then(function (result, err) {
                 if (err) {

@@ -9,6 +9,7 @@ var dbFunc = require('../mysql_connection/connection.js');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 var xlsx = require('node-xlsx');
+const checktoken = require("../utils/checkToken");
 
 
 var app = express();
@@ -81,88 +82,103 @@ var app = express();
 // //})
 // })
 // };
-async function upload_aman_web(filepath, email_id) {
-    return new Promise(function (resolve, reject) {
-        var XLSX = require('xlsx');
-        var workbook = XLSX.readFile(filepath);
-        var sheet_name_list = workbook.SheetNames;
-        sheet_name_list.forEach(function (y) {
-            var worksheet = workbook.Sheets[y];
-            var headers = {};
-            var data = [];
-            var order_Id = "";
-            var possible = "123456789";
-
-            for (var i = 0; i < 6; i++)
-                order_Id += possible.charAt(Math.floor(Math.random() * possible.length));
-            console.log("order_Id" + order_Id);
-            for (z in worksheet) {
-                if (z[0] === '!') continue;
-                //parse out the column, row, and value
-                var tt = 0;
-                for (var i = 0; i < z.length; i++) {
-                    if (!isNaN(z[i])) {
-                        tt = i;
-                        break;
-                    }
-                };
-                var col = z.substring(0, tt);
-                var row = parseInt(z.substring(tt));
-                var value = worksheet[z].v;
-
-                //store header names
-                if (row == 1 && value) {
-                    headers[col] = value;
-                    continue;
-                }
-
-                if (!data[row]) data[row] = {};
-                data[row][headers[col]] = value;
-            }
-            //drop those first two rows which are empty
-            data.shift();
-            data.shift();
-            console.log(data, "jhkjhkjhkjh");
-
-            //  var test= Object.values(data[0])
-            //    console.log(data,"joieuroiture")
-            // async function(err, data) {
-            var params = []
-            //    if (err) {
-            //                         console.log(err);
-            //                     } else {
-            //   //================================Removing the Header from the template which contains the field values============================================================//        
-            // console.log(data.length);
-            // for (var i = 1; i < data.length; i++) {
-            var test = params.push(Object.values(data[0]))
-
-            //    }
-            console.log(test);
-            var sql = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-            con.query(sql, [params], async function (err, result) {
-                console.log(result, "result")
-
-                if (err) {
-                    return resolve({
-                        "status": 400,
-                        result
-
-                    })
-                } else {
-                    return resolve({
-
-                        message: 'file uploaded successfully',
-                        order_Id: order_Id
-
-
-                    });
-
-                }
+async function upload_aman_web(filepath, token) {
+    return new Promise(async function (resolve, reject) {
+        var verifytoken = await checktoken.checkToken(token);
+        if (verifytoken.status == 405) {
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
             });
-            // }
-        });
+        } else if (verifytoken.status == 403) {
+            console.log("session expired");
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            });
+        }
+        else {
+            var XLSX = require('xlsx');
+            var workbook = XLSX.readFile(filepath);
+            var sheet_name_list = workbook.SheetNames;
+            sheet_name_list.forEach(function (y) {
+                var worksheet = workbook.Sheets[y];
+                var headers = {};
+                var data = [];
+                var order_Id = "";
+                var possible = "123456789";
 
-        // });
+                for (var i = 0; i < 6; i++)
+                    order_Id += possible.charAt(Math.floor(Math.random() * possible.length));
+                console.log("order_Id" + order_Id);
+                for (z in worksheet) {
+                    if (z[0] === '!') continue;
+                    //parse out the column, row, and value
+                    var tt = 0;
+                    for (var i = 0; i < z.length; i++) {
+                        if (!isNaN(z[i])) {
+                            tt = i;
+                            break;
+                        }
+                    };
+                    var col = z.substring(0, tt);
+                    var row = parseInt(z.substring(tt));
+                    var value = worksheet[z].v;
+
+                    //store header names
+                    if (row == 1 && value) {
+                        headers[col] = value;
+                        continue;
+                    }
+
+                    if (!data[row]) data[row] = {};
+                    data[row][headers[col]] = value;
+                }
+                //drop those first two rows which are empty
+                data.shift();
+                data.shift();
+                console.log(data, "jhkjhkjhkjh");
+
+                //  var test= Object.values(data[0])
+                //    console.log(data,"joieuroiture")
+                // async function(err, data) {
+                var params = []
+                //    if (err) {
+                //                         console.log(err);
+                //                     } else {
+                //   //================================Removing the Header from the template which contains the field values============================================================//        
+                // console.log(data.length);
+                // for (var i = 1; i < data.length; i++) {
+                var test = params.push(Object.values(data[0]))
+
+                //    }
+                console.log(test);
+                var sql = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
+                con.query(sql, [params], async function (err, result) {
+                    console.log(result, "result")
+
+                    if (err) {
+                        return resolve({
+                            "status": 400,
+                            result
+
+                        })
+                    } else {
+                        return resolve({
+
+                            message: 'file uploaded successfully',
+                            order_Id: order_Id
+
+
+                        });
+
+                    }
+                });
+                // }
+            });
+
+            // });
+        }
 
     });
 }

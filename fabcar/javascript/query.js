@@ -16,7 +16,7 @@ const ccp = JSON.parse(ccpJSON);
     return new Promise(async (resolve, reject) => {
     try {
          //var key="1"
-        console.log(key.id,"key");
+        console.log(key,fun,"key");
         // Create a new file system based wallet for managing identities.
         // const walletPath = path.join(process.cwd(), 'wallet');
         const walletPath = "/home/rpqb-desk-001/fabric-samples/fabcar/javascript/wallet"
@@ -45,10 +45,9 @@ const ccp = JSON.parse(ccpJSON);
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        const result = await contract.evaluateTransaction(fun.fun,key.id);
+        const result = await contract.evaluateTransaction(fun,key);
         console.log(`Transaction has been evaluated, result is: ${result}`);
         var record = await JSON.parse(result)
-       console.log(record);
         return resolve(record);
 
     } catch (error) {

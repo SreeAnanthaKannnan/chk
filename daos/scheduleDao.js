@@ -6,7 +6,7 @@ const query = require("../mysql_connection/queries");
 
 function schedule_insert(values) {
   return new Promise(function(resolve, reject) {
-    values = [values];
+    //values = [values];
     logger.fatal("values", values);
       mysqlConnection
       .insert_query(query.scheduleinfo,values)

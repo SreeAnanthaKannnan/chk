@@ -1,3 +1,9 @@
+/**
+ * @author: Manoj V
+ * @version: 1.0.0
+ * @date: March 05, 2019
+ * @description: This would be the DAO file where all the mysql queries will be executed for result insertion and fetch.
+ */
 const con = require("../mysql_connection/dbConfig");
 const log4js = require("log4js");
 const logger = log4js.getLogger("Salama_project");
