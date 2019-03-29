@@ -60,7 +60,7 @@ module.exports.appealidcount = "SELECT count(id) as count FROM Appeal";
 
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
-module.exports.getlogindetails = "SELECT * FROM citizens where verify_email=Y  AND email_id =? ";
+module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?  AND verify_email='Y'";
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
 /*================fetching the availabledate for the number of available seats greater than the selected seats and particular trainer
 course id========*/

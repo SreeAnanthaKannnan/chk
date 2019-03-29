@@ -10,7 +10,7 @@ function assesserview(token) {
     return new Promise(async (resolve, reject) => {
 
         var verifytoken = await checktoken.checkToken(token)
-        if (verifytoken.status == 402) {
+        if (verifytoken.status == 405) {
             return resolve({
                 status: verifytoken.status,
                 message: verifytoken.message

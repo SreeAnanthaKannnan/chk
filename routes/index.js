@@ -423,6 +423,7 @@ router.post("/serviceHistory", cors(), async function(req, res) {
 //==============================================================================================
 router.post("/Assessment", cors(), async function (req, res) {
   console.log(req.body);
+  const token = req.headers.authorization;
   var id = req.body.id;
   var status = req.body.status;
   if (!id || !status.trim()) {
@@ -431,7 +432,7 @@ router.post("/Assessment", cors(), async function (req, res) {
     });
   } else {
     assessment
-      .assessment(id, status)
+      .assessment(id, status,token)
       .then(result => {
         res.send({
           message: "schedule details saved",
@@ -483,8 +484,9 @@ router.get("/assesser-view", cors(), async function (req, res) {
   //     })
   // }
   // else{
+    const token = req.headers.authorization;
   assesserview
-    .assesserview()
+    .assesserview(token)
     .then(result => {
       res.send({
         result: result.result.result
@@ -697,7 +699,9 @@ router.post("/forgetotpverification", cors(), (req, res) => {
 });
 
 router.post("/schedules", cors(), async function (req, res) {
+  
   console.log(req.body);
+  const token = req.headers.authorization;
   var time = req.body.schedule_time;
   var reqdate = req.body.requestdate;
   var building_id = req.body.building_id;
@@ -705,7 +709,7 @@ router.post("/schedules", cors(), async function (req, res) {
   var date = moment(new Date(reqdate.substr(0, 16)));
   var rdate = date.format("YYYY-MM-DD");
   schedule
-    .sup(time, rdate, building_id)
+    .sup(time, rdate, building_id,token)
     .then(result => {
       res.send({
         result: result
@@ -722,6 +726,7 @@ router.post("/schedules", cors(), async function (req, res) {
 
 router.post("/Convert_Pdf", cors(), function (req, res) {
   //var flag=0;
+  const token = req.headers.authorization;
   let checked1 = req.body.SelectedValues1;
   let checked2 = req.body.SelectedValues2;
   let checked3 = req.body.SelectedValues3;
@@ -829,7 +834,8 @@ router.post("/Convert_Pdf", cors(), function (req, res) {
     novalue8,
     yesvalue9,
     novalue9,
-    email
+    email,
+    token
   );
   // pdf.mail(email)
 
@@ -843,8 +849,9 @@ router.post("/Convert_Pdf", cors(), function (req, res) {
 
 router.post("/pdfviewer", cors(), async function (req, res) {
   const email = req.body.email;
+  const token = req.headers.authorization;
   pdf1
-    .pdf1(email)
+    .pdf1(email,token)
     .then(result => {
       console.log(result);
       res.status(result.status).json({
@@ -865,9 +872,10 @@ router.post("/pdfviewer", cors(), async function (req, res) {
 //================================installationdetails=================================//
 router.post("/installationdetails", cors(), function (req, res) {
   var installation = req.body;
+  const token = req.headers.authorization;
   console.log(installation, "installation");
   update
-    .update(installation)
+    .update(installation,token)
     .then(result => {
       res.send({
         result: result

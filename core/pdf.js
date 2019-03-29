@@ -22,7 +22,7 @@ function Pdf(yesvalue1, novalue1, yesvalue2, novalue2, yesvalue3, novalue3, yesv
 
     return new Promise(async function (resolve, reject) {
         var verifytoken = await checktoken.checkToken(token)
-        if (verifytoken.status == 402) {
+        if (verifytoken.status == 405) {
             return resolve({
                 status: verifytoken.status,
                 message: verifytoken.message
