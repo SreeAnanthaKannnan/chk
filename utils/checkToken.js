@@ -8,6 +8,7 @@ async function checkToken(token, res) {
       let query = await SessionDao.check_token(token);
       console.log("query", query);
       if (query.length == 0) {
+        console.log(query.length == 0);
         return resolve({
           status: 405,
           message: "Invalid token"

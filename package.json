@@ -64,6 +64,7 @@
     "pug": "^2.0.3",
     "puppeteer": "^1.12.2",
     "sendotp": "^1.2.9",
-    "swagger-jsdoc": "^3.2.7"
+    "swagger-jsdoc": "^3.2.7",
+    "xlsx": "^0.14.1"
   }
 }

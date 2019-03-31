@@ -37,6 +37,12 @@ module.exports.getclassroom = "SELECT * FROM Classroom where classnum =?";
 
 module.exports.insertattendance =
   "INSERT INTO Attendance (employee_id, attendance_status, National_id, Name_en, trainer_id, Attended_date, start_time, end_time, classroom, course_name) VALUES ? ";
+
+module.exports.insertcontactfeedback =
+  "INSERT INTO Appeal (service_en,service_ar,Description_en,Description_ar,Appeal_date,Compliant_NO) VALUES ?";
+
+module.exports.insertsalamaorder =
+  "INSERT INTO Company_Profile (Company_Trade_License_No,Company_Email,Company_name)Values ?";
 //======================Trainer Attendance End================================
 
 /*========inserting course details into course table=========*/
@@ -147,14 +153,34 @@ module.exports.schedulesummary =
 /*======================inserting the data into session table=========*/
 module.exports.sessioninsert =
   "INSERT INTO Session (user_ID,token,session_created_at) VALUES ? ";
+
+//==============================================================//
+module.exports.payment =
+  "UPDATE Buildings SET paymenttype = ?,trnx = ?,Amount = ?,status = ? WHERE email_id = ? ";
+
+// ===========================salama Payment======================//
+module.exports.Payment =
+  "INSERT INTO payment(email_id ,paymenttype,trnxReference,Amount,Status,id) VALUES ?";
+
+//=========================================================================//
+
+module.exports.employee_grid_view = "SELECT Company_Profile.company_Trade_License_No,Company_Profile.company_name,Employee_Profile.National_ID,Employee_Profile.id,Employee_Profile.Employee_ID,Employee_Profile.Category,Employee_Profile.Result,Employee_Profile.Name_en from Company_Profile inner join Employee_Profile on Company_Profile.company_Trade_License_No = Employee_Profile.Company_Trade_Lincense_No"
+
+module.exports.employee_grid_view1 = "SELECT Company_Profile.company_Trade_License_No,Company_Profile.company_name,Employee_Profile.National_ID,Employee_Profile.id,Employee_Profile.Employee_ID,Employee_Profile.Category,Employee_Profile.Result,Employee_Profile.Name_en from Company_Profile inner join Employee_Profile on Company_Profile.company_Trade_License_No = Employee_Profile.Company_Trade_Lincense_No Where Employee_Profile.Company_Trade_Lincense_NO=?"
+
+/*======================delete the entry from session for the particular user id======*/
+module.exports.sessiondelete =
+  "Delete from Session where user_ID =?";
+module.exports.addbuilding = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
+module.exports.resgister = "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ?";
 /*======================update the entry from session for the particular user id======*/
 module.exports.sessionupdate =
   "update Session set token=?,session_created_at=? where user_ID = ?";
 module.exports.addbuilding =
   "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-module.exports.resgister =
-  "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ?";
-/* Fetching the list of trained employees from "Results" table */
+// module.exports.resgister =
+//   "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ?";
+// /* Fetching the list of trained employees from "Results" table */
 module.exports.trained_employees =
   "select * from Employee_Profile where Company_Trade_Lincense_No=? and National_Id in (select National_Id from Results where result_en=?) ";
 
@@ -188,11 +214,5 @@ module.exports.installationdetails =
 module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
 module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
 module.exports.checktoken = "SELECT * FROM Session where token =?";
-module.exports.updateotp =   "UPDATE citizens SET verify_email = ? WHERE otp = ?";
+module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
 module.exports.deleteBuilding = "Delete from Buildings where id = ?";
-
-
-
-
-  
- 

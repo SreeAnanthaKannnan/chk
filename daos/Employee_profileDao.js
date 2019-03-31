@@ -4,15 +4,16 @@ const mysqlConnection = require("../mysql_connection/connection");
 const query = require("../mysql_connection/queries");
 
 function Employee_insert(params) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         /*====================inserting employee's data into employee_Profile table========*/
         var res1 = await mysqlConnection
             .insert_query(query.insertemployee, params)
+        console.log(res1, "err===>")
         /*==========db error capturing================*/
         if (res1.data.errno) {
             return reject({
-                status:400,
-                message:"something went wrong"
+                status: 400,
+                message: "something went wrong"
             })
         } else {
             // console.log(result);
@@ -26,7 +27,7 @@ function Employee_insert(params) {
 }
 /*====================Safety officer details show up==============================*/
 function Safety_officer_details(params) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         params = [params];
         /*===============selecting saftery officer category=====================*/
         var res1 = await mysqlConnection
@@ -47,15 +48,15 @@ function Safety_officer_details(params) {
 }
 //===============================================================================================//
 async function Employee_select(params) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         /*==================Selecting employee data from employee_profile table=================*/
         var res1 = await mysqlConnection
             .query_execute(query.findemployee, [params])
         /*===================db error capturing====================*/
         if (res1.data.errno) {
             return reject({
-                status:400,
-                message:"something went wrong"
+                status: 400,
+                message: "something went wrong"
             })
         } else {
             return resolve({
@@ -69,7 +70,7 @@ async function Employee_select(params) {
 
 //=======================================================================================//
 function Employee_update(Emirates_ID, Company_Trade_Lincense_No, language) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         if (language == "en") {
             console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
             console.log(Emirates_ID, "Emirates_ID");
@@ -81,8 +82,8 @@ function Employee_update(Emirates_ID, Company_Trade_Lincense_No, language) {
                 /*==============db error capture====================*/
                 if (res1.data.errno) {
                     return reject({
-                        status:400,
-                        message:"something went wrong"
+                        status: 400,
+                        message: "something went wrong"
                     })
                 }
                 console.log("res1===>", res1.data);
@@ -102,8 +103,8 @@ function Employee_update(Emirates_ID, Company_Trade_Lincense_No, language) {
                 /*==============db error capture====================*/
                 if (res1.data.errno) {
                     return reject({
-                        status:400,
-                        message:"something went wrong"
+                        status: 400,
+                        message: "something went wrong"
                     })
                 }
                 console.log("res1===>", res1.data);
@@ -118,7 +119,7 @@ function Employee_update(Emirates_ID, Company_Trade_Lincense_No, language) {
 
 //===========================================================================================
 function Untrained_Employees_schedule(Company_Trade_Lincense_No, language) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         if (language == "en") {
             /*================selecting employees whoare not passed and assigned for training is NO=======*/
             var res2 = await mysqlConnection.query_execute(
@@ -126,16 +127,16 @@ function Untrained_Employees_schedule(Company_Trade_Lincense_No, language) {
             );
             if (res2.data.errno) {
                 return reject({
-                    status:400,
-                    message:"something went wrong"
+                    status: 400,
+                    message: "something went wrong"
                 })
             }
-            else{
+            else {
 
-            return resolve({
-                result: res2.data
-            });
-        }
+                return resolve({
+                    result: res2.data
+                });
+            }
         }
         if (language == "ar") {
             console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
@@ -145,25 +146,25 @@ function Untrained_Employees_schedule(Company_Trade_Lincense_No, language) {
             );
             if (res2.data.errno) {
                 return reject({
-                    status:400,
-                    message:"something went wrong"
+                    status: 400,
+                    message: "something went wrong"
                 })
             }
-            else{
-            console.log("res1===>", res2);
-            return resolve({
-                result: res2.data
-            });
-        }
+            else {
+                console.log("res1===>", res2);
+                return resolve({
+                    result: res2.data
+                });
+            }
         }
     });
 }
 //================================Delete the employee=========================//
 async function delete_Employee(params) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         mysqlConnection
             .query_execute(query.deleteemployee, [params])
-            .then(function(result, err) {
+            .then(function (result, err) {
                 if (err) {
                     //  console.log(result,"achieved")
                     console.log("something", err);
@@ -183,7 +184,7 @@ async function delete_Employee(params) {
 }
 //=================================================================================================//
 function Employee_name_schedule(value, language) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         console.log(value, "<=============params_values");
 
         if (language == "en") {
@@ -207,15 +208,15 @@ function Employee_name_schedule(value, language) {
                     /*================pusing the employee names in english in the array myresult=======*/
                     myresult.push(res1.data[0].Name_en);
 
-               // }
+                    // }
 
-                console.log(myresult, "<=========myresult");
+                    console.log(myresult, "<=========myresult");
+                }
+
+                return resolve({
+                    result: myresult
+                });
             }
-
-            return resolve({
-                result: myresult
-            });
-        }
 
         }
         if (language == "ar") {
@@ -235,28 +236,28 @@ function Employee_name_schedule(value, language) {
                 /*================db error capture==================*/
                 if (res1.data.errno) {
                     return reject({
-                        status:400,
-                        message:"something went wrong"
+                        status: 400,
+                        message: "something went wrong"
                     })
                 } else {
                     /*=================pushing the arabic names of the particular emirates id into the myresult array======*/
 
                     myresult.push(res1.data[0].Name_ar);
 
-                //}
+                    //}
 
-                console.log(myresult, "<=========myresult");
+                    console.log(myresult, "<=========myresult");
+                }
+                return resolve({
+                    result: myresult
+                });
             }
-            return resolve({
-                result: myresult
-            });
-        }
         }
     });
 }
 //==============================================================================================//
 function trainer_id(trainer_name, language) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         if (language == "en") {
             var res2 = await mysqlConnection.query_execute(
                 "select * from Employee_Profile where  Company_Trade_Lincense_No=? and Category=? and  National_Id not in(select National_Id from Results where result_en=?) ",
@@ -264,17 +265,17 @@ function trainer_id(trainer_name, language) {
             );
             if (res1.data.errno) {
                 return reject({
-                    status:400,
-                    message:"something went wrong"
+                    status: 400,
+                    message: "something went wrong"
                 })
             }
-            else{
-            return resolve({
-                result: res2.data
-            });
+            else {
+                return resolve({
+                    result: res2.data
+                });
+            }
         }
-        } 
-        if(language =="ar") {
+        if (language == "ar") {
             console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
 
             var res1 = await mysqlConnection.query_execute(
@@ -283,23 +284,23 @@ function trainer_id(trainer_name, language) {
             );
             if (res1.data.errno) {
                 return reject({
-                    status:400,
-                    message:"something went wrong"
+                    status: 400,
+                    message: "something went wrong"
                 })
             }
-            else{
-            console.log("res1===>", res1);
-            return resolve({
-                result: res1.data
-            });
-        }
+            else {
+                console.log("res1===>", res1);
+                return resolve({
+                    result: res1.data
+                });
+            }
         }
     });
 }
 
 //=================================================================================================//
 function Untrained_Employees_list(Company_Trade_Lincense_No, language) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         if (language == "en") {
             var res2 = await mysqlConnection.query_execute(
                 "select * from Employee_Profile where  National_Id not in(select National_Id from Results where result_en=?) and assigned_for_training =?  and Company_Trade_Lincense_No=? and Category=?  ",
@@ -311,40 +312,40 @@ function Untrained_Employees_list(Company_Trade_Lincense_No, language) {
         } else {
             console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
 
-      var res1 = await mysqlConnection.query_execute(
-        query.untrained_employees,
-        [Company_Trade_Lincense_No, status]
-      );
-      console.log("res1===>", res1);
-      return resolve({ result: res1.data });
-    }
-  });
+            var res1 = await mysqlConnection.query_execute(
+                query.untrained_employees,
+                [Company_Trade_Lincense_No, status]
+            );
+            console.log("res1===>", res1);
+            return resolve({ result: res1.data });
+        }
+    });
 }
 //===============================================================================================//
 function Trained_Employees_list(Company_Trade_Lincense_No, language, status) {
-  return new Promise(async function(resolve, reject) {
-    /* Selecting the Company Trade License No. and National Id from "Employee_Profile" table and checking that same National Id from "Results" table */
-    if (language == "en") {
-      var res1 = await mysqlConnection.query_execute(
-        query.trained_employees,
-        [Company_Trade_Lincense_No, status]
-      );
-      // Result throwed 
-      return resolve({ result: res1.data });
-    } 
-    if (language == "ar") {
-      var res1 = await mysqlConnection.query_execute(
-        "select * from Employee_Profile where Company_Trade_Lincense_No=? and National_Id in (select National_Id from Results where result_ar=?) ",
-        [Company_Trade_Lincense_No, status]
-      );
-      return resolve({ result: res1.data });
-    }
-  });
+    return new Promise(async function (resolve, reject) {
+        /* Selecting the Company Trade License No. and National Id from "Employee_Profile" table and checking that same National Id from "Results" table */
+        if (language == "en") {
+            var res1 = await mysqlConnection.query_execute(
+                query.trained_employees,
+                [Company_Trade_Lincense_No, status]
+            );
+            // Result throwed 
+            return resolve({ result: res1.data });
+        }
+        if (language == "ar") {
+            var res1 = await mysqlConnection.query_execute(
+                "select * from Employee_Profile where Company_Trade_Lincense_No=? and National_Id in (select National_Id from Results where result_ar=?) ",
+                [Company_Trade_Lincense_No, status]
+            );
+            return resolve({ result: res1.data });
+        }
+    });
 }
 
 //================================================================================================
 function number_validation_schedule(Company_Trade_Lincense_No) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
         /*=================count the number of employees who are not passed and assigned for training is NO========*/
         var res2 = await mysqlConnection.query_execute(
@@ -353,8 +354,8 @@ function number_validation_schedule(Company_Trade_Lincense_No) {
         /*=================db error capture==================*/
         if (res2.data.errno) {
             return reject({
-                status:400,
-                message:"something went wrong"
+                status: 400,
+                message: "something went wrong"
             })
         } else {
             return resolve({
@@ -366,7 +367,7 @@ function number_validation_schedule(Company_Trade_Lincense_No) {
 //==================================Trainer_attendance =============================================================//
 
 async function national_id(Emirates_ID, class_id) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         let length = Emirates_ID.length;
         var obj = {};
         var value = [];
@@ -386,7 +387,45 @@ async function national_id(Emirates_ID, class_id) {
         });
     });
 }
+//===========================================================================================//
+async function Employee_grid_view() {
+    return new Promise(async function (resolve, reject) {
+        /*===============selecting saftery officer category=====================*/
+        var res1 = await mysqlConnection
+            .query_execute(query.employee_grid_view, [])
 
+        /*======================db error catpturing===========================*/
+        if (res1.data.errno) {
+            return reject({
+                err: "something went wrong"
+            })
+        } else {
+            return resolve({
+                result: res1
+            });
+        }
+    });
+
+}
+async function Employee_grid_view1(company_trade_license) {
+    return new Promise(async function (resolve, reject) {
+        /*===============selecting saftery officer category=====================*/
+        var res1 = await mysqlConnection
+            .query_execute(query.employee_grid_view1, [company_trade_license])
+
+        /*======================db error catpturing===========================*/
+        if (res1.data.errno) {
+            return reject({
+                err: "something went wrong"
+            })
+        } else {
+            return resolve({
+                result: res1
+            });
+        }
+    });
+
+}
 module.exports = {
     Employee_insert: Employee_insert,
     Safety_officer_details: Safety_officer_details,
@@ -399,6 +438,9 @@ module.exports = {
     trainer_id: trainer_id,
     Untrained_Employees_list: Untrained_Employees_list,
     number_validation_schedule: number_validation_schedule,
-    national_id: national_id
+    national_id: national_id,
+    Employee_grid_view: Employee_grid_view,
+    Employee_grid_view1: Employee_grid_view1
+
 
 };

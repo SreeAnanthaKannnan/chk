@@ -75,10 +75,6 @@ async function upload(filepath, email_id) {
 }
 
 module.exports = {
-
-    upload: upload
-}
-module.exports = {
     upload: upload
 };
 //===============================================================Code End=============================================================================================//

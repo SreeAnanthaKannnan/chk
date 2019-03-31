@@ -1,4 +1,4 @@
-var buildings = require('../daos/getBuildingsDao.js');
+var buildings = require('../daos/getBuildingspayments.js');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 const SessionDao = require("../daos/SessionDao");

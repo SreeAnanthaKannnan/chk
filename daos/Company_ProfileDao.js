@@ -4,7 +4,7 @@ const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 /*============Inserting data into compmay_profile table========*/
 function Company_profile_insert(param) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         console.log("param", param);
         let res1 = await mysqlConnection
             .insert_query(query.companyprofileinsert, param)
@@ -25,7 +25,7 @@ function Company_profile_insert(param) {
 }
 /*=========checking whether the compnay email is already exits or not======*/
 function company_trading_license(param) {
-    return new Promise(async function(resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         console.log("Company_TRAde_licence_DAO", param);
 
         /*======selecting company profile data for the given email id======*/
@@ -34,8 +34,8 @@ function company_trading_license(param) {
         console.log(res1, "dbresult")
         if (res1.data.errno) {
             return reject({
-                status:400,
-                message:"something went wrong"
+                status: 400,
+                message: "something went wrong"
             })
         } else {
             console.log("<=======result", res1.data);
@@ -47,7 +47,40 @@ function company_trading_license(param) {
 
     });
 }
+async function salama_order(
+    params,
+    params1,
+    params2,
+
+) {
+    return new Promise(async function (resolve, reject) {
+        console.log("params2", params2)
+        var values = [
+            params,
+            params1,
+            params2,
+
+
+        ];
+
+        var res = await mysqlConnection
+            .insert_query(query.insertsalamaorder, values)
+        console.log("Res========>>", res)
+        if (res.data.errno) {
+            //console.log("something", err);
+            return reject({ status: 400, message: "something went wrong" });
+        } else if (res) {
+            //console.log(result);
+            return resolve({ status: 200, message: res });
+        } else {
+            return resolve({ status: 401, message: res });
+        }
+
+    });
+}
+
 module.exports = {
     Company_profile_insert: Company_profile_insert,
-    company_trading_license: company_trading_license
+    company_trading_license: company_trading_license,
+    salama_order: salama_order
 };

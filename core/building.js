@@ -9,19 +9,18 @@ function buildings(buildingobject, token, email_id) {
   logger.fatal(buildingobject, "buildingobject");
   return new Promise(async (resolve, reject) => {
     var responseObj = {};
-    var verifytoken = await checktoken.checkToken(token)
+    var verifytoken = await checktoken.checkToken(token);
     if (verifytoken.status == 405) {
-        return resolve({
-            status: verifytoken.status,
-            message: verifytoken.message
-        })
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
     } else if (verifytoken.status == 403) {
-        return resolve({
-            status: verifytoken.status,
-            message: verifytoken.message
-        })
-    }
-    else {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else {
       var user = building
         .building(buildingobject, email_id)
         .then(data => {

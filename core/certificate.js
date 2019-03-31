@@ -11,7 +11,7 @@ const Result = require("../daos/ResultsDao");
 const language_detect = require("../utils/language_detect");
 const translate = require("../utils/translate");
 const moment = require("moment");
-const checktoken = require("../utils/checkToken")
+const checktoken = require("../utils/checkToken");
 
 module.exports = {
   Certificate: Certificate,
@@ -30,19 +30,18 @@ async function Certificate(req, callback) {
   var course_name = req.body.course_name;
   var queryresult;
   console.log("outputlength........>>>>>>>>", output.length);
-  var verifytoken = await checktoken.checkToken(token)
-  if (verifytoken.status == 402) {
+  var verifytoken = await checktoken.checkToken(token);
+  if (verifytoken.status == 405) {
     return resolve({
       status: verifytoken.status,
       message: verifytoken.message
-    })
+    });
   } else if (verifytoken.status == 403) {
     return resolve({
       status: verifytoken.status,
       message: verifytoken.message
-    })
+    });
   } else {
-
     for (i = 0; i < output.length; i++) {
       var employee_id = output[i].employee_id;
 
@@ -86,7 +85,7 @@ async function Certificate(req, callback) {
         };
 
         if (result == "Pass") {
-          let course_ar, course_en
+          let course_ar, course_en;
 
           if (lang == "en") {
             let temp = await translate.translate_ar(course_name);
@@ -104,7 +103,7 @@ async function Certificate(req, callback) {
           if (lang == "en") {
             await certificate
               .Pdf(value.employee_name, value.course_name)
-              .then(async function (result) {
+              .then(async function(result) {
                 var path = "/certificate" + employee_name + ".pdf";
 
                 var query_value = [
@@ -118,10 +117,10 @@ async function Certificate(req, callback) {
                   course_en,
                   course_ar
                 ];
-                await Result.Result_select(emirates_id).then(async function (
+                await Result.Result_select(emirates_id).then(async function(
                   result
                 ) {
-                  console.log(result)
+                  console.log(result);
                   if (result.message.length == 0) {
                     let query = await Result.Result_insert(query_value);
 
@@ -155,7 +154,7 @@ async function Certificate(req, callback) {
             };
             await certificate
               .Pdf(value1.employee_ar, value1.course_name_ar)
-              .then(async function (result) {
+              .then(async function(result) {
                 var path = "/certificate" + employee_name + ".pdf";
 
                 var query_value = [
@@ -169,7 +168,7 @@ async function Certificate(req, callback) {
                   course_en,
                   course_ar
                 ];
-                await Result.Result_select(emirates_id).then(async function (
+                await Result.Result_select(emirates_id).then(async function(
                   result
                 ) {
                   if (result.message.length == 0) {
@@ -205,7 +204,7 @@ async function Certificate(req, callback) {
             null,
             emirates_id
           ];
-          await Result.Result_select(emirates_id).then(async function (result) {
+          await Result.Result_select(emirates_id).then(async function(result) {
             if (result.message.length == 0) {
               let query = await Result.Result_insert(query_value);
 
@@ -229,7 +228,6 @@ async function Certificate(req, callback) {
       }
     }
     callback(queryresult);
-
   }
 }
 //====getCertificate method is used to fetch the certificate path from DB and it sends to UI====//
@@ -237,17 +235,17 @@ async function getCertificate(req, callback) {
   var emirates_id = req.body.national_id;
   const token = req.headers.authorization;
   const language = req.headers.language;
-  var verifytoken = await checktoken.checkToken(token)
+  var verifytoken = await checktoken.checkToken(token);
   if (verifytoken.status == 402) {
     return resolve({
       status: verifytoken.status,
       message: verifytoken.message
-    })
+    });
   } else if (verifytoken.status == 403) {
     return resolve({
       status: verifytoken.status,
       message: verifytoken.message
-    })
+    });
   } else {
     if (!emirates_id) {
       var err = {
@@ -275,7 +273,6 @@ async function getCertificate(req, callback) {
       }
     }
   }
-
 }
 
 //====getAttendance method will dtch the attendance list by providing trainer_id to DB====//
@@ -283,17 +280,17 @@ async function getAttendance(req, callback) {
   var trainer_id = req.body.trainer_id;
   const token = req.headers.authorization;
   const language = req.headers.language;
-  var verifytoken = await checktoken.checkToken(token)
+  var verifytoken = await checktoken.checkToken(token);
   if (verifytoken.status == 402) {
     return resolve({
       status: verifytoken.status,
       message: verifytoken.message
-    })
+    });
   } else if (verifytoken.status == 403) {
     return resolve({
       status: verifytoken.status,
       message: verifytoken.message
-    })
+    });
   } else {
     if (!trainer_id) {
       var err = {
@@ -317,7 +314,7 @@ async function getAttendance(req, callback) {
           date_attended = moment(cert).format("YYYY/MM/DD");
           Attendance.message[i].Attended_date = date_attended;
         }
-
+        console.log("Attendance", Attendance);
         var result = {
           status: 200,
           message: Attendance
@@ -326,5 +323,4 @@ async function getAttendance(req, callback) {
       }
     }
   }
-
 }
