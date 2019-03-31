@@ -12,7 +12,7 @@ module.exports.findemployee =
   "SELECT * FROM Employee_Profile where National_Id =?";
 /*===============inserting employee  details into employee_profile table=========*/
 module.exports.insertemployee =
-  "INSERT INTO Employee_Profile (Employee_ID,Name_en,Name_ar,Position,National_Id,Company_Trade_Lincense_No,assigned_for_training,Category) VALUES ?";
+  "INSERT INTO Employee_Profile (uid,national_id,category,date_scheduled,name_en,name_ar,company_trade_license_no,hr_email,date_created) VALUES ?";
 module.exports.deleteemployee =
   "delete from Employee_Profile where National_Id = ?";
 
@@ -66,7 +66,8 @@ module.exports.appealidcount = "SELECT count(id) as count FROM Appeal";
 
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
-module.exports.getlogindetails = "SELECT * FROM citizens where email_id =?  AND verify_email='Y'";
+module.exports.getlogindetails =
+  "SELECT * FROM citizens where email_id =?  AND verify_email='Y'";
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
 /*================fetching the availabledate for the number of available seats greater than the selected seats and particular trainer
 course id========*/
@@ -164,15 +165,18 @@ module.exports.Payment =
 
 //=========================================================================//
 
-module.exports.employee_grid_view = "SELECT Company_Profile.company_Trade_License_No,Company_Profile.company_name,Employee_Profile.National_ID,Employee_Profile.id,Employee_Profile.Employee_ID,Employee_Profile.Category,Employee_Profile.Result,Employee_Profile.Name_en from Company_Profile inner join Employee_Profile on Company_Profile.company_Trade_License_No = Employee_Profile.Company_Trade_Lincense_No"
+module.exports.employee_grid_view =
+  "SELECT Company_Profile.company_Trade_License_No,Company_Profile.company_name,Employee_Profile.National_ID,Employee_Profile.id,Employee_Profile.Employee_ID,Employee_Profile.Category,Employee_Profile.Result,Employee_Profile.Name_en from Company_Profile inner join Employee_Profile on Company_Profile.company_Trade_License_No = Employee_Profile.Company_Trade_Lincense_No";
 
-module.exports.employee_grid_view1 = "SELECT Company_Profile.company_Trade_License_No,Company_Profile.company_name,Employee_Profile.National_ID,Employee_Profile.id,Employee_Profile.Employee_ID,Employee_Profile.Category,Employee_Profile.Result,Employee_Profile.Name_en from Company_Profile inner join Employee_Profile on Company_Profile.company_Trade_License_No = Employee_Profile.Company_Trade_Lincense_No Where Employee_Profile.Company_Trade_Lincense_NO=?"
+module.exports.employee_grid_view1 =
+  "SELECT Company_Profile.company_Trade_License_No,Company_Profile.company_name,Employee_Profile.National_ID,Employee_Profile.id,Employee_Profile.Employee_ID,Employee_Profile.Category,Employee_Profile.Result,Employee_Profile.Name_en from Company_Profile inner join Employee_Profile on Company_Profile.company_Trade_License_No = Employee_Profile.Company_Trade_Lincense_No Where Employee_Profile.Company_Trade_Lincense_NO=?";
 
 /*======================delete the entry from session for the particular user id======*/
-module.exports.sessiondelete =
-  "Delete from Session where user_ID =?";
-module.exports.addbuilding = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-module.exports.resgister = "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ?";
+module.exports.sessiondelete = "Delete from Session where user_ID =?";
+module.exports.addbuilding =
+  "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
+module.exports.resgister =
+  "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ?";
 /*======================update the entry from session for the particular user id======*/
 module.exports.sessionupdate =
   "update Session set token=?,session_created_at=? where user_ID = ?";

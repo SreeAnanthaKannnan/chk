@@ -27,7 +27,7 @@ async function checkToken(token, res) {
           time_difference_minutes.Session_time_difference,
           "session time difference"
         );
-        if (time_difference_minutes.Session_time_difference >= "00:01") {
+        if (time_difference_minutes.Session_time_difference >= "00:30") {
           // let deletetoken = await SessionDao.Session_delete(Db_time)
           // console.log("deletetoken", deletetoken)
           return resolve({
