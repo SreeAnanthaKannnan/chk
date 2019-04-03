@@ -7,7 +7,11 @@ const logger = log4js.getLogger('Aman_project');
 function buildings() {
     return new Promise((resolve, reject) => {
         // logger.fatal(buildingobject,"=>buildingobject");
-        var sql = "SELECT  * FROM Buildings INNER JOIN citizens ON citizens.email_id=Buildings.email_id INNER JOIN Schedules ON Schedules.building_id=Buildings.id";
+        // var sql = "SELECT  * FROM Buildings INNER JOIN citizens ON citizens.email_id=Buildings.email_id INNER JOIN Schedules ON Schedules.building_id=Buildings.id";
+        //var sql = "SELECT  * FROM SHARJAH.Buildings INNER JOIN SHARJAH.citizens ON citizens.email_id=Buildings.email_id";
+        //var sql = " SELECT distinct orderid, datecreated, firstname_en, paymenttype, trnx, Amount, status FROM SHARJAH.Buildings INNER JOIN SHARJAH.citizens ON citizens.email_id=Buildings.email_id";
+
+        var sql = "SELECT  distinct c.firstname_en, b.paymenttype, b.Amount,b.email_id, b.status, b.trnx, b.datecreated, b.orderid FROM Buildings b inner join citizens c ON b.email_id=c.email_id where (lower(trim(orderid)) !='nointerest') AND (lower(trim(orderid))!='null')";
         con.query(sql, function (err, result) {
             if (err) throw err;
             dbFunc.connectionRelease;
@@ -15,6 +19,7 @@ function buildings() {
             logger.fatal(result, "inserted.......")
             resolve({
                 Message: "get Buildings done",
+                // console
                 result: result
             })
         })

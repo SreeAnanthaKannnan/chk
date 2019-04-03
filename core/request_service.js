@@ -125,7 +125,7 @@ function request_service(filepath, token, filename) {
                                         }
                                         else {
                                             order_id = "S" + order_id
-                                         
+
                                         }
                                     }
 
@@ -198,7 +198,7 @@ function request_service(filepath, token, filename) {
                             var national_id_array = []
 
                             console.log("length", data.length);
-                            for (i = 0; i < data.length; i++) {
+                            for (i = 1; i < data.length; i++) {
                                 console.log("data", data[i]);
                                 national_id_array.push(data[i]["Emirates ID"])
                             }
@@ -211,35 +211,33 @@ function request_service(filepath, token, filename) {
 
                                     console.log(order_id, "ORDER")
                                     console.log(order_id == "null")
-                                    if (order_id=null ||order_id == "null" || order_id == "NULL" || order_id == "NoInterest") {
+                                    if (order_id == "null" || order_id == "NULL" || order_id == "NoInterest") {
                                         order_id = "S0001"
                                     }
                                     else {
-                                        //console.log(order_id, "inside the loop")
+                                        console.log(order_id, "inside1 the loop")
                                         order_id = order_id + 1;
                                         order_id = order_id.toString();
-                                        //console.log(order_id, "in line 142");
+                                        console.log(order_id, "in line 142");
                                         if (order_id.length == 1) {
                                             order_id = "S000" + order_id
                                         }
                                         else if (order_id.length == 2) {
                                             order_id = "S00" + order_id
-                                           
                                         }
                                         else if (order_id.length == 3) {
                                             order_id = "S0" + order_id
-                                            
                                         }
-                                       else{
+                                        else {
                                             order_id = "S" + order_id
-                                           
+
                                         }
                                     }
-                                   // console.log("order_id",order_id);
+                                    // console.log("order_id",order_id);
                                     // for (var i = 0; i < 6; i++)
                                     //   order_id += possible.charAt(Math.floor(Math.random() * possible.length));
                                     // console.log("order_id" + order_id);
-                                    console.log(national_id_array, "=======>national_id_array")
+                                    //console.log(national_id_array, "=======>national_id_array")
                                     await Employee_profileDao.update_order_id(order_id, national_id_array)
                                     return resolve({
                                         // statuscode: "E08",

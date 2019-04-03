@@ -6,11 +6,11 @@ const logger = log4js.getLogger('Aman_project');
 //Here we fetch the Building details of the user
 function buildings(buildingobject) {
   return new Promise((resolve, reject) => {
-    console.log(buildingobject, "=>buildingobject");
-    // var sql = "SELECT  * FROM Buildings INNER JOIN payment ON payment.email_id=Buildings.email_id AND Buildings.email_id= '" + buildingobject + "'";
-
-    var sql = "SELECT  * FROM Buildings inner join citizens ON Buildings.email_id=citizens.email_id AND Buildings.email_id= '" + buildingobject + "'";
-    con.query(sql, function (err, result) {
+    // logger.fatal(buildingobject,"=>buildingobject");
+    //var sql = "SELECT  * FROM Buildings inner join citizens ON Buildings.email_id=citizens.email_id ";
+    var sql = "SELECT DISTINCT orderid,datecreated,paymenttype,trnx,Amount,status FROM Buildings where (lower(trim(orderid)) !='nointerest') AND (lower(trim(orderid))!='null') AND email_id= '" + buildingobject + "'"
+    // var sql = "SELECT distinct CONCAT(c.firstname_en ,' ', c.lastname_en) AS name_en, b.paymenttype, b.Amount, b.status, b.trnx, b.datecreated, b.orderid FROM Buildings b inner join citizens c ON b.email_id=c.email_id WHERE email_id = ?;"
+    con.query(sql,function (err, result) {
       if (err) throw err;
       dbFunc.connectionRelease;
       logger.fatal("DataBase ERR:", err)
@@ -24,21 +24,37 @@ function buildings(buildingobject) {
 }
 
 //Here we get the mobile number of citizens from citizen table
-function phone(buildingobject) {
-  return new Promise((resolve, reject) => {
-    logger.fatal(buildingobject, "=>buildingobject");
-    var sql = "SELECT * FROM citizens where email_id = '" + buildingobject + "'";
-    con.query(sql, function (err, result) {
-      if (err) throw err;
-      dbFunc.connectionRelease;
-      resolve({
-        Message: "get phone number",
-        result: result
-      })
-    })
-  })
-}
+// function phone(){
+//   return new Promise((resolve, reject)=>{
+//      // logger.fatal(buildingobject,"=>buildingobject");
+//        var sql = "SELECT * FROM citizens";
+//       con.query(sql, function (err, result) {
+//       if (err) throw err;
+//       dbFunc.connectionRelease;
+//       resolve({
+//           Message: "get phone number",
+//            result:result
+//         })
+//       })
+//   })
+// }
+// function date(){
+//   return new Promise((resolve, reject)=>{
+//      // logger.fatal(buildingobject,"=>buildingobject");
+//        var sql = "SELECT * FROM Schedules";
+//       con.query(sql, function (err, result) {
+//       if (err) throw err;
+//       dbFunc.connectionRelease;
+//       resolve({
+//           Message: "get date",
+//            result:result
+//         })
+//       })
+//   })
+// }
+
 module.exports = {
   buildings: buildings,
-  phone: phone
+  //  phone:phone,
+  //  date:date
 }

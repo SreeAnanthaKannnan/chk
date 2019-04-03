@@ -1,88 +1,11 @@
-var express = require('express');
-var multer = require('multer');
-var fs = require('fs');
-var formidable = require('formidable');
-var csvParser = require('csv-parse');
-var cm = require('csv-mysql');
-const con = require('../mysql_connection/dbConfig');
-var dbFunc = require('../mysql_connection/connection.js');
-var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
-var xlsx = require('node-xlsx');
+var fs = require("fs");
+const uploaddao = require("../daos/uploaddao");
 const checktoken = require("../utils/checkToken");
-
-
-var app = express();
-
-// async function upload(filepath, email_id) {
-//     return new Promise(function(resolve, reject) {
-//  /*============================Token Validation========================================*/  
-// //    SessionDao.Session_select(token)
-// //    .then(async function(result) {
-// //        console.log("token-result<======", result);
-// //        console.log(result[0], "token");
-// //        let query = result
-// //        if (query.length == 0) {
-// //            resolve({
-// //                status: 402,
-// //                message: "Invalid token"
-// //            });
-// //        }
-// //        else{
-//         logger.fatal(filepath) // logger.fatal("body " + req.body);
-//   //========================================Reading .csv file which uploaded from UI.==========================================================//  
-
-//         fs.readFile(filepath, {
-//             encoding: 'utf-8'
-//         }, function(err, csvData) {
-
-//             if (err) {
-//                 logger.fatal(err);
-//             }
-
-
-//             //  csvParser(csvData, {
-//             //      delimiter: ','
-//             //  }, 
-//             xlsx.parse(xlsxFile, {
-//                 delimiter: ','
-//             }, 
-
-//             async function(err, data) {
-//                 var params = [];
-//                 if (err) {
-//                     console.log(err);
-//                 } else {
-//   //================================Removing the Header from the template which contains the field values============================================================//        
-//                     console.log(data.length);
-//                     for (var i = 1; i < data.length; i++) {
-//                         params.push(data[i])
-
-//                     }
-//                     console.log(params);
-//  //==================================================storing the csv content into DataBase==============================================================================//
-//                     var sql = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-//                     await con.query(sql, [params], async function(err, result) {
-//                         if (err) {
-//                             return resolve({
-//                                 "status": 200,
-//                                 "message": 'file uploaded successfully'
-//                             })
-//                         } else {
-//                             return resolve({
-//                                 result
-//                             });
-//                         }
-//                     });
-
-//                 }
-//             });
-//         });
-//    // }
-// //})
-// })
-// };
-async function upload_aman_web(filepath, token) {
+let moment = require("moment");
+var dateFormat = require('dateformat');
+var count = 0;
+function upload_aman_web(filename, token, email_id) {
+    console.log("body ", token);
     return new Promise(async function (resolve, reject) {
         var verifytoken = await checktoken.checkToken(token);
         if (verifytoken.status == 405) {
@@ -96,95 +19,239 @@ async function upload_aman_web(filepath, token) {
                 status: verifytoken.status,
                 message: verifytoken.message
             });
-        }
-        else {
-            var XLSX = require('xlsx');
-            var workbook = XLSX.readFile(filepath);
-            var sheet_name_list = workbook.SheetNames;
-            sheet_name_list.forEach(function (y) {
-                var worksheet = workbook.Sheets[y];
-                var headers = {};
-                var data = [];
-                var order_Id = "";
-                var possible = "123456789";
+        } else {
+            console.log(filename, "filename=====core===>");
 
-                for (var i = 0; i < 6; i++)
-                    order_Id += possible.charAt(Math.floor(Math.random() * possible.length));
-                console.log("order_Id" + order_Id);
-                for (z in worksheet) {
-                    if (z[0] === '!') continue;
-                    //parse out the column, row, and value
-                    var tt = 0;
-                    for (var i = 0; i < z.length; i++) {
-                        if (!isNaN(z[i])) {
-                            tt = i;
-                            break;
-                        }
-                    };
-                    var col = z.substring(0, tt);
-                    var row = parseInt(z.substring(tt));
-                    var value = worksheet[z].v;
-
-                    //store header names
-                    if (row == 1 && value) {
-                        headers[col] = value;
-                        continue;
-                    }
-
-                    if (!data[row]) data[row] = {};
-                    data[row][headers[col]] = value;
+            await fs.readFile(filename, { encoding: "utf-8" }, async function (
+                err,
+                data
+            ) {
+                if (err) {
+                    throw err;
                 }
-                //drop those first two rows which are empty
-                data.shift();
-                data.shift();
-                console.log(data, "jhkjhkjhkjh");
+                var XLSX = require("xlsx");
+                var workbook = XLSX.readFile(filename);
+                var sheet_name_list = workbook.SheetNames;
+                console.log("sheet_name", sheet_name_list);
+                sheet_name_list.forEach(async function (y) {
+                    if (y == "Building Lists") {
+                        var worksheet = workbook.Sheets[y];
+                        var headers = {};
+                        var data = [];
+                        {
+                            for (z in worksheet) {
+                                if (z[0] === "!") continue;
+                                //parse out the column, row, and value
+                                var tt = 0;
+                                for (var i = 0; i < z.length; i++) {
+                                    if (!isNaN(z[i])) {
+                                        tt = i;
+                                        break;
+                                    }
+                                }
+                                var col = z.substring(0, tt);
+                                var row = parseInt(z.substring(tt));
+                                var value = worksheet[z].v;
 
-                //  var test= Object.values(data[0])
-                //    console.log(data,"joieuroiture")
-                // async function(err, data) {
-                var params = []
-                //    if (err) {
-                //                         console.log(err);
-                //                     } else {
-                //   //================================Removing the Header from the template which contains the field values============================================================//        
-                // console.log(data.length);
-                // for (var i = 1; i < data.length; i++) {
-                var test = params.push(Object.values(data[0]))
+                                //store header names
+                                if (row == 1 && value) {
+                                    headers[col] = value;
+                                    continue;
+                                }
 
-                //    }
-                console.log(test);
-                var sql = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-                con.query(sql, [params], async function (err, result) {
-                    console.log(result, "result")
-
-                    if (err) {
-                        return resolve({
-                            "status": 400,
-                            result
-
-                        })
-                    } else {
-                        return resolve({
-
-                            message: 'file uploaded successfully',
-                            order_Id: order_Id
+                                if (!data[row]) data[row] = {};
+                                data[row][headers[col]] = value;
+                            }
+                            data.shift();
+                            data.shift();
 
 
-                        });
+                            if (err) {
+                                var error = {
+                                    // statuscode: "E08",
+                                    status: 500,
+                                    message: "Something went wrong"
+                                };
+                                throw error;
+                            } else if (data.length != 0) {
+                                console.log("length", data.length);
+                                for (i = 0; i < data.length; i++) {
+                                    console.log("data_select.......", data[i]);
 
+
+                                    //   if (select_record.message.data.length == 0) {
+                                    console.log(data[i]);
+
+
+                                    var address = data[i]["Building No"] + "||" + data[i]["Building Street"] + "||" + data[i]["Plot No"];
+                                    data[i].address = address;
+                                    // data[0].name_ar = name_ar;
+                                    delete data[i]["Building No"];
+                                    delete data[i]["Building Street"];
+                                    delete data[i]["Plot No"];
+                                    var alternumber = data[i]["Alternate Contact Phone Number 1"] + "||" + data[i]["Alternate Contact Phone Number 2"];
+                                    delete data[i]["Alternate Contact Phone Number 1"];
+                                    delete data[i]["Alternate Contact Phone Number 2"];
+                                    data[i].alternumber = alternumber;
+                                    data[i]["Preferred Schedule"] = ExcelDateToJSDate(
+                                        data[i]["Preferred Schedule"]
+                                    );
+                                    data[i]["email_id"] = email_id;
+                                    var datecreated = dateFormat("yyyy-mm-dd");
+                                    data[i].datecreated = datecreated;
+                                    var test = Object.values(data[i]);
+
+                                    console.log("test..........", test);
+                                    var insert_employee = await uploaddao.Building_insert(
+                                        test
+                                    );
+
+                                    // console.log(
+                                    //   "insert",
+                                    //   insert_employee.message.data.affectedRows
+                                    // );
+                                    // // count + 1;
+                                    // if (insert_employee.message.data.affectedRows != 0) {
+                                    //   count++;
+                                    //   console.log("count numb======>", count);
+                                    // }
+                                    //}
+                                }
+                                return resolve({
+                                    // statuscode: "E08",
+                                    status: 200,
+                                    message:
+                                        count +
+                                        " employee records were captured and "
+
+                                });
+                            } else {
+                                return resolve({
+                                    // statuscode: "E08",
+                                    status: 400,
+                                    message: "Records not found in Employee List.xlsx File"
+                                });
+                            }
+                        }
+                    }
+                    else if (y == "قوائم المبانى ") {
+                        var worksheet = workbook.Sheets[y];
+                        var headers = {};
+                        var data = [];
+                        {
+                            for (z in worksheet) {
+                                if (z[0] === "!") continue;
+                                //parse out the column, row, and value
+                                var tt = 0;
+                                for (var i = 0; i < z.length; i++) {
+                                    if (!isNaN(z[i])) {
+                                        tt = i;
+                                        break;
+                                    }
+                                }
+                                var col = z.substring(0, tt);
+                                var row = parseInt(z.substring(tt));
+                                var value = worksheet[z].v;
+
+                                //store header names
+                                if (row == 1 && value) {
+                                    headers[col] = value;
+                                    continue;
+                                }
+
+                                if (!data[row]) data[row] = {};
+                                data[row][headers[col]] = value;
+                            }
+                            data.shift();
+                            data.shift();
+
+
+                            if (err) {
+                                var error = {
+                                    // statuscode: "E08",
+                                    status: 500,
+                                    message: "Something went wrong"
+                                };
+                                throw error;
+                            } else if (data.length != 0) {
+                                console.log("length", data.length);
+                                for (i = 1; i < data.length; i++) {
+                                    console.log("data_select.......", data[i]);
+
+
+                                    //   if (select_record.message.data.length == 0) {
+                                    console.log(data[i]);
+
+
+                                    var address = data[i]["Building No"] + "||" + data[i]["Building Street"] + "||" + data[i]["Plot No"];
+                                    data[i].address = address;
+                                    // data[0].name_ar = name_ar;
+                                    delete data[i]["Building No"];
+                                    delete data[i]["Building Street"];
+                                    delete data[i]["Plot No"];
+                                    var alternumber = data[i]["Alternate Contact Phone Number 1"] + "||" + data[i]["Alternate Contact Phone Number 2"];
+                                    delete data[i]["Alternate Contact Phone Number 1"];
+                                    delete data[i]["Alternate Contact Phone Number 2"];
+                                    data[i].alternumber = alternumber;
+                                    data[i]["Preferred Schedule"] = ExcelDateToJSDate(
+                                        data[i]["Preferred Schedule"]
+                                    );
+                                    data[i]["email_id"] = email_id;
+                                    var datecreated = dateFormat("yyyy-mm-dd");
+                                    data[i].datecreated = datecreated;
+                                    var test = Object.values(data[i]);
+
+                                    console.log("test..........", test);
+                                    var insert_employee = await uploaddao.Building_insert(
+                                        test
+                                    );
+
+
+                                }
+                                return resolve({
+                                    // statuscode: "E08",
+                                    status: 200,
+                                    message:
+                                        count +
+                                        " employee records were captured and "
+
+                                });
+                            } else {
+                                return resolve({
+                                    // statuscode: "E08",
+                                    status: 400,
+                                    message: "Records not found in Employee List.xlsx File"
+                                });
+                            }
+                        }
                     }
                 });
-                // }
+
+                count = 0;
+                length = 0;
             });
-
-            // });
         }
-
     });
 }
-
-module.exports = {
-
-    upload_aman_web: upload_aman_web
+function ExcelDateToJSDate(serial) {
+    var utc_days = Math.floor(serial - 25569);
+    var utc_value = utc_days * 86400;
+    var date_info = new Date(utc_value * 1000);
+    var fractional_day = serial - Math.floor(serial) + 0.0000001;
+    var total_seconds = Math.floor(86400 * fractional_day);
+    var seconds = total_seconds % 60;
+    total_seconds -= seconds;
+    var hours = Math.floor(total_seconds / (60 * 60));
+    var minutes = Math.floor(total_seconds / 60) % 60;
+    return new Date(
+        date_info.getFullYear(),
+        date_info.getMonth(),
+        date_info.getDate(),
+        hours,
+        minutes,
+        seconds
+    );
 }
-//===============================================================Code End=============================================================================================//
+module.exports = {
+    upload_aman_web: upload_aman_web
+};

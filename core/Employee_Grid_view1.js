@@ -10,16 +10,18 @@ const translate = require("../utils/translate");
 const fs = require("fs");
 
 exports.Employee_grid_view1 = (
-    token, language, company_trade_license
+     order_id,token, language,
 ) =>
     new Promise(async (resolve, reject) => {
         console.log("language===>", language)
+        console.log("order_id_core", order_id)
+
         var date = new Date()
         date = moment(date).format("YYYY-MM-DD")
         console.log(date, "dateraised")
 
         /*============token validation===================*/
-        console.log(token, "test");
+        //console.log(token, "test");
         let query = await SessionDao.Session_select(token);
         // if (query.length == 0) {
         //     resolve({
@@ -46,10 +48,8 @@ exports.Employee_grid_view1 = (
         //     } else {
 
         /*==================Checking whether employee already exists or not==============*/
-        await Employee_profileDao.Employee_grid_view1(company_trade_license)
+        await Employee_profileDao.Employee_grid_view1(order_id)
             .then(async function (result, err) {
-
-
                 console.log("result======>", result);
 
                 if (result) {

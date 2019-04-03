@@ -55,8 +55,9 @@ function insert_user(registerobject, otp) {
         var type_description = registerobject.typedescription;
         var firstname_ar, firstname_en, lastname_ar, lastname_en, company_ar, company_en, nationality_ar, nationality_en, address_ar, address_en;
         var value;
-        var verify_email = "N";
+        var verify_email = "Y";
         var verify_mobile = "N";
+        var user_type = "residence"
         var password = cryptr.encrypt(registerobject.password);
         var reg_date = now;
         if (nationality == undefined) {

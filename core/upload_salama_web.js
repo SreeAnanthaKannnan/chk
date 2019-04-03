@@ -50,7 +50,7 @@ function upload_salama_web(
   hr_email
 ) {
   console.log("body ", token);
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     var verifytoken = await checktoken.checkToken(token);
     if (verifytoken.status == 405) {
       return resolve({
@@ -66,7 +66,7 @@ function upload_salama_web(
     } else {
       console.log(filepath);
 
-      await fs.readFile(filepath, { encoding: "utf-8" }, async function(
+      await fs.readFile(filepath, { encoding: "utf-8" }, async function (
         err,
         data
       ) {
@@ -77,7 +77,7 @@ function upload_salama_web(
         var workbook = XLSX.readFile(filepath);
         var sheet_name_list = workbook.SheetNames;
         console.log("sheet_name", sheet_name_list);
-        sheet_name_list.forEach(async function(y) {
+        sheet_name_list.forEach(async function (y) {
           if (y == "Employee List") {
             var worksheet = workbook.Sheets[y];
             var headers = {};
@@ -276,8 +276,9 @@ function upload_salama_web(
 
                     data[i].name_en = name_en;
                     data[i].name_ar = name_ar;
-                    data[i].trade_license_number = trade_license_number;
                     data[i].hr_email = hr_email;
+                    data[i].trade_license_number = trade_license_number;
+                  
                     // data[0].name_ar = name_ar;
                     delete data[i]["First Name"];
                     delete data[i]["Last Name"];
@@ -348,3 +349,4 @@ function upload_salama_web(
 module.exports = {
   upload_salama_web: upload_salama_web
 };
+``

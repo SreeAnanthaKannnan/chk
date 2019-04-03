@@ -6,21 +6,21 @@ var mysql = require("mysql");
 
 
 // const con = require("../mysql_connection/dbConfig");
-var dbConfig = {
-  connectionLimit: 100,
-  host: "68.183.86.120",
-  user: "rapiduser",
-  password: "Rpqb$2018",
-  database: "SHARJAH"
-};
-
-// module.exports = mysql.createPool({
+// var dbConfig = {
 //   connectionLimit: 100,
-//   host: '68.183.86.120',
-//   user: 'rapiduser',
-//   password: 'Rpqb$2018',
-//   database: 'SHARJAH'
-// })
+//   host: '192.168.5.60',
+//   user: 'spsa',
+//   password: 'YZjht87HZ%L',
+//   database: 'sharjah'
+// };
+
+module.exports = mysql.createPool({
+  connectionLimit: 100,
+  host: '68.183.86.120',
+  user: 'rapiduser',
+  password: 'Rpqb$2018',
+  database: 'SHARJAH'
+})
 // var dbConfig = {
 //   connectionLimit: 100,
 //   host: '68.183.86.120',
