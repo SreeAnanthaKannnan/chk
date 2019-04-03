@@ -143,8 +143,9 @@ function upload_salama_web(
 
                     data[i].name_en = name_en;
                     data[i].name_ar = name_ar;
-                    data[i].trade_license_number = trade_license_number;
                     data[i].hr_email = hr_email;
+                    data[i].trade_license_number = trade_license_number;
+                    
                     // data[0].name_ar = name_ar;
                     delete data[i]["First Name"];
                     delete data[i]["Last Name"];
