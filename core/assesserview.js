@@ -9,10 +9,11 @@ module.exports = {
 function assesserview(token) {
   return new Promise(async (resolve, reject) => {
     var verifytoken = await checktoken.checkToken(token);
-    if (verifytoken.status == 405) {
+    console.log(verifytoken);
+        if (verifytoken.status == 405) {
       return resolve({
         status: verifytoken.status,
-        message: verifytoken.message
+        message: verifytoken.message,
       });
     } else if (verifytoken.status == 403) {
       return resolve({
@@ -21,11 +22,12 @@ function assesserview(token) {
       });
     } else {
       var result = await asser.assement_get();
-      logger.fatal("result in core file", result);
+      console.log("result in core file", result);
       if (result) {
         resolve({
           status: 200,
-          result: result
+          result: result.result,
+          message:"Details"
         });
       }
       reject({

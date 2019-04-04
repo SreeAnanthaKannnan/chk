@@ -1,8 +1,6 @@
-// var con = require('../mysql_connection/dbConfig.js');
-// var dbFunc = require('../mysql_connection/connection.js');
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
-const mysqlConnection = require("../config/Connection");
+const mysqlConnection = require("../mysql_connection/connection");
 const query = require("../mysql_connection/queries");
 //Here the Data from UI is separated and stored in DATA BASE
 function building(buildingobject, email_id) {
@@ -23,10 +21,78 @@ function building(buildingobject, email_id) {
       });
   })
 }
+async function not_interested_aman(email_id) {
+  return new Promise(async function (resolve, reject) {
+    var params = ["NoInterest", email_id]
+    /*==================Selecting employee data from employee_profile table=================*/
+    var res1 = await mysqlConnection
+      .query_execute(query.not_interested_aman, params)
+    console.log("")
+    /*===================db error capturing====================*/
+    if (res1.data.errno) {
+      return reject({
+        status: 400,
+        message: "something went wrong"
+      })
+    } else {
+      return resolve({
+        status: 200,
+        message: res1
+      });
+    }
+    //});
+  });
+}
+function order_id_select_aman() {
+  return new Promise(async function (resolve, reject) {
+    /*===============selecting saftery officer category=====================*/
+    var res1 = await mysqlConnection
+      .query_execute(query.order_id_select_aman, [])
 
-module.exports = {
-  building: building
+    /*======================db error catpturing===========================*/
+    if (res1.data.errno) {
+      return reject({
+        err: "something went wrong"
+      })
+    } else {
+      return resolve({
+        result: res1
+      });
+    }
+  });
+
+}
+async function update_order_id_aman(order_id, email_id) {
+  return new Promise(async function (resolve, reject) {
+    console.log("email", email_id);
+    var params = [order_id, email_id]
+    /*===============selecting saftery officer category=====================*/
+    //for(i=0;i<email_id.length;i++){
+    var res1 = await mysqlConnection
+      .query_execute(query.update_order_id_aman, params)
+    console.log(res1, "database result")
+    // }
+
+    /*======================db error catpturing===========================*/
+    if (res1.data.errno) {
+      return reject({
+        err: "something went wrong"
+      })
+    } else {
+      return resolve({
+        result: res1
+      });
+    }
+  });
+
 }
 
+module.exports = {
+  building: building,
+  not_interested_aman: not_interested_aman,
+  order_id_select_aman: order_id_select_aman,
+  update_order_id_aman: update_order_id_aman
+
+}
 
 

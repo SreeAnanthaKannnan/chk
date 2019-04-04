@@ -49,13 +49,14 @@ function Pdf(
         status: verifytoken.status,
         message: verifytoken.message
       });
-    } else {
-      try {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
+        } else {
+            try {
 
-        //==================================================Html File generation for creating pdf===================================================================//
-        await page.setContent(`<!DOCTYPE html>
+                const browser = await puppeteer.launch();
+                const page = await browser.newPage();
+
+                //==================================================Html File generation for creating pdf===================================================================//
+                await page.setContent(`<!DOCTYPE html>
         <html>
                  
         </head>

@@ -11,14 +11,16 @@ const translate = require("../utils/translate");
 const fs = require("fs");
 
 exports.Employee_grid_view = (
-    token, language, id
+    token, language,
 ) =>
     new Promise(async (resolve, reject) => {
         console.log("language===>", language)
+        // console.log("email_id Employee grid===>")
 
         /*============token validation===================*/
-        console.log(token, "test");
-        let query = await SessionDao.Session_select(token);
+        //console.log(token, "test");
+        //console.log("id==========>>>",id);
+        //let query = await SessionDao.Session_select(token);
         // if (query.length == 0) {
         //     resolve({
         //         status: 402,
@@ -45,7 +47,8 @@ exports.Employee_grid_view = (
         //     } else {
 
         /*==================Checking whether employee already exists or not==============*/
-        await Employee_profileDao.Employee_grid_view(id)
+        await Employee_profileDao.Employee_grid_view()
+            //console.log("hello")
             .then(async function (result, err) {
                 console.log("result======>", result);
                 if (result) {

@@ -116,6 +116,54 @@ function Employee_update(Emirates_ID, Company_Trade_Lincense_No, language) {
 
     });
 }
+//============================================================================================
+function Employeepay_update(Emirates_ID, Company_Trade_Lincense_No, language) {
+    return new Promise(async function (resolve, reject) {
+        if (language == "en") {
+            console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
+            console.log(Emirates_ID, "Emirates_ID");
+            for (i = 0; i < Emirates_ID.length; i++) {
+                /*=================updating the employee table for specific emirates id for assigned for training  as booked =========*/
+                var res1 = await mysqlConnection.query_execute(
+                    query.employeeupdate, ["Booked", Company_Trade_Lincense_No, Emirates_ID[i]]
+                );
+                /*==============db error capture====================*/
+                if (res1.data.errno) {
+                    return reject({
+                        status: 400,
+                        message: "something went wrong"
+                    })
+                }
+                console.log("res1===>", res1.data);
+            }
+            return resolve({
+                result: res1.data
+            });
+        }
+        if (language == "ar") {
+            console.log("Company_Trade_Lincense_No", Company_Trade_Lincense_No);
+            console.log(Emirates_ID, "Emirates_ID");
+            for (i = 0; i < Emirates_ID.length; i++) {
+                /*=================updating the employee table for specific emirates id for assigned for training  as booked =========*/
+                var res1 = await mysqlConnection.query_execute(
+                    query.employeeupdate, ["Booked", Company_Trade_Lincense_No, Emirates_ID[i]]
+                );
+                /*==============db error capture====================*/
+                if (res1.data.errno) {
+                    return reject({
+                        status: 400,
+                        message: "something went wrong"
+                    })
+                }
+                console.log("res1===>", res1.data);
+            }
+            return resolve({
+                result: res1.data
+            });
+        }
+
+    });
+}
 
 //===========================================================================================
 function Untrained_Employees_schedule(Company_Trade_Lincense_No, language) {
@@ -297,6 +345,67 @@ function trainer_id(trainer_name, language) {
         }
     });
 }
+function order_id_select() {
+    return new Promise(async function (resolve, reject) {
+        /*===============selecting saftery officer category=====================*/
+        var res1 = await mysqlConnection
+            .query_execute(query.order_id_select, [])
+
+        /*======================db error catpturing===========================*/
+        if (res1.data.errno) {
+            return reject({
+                err: "something went wrong"
+            })
+        } else {
+            return resolve({
+                result: res1
+            });
+        }
+    });
+
+}
+async function not_interested() {
+    return new Promise(async function (resolve, reject) {
+        /*==================Selecting employee data from employee_profile table=================*/
+        var res1 = await mysqlConnection
+            .query_execute(query.not_interested, ["NoInterest"])
+        /*===================db error capturing====================*/
+        if (res1.data.errno) {
+            return reject({
+                status: 400,
+                message: "something went wrong"
+            })
+        } else {
+            return resolve({
+                status: 200,
+                message: res1
+            });
+        }
+        //});
+    });
+}
+async function update_order_id(order_id, national_id_array) {
+    return new Promise(async function (resolve, reject) {
+        /*===============selecting saftery officer category=====================*/
+        for (i = 0; i < national_id_array.length; i++) {
+            var res1 = await mysqlConnection
+                .query_execute(query.update_order_id, [order_id, national_id_array[i]])
+            console.log(res1, "database result")
+        }
+
+        /*======================db error catpturing===========================*/
+        if (res1.data.errno) {
+            return reject({
+                err: "something went wrong"
+            })
+        } else {
+            return resolve({
+                result: res1
+            });
+        }
+    });
+
+}
 
 //=================================================================================================//
 function Untrained_Employees_list(Company_Trade_Lincense_No, language) {
@@ -389,11 +498,33 @@ async function national_id(Emirates_ID, class_id) {
 }
 //===========================================================================================//
 async function Employee_grid_view() {
+    //console.log("id",id)
     return new Promise(async function (resolve, reject) {
         /*===============selecting saftery officer category=====================*/
         var res1 = await mysqlConnection
-            .query_execute(query.employee_grid_view, [])
+            .query_execute(query.employee_grid_view)
+        console.log("res123====>", res1)
+        /*======================db error catpturing===========================*/
+        if (res1.data.errno) {
+            return reject({
+                err: "something went wrong"
+            })
+        } else {
+            console.log("res1========>", res1)
+            return resolve({
+                result: res1
+            });
+        }
+    });
 
+}
+async function Employee_grid_view1(order_id) {
+    console.log("order_id_DAO", order_id)
+    return new Promise(async function (resolve, reject) {
+        /*===============selecting saftery officer category=====================*/
+        var res1 = await mysqlConnection
+            .query_execute(query.employee_grid_view1, [order_id])
+        console.log("res1============>>>", res1)
         /*======================db error catpturing===========================*/
         if (res1.data.errno) {
             return reject({
@@ -407,12 +538,35 @@ async function Employee_grid_view() {
     });
 
 }
-async function Employee_grid_view1(company_trade_license) {
+
+async function Employee_grid_view2(national_id) {
+    //console.log("id",id)
     return new Promise(async function (resolve, reject) {
         /*===============selecting saftery officer category=====================*/
         var res1 = await mysqlConnection
-            .query_execute(query.employee_grid_view1, [company_trade_license])
+            .query_execute(query.employee_grid_view2)
+        console.log("res123====>", res1)
+        /*======================db error catpturing===========================*/
+        if (res1.data.errno) {
+            return reject({
+                err: "something went wrong"
+            })
+        } else {
+            console.log("res1========>", res1)
+            return resolve({
+                result: res1
+            });
+        }
+    });
 
+}
+async function employeedetails(employeedetails) {
+    console.log("DAO====>", employeedetails)
+    return new Promise(async function (resolve, reject) {
+        /*===============selecting saftery officer category=====================*/
+        var res1 = await mysqlConnection
+            .query_execute(query.find_employee, employeedetails)
+        console.log("res=======>>>", res1)
         /*======================db error catpturing===========================*/
         if (res1.data.errno) {
             return reject({
@@ -425,6 +579,42 @@ async function Employee_grid_view1(company_trade_license) {
         }
     });
 
+}
+async function Employee_grid_view2(certificate_issue1,certificate_status_emp,result) {
+    //console.log("id",id)
+    return new Promise(async function (resolve, reject) {
+        var params = [certificate_issue1]
+        /*===============selecting saftery officer category=====================*/
+        var res1 = await mysqlConnection
+            .query_execute(query.employee_grid_view2,params)
+        console.log("res1============>>>", res1)
+        console.log("res2============>>>", res1.data[0].certificate_status_emp)
+
+        
+    //  if(res1.data[0]==null) 
+         {
+            console.log("lklkl======")
+        var params = [certificate_status_emp,result,certificate_issue1]
+         console.log(params,"uuuuuuuuuuuuu")
+        
+        var res1 = await mysqlConnection
+            .query_execute(query.employee_grid_view3,params)
+        console.log("res123====>", res1)
+
+        /*======================db error catpturing===========================*/
+        if (res1.data.errno) {
+            return reject({
+                err: "something went wrong"
+            })
+        } else {
+            console.log("res1========>", res1)
+            return resolve({
+                result: res1
+            });
+        }
+    }
+    });
+    
 }
 module.exports = {
     Employee_insert: Employee_insert,
@@ -440,7 +630,12 @@ module.exports = {
     number_validation_schedule: number_validation_schedule,
     national_id: national_id,
     Employee_grid_view: Employee_grid_view,
-    Employee_grid_view1: Employee_grid_view1
+    Employee_grid_view1: Employee_grid_view1,
+    Employee_grid_view2: Employee_grid_view2,
+    employeedetails: employeedetails,
+    not_interested: not_interested,
+    order_id_select: order_id_select,
+    update_order_id: update_order_id
 
 
 };

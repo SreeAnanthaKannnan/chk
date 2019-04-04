@@ -7,8 +7,15 @@ const translate = require("../utils/translate");
 let moment = require("moment");
 const checktoken = require("../utils/checkToken");
 
-exports.Appeal = (Appeal_Object, token, language) =>
-  new Promise(async (resolve, reject) => {
+
+// Contactus_comments
+module.exports = {
+  Appeal: Appeal,
+  Contactus_comments: Contactus_comments
+};
+
+async function Appeal(Appeal_Object, token, language) {
+  return new Promise(async (resolve, reject) => {
     let service = Appeal_Object.service;
     let Description = Appeal_Object.Description;
     let today = new Date();
@@ -110,5 +117,126 @@ exports.Appeal = (Appeal_Object, token, language) =>
         });
     }
   });
+}
+
+
+function Contactus_comments(contact_feedback) {
+  return new Promise(async (resolve, reject) => {
+
+    console.log("contact_feedback=======>")
+    var fullname = contact_feedback.fullname;
+    console.log("core_fullname", fullname);
+
+    var email = contact_feedback.email;
+    console.log("core_email", email);
+
+    var mobile = contact_feedback.mobile;
+    console.log("core_ mobile", mobile);
+
+
+    var subject = contact_feedback.subject;
+    console.log("core_ subject", subject);
+
+    var comment = contact_feedback.comment;
+    console.log("core_ comment", comment);
+
+
+    //=====================Trainer_email send to trainer table ===start=====================
+    var select_query_contucUs = await AppealDAO.contact_feedback(fullname, email, mobile, subject, comment);
+    console.log("Core_selectQuery _Appeal_Table===>", select_query_contucUs);
+
+
+
+    //==========Employee person values send to the attendance table
+    //and store the wheather the person is present ====end============
+
+    if (select_query_contucUs.message.data.affectedRows == 1) {
+
+    } else {
+      var select_query_contucUs = {
+        status: 400,
+        message: "Something went wrong while storing records"
+      };
+    }
+
+    //====================getdata values comes for array ,here I have split
+    //and get the employee_id,name_en,national_id=======end===============
+
+    return resolve({
+      statuscode: "E08",
+      status: 200,
+      //Token: token,
+      message: select_query_contucUs,
+      result: "Details saved sucessfully"
+    });
+
+  })
+
+
+}
 
 /*******************************Code Ends***********************************************/
+function Contactus_comments_() {
+  return new Promise(async (resolve, reject) => {
+    // var verifytoken = await checktoken.checkToken(token);
+    // console.log(verifytoken);
+    // if (verifytoken.status == 402) {
+    //   return resolve({
+    //     status: verifytoken.status,
+    //     message: verifytoken.message
+    //   });
+    // } else if (verifytoken.status == 403) {
+    //   return resolve({
+    //     status: verifytoken.status,
+    //     message: verifytoken.message
+    //   });
+    // } else {
+    console.log("contact_feedback=======>")
+    var fullname = contact_feedback.fullname;
+    console.log("core_fullname", fullname);
+
+    var email = contact_feedback.email;
+    console.log("core_email", email);
+
+    var mobile = contact_feedback.mobile;
+    console.log("core_ mobile", mobile);
+
+
+    var subject = contact_feedback.subject;
+    console.log("core_ subject", subject);
+
+    var comment = contact_feedback.comment;
+    console.log("core_ comment", comment);
+
+
+    //=====================Trainer_email send to trainer table ===start=====================
+    let select_query = await AppealDAO.contact_feedback(fullname, email, mobile, subject, comment);
+    console.log("Core_selectQuery _Trainer_Table===>", select_query);
+
+
+
+    //==========Employee person values send to the attendance table
+    //and store the wheather the person is present ====end============
+
+    if (select_query.message.data.affectedRows == 1) {
+      var select_query = select_query;
+    } else {
+      var select_query = {
+        status: 400,
+        message: "Something went wrong while storing records"
+      };
+    }
+
+    //====================getdata values comes for array ,here I have split
+    //and get the employee_id,name_en,national_id=======end===============
+
+    return resolve({
+      statuscode: "E08",
+      status: 200,
+      //Token: token,
+      message: select_query,
+      result: "Details saved sucessfully"
+    });
+
+  });
+}
