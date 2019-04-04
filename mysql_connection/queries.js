@@ -14,7 +14,7 @@ module.exports.findemployee =
 
 
 module.exports.find_employee =
-  "SELECT DISTINCT e.company_trade_license_no, e.hr_email, e.order_id, e.payment_type, e.amount,e.trnx,e.order_status,DATE_FORMAT(e.date_created, '%Y-%m-%d') AS date_created ,e.certificate_status, c.Company_name FROM SHARJAH.Employee_Profile e, SHARJAH.Company_Profile c where (lower(trim(e.order_id)) !='nointerest')AND (lower(trim(e.order_id))!='null') AND e.hr_email=c.Company_Email"
+  "SELECT DISTINCT e.company_trade_license_no, e.hr_email, e.order_id, e.payment_type, e.amount,e.trnx,e.order_status,DATE_FORMAT(e.date_created, '%Y-%m-%d') AS date_created ,e.certificate_status, c.Company_name FROM SHARJAH.Employee_Profile e, SHARJAH.Company_Profile c where (lower(trim(e.order_id)) !='nointerest')AND (lower(trim(e.order_id))!='null') AND e.hr_email=c.Company_Email AND e.hr_email=?";
 // "select distinct order_id, company_trade_license_no,hr_email,payment_type,amount,trnx,order_status,certificate_status FROM SHARJAH.Employee_Profile where hr_email = ? AND order_id is not null AND(order_id != 'NOInterest' AND order_id != 'NULL'); ";
 // "SELECT distinct id, uid, name_en, name_ar, national_id, category, date_scheduled, date_preferred, result FROM Employee_Profile where order_id is not null AND 'NOIntrest' where hr_email =?";
 // "SELECT distinct order_id, id, uid, name_en, name_ar, national_id,company_trade_licence_no,hr_email, category, date_scheduled, date_preferred,date_prefered,payment_type,result,amount,trnx,order_status result FROM SHARJAH.Employee_Profile where hr_email=? AND order_id is not null AND (order_id !='NoInterest'AND order_id !='NULL')";
