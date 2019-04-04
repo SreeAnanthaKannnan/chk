@@ -1,5 +1,3 @@
-var con = require('../mysql_connection/dbConfig.js');
-var dbFunc = require('../mysql_connection/connection.js');
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 var log4js = require('log4js');

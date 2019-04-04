@@ -11,17 +11,9 @@ module.exports.getemployeedetails =
 module.exports.findemployee =
   "SELECT * FROM Employee_Profile where national_id=?";
 //   "SELECT distinct order_id, id, uid, REPLACE(name_en,'||',' ') AS name_en,REPLACE(name_ar,'||',' ') AS name_ar, national_id,company_trade_license_no,hr_email, category, date_scheduled, date_preferred,payment_type, result,amount,trnx,order_status,certificate_status,DATE_FORMAT(date_created, '%Y-%m-%d') as date_created,date_modified FROM SHARJAH.Employee_Profile where hr_email=? AND order_id is not null AND (order_id !='NOInterest' AND order_id !='NULL')";
-
-
 module.exports.find_employee =
-  "SELECT DISTINCT e.company_trade_license_no, e.hr_email, e.order_id, e.payment_type, e.amount,e.trnx,e.order_status,DATE_FORMAT(e.date_created, '%Y-%m-%d') AS date_created ,e.certificate_status, c.Company_name FROM SHARJAH.Employee_Profile e, SHARJAH.Company_Profile c where (lower(trim(e.order_id)) !='nointerest')AND (lower(trim(e.order_id))!='null') AND e.hr_email=c.Company_Email"
-// "select distinct order_id, company_trade_license_no,hr_email,payment_type,amount,trnx,order_status,certificate_status FROM SHARJAH.Employee_Profile where hr_email = ? AND order_id is not null AND(order_id != 'NOInterest' AND order_id != 'NULL'); ";
-// "SELECT distinct id, uid, name_en, name_ar, national_id, category, date_scheduled, date_preferred, result FROM Employee_Profile where order_id is not null AND 'NOIntrest' where hr_email =?";
-// "SELECT distinct order_id, id, uid, name_en, name_ar, national_id,company_trade_licence_no,hr_email, category, date_scheduled, date_preferred,date_prefered,payment_type,result,amount,trnx,order_status result FROM SHARJAH.Employee_Profile where hr_email=? AND order_id is not null AND (order_id !='NoInterest'AND order_id !='NULL')";
-// "SELECT * FROM Employee_Profile where hr_email =?";
-/*===============inserting employee  details into employee_profile table=========*/
-// module.exports.insertemployee =
-//   "INSERT INTO Employee_Profile (Employee_ID,Name_en,Name_ar,Position,National_Id,Company_Trade_Lincense_No,assigned_for_training,Category) VALUES ?";
+  "SELECT DISTINCT e.company_trade_license_no, e.hr_email, e.order_id, e.payment_type, e.amount,e.trnx,e.order_status,DATE_FORMAT(e.date_created, '%Y-%m-%d') AS date_created ,e.certificate_status, c.Company_name FROM SHARJAH.Employee_Profile e, SHARJAH.Company_Profile c where (lower(trim(e.order_id)) !='nointerest')AND (lower(trim(e.order_id))!='null') AND e.hr_email=c.Company_Email AND e.hr_email=?"
+
 module.exports.insertemployee =
   "INSERT INTO Employee_Profile (uid,national_id,category,date_scheduled,name_en,name_ar,company_trade_license_no,hr_email,date_created) VALUES ?";
 module.exports.deleteemployee =
@@ -168,7 +160,6 @@ module.exports.sessioninsert =
 
 //==============================================================//
 module.exports.payupdate =
-  // 'update Employee_Profile set paymenttype=?, trnx=?,Amount =? , status=? where id =?';
   "update Employee_Profile set payment_type=?, trnx=?,amount =?, order_status=?, certificate_status=? where order_id=?";
 
 //=======================
@@ -196,55 +187,18 @@ module.exports.order_id_select = "SELECT max(convert(substring(order_id FROM 2),
 
 module.exports.order_id_select_aman =
   "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
-//"select max(substr(orderid,2)) as orderid from Buildings where orderid not in ('NoInterest','NULL') and orderid is not null";
-// "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
-
-
 module.exports.update_order_id_aman =
   "UPDATE Buildings SET orderid=? where email_id =? AND orderid IS NULL";
-// module.exports.order_id_select_aman =
-//   "SELECT orderid FROM Buildings ORDER BY id DESC LIMIT 1";
 module.exports.insertbulkbuilding = "INSERT INTO Buildings(Buildingname,preschedule,address,alternumber,email_id,datecreated) VALUES ?";
 
-
-
-//==============aman and salma============
-
-
-// module.exports.payment =
-//   "UPDATE Buildings SET paymenttype = ?,trnx = ?,Amount = ?,status = ? WHERE email_id = ? ";
-
-// // ===========================salama Payment======================//
-// module.exports.Payment =
-//   "INSERT INTO payment(email_id ,paymenttype,trnxReference,Amount,Status,id) VALUES ?";
-
 //====================================aman and salma=====================================//
-
-
-
-
-
-
-
-
 module.exports.employee_grid_view =
-  // "SELECT distinct company_trade_license_no, hr_email, order_id, payment_type, amount, trnx,order_status, date_created FROM SHARJAH.Employee_Profile";
-  //"SELECT distinct company_trade_license_no, hr_email, order_id, payment_type, amount, trnx,order_status, date_created FROM SHARJAH.Employee_Profile where hr_email=? AND (order_id is not null OR order_id !='NoInterest' OR order_id !='NULL')";
-  // "SELECT distinct company_trade_license_no, hr_email, order_id, payment_type, amount, trnx,order_status,DATE_FORMAT(date_created, '%Y-%m-%d') AS date_created , certificate_status FROM SHARJAH.Employee_Profile where (lower(trim(order_id)) !='nointerest') AND (lower(trim(order_id))!='null')";
-  //module.exports.employee_grid_view1 = "SELECT Company_Profile.company_Trade_License_No,Company_Profile.company_name,Employee_Profile.National_ID,Employee_Profile.id,Employee_Profile.Employee_ID,Employee_Profile.Category,Employee_Profile.Result,Employee_Profile.Name_en from Company_Profile inner join Employee_Profile on Company_Profile.company_Trade_License_No = Employee_Profile.Company_Trade_Lincense_No Where Employee_Profile.Company_Trade_Lincense_NO=?"
   "SELECT DISTINCT e.company_trade_license_no, e.hr_email, e.order_id, e.payment_type, e.amount,e.trnx,e.order_status,DATE_FORMAT(e.date_created, '%Y-%m-%d') AS date_created ,e.certificate_status, c.Company_name FROM SHARJAH.Employee_Profile e, SHARJAH.Company_Profile c where (lower(trim(e.order_id)) !='nointerest') AND (lower(trim(e.order_id))!='null') AND e.hr_email=c.Company_Email"
-
-
-
-
-
-
-
 module.exports.employee_grid_view2 =
   "update Employee_Profile set certificate_status_emp=? where national_id = ?";
 
 module.exports.employee_grid_view1 =
-  // "SELECT * FROM Employee_Profile where order_id =?";
+
   "SELECT distinct order_id, id, uid, REPLACE(name_en,'||',' ') AS name_en,REPLACE(name_ar,'||',' ') AS name_ar, national_id,company_trade_license_no,hr_email, category, DATE_FORMAT(date_scheduled, '%Y-%m-%d %T') AS date_scheduled, DATE_FORMAT(date_preferred, '%Y-%m-%d %T') AS date_preferred,payment_type, result,amount,trnx,order_status,certificate_status, certificate_status_emp, DATE_FORMAT(date_created, '%Y-%m-%d') as date_created FROM SHARJAH.Employee_Profile WHERE order_id is not null AND (order_id !='NOInterest' AND order_id !='NULL') AND order_id =?";
 //====================================aman and salma=====================================//
 
@@ -258,8 +212,6 @@ module.exports.sessionupdate =
   "update Session set token=?,session_created_at=? where user_ID = ?";
 module.exports.addbuilding =
   "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-// module.exports.resgister =
-//   "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ?";
 // /* Fetching the list of trained employees from "Results" table */
 module.exports.trained_employees =
   "select * from Employee_Profile where Company_Trade_Lincense_No=? and National_Id in (select National_Id from Results where result_en=?) ";
@@ -307,7 +259,8 @@ module.exports.employee_grid_view2 =
 
 
 module.exports.employee_grid_view3 =
-
-  //  "UPDATE Employee_Profile SET certificate_status_emp = ? where uid=?";
-
   "UPDATE Employee_Profile SET certificate_status_emp =?,result =? WHERE national_id=?";
+module.exports.allbuildings =
+"SELECT  distinct c.firstname_en, b.paymenttype, b.Amount,b.email_id, b.status, b.trnx, b.datecreated, b.orderid FROM Buildings b inner join citizens c ON b.email_id=c.email_id where (lower(trim(orderid)) !='nointerest') AND (lower(trim(orderid))!='null')";
+module.exports.getbuildings =
+"SELECT DISTINCT orderid,datecreated,paymenttype,trnx,Amount,status FROM Buildings where (lower(trim(orderid)) !='nointerest') AND (lower(trim(orderid))!='null') AND email_id= ?";  
