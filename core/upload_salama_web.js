@@ -199,7 +199,7 @@ function upload_salama_web(
                 return resolve({
                   // statuscode: "E08",
                   status: 400,
-                  message: "Records not found in Employee List.csv File"
+                  message: "Records not found in Employee List.xlsx File"
                 });
               }
             }
@@ -333,7 +333,7 @@ function upload_salama_web(
                 return resolve({
                   // statuscode: "E08",
                   status: 400,
-                  message: "Records not found in Employee List.csv File"
+                  message: "Records not found in Employee List.xlsx File"
                 });
               }
             }
