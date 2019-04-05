@@ -35,7 +35,7 @@ function getbuildings(buildingobject, token) {
         console.log("after");
         var result = await buildings.buildings(buildingobject);
         // var result1 = await buildings.phone(buildingobject);
-        logger.fatal("result", result);
+        console.log("result", result);
         // logger.fatal("result1", result1);
         info.push(result);
         // info.push(result1.result[0].mobile_number);

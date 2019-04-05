@@ -263,4 +263,6 @@ module.exports.employee_grid_view3 =
 module.exports.allbuildings =
 "SELECT  distinct c.firstname_en, b.paymenttype, b.Amount,b.email_id, b.status, b.trnx, b.datecreated, b.orderid FROM Buildings b inner join citizens c ON b.email_id=c.email_id where (lower(trim(orderid)) !='nointerest') AND (lower(trim(orderid))!='null')";
 module.exports.getbuildings =
-"SELECT DISTINCT orderid,datecreated,paymenttype,trnx,Amount,status FROM Buildings where (lower(trim(orderid)) !='nointerest') AND (lower(trim(orderid))!='null') AND email_id= ?";  
+"SELECT DISTINCT orderid,datecreated,paymenttype,trnx,Amount,status FROM Buildings where (lower(trim(orderid)) !='nointerest') AND (lower(trim(orderid))!='null') AND email_id= ?";
+module.exports.getbuildings_web =
+"SELECT Buildingname, address, preschedule,  REPLACE(alternumber,'||',', ') AS alternumber, installeddate,preschedule from Buildings where orderid=?";  

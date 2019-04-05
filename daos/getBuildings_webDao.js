@@ -1,5 +1,5 @@
-var con = require('../mysql_connection/dbConfig.js');
-var dbFunc = require('../mysql_connection/connection.js');
+const mysqlConnection = require("../config/Connection");
+const query = require("../mysql_connection/queries");
 var log4js = require('log4js');
 const logger = log4js.getLogger('Aman_project');
 
@@ -7,20 +7,18 @@ const logger = log4js.getLogger('Aman_project');
 function buildings(buildingobject) {
     return new Promise((resolve, reject) => {
         console.log(buildingobject, "=>buildingobject");
-        // var sql = "SELECT  * FROM Buildings INNER JOIN payment ON payment.email_id=Buildings.email_id AND Buildings.email_id= '" + buildingobject + "'";
-
-        //var sql = "SELECT  * FROM Buildings inner join citizens on Buildings.email_id=citizens.email_id AND Buildings.email_id= '" + buildingobject + "'";
-        var sql = "SELECT Buildingname, address, preschedule,  REPLACE(alternumber,'||',', ') AS alternumber, installeddate,preschedule from Buildings where orderid='" + buildingobject + "'";
-        con.query(sql, function (err, result) {
-            console.log("result", result)
-            if (err) throw err;
-            dbFunc.connectionRelease;
-            logger.fatal("DataBase ERR:", err)
-            logger.fatal(result, "inserted.......")
-            resolve({
-                Message: "get Buildings done",
-                result: result
-            })
+        mysqlConnection
+        .query_execute(query.getbuildings_web,buildingobject)
+        .then(function (result, err) {
+          
+            if (err) {
+                logger.fatal("something", err)
+                return reject({ "status": 400, "body": 'Cannot insert the data' })
+            }
+            else {
+                console.log(result, "achieved")
+                return resolve({ status:200, result:result.data});
+            }
         })
     })
 }
