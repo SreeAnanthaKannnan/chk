@@ -165,11 +165,12 @@ router.post("/request_for_service", cors(), (req, res) => {
   console.log("enter into req for service");
   var file_name = req.body.filename;
   console.log("frontend", req.body);
-  var file1 = file_name.substring(1);
-  var file_path = "./uploads/" + file1;
+  var token = req.headers.authorization;
+  //var file1 = file_name.substring(1);
+  var file_path = "./uploads/" + file_name;
   console.log(file_path, "filepath");
   request_service
-    .request_service(file_path, file_name)
+    .request_service(file_path, file_name, token)
     .then(result => {
       console.log(result);
       res.status(result.status).json({
