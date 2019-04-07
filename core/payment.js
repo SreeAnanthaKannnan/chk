@@ -14,7 +14,6 @@ module.exports = {
 
 
 function payment(payment1, token) {
-  logger.fatal(payment1, "payment1");
   return new Promise(async (resolve, reject) => {
     var verifytoken = await checktoken.checkToken(token);
     if (verifytoken.status == 405) {
@@ -69,7 +68,31 @@ function payment_aman(payment1, token) {
       var responseObj = {};
 
       {
+         var verify = await pay.pay_verify(payment1.orderid)
+         console.log(verify,"verify=======<<<<<<<<")
+         if(verify.status ==400){
+           return reject({
+             status:401,
+             message:"something went wrong"
+           })
+         }
+         else{
+         
+           var status = verify.message.status
+           console.log(status)
+           console.log(status!=null,"null checking=====<<<<<")
+           if(status !=null){
+            console.log("kavitha1")
 
+             return resolve({
+               status:401,
+               message:"Payment is not updated. Kindly contact call center"
+             })
+           }
+           
+         
+        
+       else{
         var user = await pay
           .payment_aman(payment1)
           console.log(user,"user=======<<<<<<")
@@ -95,6 +118,8 @@ function payment_aman(payment1, token) {
         }
 
       }
+    }
+    }
     }
   });
 }

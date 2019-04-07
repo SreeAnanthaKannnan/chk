@@ -72,11 +72,36 @@ function payment_aman_install(param) {
     });
 }
 //==================================Trainer_attendance =============================================================//
+function pay_verify(params) {
+    return new Promise(async function (resolve, reject) {
+        // console.log("amount", param.Amount)
+        // console.log("tran", param.trnx)
+        console.log(params,"params========<<<<<<<<<<<<<<")
+        /*====================inserting employee's data into employee_Profile table========*/
+       var res= await mysqlConnection
+            .query_execute(query.pay_verify, [params])
+            console.log(res.data.errno,"checking=====<<<<<<<<<<<<<<<<")
+            console.log(res,"res======>")
+            /*==========db error capturing================*/
+            if (res.data.errno)  {
+                    logger.fatal(res.data.sqlMessage,"db error while updating payment")
+                    return resolve({
+                        status:400,
+                        message:res.data.sqlMessage
+                    })
+                } else {
+                    
+                    return resolve({ status: 200, message: res.data[0]});
+                }
+            
 
+    });
+}
 
 module.exports = {
     payment: payment,
     payment_aman: payment_aman,
-    payment_aman_install: payment_aman_install
+    payment_aman_install: payment_aman_install,
+    pay_verify : pay_verify
 
 };

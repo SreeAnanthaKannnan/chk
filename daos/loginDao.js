@@ -9,7 +9,7 @@ function login(loginobject) {
 //====================================================Get Login Information form Citizens Table==================================================================//       
         mysqlConnection
             .query_execute(query.getlogindetails, email_id)
-            .then(function(err,result) {
+            .then(function(result,err) {
 
                 if (err) {
                     logger.fatal("db error while checking the login in table", err)

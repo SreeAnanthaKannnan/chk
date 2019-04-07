@@ -10,9 +10,11 @@ module.exports = {
 };
 
 async function payment(payment1, token) {
-    console.log(payment1, "payment1");
     return new Promise(async (resolve, reject) => {
         var responseObj = {};
+        
+        
+
         await pay
             .payupdate(payment1)
             .then(data => {
