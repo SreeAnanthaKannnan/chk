@@ -1,13 +1,6 @@
 const mysql = require("mysql");
 
 // module.exports = mysql.createPool({
-//    connectionLimit: 100,
-//    host: '192.168.5.60',
-//    user: 'spsa',
-//    password: 'YZjht87HZ%L',
-//    database: 'sharjah'
-// })
-// module.exports = mysql.createPool({
 //    connectionLimit : 100,
 //    host : 'db4free.net',
 //    user :  'rapidqube',
