@@ -76,12 +76,9 @@ function pay_verify(params) {
     return new Promise(async function (resolve, reject) {
         // console.log("amount", param.Amount)
         // console.log("tran", param.trnx)
-        console.log(params,"params========<<<<<<<<<<<<<<")
         /*====================inserting employee's data into employee_Profile table========*/
        var res= await mysqlConnection
             .query_execute(query.pay_verify, [params])
-            console.log(res.data.errno,"checking=====<<<<<<<<<<<<<<<<")
-            console.log(res,"res======>")
             /*==========db error capturing================*/
             if (res.data.errno)  {
                     logger.fatal(res.data.sqlMessage,"db error while updating payment")
