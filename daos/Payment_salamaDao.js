@@ -5,6 +5,9 @@
 //Here the Data from UI is separated and stored in DATA BASE
 const con = require("../mysql_connection/dbConfig");
 const mysqlConnection = require("../mysql_connection/connection");
+var log4js = require('log4js');
+const logger = log4js.getLogger("SPSA_project");
+
 
 const query = require("../mysql_connection/queries");
 

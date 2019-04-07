@@ -39,7 +39,7 @@
     "express": "^4.16.4",
     "express-generator": "^4.16.0",
     "fabric-client": "^1.4.0",
-    "fabric-network": "^1.4.0",
+    "fabric-network": "^1.4.1",
     "formidable": "^1.2.1",
     "group-array": "^0.3.3",
     "handlebars": "^4.1.0",

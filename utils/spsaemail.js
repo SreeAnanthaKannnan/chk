@@ -32,6 +32,7 @@ console.log("after mail options");
  transporter.sendMail(mailOptions, (error, info) => {
   
   if (error) {
+    
     console.log("Mail send error: ", error);
    // return reject({ "status": 400, "body": 'Cannot fetch the data' })}
   }

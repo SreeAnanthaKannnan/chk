@@ -4,6 +4,9 @@ var TimeFormat = require("hh-mm-ss");
 var start_time = "";
 var groupArray = require("group-array");
 const query = require("../mysql_connection/queries");
+var log4js = require('log4js');
+const logger = log4js.getLogger("SPSA_project");
+
 /*=================Insering the params into classroom table=================*/
 function Classroom_insert(params, duration, insert_count) {
     return new Promise(async function(resolve, reject) {

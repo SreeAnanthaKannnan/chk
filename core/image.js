@@ -1,6 +1,6 @@
 let insertquery = require('../daos/ImageDao');
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 
 
 exports.Image = (Imageobject) => new Promise(async(resolve, reject) => {

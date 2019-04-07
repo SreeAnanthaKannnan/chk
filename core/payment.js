@@ -1,7 +1,7 @@
 var pay = require("../daos/payment.js");
 var Employee_Dao = require("../daos/Employee_profileDao")
 var log4js = require("log4js");
-const logger = log4js.getLogger("Aman_project");
+const logger = log4js.getLogger("SPSA_project");
 const SessionDao = require("../daos/SessionDao");
 const session_time = require("../utils/session_time_difference");
 const checktoken = require("../utils/checkToken");
@@ -72,9 +72,20 @@ function payment_aman(payment1, token) {
 
         var user = await pay
           .payment_aman(payment1)
+          console.log(user,"user=======<<<<<<")
         console.log("payment added", payment1)
+        if(user.message.data.affectedRows ==0){
+          logger.fatal("no rows are updated in aman_building owner")
+          return reject({
+            status:400,
+            message:"something went wrong"
+          })
+        }
         if (user.status == 200) {
-          return resolve(user)
+          return resolve({
+            status:200,
+            message:"payment is updated successfully"
+          })
         }
         else {
           return resolve({

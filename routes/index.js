@@ -810,6 +810,7 @@ router.post("/update_installation", cors(), async function(req, res) {
       });
     })
     .catch(err =>
+     
       res.status(err.status).json({
         message: err.message
       })
@@ -1794,8 +1795,7 @@ router.post("/getCertificate", cors(), (request, response) => {
 router.post("/request_for_service_aman", cors(), (req, res) => {
   console.log("enter into req for aman service");
   var file_name = req.body.filename;
-  console.log("FNAME", req.body.filename);
-  console.log("frontend", req.body.email);
+ 
   var file1 = file_name;
   var file_path = "./uploads/" + file1;
   console.log(file_path, "filepath");

@@ -9,6 +9,7 @@ function otpgen() {
       console.log("in if");
       resolve({ otp });
     } else {
+      logger.fatal(err," error while generating otp")
       reject({ result: err });
     }
   });

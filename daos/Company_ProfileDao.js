@@ -2,6 +2,9 @@ const con = require("../mysql_connection/dbConfig");
 const moment = require("moment");
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
+var log4js = require('log4js');
+const logger = log4js.getLogger("SPSA_project");
+
 /*============Inserting data into compmay_profile table========*/
 function Company_profile_insert(param) {
     return new Promise(async function (resolve, reject) {
@@ -33,6 +36,7 @@ function company_trading_license(param) {
             .query_execute(query.companyprofileselect, [param])
         console.log(res1, "dbresult")
         if (res1.data.errno) {
+            logger.fatal(res1.data.sqlMessage,"db error while inserting company details into company_Profile table")
             return reject({
                 status: 400,
                 message: "something went wrong"

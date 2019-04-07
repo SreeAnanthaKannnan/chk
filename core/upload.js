@@ -7,7 +7,7 @@ var cm = require('csv-mysql');
 const con = require('../mysql_connection/dbConfig');
 var dbFunc = require('../mysql_connection/connection.js');
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 var xlsx = require('node-xlsx');
 var app = express();
 

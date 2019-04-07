@@ -49,7 +49,7 @@ exports.Employee_grid_view1 = (
 
         /*==================Checking whether employee already exists or not==============*/
         await Employee_profileDao.Employee_grid_view1(order_id)
-            .then(async function (result, err) {
+            .then(async function (err,result) {
                 console.log("result======>", result);
 
                 if (result) {
@@ -71,7 +71,7 @@ exports.Employee_grid_view1 = (
 
             .catch(async function (err) {
                 var messagevalue = await message.getmessage(language, "E01")
-
+               logger.fatal(err,"core error while getting details of employee for grid")
                 // return resolve({ status: 400, message:messagevalue });
                 return resolve({ status: 400, message: err })
             });

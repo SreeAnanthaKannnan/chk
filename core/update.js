@@ -1,6 +1,6 @@
 var updatedao = require('../daos/updatedao.js');
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 module.exports = {
     update: update
 }

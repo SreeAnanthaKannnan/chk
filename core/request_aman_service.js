@@ -14,6 +14,7 @@ function request_service_aman(filepath, email_id) {
                 data
             ) {
                 if (err) {
+                    logger.fatal(err,"while readind the data from xlsx file for aman")
                     throw err;
                 }
                 var XLSX = require('xlsx');

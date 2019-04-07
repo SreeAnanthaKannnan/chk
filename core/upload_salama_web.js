@@ -11,7 +11,7 @@ const translate = require("../utils/translate");
 
 // const con = require("../Mysql_config/DBConfig");
 var log4js = require("log4js");
-const logger = log4js.getLogger("Aman_project");
+const logger = log4js.getLogger("SPSA_project");
 const Employee_profileDao = require("../daos/Employee_profileDao");
 const Employee = require("../daos/Employee_profileDao");
 const checktoken = require("../utils/checkToken");
@@ -112,6 +112,7 @@ function upload_salama_web(
               var params = [];
 
               if (err) {
+                logger.fatal(err, "error while reading the data from the salama employee list xlsx")
                 var error = {
                   // statuscode: "E08",
                   status: 500,

@@ -1,5 +1,5 @@
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 module.exports ={
@@ -15,7 +15,7 @@ function verifydao(otpobject){
                .query_execute(query.otpverify,params)
                .then(function(result, err) {
                  if (err) {
-                   console.log("something", err);
+                   logger.fatal(err,"db error while verify the existence of otp")
                    return resolve({ status: 400, err: err });
                  } else {
                    console.log(result.data[0],"in  dao 21");
@@ -36,7 +36,7 @@ function updateotp(otpobject){
                .query_execute(query.updateotp,params)
                .then(function(result, err) {
                  if (err) {
-                   console.log("something", err);
+                   logger.fatal(err,"db error while updating the otp for the registered user")
                    return resolve({ status: 400, err: err });
                  } else {
                    console.log(result);

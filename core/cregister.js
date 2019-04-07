@@ -6,7 +6,7 @@ var emailotpfun = require('../utils/spsaemail');
 const SendOtp = require('sendotp');
 const sendOtp = new SendOtp('254625AbVGrmks5c2c92bd');
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 //Here the verification of user details
 function cregister(registerobject) {
   return new Promise(async (resolve, reject) => {

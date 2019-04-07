@@ -6,7 +6,7 @@ const cryptr = new Cryptr('myTotalySecretKey');
 const langdetect = require('../utils/languagedetect');
 let now = new Date();
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 module.exports = {
     verify_user: verify_user,
     insert_user: insert_user
@@ -21,8 +21,8 @@ function verify_user(registerobject) {
             .query_execute(query.getlogindetails, param)
             .then(function (result, err) {
                 if (err) {
-                    console.log("something", err);
-                    return resolve({
+                    logger.fatal(err,"db error to verify the user while registering")
+                      return resolve({
                         status: 400,
                         err: err
                     });
@@ -144,7 +144,7 @@ function insert_user(registerobject, otp) {
             .insert_query(query.resgister, params)
             .then(function (result, err) {
                 if (err) {
-                    logger.fatal("Data Base Err", err);
+                    logger.fatal(err,"db error while intering the data into the citizen table while registering")
                     return resolve({
                         status: 400,
                         err: err

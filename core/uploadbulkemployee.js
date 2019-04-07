@@ -12,7 +12,7 @@ var csvParser = require("csv-parse");
 var cm = require("csv-mysql");
 // const con = require("../Mysql_config/DBConfig");
 var log4js = require("log4js");
-const logger = log4js.getLogger("Aman_project");
+const logger = log4js.getLogger("SPSA_project");
 const Employee_profileDao = require("../daos/Employee_profileDao");
 const Employee = require("../daos/Employee_profileDao");
 // var app = express();
@@ -58,6 +58,7 @@ function uploadbulkemployee(filepath, token, language) {
             },
             async function(err, data) {
               if (err) {
+                logger.fatal(err,"err while reading data from xlsx file in salama")
                 var error = {
                   // statuscode: "E08",
                   status: 500,

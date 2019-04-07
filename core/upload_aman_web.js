@@ -96,6 +96,13 @@ function upload_aman_web(filename, token, email_id) {
                                     data[i]["Preferred Schedule"] = ExcelDateToJSDate(
                                         data[i]["Preferred Schedule"]
                                     );
+                                    if(data[i]["Preferred Schedule"] =="Invalid Date"){
+                                        return reject({
+                                            status: 400,
+                                            message: "Please provide a valid date format in the preferred schedule"
+                                        })
+                                    }
+                                    else{
                                     data[i]["email_id"] = email_id;
                                     var datecreated = dateFormat("yyyy-mm-dd");
                                     data[i].datecreated = datecreated;
@@ -105,6 +112,9 @@ function upload_aman_web(filename, token, email_id) {
                                     var insert_employee = await uploaddao.Building_insert(
                                         test
                                     );
+
+                                    count = insert_employee.message.data.affectedRows
+                                    console.log(count,"count====>")
 
                                     // console.log(
                                     //   "insert",
@@ -122,18 +132,20 @@ function upload_aman_web(filename, token, email_id) {
                                     status: 200,
                                     message:
                                         count +
-                                        " employee records were captured and "
+                                       +" "+ "Building's record is captured and saved successfully"
 
                                 });
-                            } else {
+                            }
+                         } else {
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 400,
-                                    message: "Records not found in Employee List.xlsx File"
+                                    message: "Records not found in Building List.xlsx File"
                                 });
                             }
                         }
                     }
+                
                     else if (y == "قوائم المبانى ") {
                         var worksheet = workbook.Sheets[y];
                         var headers = {};
@@ -196,6 +208,13 @@ function upload_aman_web(filename, token, email_id) {
                                     data[i]["Preferred Schedule"] = ExcelDateToJSDate(
                                         data[i]["Preferred Schedule"]
                                     );
+                                    if(data[i]["Preferred Schedule"] =="Invalid Date"){
+                                        return reject({
+                                            status: 400,
+                                            message: "Please provide a valid date format in the preferred schedule"
+                                        })
+                                    }
+                                    else{
                                     data[i]["email_id"] = email_id;
                                     var datecreated = dateFormat("yyyy-mm-dd");
                                     data[i].datecreated = datecreated;
@@ -208,23 +227,33 @@ function upload_aman_web(filename, token, email_id) {
 
 
                                 }
+                                count = insert_employee.message.data.affectedRows
+                                if(count ==0){
+                                    return reject({
+                                        status:400,
+                                        message:"something went wrong"
+                                    })
+                                }
+
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 200,
                                     message:
                                         count +
-                                        " employee records were captured and "
+                                        +" "+" Building record is captured and saved successfully "
 
                                 });
-                            } else {
+                            }
+                         } else {
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 400,
-                                    message: "Records not found in Employee List.xlsx File"
+                                    message: "Records not found in Building List.xlsx File"
                                 });
                             }
                         }
                     }
+                
                 });
 
                 count = 0;
@@ -232,6 +261,7 @@ function upload_aman_web(filename, token, email_id) {
             });
         }
     });
+
 }
 function ExcelDateToJSDate(serial) {
     var utc_days = Math.floor(serial - 25569);

@@ -1,6 +1,6 @@
 const con = require('../mysql_connection/dbConfig');
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 //Here the we query the DB to check prefered schedule of building owner is available or not
 function auto(t,s,D){
     logger.fatal("auto s",s);
