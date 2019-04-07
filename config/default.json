@@ -2,9 +2,9 @@
 
 {
   "mysqlConnection": {
-    "host": "192.168.5.60",
-    "user": "spsa",
-    "password": "YZjht87HZ%L",
-    "database": "sharjah"
+    "host": "68.183.86.120",
+    "user": "rapiduser",
+    "password": "Rpqb$2018",
+    "database": "SHARJAH"
   }
  }
