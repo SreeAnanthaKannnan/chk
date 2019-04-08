@@ -385,6 +385,24 @@ router.post("/getBuildings", cors(), async function(req, res) {
       );
   }
 });
+router.post("/getBuildingsbymail", cors(), async function(req, res) {
+  const token = req.headers.authorization;
+     var email_id = req.body.email;
+    console.log(email_id, "data");
+    building
+      .buildingsbymail(email_id, token)
+      .then(result => {
+        res.send({
+          result: result,
+          message: "mock mock"
+        });
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+  });
 //=========================buildingwithpayment=============================================//
 router.post("/getBuildings_web", cors(), async function(req, res) {
   const token = req.headers.authorization;

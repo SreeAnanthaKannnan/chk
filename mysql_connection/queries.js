@@ -273,4 +273,6 @@ module.exports.getbuildings =
 module.exports.getbuildings_web =
 "SELECT Buildingname, address, preschedule,  REPLACE(alternumber,'||',', ') AS alternumber, installeddate,preschedule from Buildings where orderid=?";
 module.exports.pay_verify =
-"SELECT status from Buildings where orderid =?"  
+"SELECT status from Buildings where orderid =?" 
+module.exports.getbuildingsbyemail =
+"select * from Buildings where email_id = ?";   
