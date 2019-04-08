@@ -2,7 +2,6 @@ var log4js = require('log4js');
 const logger = log4js.getLogger('SPSA_project');
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
-
 function login(loginobject) {
     return new Promise(function(resolve, reject) {
         var email_id = loginobject.email;

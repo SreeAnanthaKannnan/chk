@@ -9,7 +9,7 @@ function buildings(buildingobject) {
         console.log(buildingobject, "=>buildingobject");
         mysqlConnection
         .query_execute(query.getbuildings_web,buildingobject)
-        .then(function (err,result) {
+        .then(function (result,err) {
           
             if (err) {
                 logger.fatal(err,"db error while inerting the building details into the building table")

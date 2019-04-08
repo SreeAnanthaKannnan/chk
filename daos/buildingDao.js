@@ -10,7 +10,7 @@ function building(buildingobject, email_id) {
     var params = [email_id, buildingobject.type, buildingobject.address, buildingobject.Buildingname, buildingobject.lat, buildingobject.lon, buildingobject.cdccn, buildingobject.AMC, buildingobject.NSP, buildingobject.SPCN]
     mysqlConnection
       .insert_query(query.addbuilding, params)
-      .then(function (err,result) {
+      .then(function (result,err) {
         if (err) {
           console.log("something", err);
           logger.fatal(err,"db error while inserting building details into building table")
