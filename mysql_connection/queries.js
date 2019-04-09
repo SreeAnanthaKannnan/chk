@@ -254,16 +254,10 @@ module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
 module.exports.checktoken = "SELECT * FROM Session where token =?";
 module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
 module.exports.deleteBuilding = "Delete from Buildings where id = ?";
-
-
-
 module.exports.certificate_issue = " UPDATE Employee_Profile SET certificate_issue = ? WHERE national_id = ?";
-
 module.exports.deletetoken = "Delete from Session where token=?";
 module.exports.employee_grid_view2 =
   "SELECT certificate_status_emp from Employee_Profile where national_id=?";
-
-
 module.exports.employee_grid_view3 =
   "UPDATE Employee_Profile SET certificate_status_emp =?,result =? WHERE national_id=?";
 module.exports.allbuildings =

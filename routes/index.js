@@ -1020,8 +1020,17 @@ router.post("/Convert_Pdf", cors(), function(req, res) {
     yesvalue9,
     novalue9,
     email,
-    token
-  );
+    token,
+    checked1,
+    checked2,
+    checked3,
+    checked4,
+    checked5,
+    checked6,
+    checked7,
+    checked8,
+    checked9,
+   );
   // pdf.mail(email)
 
   res.send({
@@ -2198,7 +2207,32 @@ router.post("/uploadaman", upload_aman.single("file"), cors(), (req, res) => {
 });
 
 //================================================================================================//
-
+router.post("/DeleteBuilding", cors(), async function (req, res) {
+  // var id = await check.checkToken(req);
+  // const token = req.headers['authorization'];
+  // console.log(id);
+  // if (id.status == 400 && id.status == 403) {
+  //   res.send({
+  //     result: id
+  //   });
+  // } else {
+    var buildingobject = req.body;
+  console.log("buildingobject",req.body);
+   delbuilding
+      .buildings(buildingobject)
+      .then(result => {
+        res.send({
+          result: result,
+          message: "Your Building Details Deleted successfully"
+        });
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+ // }
+});
 router.get("/download1", express.static(path.join(__dirname, "../uploads")));
 
 //======================================================================================//
