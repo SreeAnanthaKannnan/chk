@@ -269,4 +269,6 @@ module.exports.getbuildings_web =
 module.exports.pay_verify =
 "SELECT status from Buildings where orderid =?" 
 module.exports.getbuildingsbyemail =
-"select * from Buildings where email_id = ?";   
+"select * from Buildings where email_id = ?";
+module.exports.editBuilding = 
+"update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";   

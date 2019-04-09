@@ -2233,6 +2233,32 @@ router.post("/DeleteBuilding", cors(), async function (req, res) {
       );
  // }
 });
+router.post("/EditBuildingdetails", cors(), async function (req, res) {
+  // var id = await check.checkToken(req);
+  // const token = req.headers['authorization'];
+  // console.log(id);
+  // if (id.status == 400 && id.status == 403) {
+  //   res.send({
+  //     result: id
+  //   });
+  // } else {
+    var buildingobject = req.body;
+  console.log("buildingobject",req.body);
+   delbuilding
+      .editbuildings(buildingobject)
+      .then(result => {
+        res.send({
+          result: result,
+          message: "Your Building Details Deleted successfully"
+        });
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+ // }
+});
 router.get("/download1", express.static(path.join(__dirname, "../uploads")));
 
 //======================================================================================//
