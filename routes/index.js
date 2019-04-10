@@ -79,6 +79,7 @@ let Appeal = require("../core/Appeal"),
   Untrained_Employees_schedule = require("../core/Untrained_Employees_showup_schedule"),
   number_validation_schedule = require("../core/Number_validation_schedule"),
   allBuildings = require("../core/allBuildings");
+var payment_statusupdate_salama =require("../core/payment_statusupdate_salama");  
 var certificate_issue1 = require("../core/certificate_issue");
 var getBuildings_web = require("../core/getBuildings_web");
 var ip = require("ip");
@@ -166,8 +167,8 @@ router.post("/request_for_service", cors(), (req, res) => {
   var file_name = req.body.filename;
   console.log("frontend", req.body);
   var token = req.headers.authorization;
-  //var file1 = file_name.substring(1);
-  var file_path = "./uploads/" + file_name;
+  var file1 = file_name.substring(1);
+  var file_path = "./uploads/" + file1;
   console.log(file_path, "filepath");
   request_service
     .request_service(file_path, file_name, token)
@@ -804,6 +805,40 @@ router.post("/Payment_aman", cors(), async function(req, res) {
   console.log("payment", payment1);
   payment
     .payment_aman(payment1, token)
+    .then(result => {
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+router.post("/Payment_aman_status", cors(), async function(req, res) {
+  const token = req.headers.authorization;
+  var payment1 = req.body;
+  console.log("payment", payment1);
+  payment
+    .payment_aman_status(payment1, token)
+    .then(result => {
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+router.post("/Payment_statusupdate_salama", cors(), async function(req, res) {
+  const token = req.headers.authorization;
+  var payment1 = req.body;
+  console.log("payment", payment1);
+  payment_statusupdate_salama
+    .payment_statusupdate_salama(payment1, token)
     .then(result => {
       res.status(result.status).json({
         message: result
@@ -2347,7 +2382,46 @@ router.post("/session_close", cors(), async function(req, res) {
     );
 });
 //=====================================================
+//---------------------Owner Details------------------------------------
+router.post("/owner_details", cors(), function(req, res) {
+  var owner_details = req.body;
+  console.log("owner_details",owner_details);
+  var token =req.headers.authorization
+  console.log("token",token)
+  cregister
+    .owner_details(owner_details,token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=============================================================================
+router.post("/hr_details", cors(), function(req, res) {
+  var hr_details = req.body;
 
+  var token =req.headers.authorization
+  console.log("token",token)
+  cregister
+    .hr_details(hr_details,token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//========================================================================
 router.use("/download", express.static(path.join(__dirname, "../upload")));
 //===================================================================================
 router.post("/certificate_issue", cors(), async function(req, res) {

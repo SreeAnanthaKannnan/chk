@@ -49,7 +49,7 @@ exports.Employee_grid_view1 = (
 
         /*==================Checking whether employee already exists or not==============*/
         await Employee_profileDao.Employee_grid_view1(order_id)
-            .then(async function (err,result) {
+            .then(async function (result,err) {
                 console.log("result======>", result);
 
                 if (result) {

@@ -9,7 +9,9 @@ var log4js = require('log4js');
 const logger = log4js.getLogger('SPSA_project');
 module.exports = {
     verify_user: verify_user,
-    insert_user: insert_user
+    insert_user: insert_user,
+    owner_details_name:owner_details_name,
+    hr_details_name:hr_details_name
 
 }
 //Here verify the user already exits or not, if exits through error
@@ -36,6 +38,59 @@ function verify_user(registerobject) {
             });
     })
 }
+
+//=========================================================
+function owner_details_name(employee_name, email_id) {
+    return new Promise(async function (resolve, reject) {
+        var param = [employee_name, email_id]
+        console.log("DAO_reg",param)
+
+        // -----
+        var res = await mysqlConnection.query_execute(
+            query.getownerdetails,
+            param
+          );
+          console.log("response", res)
+          if (res.data.errno) {
+            return reject({
+              status: 400,
+              message: "something went wrong"
+            });
+          } else {
+      console.log("result_dao===========>",res)
+            return resolve({
+              status: 200,
+              message: res
+            });
+          }
+        });
+      }
+//===================================================================================
+function hr_details_name(email_id) {
+    return new Promise(async function (resolve, reject) {
+        var param = [email_id]
+        console.log("DAO_reg",param)
+
+        // -----
+        var res = await mysqlConnection.query_execute(
+            query.gethrdetails,
+            param
+          );
+          console.log("response", res)
+          if (res.data.errno) {
+            return reject({
+              status: 400,
+              message: "something went wrong"
+            });
+          } else {
+      console.log("result_dao===========>",res)
+            return resolve({
+              status: 200,
+              message: res
+            });
+          }
+        });
+      }
 //if new user insert the data into DataBase
 function insert_user(registerobject, otp) {
     return new Promise(async function (resolve, reject) {

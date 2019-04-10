@@ -326,15 +326,15 @@ function upload_salama_web(
                   status: 200,
                   message:
                     count +
-                    " employee records were captured and " +
+                    " تم تسجيل سجلات الموظفين و " +
                     length +
-                    " employee records were found to be duplicate."
+                    " تم العثور على سجلات الموظفين لتكون مكررة"
                 });
               } else {
                 return resolve({
                   // statuscode: "E08",
                   status: 400,
-                  message: "Records not found in Employee List.xlsx File"
+                  message: "السجلات غير موجودة في ملف الموظف قائمة.xlsx"
                 });
               }
             }

@@ -231,7 +231,7 @@ function upload_aman_web(filename, token, email_id) {
                                 if(count ==0){
                                     return reject({
                                         status:400,
-                                        message:"something went wrong"
+                                        message:"هناك خطأ ما"
                                     })
                                 }
 
@@ -240,7 +240,7 @@ function upload_aman_web(filename, token, email_id) {
                                     status: 200,
                                     message:
                                         count +
-                                        +" "+" Building record is captured and saved successfully "
+                                        +" "+" يتم التقاط سجل المبنى وحفظه بنجاح "
 
                                 });
                             }
@@ -248,7 +248,7 @@ function upload_aman_web(filename, token, email_id) {
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 400,
-                                    message: "Records not found in Building List.xlsx File"
+                                    message: "السجلات غير موجودة في ملف بناء قائمة.xlsx"
                                 });
                             }
                         }

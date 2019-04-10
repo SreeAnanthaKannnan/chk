@@ -13,6 +13,15 @@ module.exports.findemployee =
 //   "SELECT distinct order_id, id, uid, REPLACE(name_en,'||',' ') AS name_en,REPLACE(name_ar,'||',' ') AS name_ar, national_id,company_trade_license_no,hr_email, category, date_scheduled, date_preferred,payment_type, result,amount,trnx,order_status,certificate_status,DATE_FORMAT(date_created, '%Y-%m-%d') as date_created,date_modified FROM SHARJAH.Employee_Profile where hr_email=? AND order_id is not null AND (order_id !='NOInterest' AND order_id !='NULL')";
 module.exports.find_employee =
   "SELECT DISTINCT e.company_trade_license_no, e.hr_email, e.order_id, e.payment_type, e.amount,e.trnx,e.order_status,DATE_FORMAT(e.date_created, '%Y-%m-%d') AS date_created ,e.certificate_status, c.Company_name FROM SHARJAH.Employee_Profile e, SHARJAH.Company_Profile c where (lower(trim(e.order_id)) !='nointerest')AND (lower(trim(e.order_id))!='null') AND e.hr_email=c.Company_Email AND e.hr_email=?";
+
+
+
+  module.exports.getownerdetails =
+  "SELECT * FROM citizens where firstname_en=? AND email_id= ?";
+
+  module.exports.gethrdetails = 
+  "SELECT * FROM citizens where email_id = ?";
+
 // "select distinct order_id, company_trade_license_no,hr_email,payment_type,amount,trnx,order_status,certificate_status FROM SHARJAH.Employee_Profile where hr_email = ? AND order_id is not null AND(order_id != 'NOInterest' AND order_id != 'NULL'); ";
 // "SELECT distinct id, uid, name_en, name_ar, national_id, category, date_scheduled, date_preferred, result FROM Employee_Profile where order_id is not null AND 'NOIntrest' where hr_email =?";
 // "SELECT distinct order_id, id, uid, name_en, name_ar, national_id,company_trade_licence_no,hr_email, category, date_scheduled, date_preferred,date_prefered,payment_type,result,amount,trnx,order_status result FROM SHARJAH.Employee_Profile where hr_email=? AND order_id is not null AND (order_id !='NoInterest'AND order_id !='NULL')";
@@ -176,7 +185,8 @@ module.exports.payment_aman =
 module.exports.payment_aman_install =
   "UPDATE Buildings SET installeddate = ? WHERE email_id = ? AND Buildingname=?";
 // ===========================salama Payment======================//
-
+module.exports.payment_aman_status =
+  "UPDATE Buildings SET status = ? WHERE orderid = ?";
 
 module.exports.Payment =
   "UPDATE Employee_Profile SET payment_type = ?,Amount = ?, trnx = ?,order_status = ?,certificate_status=? WHERE order_id = ? ";
@@ -205,7 +215,7 @@ module.exports.employee_grid_view2 =
 
 module.exports.employee_grid_view1 =
 
-  "SELECT distinct order_id, id, uid, REPLACE(name_en,'||',' ') AS name_en,REPLACE(name_ar,'||',' ') AS name_ar, national_id,company_trade_license_no,hr_email, category, DATE_FORMAT(date_scheduled, '%Y-%m-%d %T') AS date_scheduled, DATE_FORMAT(date_preferred, '%Y-%m-%d %T') AS date_preferred,payment_type, result,amount,trnx,order_status,certificate_status, certificate_status_emp, DATE_FORMAT(date_created, '%Y-%m-%d') as date_created FROM SHARJAH.Employee_Profile WHERE order_id is not null AND (order_id !='NOInterest' AND order_id !='NULL') AND order_id =?";
+  "SELECT distinct order_id, id, uid, REPLACE(name_en,'||',' ') AS name_en,REPLACE(name_ar,'||',' ') AS name_ar, national_id,company_trade_license_no,hr_email, category, DATE_FORMAT(date_scheduled, '%Y-%m-%d') AS date_scheduled, DATE_FORMAT(date_preferred, '%Y-%m-%d') AS date_preferred,payment_type, result,amount,trnx,order_status,certificate_status, certificate_status_emp, DATE_FORMAT(date_created, '%Y-%m-%d') as date_created FROM SHARJAH.Employee_Profile WHERE order_id is not null AND (order_id !='NOInterest' AND order_id !='NULL') AND order_id =?";
 //====================================aman and salma=====================================//
 
 
@@ -271,8 +281,12 @@ module.exports.allbuildings =
 module.exports.getbuildings =
 "SELECT DISTINCT orderid,datecreated,paymenttype,trnx,Amount,status FROM Buildings where (lower(trim(orderid)) !='nointerest') AND (lower(trim(orderid))!='null') AND email_id= ?";
 module.exports.getbuildings_web =
-"SELECT Buildingname, address, preschedule,  REPLACE(alternumber,'||',', ') AS alternumber, installeddate,preschedule from Buildings where orderid=?";
+"SELECT Buildingname, address, DATE_FORMAT(preschedule, '%Y-%m-%d') AS preschedule,  REPLACE(alternumber,'||',', ') AS alternumber, installeddate from Buildings where orderid=?";
 module.exports.pay_verify =
 "SELECT status from Buildings where orderid =?" 
+module.exports.pay_verify_status =
+"SELECT order_status from Employee_Profile where order_id =?" 
 module.exports.getbuildingsbyemail =
 "select * from Buildings where email_id = ?";   
+module.exports.payment_callcenter_salama =
+"UPDATE Employee_Profile SET order_status=?, certificate_status=? where order_id =?"
