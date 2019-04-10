@@ -29,7 +29,31 @@ function delbuilding(buildingobject) {
             });
     })
 }
+function editbuilding(buildingobject) {
+    return new Promise(async (resolve, reject) => {
+        var params =[buildingobject.Buildingname, buildingobject.address,  buildingobject.lat, buildingobject.lon, buildingobject.cdccn, buildingobject.AMC, buildingobject.NSP, buildingobject.SPCN,buildingobject.id]
+        logger.fatal(buildingobject, "=>buildingobject");
+        mysqlConnection
+            .query_execute(query.editBuilding, params)
+            .then(function(result, err) {
+                if (err) {
+                    console.log("something", err);
+                    return resolve({
+                        status: 400,
+                        err: err
+                    });
+                } else {
+                    console.log(result);
+                    return resolve({
+                        status: 200,
+                        message: result
+                    });
+                }
+            });
+    })
+}
 
 module.exports = {
-    delbuilding: delbuilding
+    delbuilding: delbuilding,
+    editbuilding:editbuilding
 }
