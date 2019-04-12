@@ -37,7 +37,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   check = require("../utils/checkToken"),
   email = require("../utils/emailbytoken"),
   phone = require("../utils/phonecheck.js"),
-  pdf = require("../core/pdf.js"),
+
   upload = require("../core/upload.js"),
   pdf1 = require("../core/pdfviewer.js"),
   update = require("../core/update"),
@@ -48,7 +48,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   Employee_grid_view = require("../core/Employee_Grid_view"),
   payment_salama = require("../core/payment_salama"),
   verify = require("../core/otpverify");
-
+  var pdf = require("../core/pdf.js");
 let moment = require("moment");
 let Appeal = require("../core/Appeal"),
   Employee_profile = require("../core/Employee_profile"),
@@ -944,136 +944,132 @@ router.post("/schedules", cors(), async function(req, res) {
 });
 //============================================convert pdf===================================================//
 
-router.post("/Convert_Pdf", cors(), function(req, res) {
+router.post('/Convert_Pdf', cors(), async function (req, res) {
   //var flag=0;
-  const token = req.headers.authorization;
-  let checked1 = req.body.SelectedValues1;
-  let checked2 = req.body.SelectedValues2;
-  let checked3 = req.body.SelectedValues3;
-  let checked4 = req.body.SelectedValues4;
-  let checked5 = req.body.SelectedValues5;
-  let checked6 = req.body.SelectedValues6;
-  let checked7 = req.body.SelectedValues7;
-  let checked8 = req.body.SelectedValues8;
-  let checked9 = req.body.SelectedValues9;
-  let email = req.body.email;
-  let flag = 0;
-  // let checked3=req.body.SelectedValues3;
-  if (checked1 == "1") {
-    var yesvalue1 = "checked";
-    var novalue1 = "unchecked";
-  } else {
-    var yesvalue1 = "unchecked";
-    var novalue1 = "checked";
-    flag = 1;
+  let checked1=req.body.SelectedValues1;
+  let checked2=req.body.SelectedValues2;
+  let checked3=req.body.SelectedValues3;
+  let checked4=req.body.SelectedValues4;
+  let checked5=req.body.SelectedValues5;
+  let checked6=req.body.SelectedValues6;
+  let checked7=req.body.SelectedValues7;
+  let checked8=req.body.SelectedValues8;
+  let checked9=req.body.SelectedValues9;
+  let checked10=req.body.SelectedValues10;
+  let email=req.body.email;
+  let flag=0;
+ // let checked3=req.body.SelectedValues3;
+  if(checked1=="1"){
+     var yesvalue1="checked";
+     var novalue1="unchecked";
+      
   }
-  if (checked2 == "1") {
-    var yesvalue2 = "checked";
-    var novalue2 = "unchecked";
-  } else {
-    var yesvalue2 = "unchecked";
-    var novalue2 = "checked";
-    flag = 1;
-  }
-  if (checked3 == "1") {
-    var yesvalue3 = "checked";
-    var novalue3 = "unchecked";
-  } else {
-    var yesvalue3 = "unchecked";
-    var novalue3 = "checked";
-    flag = 1;
-  }
-  if (checked4 == "1") {
-    var yesvalue4 = "checked";
-    var novalue4 = "unchecked";
-  } else {
-    var yesvalue4 = "unchecked";
-    var novalue4 = "checked";
-    flag = 1;
-  }
-  if (checked5 == "1") {
-    var yesvalue5 = "checked";
-    var novalue5 = "unchecked";
-  } else {
-    var yesvalue5 = "unchecked";
-    var novalue5 = "checked";
-    flag = 1;
-  }
-  if (checked6 == "1") {
-    var yesvalue6 = "checked";
-    var novalue6 = "unchecked";
-  } else {
-    var yesvalue6 = "unchecked";
-    var novalue6 = "checked";
-    flag = 1;
-  }
-  if (checked7 == "1") {
-    var yesvalue7 = "checked";
-    var novalue7 = "unchecked";
-  } else {
-    var yesvalue7 = "unchecked";
-    var novalue7 = "checked";
-    flag = 1;
-  }
-  if (checked8 == "1") {
-    var yesvalue8 = "checked";
-    var novalue8 = "unchecked";
-  } else {
-    var yesvalue8 = "unchecked";
-    var novalue8 = "checked";
-    flag = 1;
-  }
-  if (checked9 == "1") {
-    var yesvalue9 = "checked";
-    var novalue9 = "unchecked";
-  } else {
-    var yesvalue9 = "unchecked";
-    var novalue9 = "checked";
-    flag = 1;
-  }
-  //    var yesvalue3="checked";
+  else{
+      yesvalue1="unchecked";
+      novalue1="checked";
+      flag=1
 
-  console.log("in 781", flag);
-  //console.log("All data=====>>", checked1,checked2,checked3);
-  pdf.Pdf(
-    yesvalue1,
-    novalue1,
-    yesvalue2,
-    novalue2,
-    yesvalue3,
-    novalue3,
-    yesvalue4,
-    novalue4,
-    yesvalue5,
-    novalue5,
-    yesvalue6,
-    novalue6,
-    yesvalue7,
-    novalue7,
-    yesvalue8,
-    novalue8,
-    yesvalue9,
-    novalue9,
-    email,
-    token,
-    checked1,
-    checked2,
-    checked3,
-    checked4,
-    checked5,
-    checked6,
-    checked7,
-    checked8,
-    checked9,
-   );
-  // pdf.mail(email)
+  }
+  if(checked2=="1"){
+     var yesvalue2="checked";
+     var novalue2="unchecked";
+      
+  }
+  else{
+      yesvalue2="unchecked";
+      novalue2="checked";
+      flag=1
+  }
+  if(checked3=="1"){
+     var yesvalue3="checked";
+   var novalue3="unchecked"
+     
+  }
+  else{
+      yesvalue3="unchecked";
+      novalue3="checked";
+      flag=1
+  }
+  if(checked4=="1"){
+      var yesvalue4="checked";
+      var novalue4="unchecked"
+  }
+  else{
+      yesvalue4="unchecked";
+      novalue4="checked";
+      flag=1
+  }
+  if(checked5=="1"){
+      var yesvalue5="checked";
+      var novalue5="unchecked"
+  }
+  else{
+      yesvalue5="unchecked";
+      novalue5="checked";
+      flag=1;
+  }
+  if(checked6=="1"){
+      var yesvalue6="checked";
+      var novalue6="unchecked"
+  }
+  else{
+      yesvalue6="unchecked";
+      novalue6="checked";
+      flag=1;
+  }
+  if(checked7=="1"){
+      var yesvalue7="checked";
+      var novalue7="unchecked"
+  }
+  else{
+      yesvalue7="unchecked";
+      novalue7="checked";
+      flag=1;
+  }
+  if(checked8=="1"){
+      var yesvalue8="checked";
+       var novalue8="unchecked"
+  }
+  else{
+      yesvalue8="unchecked";
+      novalue8="checked";
+      flag=1;
+  }
+  if(checked9=="1"){
+      var yesvalue9="checked";
+      var novalue9="unchecked"
 
-  res.send({
-    message: "success",
-    flag: flag
-  });
-});
+  }
+  else{
+      yesvalue9="unchecked";
+      novalue9="checked";
+      flag=1
+  }
+  if(checked10=="1"){
+    var yesvalue10="checked";
+    var novalue10="unchecked"
 
+}
+else{
+    yesvalue10="unchecked";
+    novalue10="checked";
+    flag=1
+}
+//    var yesvalue3="checked";
+console.log(checked10,"jdfdkljd")
+
+ console.log("in 781",flag);
+  //console.log("All data===00000==>>", checked1,checked2,checked3);
+  // pdf2.pdf2(checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,email)
+
+  pdf.Pdf(yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,yesvalue10,novalue10,email,checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,checked10)
+    // pdf.mail(email)
+    
+     res.send({
+         "message":"success",
+         flag:flag
+     })
+})
 //=========================================pdfviewer=============================================
 
 router.post("/pdfviewer", cors(), async function(req, res) {
@@ -1099,23 +1095,21 @@ router.post("/pdfviewer", cors(), async function(req, res) {
     );
 });
 //================================installationdetails=================================//
-router.post("/installationdetails", cors(), function(req, res) {
-  var installation = req.body;
-  const token = req.headers.authorization;
-  console.log(installation, "installation");
-  update
-    .update(installation, token)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+router.post('/installationdetails', cors(), function(req, res){
+  var installation= req.body;
+  // var email=req.body.email;
+  console.log(installation,"installation");
+  update.update(installation)
+  .then(result=>{
+           res.send({
+               result:result,
+         
       })
-    );
-});
+    })
+  .catch(err => res.status(err.status).json({
+      message: err.message
+  }))
+}) 
 //==================================bulkschedules============================================//
 router.post("/BulkSchedules", cors(), async function(req, res) {
   console.log(req.body);
