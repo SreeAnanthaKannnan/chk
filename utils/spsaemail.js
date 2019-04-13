@@ -8,10 +8,10 @@ var encodedMail = new Buffer(email).toString('base64');
      console.log(otp,"otp");
 var transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
+  port: 465,
+  secure: true,
   auth: {
-    user: "spsaservices@gmail.com",
+    user: "mob.spsa@gmail.com",
     pass: "spsa2019"
   }
  });
