@@ -125,6 +125,7 @@ function upload_salama_web(
                   var select_record = await Employee.Employee_select(
                     data[i]["Emirates ID"]
                   );
+
                   // data[i].Empty = "NO";
                   console.log("select_record", select_record);
                   if (select_record.message.data.length == 0) {
