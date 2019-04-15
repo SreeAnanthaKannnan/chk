@@ -258,7 +258,7 @@ module.exports.scheduleinfo =
 module.exports.servicehistory =
   "SELECT * FROM Schedules INNER JOIN Buildings ON Schedules.building_id=Buildings.id AND Buildings.email_id=?";
 module.exports.installationdetails =
-  "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ?  WHERE id = ?";
+  "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ?  WHERE email_id= ?";
 
 
 
@@ -291,32 +291,3 @@ module.exports.payment_callcenter_salama =
 module.exports.editBuilding = 
 "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";   
 
-// // ==========================================
-// module.exports.citizentabdetails = 
-// "SELECT citizens.mobile_number,Buildings.Buildingname,Buildings.lat,Buildings.lon,Buildings.plotno,Buildings.location,Buildings.simnumber,Buildings.NSP,Buildings.SPCN,Buildings.FAC FROM citizens inner join Buildings on Buildings.email_id = citizens.email_id And Buildings.email_id='?'";
-// module.exports.servicetabdetails = 
-// "SELECT citizens.mobile_number,Buildings.Buildingname,Buildings.lat,Buildings.lon,Buildings.plotno,Buildings.location,Buildings.simnumber,Buildings.NSP,Buildings.SPCN,Buildings.FAC,Buildings.P220V,Buildings.FASA,Buildings.FARS,Buildings.FAFS,Buildings.TAMS,Buildings.FPPS,Buildings.FPFS,Buildings.SIM,Buildings.TLA,Buildings.FACR,Buildings.Assessment1,Buildings.Assessment2,Buildings.Assessment3,Buildings.Flag,Schedules.FACP,Schedules.CSI,Schedules.BRAND,Schedules.status FROM citizens inner join Buildings on Buildings.email_id = citizens.email_id inner join Schedules on Schedules.email_id=Buildings.email_id And Buildings.email_id='?'";
-// module.exports.servicetabdetails1 = 
-// "SELECT Assessment1,Assessment2,Assessment3 FROM Buildings WHERE email_id='?'";
-// module.exports.servicetabdetails2 = 
-// "SELECT citizens.mobile_number,Buildings.Buildingname,Buildings.lat,Buildings.lon,Buildings.plotno,Buildings.location,Buildings.simnumber,Buildings.NSP,Buildings.SPCN,Buildings.FAC,Buildings.P220V,Buildings.FASA,Buildings.FARS,Buildings.FAFS,Buildings.TAMS,Buildings.FPPS,Buildings.FPFS,Buildings.SIM,Buildings.TLA,Buildings.FACR,Buildings.Assessment1,Buildings.Flag FROM citizens inner join Buildings on Buildings.email_id = citizens.email_id And Buildings.email_id='?'";
-// module.exports.servicetabdetails3 = 
-// "SELECT citizens.mobile_number,Buildings.Buildingname,Buildings.lat,Buildings.lon,Buildings.plotno,Buildings.location,Buildings.simnumber,Buildings.NSP,Buildings.SPCN,Buildings.FAC,Buildings.P220V,Buildings.FASA,Buildings.FARS,Buildings.FAFS,Buildings.TAMS,Buildings.FPPS,Buildings.FPFS,Buildings.SIM,Buildings.TLA,Buildings.FACR,Buildings.Assessment2,Buildings.Flag FROM citizens inner join Buildings on Buildings.email_id = citizens.email_id And Buildings.email_id='?'";
-// module.exports.servicetabdetails4 = 
-// "SELECT citizens.mobile_number,Buildings.Buildingname,Buildings.lat,Buildings.lon,Buildings.plotno,Buildings.location,Buildings.simnumber,Buildings.NSP,Buildings.SPCN,Buildings.FAC,Buildings.P220V,Buildings.FASA,Buildings.FARS,Buildings.FAFS,Buildings.TAMS,Buildings.FPPS,Buildings.FPFS,Buildings.SIM,Buildings.TLA,Buildings.FACR,Buildings.Assessment3,Buildings.Flag FROM citizens inner join Buildings on Buildings.email_id = citizens.email_id And Buildings.email_id='?'";
-// module.exports.pdfinsert1 =
-// "SELECT * FROM Buildings where email_id ='?'";
-// module.exports.pdfinsert2 =
-// "UPDATE Buildings SET P220V ='?', FASA='?', FARS='?',FAFS='?',TAMS='?', FPPS='?', FPFS='?',SIM='/',TLA='?', FACR='?',Assessment1='yes',Flag='1' where email_id='?'";
-// module.exports.pdfinsert4 =
-// "UPDATE Buildings SET P220V ='?', FASA='?', FARS='?',FAFS='?',TAMS='?', FPPS='?', FPFS='?',SIM='/',TLA='?', FACR='?',Assessment2='yes',Flag='2' where email_id='?'";
-// module.exports.pdfinsert5 =
-// "UPDATE Buildings SET P220V ='?', FASA='?', FARS='?',FAFS='?',TAMS='?', FPPS='?', FPFS='?',SIM='/',TLA='?', FACR='?',Assessment3='yes',Flag='3' where email_id='?'";
-
-// module.exports.pdfinsert6 =
-// "UPDATE Buildings SET path ='?' where email_id='?'";
-// module.exports.pdfinsert7 =
-// "UPDATE Buildings SET path1 ='?' where email_id='?'";
-// module.exports.pdfinsert8 =
-// "UPDATE Buildings SET path2 ='?' where email_id='?'";
-// //===============================================================================

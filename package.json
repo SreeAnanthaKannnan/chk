@@ -36,6 +36,7 @@
     "csv-parse": "^4.3.3",
     "date-and-time": "^0.6.3",
     "dateformat": "^3.0.3",
+    "docxtemplater": "^3.10.1",
     "express": "^4.16.4",
     "express-generator": "^4.16.0",
     "fabric-client": "^1.4.0",

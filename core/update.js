@@ -224,7 +224,7 @@ async function update(installation) {
        
        //Load the docx file as a binary
        var content = fs
-           .readFileSync(path.resolve(__dirname, "../report/ServiceReport.docx"), 'binary');
+           .readFileSync(path.resolve(__dirname, "/home/bahirathy/saned_spsa_backend/report/ServiceReport.docx"), 'binary');
        
        var zip = new JSZip(content);
        
@@ -296,11 +296,11 @@ async function update(installation) {
                     .generate({type: 'nodebuffer'});
        
        // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-       fs.writeFileSync(path.resolve(__dirname, "../report/outServiceReport.docx"), buf);
+       fs.writeFileSync(path.resolve(__dirname, "/home/bahirathy/saned_spsa_backend/report/outServiceReport.docx"), buf);
    
-   unoconv.convert('./report/outServiceReport.docx', 'pdf', async function (err, result) {
+   unoconv.convert('/home/bahirathy/saned_spsa_backend/report/outServiceReport.docx', 'pdf', async function (err, result) {
        // result is returned as a Buffer
-       await fs.writeFile('./report/outServiceReport'+datetime+email+'.pdf', result);
+       await fs.writeFile('/home/bahirathy/saned_spsa_backend/report/outServiceReport.docx'+datetime+email+'.pdf', result);
    });
  
 //================================================================================================
@@ -321,7 +321,7 @@ var transporter = nodemailer.createTransport({
           subject: 'Saned Services',
           attachments: [{   // filename and content type is derived from path
           // filename and content type is derived from path
-        path: './report/outServiceReport'+datetime+email+'.pdf'
+        path: '/home/bahirathy/saned_spsa_backend/report/outServiceReport.docx'+datetime+email+'.pdf'
     },
         ],
         

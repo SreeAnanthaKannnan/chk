@@ -416,12 +416,12 @@ console.log(checked10,"eeeeeeeeeee")
     
     //Load the docx file as a binary
     var content = fs
-        .readFileSync(path.resolve(__dirname, "../report/prerequist.docx"), 'binary');
+        .readFileSync(path.resolve(__dirname, "/home/bahirathy/saned_spsa_backend/report/prerequist.docx"), 'binary');
     
     var zip = new JSZip(content);
     
     var doc = new Docxtemplater();
-    doc.loadZip(zip);
+    await doc.loadZip(zip);
     
     //set the templateVariables
    console.log("mobile",_mobile)
@@ -429,7 +429,7 @@ console.log(checked10,"eeeeeeeeeee")
    console.log("lon",lon)
    console.log(checked10,"hhhhhhhh")
 
-    doc.setData({
+    await doc.setData({
         
           "yesvalue1":yes1,
           "novalue1":no1,
@@ -485,11 +485,11 @@ console.log(checked10,"eeeeeeeeeee")
                  .generate({type: 'nodebuffer'});
     
     // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-    fs.writeFileSync(path.resolve(__dirname, "../report/outprerequist.docx"), buf);
+    await fs.writeFileSync(path.resolve(__dirname, "/home/bahirathy/saned_spsa_backend/report/outprerequist.docx"), buf);
 
-unoconv.convert('./report/outprerequist.docx', 'pdf', async function (err, result) {
+await unoconv.convert('/home/bahirathy/saned_spsa_backend/report/outprerequist.docx', 'pdf', async function (err, result) {
 	// result is returned as a Buffer
-	await fs.writeFile('./report/outprerequist'+datetime+email+'.pdf', result);
+	await fs.writeFile('/home/bahirathy/saned_spsa_backend/report/outprerequist.docx'+datetime+email+'.pdf', result);
 });
 //============================================================================
 
@@ -510,7 +510,7 @@ unoconv.convert('./report/outprerequist.docx', 'pdf', async function (err, resul
               subject: 'Saned Services',
               attachments: [{   // filename and content type is derived from path
               // filename and content type is derived from path
-            path: './report/outprerequist'+datetime+email+'.pdf'
+            path: '/home/bahirathy/saned_spsa_backend/report/outprerequist.docx'+datetime+email+'.pdf'
         },
             ],
             
@@ -518,7 +518,7 @@ unoconv.convert('./report/outprerequist.docx', 'pdf', async function (err, resul
         
             };
             console.log(path,"pathfghfff");
-            transporter.sendMail(mailOptions, (error, info) => {
+           await transporter.sendMail(mailOptions, (error, info) => {
               console.log("error",error)
               
               if (error) {
