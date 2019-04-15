@@ -97,37 +97,37 @@ function upload_aman_web(filename, token, email_id) {
                                     data[i]["Preferred Schedule"] = ExcelDateToJSDate(
                                         data[i]["Preferred Schedule"]
                                     );
-                                    if (data[i]["Preferred Schedule"] == "Invalid Date") {
-                                        return reject({
-                                            status: 400,
-                                            message: "Please provide a valid date format in the preferred schedule"
-                                        })
-                                    }
-                                    else {
-                                        data[i]["email_id"] = email_id;
-                                        var datecreated = dateFormat("yyyy-mm-dd");
-                                        data[i].datecreated = datecreated;
-                                        var test = Object.values(data[i]);
+                                    // if (data[i]["Preferred Schedule"] == "Invalid Date") {
+                                    //     return reject({
+                                    //         status: 400,
+                                    //         message: "Please provide a valid date format in the preferred schedule"
+                                    //     })
+                                    // }
+                                    // else {
+                                    data[i]["email_id"] = email_id;
+                                    var datecreated = dateFormat("yyyy-mm-dd");
+                                    data[i].datecreated = datecreated;
+                                    var test = Object.values(data[i]);
 
-                                        console.log("test..........", test);
-                                        var insert_employee = await uploaddao.Building_insert(
-                                            test
-                                        );
+                                    console.log("test..........", test);
+                                    var insert_employee = await uploaddao.Building_insert(
+                                        test
+                                    );
 
-                                        // count = + insert_employee.message.data.affectedRows
-                                        console.log(count, "count====>")
+                                    // count = + insert_employee.message.data.affectedRows
+                                    console.log(count, "count====>")
 
-                                        // console.log(
-                                        //   "insert",
-                                        //   insert_employee.message.data.affectedRows
-                                        // );
-                                        // // count + 1;
-                                        // if (insert_employee.message.data.affectedRows != 0) {
-                                        //   count++;
-                                        //   console.log("count numb======>", count);
-                                        // }
-                                        //}
-                                    }
+                                    // console.log(
+                                    //   "insert",
+                                    //   insert_employee.message.data.affectedRows
+                                    // );
+                                    // // count + 1;
+                                    // if (insert_employee.message.data.affectedRows != 0) {
+                                    //   count++;
+                                    //   console.log("count numb======>", count);
+                                    // }
+                                    //}
+                                    //}
                                 }
                                 return resolve({
                                     // statuscode: "E08",
@@ -211,13 +211,13 @@ function upload_aman_web(filename, token, email_id) {
                                     data[i]["Preferred Schedule"] = ExcelDateToJSDate(
                                         data[i]["Preferred Schedule"]
                                     );
-                                    if (data[i]["Preferred Schedule"] == "Invalid Date") {
-                                        return reject({
-                                            status: 400,
-                                            message: "Please provide a valid date format in the preferred schedule"
-                                        })
-                                    }
-                                    else {
+                                    // if (data[i]["Preferred Schedule"] == "Invalid Date") {
+                                    //     return reject({
+                                    //         status: 400,
+                                    //         message: "Please provide a valid date format in the preferred schedule"
+                                    //     })
+                                    // }
+                                    // else {
                                         data[i]["email_id"] = email_id;
                                         var datecreated = dateFormat("yyyy-mm-dd");
                                         data[i].datecreated = datecreated;
@@ -229,7 +229,7 @@ function upload_aman_web(filename, token, email_id) {
                                         );
 
 
-                                    }
+                                    //}
                                 }
                                 return resolve({
                                     // statuscode: "E08",
