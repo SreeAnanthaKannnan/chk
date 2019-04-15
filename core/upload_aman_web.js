@@ -3,7 +3,6 @@ const uploaddao = require("../daos/uploaddao");
 const checktoken = require("../utils/checkToken");
 let moment = require("moment");
 var dateFormat = require('dateformat');
-var count = 0;
 function upload_aman_web(filename, token, email_id) {
     console.log("body ", token);
     return new Promise(async function (resolve, reject) {
@@ -75,6 +74,7 @@ function upload_aman_web(filename, token, email_id) {
                                 throw error;
                             } else if (data.length != 0) {
                                 console.log("length", data.length);
+                                var count = data.length
                                 for (i = 0; i < data.length; i++) {
                                     console.log("data_select.......", data[i]);
 
@@ -96,47 +96,48 @@ function upload_aman_web(filename, token, email_id) {
                                     data[i]["Preferred Schedule"] = ExcelDateToJSDate(
                                         data[i]["Preferred Schedule"]
                                     );
-                                    if(data[i]["Preferred Schedule"] =="Invalid Date"){
+                                    if (data[i]["Preferred Schedule"] == "Invalid Date") {
                                         return reject({
                                             status: 400,
                                             message: "Please provide a valid date format in the preferred schedule"
                                         })
                                     }
-                                    else{
-                                    data[i]["email_id"] = email_id;
-                                    var datecreated = dateFormat("yyyy-mm-dd");
-                                    data[i].datecreated = datecreated;
-                                    var test = Object.values(data[i]);
+                                    else {
+                                        data[i]["email_id"] = email_id;
+                                        var datecreated = dateFormat("yyyy-mm-dd");
+                                        data[i].datecreated = datecreated;
+                                        var test = Object.values(data[i]);
 
-                                    console.log("test..........", test);
-                                    var insert_employee = await uploaddao.Building_insert(
-                                        test
-                                    );
+                                        console.log("test..........", test);
+                                        var insert_employee = await uploaddao.Building_insert(
+                                            test
+                                        );
 
-                                    count = insert_employee.message.data.affectedRows
-                                    console.log(count,"count====>")
+                                        // count = + insert_employee.message.data.affectedRows
+                                        console.log(count, "count====>")
 
-                                    // console.log(
-                                    //   "insert",
-                                    //   insert_employee.message.data.affectedRows
-                                    // );
-                                    // // count + 1;
-                                    // if (insert_employee.message.data.affectedRows != 0) {
-                                    //   count++;
-                                    //   console.log("count numb======>", count);
-                                    // }
-                                    //}
+                                        // console.log(
+                                        //   "insert",
+                                        //   insert_employee.message.data.affectedRows
+                                        // );
+                                        // // count + 1;
+                                        // if (insert_employee.message.data.affectedRows != 0) {
+                                        //   count++;
+                                        //   console.log("count numb======>", count);
+                                        // }
+                                        //}
+                                    }
                                 }
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 200,
                                     message:
                                         count +
-                                       +" "+ "Building's record is captured and saved successfully"
+                                        + " " + "  Buildings record is captured and saved successfully"
 
                                 });
-                            }
-                         } else {
+
+                            } else {
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 400,
@@ -145,7 +146,7 @@ function upload_aman_web(filename, token, email_id) {
                             }
                         }
                     }
-                
+
                     else if (y == "قوائم المبانى ") {
                         var worksheet = workbook.Sheets[y];
                         var headers = {};
@@ -187,6 +188,7 @@ function upload_aman_web(filename, token, email_id) {
                                 throw error;
                             } else if (data.length != 0) {
                                 console.log("length", data.length);
+                                var count = data.length;
                                 for (i = 1; i < data.length; i++) {
                                     console.log("data_select.......", data[i]);
 
@@ -208,43 +210,37 @@ function upload_aman_web(filename, token, email_id) {
                                     data[i]["Preferred Schedule"] = ExcelDateToJSDate(
                                         data[i]["Preferred Schedule"]
                                     );
-                                    if(data[i]["Preferred Schedule"] =="Invalid Date"){
+                                    if (data[i]["Preferred Schedule"] == "Invalid Date") {
                                         return reject({
                                             status: 400,
                                             message: "Please provide a valid date format in the preferred schedule"
                                         })
                                     }
-                                    else{
-                                    data[i]["email_id"] = email_id;
-                                    var datecreated = dateFormat("yyyy-mm-dd");
-                                    data[i].datecreated = datecreated;
-                                    var test = Object.values(data[i]);
+                                    else {
+                                        data[i]["email_id"] = email_id;
+                                        var datecreated = dateFormat("yyyy-mm-dd");
+                                        data[i].datecreated = datecreated;
+                                        var test = Object.values(data[i]);
 
-                                    console.log("test..........", test);
-                                    var insert_employee = await uploaddao.Building_insert(
-                                        test
-                                    );
+                                        console.log("test..........", test);
+                                        var insert_employee = await uploaddao.Building_insert(
+                                            test
+                                        );
 
 
+                                    }
                                 }
-                                count = insert_employee.message.data.affectedRows
-                                if(count ==0){
-                                    return reject({
-                                        status:400,
-                                        message:"هناك خطأ ما"
-                                    })
-                                }
-
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 200,
                                     message:
                                         count +
-                                        +" "+" يتم التقاط سجل المبنى وحفظه بنجاح "
+                                        +" " + " يتم التقاط سجل المبنى وحفظه بنجاح "
 
                                 });
-                            }
-                         } else {
+
+                            } else {
+
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 400,
@@ -253,7 +249,7 @@ function upload_aman_web(filename, token, email_id) {
                             }
                         }
                     }
-                
+
                 });
 
                 count = 0;
