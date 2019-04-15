@@ -8,7 +8,7 @@ var csvParser = require("csv-parse");
 var cm = require("csv-mysql");
 // const con = require("../Mysql_config/DBConfig");
 var log4js = require("log4js");
-const logger = log4js.getLogger("SPSA_project");
+const logger = log4js.getLogger("Aman_project");
 const Employee_profileDao = require("../daos/Employee_profileDao");
 const Employee = require("../daos/Employee_profileDao");
 const checktoken = require("../utils/checkToken");
@@ -203,9 +203,12 @@ function request_service(filepath, filename, token) {
                   var national_id_array = [];
 
                   console.log("length", data.length);
-                  for (i = 1; i < data.length; i++) {
-                    console.log("data", data[i]);
+                  for (i = 0; i < data.length; i++) {
+                    console.log("data===>", data[i]);
+                    if(data[i]!=undefined){  
+                      console.log("data_select.......", data[i]);
                     national_id_array.push(data[i]["Emirates ID"]);
+                    }
                   }
 
                   await Employee_profileDao.order_id_select()
