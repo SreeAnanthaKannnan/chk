@@ -15,9 +15,6 @@ var transporter = nodemailer.createTransport({
     pass: "spsa2019"
   }
  });
-
-  
- 
 var mailOptions = {
   transport: transporter,
   from: "SPSA Services" + "<spsaservices@gmail.com>",

@@ -41,17 +41,17 @@ function payment(payment1, token) {
               message:"something went wrong"
             })
           }
-          else{
+          // else{
          
-            var status = verify.message.order_status
-            console.log(status)
-            console.log(status!=null,"null checking=====<<<<<")
-            if(status !=null){
-              return resolve({
-                status:401,
-                message:"Payment is not updated. Kindly contact call center"
-              })
-            }
+          //   var status = verify.message.order_status
+          //   console.log(status)
+          //   console.log(status!=null,"null checking=====<<<<<")
+          //   if(status == 'Order Raised' ||'Work Scheduled/Schedule'|| 'work completed' || 'Paid' || ''){
+          //     return resolve({
+          //       status:401,
+          //       message:"Payment is not updated. Kindly contact call center"
+          //     })
+          //   }
             
           
          
@@ -81,7 +81,7 @@ function payment(payment1, token) {
             })
           }
   
-        }
+        // }
       }
       }
       }
@@ -115,17 +115,17 @@ function payment_aman(payment1, token) {
              message:"something went wrong"
            })
          }
-         else{
+        //  else{
          
-           var status = verify.message.status
-           console.log(status)
-           console.log(status!=null,"null checking=====<<<<<")
-           if(status !=null){
-             return resolve({
-               status:401,
-               message:"Payment is not updated. Kindly contact call center"
-             })
-           }
+        //    var status = verify.message.status
+        //    console.log(status)
+        //    console.log(status!=null,"null checking=====<<<<<")
+        //    if(status != "editable: false" ){
+        //      return resolve({
+        //        status:401,
+        //        message:"Payment is not updated. Kindly contact call center"
+        //      })
+        //    }
            
          
         
@@ -154,7 +154,7 @@ function payment_aman(payment1, token) {
           })
         }
 
-      }
+      // }
     }
     }
     }
