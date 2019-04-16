@@ -216,7 +216,7 @@ module.exports.employee_grid_view1 =
 module.exports.sessiondelete =
   "Delete from Session where user_ID =?";
 module.exports.addbuilding = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-module.exports.resgister = "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp) VALUES ?";
+module.exports.resgister = "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp,countvalue) VALUES ?";
 /*======================update the entry from session for the particular user id======*/
 module.exports.sessionupdate =
   "update Session set token=?,session_created_at=? where user_ID = ?";
@@ -242,7 +242,7 @@ module.exports.getcoursename =
   "SELECT course_name_en FROM Results where National_Id =?";
 
   module.exports.getinstallers =
-  "SELECT email_id,countvalue FROM citizens WHERE countvalue = (SELECT MIN(countvalue) FROM citizens where user_type=?)";
+  "SELECT email_id,countvalue FROM citizens WHERE countvalue = (SELECT MIN(countvalue) FROM citizens where user_type='installer')";
   module.exports.imagepdf = "UPDATE Schedules SET filepath =? WHERE id =?";
 module.exports.pdfviewer =
   "SELECT path,path1,path2,path3 FROM Buildings where email_id= ?";

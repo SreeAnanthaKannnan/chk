@@ -22,7 +22,6 @@ function cregister(registerobject) {
       })
     }
     else {
-
       var result = await registerform.verify_user(registerobject)
       logger.fatal(result.result.data.length != 0);
       dbFunc.connectionRelease;

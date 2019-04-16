@@ -9,20 +9,16 @@ const logger = log4js.getLogger("Aman_project");
 //Here the time slots which are available stored in an array
 var t = [
   "8-10 am",
-  "11-12 am",
+  "10-12 am",
   "12-2 pm",
   "2-4 pm",
-  "4-6 pm",
-  "6-8 pm",
-  "8-10 pm"
+  "4-6 pm"
 ];
 let moment = require("moment");
 const checktoken = require("../utils/checkToken");
-
 async function sup(time, rdate, building_id,token) {
   const idate = rdate;
   let sdate = rdate;
-
   console.warn("rdate", rdate);
   return new Promise(async function (resolve, reject) {
     console.warn("rdate", idate);
@@ -72,14 +68,10 @@ return resolve({
    else {
         //if preferred time slot unavilable we assign the next available slot for the Building*/
         for (var i = 0; i < t.length; i++) {
-          
             logger.fatal(t[i]);
             var result = await auto.auto(t[i], suparray[0], sdate);
-
-            if (result.result.length == 0) {
-              logger.fatal("35", result.result.length);
-
-              if (result.result.length != suparray.length) {
+            if (result.length == 0) {
+              if (result.length != suparray.length) {
                 logger.fatal("assigned time", t[i]);
                 var schedule_time = t[i];
                 var suplier_id = suparray[0];
@@ -96,7 +88,9 @@ return resolve({
                   status1
                 ];
                 let query = await insertquery.schedule_insert(data);
+                console.log(query,"query from db");
                 let countstored = await insertquery.update_countvalue(countvalue,sup.result[0].email_id)
+                console.log(countstored,"countstored from db");
                 var date22 = moment(requestdate).format("YYYY-MM-DD");
                 return resolve({
                   result: {
@@ -111,7 +105,6 @@ return resolve({
               sdate = await incrementDate(sdate, amountToIncreaseWith);
               logger.fatal("date increment", sdate);
             }
-          
         }
       }
     }

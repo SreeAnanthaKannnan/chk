@@ -120,7 +120,7 @@ function Schedule_select(classroom_id, Emirates_id, Company_Trade_Lincense_No) {
         "select * from Schedule where Company_Trade_Lincense_No=? and Emirates_ID =? and classroom_id=? ",
         query_value
       );
-      console.log(res1, "tesinggggggggggggg");
+      console.log(res1, "tesing");
       if (res1.data != []) {
         return resolve({ result: res1.data });
       } else {
