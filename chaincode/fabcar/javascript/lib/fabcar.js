@@ -50,7 +50,6 @@ class FabCar extends Contract {
        await ctx.stub.putState(carNumber, Buffer.from(data));
         console.info('============= END : Create Car ===========');
     }
-
     async queryAll(ctx) {
         const startKey = '0';
         const endKey = '999';
@@ -97,10 +96,8 @@ class FabCar extends Contract {
         console.info('============= END : changeCarOwner ===========');
     }
  async queryHistory(ctx,carNumber) {
-        
-
-        const iterator = await ctx.stub.getHistoryForKey(carNumber);
-
+       // const iterator = await ctx.stub.getHistoryForKey(carNumber);
+       const iterator = await ctx.stub.getQueryResult(carNumber)
         const allResults = [];
         while (true) {
             const res = await iterator.next();
@@ -126,6 +123,7 @@ class FabCar extends Contract {
             }
         }
     }
+    
 }
 
 module.exports = FabCar;

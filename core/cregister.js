@@ -36,10 +36,10 @@ function cregister(registerobject) {
       else {
         var otp1 = await otpfun.otpgen();
         var otp = otp1.otp
-        logger.fatal("in core before mail")
+       // logger.fatal("in core before mail")
         await emailotpfun.emailotp(email_id, otp)
         var result = await registerform.insert_user(registerobject, otp)
-        logger.fatal(result, "inserted.......")
+        //logger.fatal(result, "inserted.......")
         return resolve({
           status: 200,
           "message": "Please check your mail for otp verification",

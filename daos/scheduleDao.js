@@ -22,7 +22,24 @@ function schedule_insert(values) {
       });
   });
 }
-
+function update_countvalue(v1,v2) {
+  return new Promise(function(resolve, reject) {
+    var values = [v1,v2];
+    console.log("values", values);
+      mysqlConnection
+      .query_execute(query.updatecountvalue,values)
+      .then(function(result, err) {
+        if (err) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          console.log(result);
+          return resolve({ status: 200, message: result });
+        }
+      });
+  });
+}
 function Schedule(query_value) {
   return new Promise(async function(resolve, reject) {
     let classroom_id = query_value[0];
@@ -103,34 +120,20 @@ function Schedule_select(classroom_id, Emirates_id, Company_Trade_Lincense_No) {
         "select * from Schedule where Company_Trade_Lincense_No=? and Emirates_ID =? and classroom_id=? ",
         query_value
       );
-      // for(j=0;j<res1.data[i].length;j++){
       console.log(res1, "tesinggggggggggggg");
       if (res1.data != []) {
         return resolve({ result: res1.data });
       } else {
         return resolve({ result: value });
       }
-
-      // .then(async function(result,err) {
-      //     console.log(result,"<=====avanthika")
-      //     // return resolve({result:value})
-
-      //   })
-
-      //   .catch(async function(err) {
-      //     console.log(err,"err")
-      //     return resolve({err:err});
-      // });
-      //}
     }
-    // console.log(value,"value==============")
-    // return resolve({result:value})
-  });
+    });
 }
 
 module.exports = {
   schedule_insert: schedule_insert,
   Schedule: Schedule,
   schedule_summary_value: schedule_summary_value,
-  Schedule_select: Schedule_select
+  Schedule_select: Schedule_select,
+  update_countvalue:update_countvalue
 };
