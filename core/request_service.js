@@ -8,7 +8,7 @@ var csvParser = require("csv-parse");
 var cm = require("csv-mysql");
 // const con = require("../Mysql_config/DBConfig");
 var log4js = require("log4js");
-const logger = log4js.getLogger("SPSA_project");
+const logger = log4js.getLogger("Aman_project");
 const Employee_profileDao = require("../daos/Employee_profileDao");
 const Employee = require("../daos/Employee_profileDao");
 const checktoken = require("../utils/checkToken");
@@ -20,7 +20,7 @@ var length = 0;
 function request_service(filepath, filename, token) {
   console.log("body ", token);
   return new Promise(
-    async function(resolve, reject) {
+    async function (resolve, reject) {
       var verifytoken = await checktoken.checkToken(token);
       if (verifytoken.status == 405) {
         return resolve({
@@ -37,7 +37,7 @@ function request_service(filepath, filename, token) {
         //   console.log(filepath);
         await Employee_profileDao.not_interested();
 
-        await fs.readFile(filepath, { encoding: "utf-8" }, async function(
+        await fs.readFile(filepath, { encoding: "utf-8" }, async function (
           err,
           data
         ) {
@@ -48,7 +48,7 @@ function request_service(filepath, filename, token) {
           var workbook = XLSX.readFile(filepath);
           var sheet_name_list = workbook.SheetNames;
 
-          sheet_name_list.forEach(async function(y) {
+          sheet_name_list.forEach(async function (y) {
             if (y == "Employee List") {
               var worksheet = workbook.Sheets[y];
               var headers = {};
@@ -203,13 +203,16 @@ function request_service(filepath, filename, token) {
                   var national_id_array = [];
 
                   console.log("length", data.length);
-                  for (i = 1; i < data.length; i++) {
-                    console.log("data", data[i]);
-                    national_id_array.push(data[i]["Emirates ID"]);
+                  for (i = 0; i < data.length; i++) {
+                    console.log("data===>", data[i]);
+                    if (data[i] != undefined) {
+                      console.log("data_select.......", data[i]);
+                      national_id_array.push(data[i]["Emirates ID"]);
+                    }
                   }
 
                   await Employee_profileDao.order_id_select()
-                    .then(async function(result) {
+                    .then(async function (result) {
                       console.log(result.result.data[0]);
                       var order_id = result.result.data[0].num;
                       var order_array = [];
@@ -258,7 +261,7 @@ function request_service(filepath, filename, token) {
                     })
                     /*=========Error Capturing===========*/
 
-                    .catch(async function(err) {
+                    .catch(async function (err) {
                       return resolve({
                         status: 400,
                         message: err

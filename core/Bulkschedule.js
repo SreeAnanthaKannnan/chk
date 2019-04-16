@@ -5,7 +5,7 @@ let insertquery = require("../daos/scheduleDao");
 var supplier = require("../daos/getsupplierlist");
 var auto = require("../daos/autoDao");
 var log4js = require("log4js");
-const logger = log4js.getLogger("SPSA_project");
+const logger = log4js.getLogger("Aman_project");
 //Here the time slots which are available stored in an array
 var t = [
   "8-10 am",
@@ -24,7 +24,7 @@ async function sup(time, rdate, building_id,token) {
   let sdate = rdate;
 
   console.warn("rdate", rdate);
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     console.warn("rdate", idate);
     /*============================Token Validation========================================*/
     var verifytoken = await checktoken.checkToken(token);

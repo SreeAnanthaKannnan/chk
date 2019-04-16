@@ -1,64 +1,163 @@
-var puppeteer = require("puppeteer");
-var fs = require("fs-extra");
-var hbs = require("handlebars");
-var path = require("path");
-var moment = require("moment");
-const nodemailer = require("nodemailer");
-let insertquery = require("../daos/pdfDao");
-var express = require("express");
-var multer = require("multer");
-var upload = multer({
-  dest: "uploads/"
-});
+var puppeteer=require('puppeteer');
+var fs=require('fs-extra');
+// const fs = require('fs');
+var hbs=require('handlebars');
+var path=require('path');
+var moment=require('moment');
+const nodemailer = require('nodemailer')
+let insertquery = require('../daos/pdfDao')
+var express = require('express')
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
+var dateFormat = require('dateformat');
+var citizen = require('../daos/loginDao');
 var dateFormat = require("dateformat");
-var log4js = require("log4js");
-const logger = log4js.getLogger("SPSA_project");
-const checktoken = require("../utils/checkToken");
+// var docxConverter = require('docx-pdf');
+// var unoconv = require('unoconv');
+// const unoconv = require('unoconv-promise');
+// var office2pdf = require('office2pdf');
+var unoconv = require('lib-unoconv')
 
-function Pdf(
-  yesvalue1,
-  novalue1,
-  yesvalue2,
-  novalue2,
-  yesvalue3,
-  novalue3,
-  yesvalue4,
-  novalue4,
-  yesvalue5,
-  novalue5,
-  yesvalue6,
-  novalue6,
-  yesvalue7,
-  novalue7,
-  yesvalue8,
-  novalue8,
-  yesvalue9,
-  novalue9,
-  email,
-  token
-) {
-  return new Promise(async function(resolve, reject) {
-    var verifytoken = await checktoken.checkToken(token);
-    if (verifytoken.status == 405) {
-      return resolve({
-        status: verifytoken.status,
-        message: verifytoken.message
-      });
-    } else if (verifytoken.status == 403) {
-      return resolve({
-        status: verifytoken.status,
-        message: verifytoken.message
-      });
-        } else {
-            try {
+async function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,yesvalue10,novalue10,email,checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,checked10)  {
+    // var yesValue = checked == "yes" ? "checked" : ""
+    var result = await citizen.citizendao(email);
+    var _mobile=result.result[0].mobile_number;
+    var lat=result.result[0].lat;
+    var lon=result.result[0].lon;
+    var buildname=result.result[0].Buildingname;
+    var plot=result.result[0].plotno;
+    var loc=result.result[0].location;
+    var simno=result.result[0].simnumber;
+    var scp=result.result[0].NSP;
+    var scn=result.result[0].SPCN;
+    var fac=result.result[0].FAC;
 
-                const browser = await puppeteer.launch();
-                const page = await browser.newPage();
 
-                //==================================================Html File generation for creating pdf===================================================================//
-                await page.setContent(`<!DOCTYPE html>
+
+    dateFormat("yyyy-mm-dd HH:MM:ss")
+    console.log(_mobile,lat,lon,"login"); 
+    // var noValue = checked === "no" ? "checked" : ""
+    if(checked1=="1"){
+      yes1="✓";
+      no1="x";
+      
+  }
+  else{
+      yes1="x";
+      no1="✓";
+      flag=1
+
+  }
+  if(checked2=="1"){
+      yes2="✓";
+      no2="x";
+      
+  }
+  else{
+      yes2="x";
+      no2="✓";
+      flag=1
+  }
+  if(checked3=="1"){
+      yes3="✓";
+      no3="x"
+     
+  }
+  else{
+      yes3="✓";
+      no3="x";
+      flag=1
+  }
+  if(checked4=="1"){
+      yes4="✓";
+      no4="x"
+  }
+  else{
+      yes4="x";
+      no4="✓";
+      flag=1
+  }
+  if(checked5=="1"){
+      yes5="✓";
+      no5="x"
+  }
+  else{
+      yes5="x";
+      no5="✓";
+      flag=1;
+  }
+  if(checked6=="1"){
+      yes6="✓";
+      no6="x"
+  }
+  else{
+      yes6="x";
+      no6="✓";
+      flag=1;
+  }
+  if(checked7=="1"){
+      yes7="✓";
+      no7="x"
+  }
+  else{
+      yes7="x";
+      no7="✓";
+      flag=1;
+  }
+  if(checked8=="1"){
+      yes8="✓";
+      no8="x"
+  }
+  else{
+      yes8="x";
+      no8="✓";
+      flag=1;
+  }
+  if(checked9=="1"){
+      yes9="✓";
+      no9="x"
+
+  }
+  else{
+      yes9="x";
+      no9="✓";
+      flag=1
+  }
+  if(checked10=="1"){
+    yes10="✓";
+    no10="x"
+
+}
+else{
+    yes10="x";
+    no10="✓";
+    flag=1
+}
+console.log(checked10,"eeeeeeeeeee")
+
+    return new Promise(async function(resolve,reject){
+    try{
+        // var yesvalue1 = checked1 == "yes" ? "checked" : ""
+        // var novalue1 = checked1== "no" ? "checked" : ""
+        // var yesvalue2 = checked2 == "yes" ? "checked" : ""
+        // var novalue2 = checked2== "no" ? "checked" : ""
+        // var yesvalue3=checked3=="yes"?"checked":""
+
+
+        const browser= await puppeteer.launch();
+        const page=await browser.newPage();
+       // const HeadingName="Hall Ticket"
+        // const ImgSrc=__dirname+'/survey.png'
+        // console.log("ImgSrc==========",ImgSrc)
+        // console.log(yesvalue3)
+
+        
+
+        await page.setContent(`<!DOCTYPE html>
         <html>
-                 
+        
+        
+        
         </head>
         <body>
         
@@ -151,12 +250,21 @@ function Pdf(
              <input type="checkbox" ${novalue9}>No </input>
             </div>
         
+            <div style='border-bottom: solid black 1px; margin-right:25px;'></div>
+          </div>
+          
+           <div>
+            <p>FA Company Representative Available?  </p>
+            <div style='margin-bottom:1px'>
+            <input type="checkbox" ${yesvalue10}>Yes </input>
+             <input type="checkbox" ${novalue10}>No </input>
+            </div>
+        
             <div style='border-bottom: solid black 1px; margin-right:30px;'></div>
           </div>
         
         </div>
-        
-        
+          
         
         
         
@@ -248,8 +356,20 @@ function Pdf(
         
             <div style='border-bottom: solid black 1px; margin-right:1px;'></div>
           </div>
+          <div>
+            <p>ممثل شركة FA متاح؟</p>
+            <div style='margin-bottom:1px'>
+            <input type="checkbox" ${yesvalue10} >نعم </input>
+             <input type="checkbox" ${novalue10}>لا </input>
+            </div>
+        
+            <div style='border-bottom: solid black 1px; margin-right:1px;'></div>
+          </div>
         
         </div>
+        
+        </div>
+        
         
         
         
@@ -263,89 +383,169 @@ function Pdf(
         </body>
         </html>
         `);
-
-        await page.emulateMedia("screen");
-        var datetime = dateFormat(new Date(), "yyyy-mm-dd h:MM:ss");
+        
+        await page.emulateMedia('screen');
+        var datetime = dateFormat (new Date(),"yyyy-mm-dd h:MM:ss");
         console.log(datetime);
+        var  path='/pdf'+datetime+email+'.pdf';
 
-        //============================================================storing pdf file path==============================================================//
-        var path = "/pdf" + datetime + email + ".pdf";
-        //Here the path of the pdf will be stored in DataBase
-        let query = await insertquery.pdf_insert(path, email);
-        console.log(query != 0, "data inserted");
-        console.log("guess done");
-        await page
-          .pdf({
-            path: "./uploads/pdf" + datetime + email + ".pdf",
-            format: "A4",
-            printBackground: true
-          })
-          .then(result => {
+        let query= await insertquery.pdf_insert(path,email,checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,checked10)
+        console.log(query !=0,"data inserted")
+         console.log("guess done");
+        await page.pdf({
+         
+          path: './uploads/pdf'+datetime+email+'.pdf',
+            format:'A4',
+            printBackground:true
+           
+        }).then(result=>{
+            
             return resolve({
-              message: "pdf conversion done",
-              result: new Buffer(result).toString("base64")
-            });
-          });
+            message:"pdf conversion done",
+            result: (new Buffer(result)).toString('base64')
+           
+        })
+    })
+  
+       
+    var zip = new require('node-zip')
+    var Docxtemplater = require('docxtemplater');
+    
+    var fs = require('fs');
+    var path = require('path');
+    
+    //Load the docx file as a binary
+    var content = fs
+        .readFileSync(path.resolve(__dirname, "/home/bahirathy/saned_spsa_backend/report/prerequist.docx"), 'binary');
+    
+    var zip = new JSZip(content);
+    
+    var doc = new Docxtemplater();
+    await doc.loadZip(zip);
+    
+    //set the templateVariables
+   console.log("mobile",_mobile)
+   console.log("lat",lat)
+   console.log("lon",lon)
+   console.log(checked10,"hhhhhhhh")
 
-        //==========================================================pdf file sent through Building owner mail======================================================================//
-        var transporter = nodemailer.createTransport({
-          host: "smtp.gmail.com",
-          port: 587,
-          secure: false,
-          auth: {
-            user: "Amanservice2019@gmail.com",
-            pass: "Aman@2019"
-          }
-        });
-        //=============================== filename and content type is derived from path=================================================================================//
-
-        var mailOptions = {
-          transport: transporter,
-          from: "Saned Services" + "<Amanservice2019@gmail.com>",
-          to: email,
-          subject: "Saned Services",
-          attachments: [
-            {
-              path: "./uploads/pdf" + datetime + email + ".pdf"
-            }
-          ],
-
-          html:
-            "Dear " +
-            email +
-            "<br>This is your survey Report for your building" +
-            "" +
-            email +
-            "  with SANED as a Supplier.  SANED will be rolling out new services for Sharjah residents." +
-            "<br><br>" +
-            "We will contact you for further information.<br><br><br>" +
-            "Best Regards,<br>" +
-            "SANED Team."
-        };
-        console.log(path, "pathfghfff");
-        transporter.sendMail(mailOptions, (error, info) => {
-          console.log("error", error);
-
-          if (error) {
-            console.log("Mail send error: ", error);
-          }
-        });
-
-        return resolve({
-          message: ""
-        });
-      } catch (e) {
-        console.log("our error", e);
-        return reject({
-          message: "not done"
-        });
-      }
+    await doc.setData({
+        
+          "yesvalue1":yes1,
+          "novalue1":no1,
+          "yesvalue2":yes2,
+          "novalue2":no2,
+          "yesvalue3":yes3,
+          "novalue3":no3,
+          "yesvalue4":yes4,
+          "novalue4":no4,
+          "yesvalue5":yes5,
+          "novalue5":no5,
+          "yesvalue6":yes6,
+          "novalue6":no6,
+          "yesvalue7":yes7,
+          "novalue7":no7,
+          "yesvalue8":yes8,
+          "novalue8":no8,
+          "yesvalue9":yes9,
+          "novalue9":no9,
+          "yesvalue10":yes10,
+          "novalue10":no10,
+          "mobile":_mobile,
+          "lat":lat,                                    
+          "lon":lon,
+          "pname":buildname,
+          "plot":plot,
+          "loct":loc,
+          "sim":simno,
+          "scp":scp,
+          "scn":scn,
+          "fac":fac,
+          "date":dateFormat("dd-mm-yyyy"),
+          "email_id":email
+        
+    });
+    
+    try {
+        doc.render()
     }
-  });
+    catch (error) {
+        var e = {
+            message: error.message,
+            name: error.name,
+            stack: error.stack,
+            properties: error.properties,
+        }
+        console.log(JSON.stringify({error: e}));
+        // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+        throw error;
+    }
+    
+    var buf = doc.getZip()
+                 .generate({type: 'nodebuffer'});
+    
+    // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
+    await fs.writeFileSync(path.resolve(__dirname, "/home/bahirathy/saned_spsa_backend/report/outprerequist.docx"), buf);
+
+await unoconv.convert('/home/bahirathy/saned_spsa_backend/report/outprerequist.docx', 'pdf', async function (err, result) {
+	// result is returned as a Buffer
+	await fs.writeFile('/home/bahirathy/saned_spsa_backend/report/outprerequist.docx'+datetime+email+'.pdf', result);
+});
+//============================================================================
+
+    var transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+        auth: {
+          user: "Amanservice2019@gmail.com",
+          pass: "Aman@2019"
+        }
+      });
+    
+            var mailOptions = {
+              transport: transporter,
+              from: "Saned Services" + "<Amanservice2019@gmail.com>",
+              to: email,
+              subject: 'Saned Services',
+              attachments: [{   // filename and content type is derived from path
+              // filename and content type is derived from path
+            path: '/home/bahirathy/saned_spsa_backend/report/outprerequist.docx'+datetime+email+'.pdf'
+        },
+            ],
+            
+              html: "Dear "+ email +"<br>This is your survey Report for your building"  +""+ email + "  with SANED as a Supplier.  SANED will be rolling out new services for Sharjah residents."+"<br><br>" + "We will contact you for further information.<br><br><br>"+"Best Regards,<br>"+"SANED Team."
+        
+            };
+            console.log(path,"pathfghfff");
+           await transporter.sendMail(mailOptions, (error, info) => {
+              console.log("error",error)
+              
+              if (error) {
+                console.log("Mail send error: ", error);
+              }
+            })
+
+            return resolve({message:""})
+        
+          // await browser.close();
+          //  var result=await process.exit(    
+          //  )
+        
+        } catch(e){
+          console.log('our error',e)
+          return reject({
+              message:"not done"
+          })
+      }
+   
+   
+        
+          })
+      }
+
+
+module.exports={
+    
+   Pdf:Pdf
 }
-
-module.exports = {
-  Pdf: Pdf
-};
-
-//====================================================================Code End======================================================================================//

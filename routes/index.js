@@ -19,6 +19,7 @@ var express = require("express"),
   multipart = require("connect-multiparty"),
   multer = require("multer"),
   path = require("path");
+
 // log4js = require('log4js');
 
 var con = require("../mysql_connection/dbConfig.js"),
@@ -37,7 +38,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   check = require("../utils/checkToken"),
   email = require("../utils/emailbytoken"),
   phone = require("../utils/phonecheck.js"),
-  pdf = require("../core/pdf.js"),
+
   upload = require("../core/upload.js"),
   pdf1 = require("../core/pdfviewer.js"),
   update = require("../core/update"),
@@ -49,7 +50,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   payment_salama = require("../core/payment_salama"),
   bc = require("../fabcar/javascript/invoke"),
   verify = require("../core/otpverify");
-
+var pdf = require("../core/pdf.js");
 let moment = require("moment");
 let Appeal = require("../core/Appeal"),
   Employee_profile = require("../core/Employee_profile"),
@@ -80,6 +81,7 @@ let Appeal = require("../core/Appeal"),
   Untrained_Employees_schedule = require("../core/Untrained_Employees_showup_schedule"),
   number_validation_schedule = require("../core/Number_validation_schedule"),
   allBuildings = require("../core/allBuildings");
+var payment_statusupdate_salama = require("../core/payment_statusupdate_salama");
 var certificate_issue1 = require("../core/certificate_issue");
 var getBuildings_web = require("../core/getBuildings_web");
 var ip = require("ip");
@@ -109,11 +111,15 @@ var file_date = date.format(now, "YYYY-MM-DD HH:mm");
 console.log(file_date, "file_date");
 var dateFormat = require("dateformat");
 var storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  // notice you are calling the multer.diskStorage() method here, not multer()
+  // destination: function(req, file, cb) {
+  //     cb(null, '/home/kavitha/Videos/salama_docs/Salama_backend_v0.1/uploads/')
+  // },
+  destination: function (req, file, cb) {
     console.log(file, "file");
     cb(null, "./uploads");
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     let file_string = JSON.stringify(file.originalname);
     console.log(file_string, "file string");
     file1 =
@@ -133,14 +139,14 @@ const upload_aman = multer({
 var multipartMiddleware = multipart();
 
 /* GET home page. */
-router.get("/", function(request, response, next) {
+router.get("/", function (request, response, next) {
   response.render("index", {
     title: "Express Page for Saneds SPSA application."
   });
 });
 
 //=======================loginservice==================================================//
-router.post("/login", cors(), function(req, res) {
+router.post("/login", cors(), function (req, res) {
   var loginobject = req.body;
   console.log("login===>", loginobject);
   login
@@ -163,8 +169,8 @@ router.post("/request_for_service", cors(), (req, res) => {
   var file_name = req.body.filename;
   console.log("frontend", req.body);
   var token = req.headers.authorization;
-  //var file1 = file_name.substring(1);
-  var file_path = "./uploads/" + file_name;
+  var file1 = file_name.substring(1);
+  var file_path = "./uploads/" + file1;
   console.log(file_path, "filepath");
   request_service
     .request_service(file_path, file_name, token)
@@ -188,7 +194,7 @@ router.post("/request_for_service", cors(), (req, res) => {
 
 //============================================================
 //===================================getbuildings======================================================//
-router.post("/getEmployees", cors(), async function(req, res) {
+router.post("/getEmployees", cors(), async function (req, res) {
   const token = req.headers.authorization;
 
   var id = await email.checkToken(req);
@@ -218,7 +224,7 @@ router.post("/getEmployees", cors(), async function(req, res) {
   }
 });
 //=========================citizen-registration-start===========================================
-router.post("/citizen-register", cors(), async function(req, res) {
+router.post("/citizen-register", cors(), async function (req, res) {
   var registerobject = req.body;
   console.log(registerobject, "registerobject");
   var news = req.body.newsletter;
@@ -250,7 +256,7 @@ router.post("/citizen-register", cors(), async function(req, res) {
 });
 
 //====================================================================================//
-router.post("/number_validation_schedule", cors(), function(req, res) {
+router.post("/number_validation_schedule", cors(), function (req, res) {
   var data = req.body;
   var request = req.headers;
   number_validation_schedule
@@ -268,7 +274,7 @@ router.post("/number_validation_schedule", cors(), function(req, res) {
 });
 
 //======================================================================================//
-router.post("/emailotpverification1", cors(), function(req, res) {
+router.post("/emailotpverification1", cors(), function (req, res) {
   var otpobject = req.body;
   console.log("login===>", otpobject);
   verify
@@ -304,7 +310,7 @@ router.post("/getdetails", cors(), async function(req, res) {
 //=================================Appeal====================================================
 
 //===================================addbuilding=============================================//
-router.post("/AddsingleBuilding", cors(), async function(req, res) {
+router.post("/AddsingleBuilding", cors(), async function (req, res) {
   const token = req.headers.authorization;
     var email_id = req.body.email;
     var buildingobject = req.body;
@@ -324,7 +330,7 @@ router.post("/AddsingleBuilding", cors(), async function(req, res) {
   });
 
 //===================================allbuildings======================================================//
-router.post("/allBuildings", cors(), async function(req, res) {
+router.post("/allBuildings", cors(), async function (req, res) {
   allBuildings
     .getbuildings()
     .then(result => {
@@ -340,7 +346,7 @@ router.post("/allBuildings", cors(), async function(req, res) {
     );
 });
 //=================================== ildings======================================================//
-router.post("/getBuildings", cors(), async function(req, res) {
+router.post("/getBuildings", cors(), async function (req, res) {
   const token = req.headers.authorization;
 
   var id = await email.checkToken(req);
@@ -368,26 +374,26 @@ router.post("/getBuildings", cors(), async function(req, res) {
       );
   }
 });
-router.post("/getBuildingsbymail", cors(), async function(req, res) {
+router.post("/getBuildingsbymail", cors(), async function (req, res) {
   const token = req.headers.authorization;
-     var email_id = req.body.email;
-    console.log(email_id, "data");
-    building
-      .buildingsbymail(email_id, token)
-      .then(result => {
-        res.send({
-          result: result,
-          message: "mock mock"
-        });
+  var email_id = req.body.email;
+  console.log(email_id, "data");
+  building
+    .buildingsbymail(email_id, token)
+    .then(result => {
+      res.send({
+        result: result,
+        message: "mock mock"
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
       })
-      .catch(err =>
-        res.status(err.status).json({
-          message: err.message
-        })
-      );
-  });
+    );
+});
 //=========================buildingwithpayment=============================================//
-router.post("/getBuildings_web", cors(), async function(req, res) {
+router.post("/getBuildings_web", cors(), async function (req, res) {
   const token = req.headers.authorization;
 
   var id = await email.checkToken(req);
@@ -416,7 +422,7 @@ router.post("/getBuildings_web", cors(), async function(req, res) {
   }
 });
 
-router.post("/getBuildingspayment", cors(), async function(req, res) {
+router.post("/getBuildingspayment", cors(), async function (req, res) {
   const token = req.headers.authorization;
 
   var id = await email.checkToken(req);
@@ -445,7 +451,7 @@ router.post("/getBuildingspayment", cors(), async function(req, res) {
   }
 });
 //=======================================================================================================
-router.post("/installationdetails", cors(), function(req, res) {
+router.post("/installationdetails", cors(), function (req, res) {
   var installation = req.body;
   console.log(installation, "installation");
   update
@@ -462,7 +468,7 @@ router.post("/installationdetails", cors(), function(req, res) {
     );
 });
 //==============================Residentsdetails===========================================//
-router.post("/profile", cors(), async function(req, res) {
+router.post("/profile", cors(), async function (req, res) {
   var id = await check.checkToken(req);
   const token = req.headers["authorization"];
   if (id.status == 400 || id.status == 403) {
@@ -489,7 +495,7 @@ router.post("/profile", cors(), async function(req, res) {
   }
 });
 //=======================================================================================================
-router.post("/installationdetails", cors(), function(req, res) {
+router.post("/installationdetails", cors(), function (req, res) {
   var installation = req.body;
   console.log(installation, "installation");
   update
@@ -513,12 +519,12 @@ var uploads = multer({
 //router.use("/download", express.static(path.join(__dirname, "../upload")));
 // File input field name is simply 'file'
 router.use("/static", express.static(path.join(__dirname, "../uploads")));
-router.post("/file_upload", uploads.single("file"), function(req, res) {
+router.post("/file_upload", uploads.single("file"), function (req, res) {
   var file = "var/www/html/" + "/" + req.file.filename;
   console.log(req.file, "ffg");
   const token = req.headers["authorization"];
   var filepath = req.file.path;
-  fs.rename(filepath, file, function(err) {
+  fs.rename(filepath, file, function (err) {
     if (err) {
       console.log(err);
       res.send(500);
@@ -541,13 +547,14 @@ router.post("/file_upload", uploads.single("file"), function(req, res) {
 });
 //=================================image===============================================//
 //=============================imageupload==================================================//
-router.post("/image_upload", uploads.single("file"), function(req, res) {
+
+router.post("/image_upload", uploads.single("file"), function (req, res) {
   var file = "var/www/html/" + "/" + req.file.filename;
   console.log(req.file);
   console.log(req.body);
   var id = req.body.id;
   var filepath = req.file.path;
-  fs.rename(filepath, file, function(err) {
+  fs.rename(filepath, file, function (err) {
     if (err) {
       console.log(err);
       res.send(500);
@@ -586,7 +593,7 @@ router.post("/serviceHistory", cors(), async function(req, res) {
       );
   });
 //==============================================================================================
-router.post("/Assessment", cors(), async function(req, res) {
+router.post("/Assessment", cors(), async function (req, res) {
   console.log(req.body);
   const token = req.headers.authorization;
   var id = req.body.id;
@@ -640,7 +647,7 @@ router.get("/Schedule_summary", cors(), (req, res) => {
     );
 });
 //==========================assesser-view=====================================================//
-router.get("/assesser-view", cors(), async function(req, res) {
+router.get("/assesser-view", cors(), async function (req, res) {
   const token = req.headers.authorization;
   assesserview
     .assesserview(token)
@@ -708,7 +715,7 @@ router.post("/forgetpassword", async (req, res) => {
     // =========email==============
     await con.query(
       "SELECT * FROM citizens where email_id ='" + username + "'",
-      async function(error, results, fields) {
+      async function (error, results, fields) {
         if (error) {
           res.send({
             status: false,
@@ -725,11 +732,11 @@ router.post("/forgetpassword", async (req, res) => {
               // console.log("password=====>>>", password);
               var data = await con.query(
                 "UPDATE citizens SET otp = '" +
-                  otp +
-                  "' WHERE email_id = '" +
-                  username +
-                  "'",
-                function(error, results1, fields) {
+                otp +
+                "' WHERE email_id = '" +
+                username +
+                "'",
+                function (error, results1, fields) {
                   console.log("result,", results1);
                   console.log("error", error);
                 }
@@ -752,7 +759,7 @@ router.post("/forgetpassword", async (req, res) => {
   }
 });
 
-router.post("/Payment", cors(), async function(req, res) {
+router.post("/Payment", cors(), async function (req, res) {
   //const token = req.headers.authorization;
   var payment1 = req.body;
   console.log(payment1);
@@ -771,7 +778,7 @@ router.post("/Payment", cors(), async function(req, res) {
     );
 });
 
-router.post("/Payment_aman", cors(), async function(req, res) {
+router.post("/Payment_aman", cors(), async function (req, res) {
   const token = req.headers.authorization;
   var payment1 = req.body;
   console.log("payment", payment1);
@@ -788,8 +795,42 @@ router.post("/Payment_aman", cors(), async function(req, res) {
       })
     );
 });
+router.post("/Payment_aman_status", cors(), async function (req, res) {
+  const token = req.headers.authorization;
+  var payment1 = req.body;
+  console.log("payment", payment1);
+  payment
+    .payment_aman_status(payment1, token)
+    .then(result => {
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+router.post("/Payment_statusupdate_salama", cors(), async function (req, res) {
+  const token = req.headers.authorization;
+  var payment1 = req.body;
+  console.log("payment", payment1);
+  payment_statusupdate_salama
+    .payment_statusupdate_salama(payment1, token)
+    .then(result => {
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
 //=============================================
-router.post("/update_installation", cors(), async function(req, res) {
+router.post("/update_installation", cors(), async function (req, res) {
   const token = req.headers.authorization;
   var payment1 = req.body;
   console.log(payment1);
@@ -801,7 +842,7 @@ router.post("/update_installation", cors(), async function(req, res) {
       });
     })
     .catch(err =>
-     
+
       res.status(err.status).json({
         message: err.message
       })
@@ -817,7 +858,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
 
   console.log(otp);
 
-  con.query("SELECT * FROM citizens where otp='" + otp + "'", function(
+  con.query("SELECT * FROM citizens where otp='" + otp + "'", function (
     error,
     results,
     fields
@@ -833,11 +874,11 @@ router.post("/forgetotpverification", cors(), (req, res) => {
           console.log(otp);
           con.query(
             "UPDATE citizens SET password = '" +
-              password +
-              "' WHERE otp = '" +
-              otp +
-              "'",
-            function(error, results, fields) {}
+            password +
+            "' WHERE otp = '" +
+            otp +
+            "'",
+            function (error, results, fields) { }
           );
           res.send({
             status: "true",
@@ -857,7 +898,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
   });
 });
 
-router.post("/schedules", cors(), async function(req, res) {
+router.post("/schedules", cors(), async function (req, res) {
   console.log(req.body);
   const token = req.headers.authorization;
   var time = req.body.schedule_time;
@@ -882,9 +923,8 @@ router.post("/schedules", cors(), async function(req, res) {
 });
 //============================================convert pdf===================================================//
 
-router.post("/Convert_Pdf", cors(), async function(req, res) {
+router.post('/Convert_Pdf', cors(), async function (req, res) {
   //var flag=0;
-  const token = req.headers.authorization;
   let checked1 = req.body.SelectedValues1;
   let checked2 = req.body.SelectedValues2;
   let checked3 = req.body.SelectedValues3;
@@ -894,132 +934,124 @@ router.post("/Convert_Pdf", cors(), async function(req, res) {
   let checked7 = req.body.SelectedValues7;
   let checked8 = req.body.SelectedValues8;
   let checked9 = req.body.SelectedValues9;
+  let checked10 = req.body.SelectedValues10;
   let email = req.body.email;
   let flag = 0;
   // let checked3=req.body.SelectedValues3;
   if (checked1 == "1") {
     var yesvalue1 = "checked";
     var novalue1 = "unchecked";
-  } else {
-    var yesvalue1 = "unchecked";
-    var novalue1 = "checked";
-    flag = 1;
+
+  }
+  else {
+    yesvalue1 = "unchecked";
+    novalue1 = "checked";
+    flag = 1
+
   }
   if (checked2 == "1") {
     var yesvalue2 = "checked";
     var novalue2 = "unchecked";
-  } else {
-    var yesvalue2 = "unchecked";
-    var novalue2 = "checked";
-    flag = 1;
+
+  }
+  else {
+    yesvalue2 = "unchecked";
+    novalue2 = "checked";
+    flag = 1
   }
   if (checked3 == "1") {
     var yesvalue3 = "checked";
-    var novalue3 = "unchecked";
-  } else {
-    var yesvalue3 = "unchecked";
-    var novalue3 = "checked";
-    flag = 1;
+    var novalue3 = "unchecked"
+
+  }
+  else {
+    yesvalue3 = "unchecked";
+    novalue3 = "checked";
+    flag = 1
   }
   if (checked4 == "1") {
     var yesvalue4 = "checked";
-    var novalue4 = "unchecked";
-  } else {
-    var yesvalue4 = "unchecked";
-    var novalue4 = "checked";
-    flag = 1;
+    var novalue4 = "unchecked"
+  }
+  else {
+    yesvalue4 = "unchecked";
+    novalue4 = "checked";
+    flag = 1
   }
   if (checked5 == "1") {
     var yesvalue5 = "checked";
-    var novalue5 = "unchecked";
-  } else {
-    var yesvalue5 = "unchecked";
-    var novalue5 = "checked";
+    var novalue5 = "unchecked"
+  }
+  else {
+    yesvalue5 = "unchecked";
+    novalue5 = "checked";
     flag = 1;
   }
   if (checked6 == "1") {
     var yesvalue6 = "checked";
-    var novalue6 = "unchecked";
-  } else {
-    var yesvalue6 = "unchecked";
-    var novalue6 = "checked";
+    var novalue6 = "unchecked"
+  }
+  else {
+    yesvalue6 = "unchecked";
+    novalue6 = "checked";
     flag = 1;
   }
   if (checked7 == "1") {
     var yesvalue7 = "checked";
-    var novalue7 = "unchecked";
-  } else {
-    var yesvalue7 = "unchecked";
-    var novalue7 = "checked";
+    var novalue7 = "unchecked"
+  }
+  else {
+    yesvalue7 = "unchecked";
+    novalue7 = "checked";
     flag = 1;
   }
   if (checked8 == "1") {
     var yesvalue8 = "checked";
-    var novalue8 = "unchecked";
-  } else {
-    var yesvalue8 = "unchecked";
-    var novalue8 = "checked";
+    var novalue8 = "unchecked"
+  }
+  else {
+    yesvalue8 = "unchecked";
+    novalue8 = "checked";
     flag = 1;
   }
   if (checked9 == "1") {
     var yesvalue9 = "checked";
-    var novalue9 = "unchecked";
-  } else {
-    var yesvalue9 = "unchecked";
-    var novalue9 = "checked";
-    flag = 1;
+    var novalue9 = "unchecked"
+
+  }
+  else {
+    yesvalue9 = "unchecked";
+    novalue9 = "checked";
+    flag = 1
+  }
+  if (checked10 == "1") {
+    var yesvalue10 = "checked";
+    var novalue10 = "unchecked"
+
+  }
+  else {
+    yesvalue10 = "unchecked";
+    novalue10 = "checked";
+    flag = 1
   }
   //    var yesvalue3="checked";
+  console.log(checked10, "jdfdkljd")
 
   console.log("in 781", flag);
-  //console.log("All data=====>>", checked1,checked2,checked3);
- pdf.Pdf(
-    yesvalue1,
-    novalue1,
-    yesvalue2,
-    novalue2,
-    yesvalue3,
-    novalue3,
-    yesvalue4,
-    novalue4,
-    yesvalue5,
-    novalue5,
-    yesvalue6,
-    novalue6,
-    yesvalue7,
-    novalue7,
-    yesvalue8,
-    novalue8,
-    yesvalue9,
-    novalue9,
-    email,
-    token,
-    checked1,
-    checked2,
-    checked3,
-    checked4,
-    checked5,
-    checked6,
-    checked7,
-    checked8,
-    checked9,
-   )
- .then(result => {
-      res.send({
-        result: result,
-        flag:flag
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
-      })
-    );
-  });
+  //console.log("All data===00000==>>", checked1,checked2,checked3);
+  // pdf2.pdf2(checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,email)
 
+  pdf.Pdf(yesvalue1, novalue1, yesvalue2, novalue2, yesvalue3, novalue3, yesvalue4, novalue4, yesvalue5, novalue5, yesvalue6, novalue6, yesvalue7, novalue7, yesvalue8, novalue8, yesvalue9, novalue9, yesvalue10, novalue10, email, checked1, checked2, checked3, checked4, checked5, checked6, checked7, checked8, checked9, checked10)
+  // pdf.mail(email)
+
+  res.send({
+    "message": "success",
+    flag: flag
+  })
+})
 //=========================================pdfviewer=============================================
 
-router.post("/pdfviewer", cors(), async function(req, res) {
+router.post("/pdfviewer", cors(), async function (req, res) {
   const email = req.body.email;
   const token = req.headers.authorization;
   pdf1
@@ -1042,23 +1074,21 @@ router.post("/pdfviewer", cors(), async function(req, res) {
     );
 });
 //================================installationdetails=================================//
-router.post("/installationdetails", cors(), function(req, res) {
+router.post('/installationdetails', cors(), function (req, res) {
   var installation = req.body;
-  const token = req.headers.authorization;
+  // var email=req.body.email;
   console.log(installation, "installation");
-  update
-    .update(installation, token)
+  update.update(installation)
     .then(result => {
       res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+        result: result,
+
       })
-    );
-});
+    })
+    .catch(err => res.status(err.status).json({
+      message: err.message
+    }))
+})
 //==================================bulkschedules============================================//
 router.post("/BulkSchedules", cors(), async function(req, res) {
   const token = req.headers.authorization;
@@ -1469,7 +1499,42 @@ router.post("/Classroom_available_date", cors(), (req, res) => {
         })
     );
 });
-router.post("/Feedback", cors(), function(req, res) {
+//========================Photo_upload===================================================================//
+// router.get('/Photo_upload', cors(), (req, res) => {
+
+// let file = req.photo;
+// let Employee_ID = req.Employee_ID;
+//     let ipAddress = ip.address();
+//     console.log("ips====>", ipAddress);
+//     console.log(file,"file_details")
+//     let path = 'http://' + ipAddress + '/' + file.filename;
+//     console.log(path,"path")
+//     const filename_blob = fs.readFileSync(req.file.path)
+//     const filename_url = req.file.path
+
+//                       photo
+//                             .photo(filename_url,Employee_ID)
+//                                    .then(result => {
+//                                            console.log(result)
+
+//                        res
+//                           .status(result.status)
+//                           .json({
+//                                   message: result,
+
+//     });
+
+// })
+// .catch(err => res.status(err.status).json({
+// message: err.message
+// }).json({
+// status: err.status
+// }));
+
+// });
+
+//============================================//
+router.post("/Feedback", cors(), function (req, res) {
   // var id= req.body.id
   var Company_Email = req.body.Company_Email;
   var comments = req.body.comments;
@@ -1690,7 +1755,7 @@ router.post("/Bulk_booking", cors(), (req, res) => {
 router.use("/static", express.static(path.join(__dirname, "upload")));
 //====Results API is used for generating certificates which will navigate to utils and there will be certificategenerate file which consits the structure for creating certificate and after get inputs from UI store the results and certificate in DB====//
 router.post("/Results", cors(), (request, response) => {
-  certificate.Certificate(request, function(error, result) {
+  certificate.Certificate(request, function (error, result) {
     // console.log("result", result);
     if (error) {
       response.status(error.status).json({
@@ -1706,7 +1771,7 @@ router.post("/Results", cors(), (request, response) => {
 //====================================FETCH CERTIFICATE============================================//
 // ====Fetching the certificate which is stored in the DB and it picks the certificate under a upload directory====//
 router.post("/getCertificate", cors(), (request, response) => {
-  certificate.getCertificate(request, function(error, result) {
+  certificate.getCertificate(request, function (error, result) {
     if (error) {
       response.status(error.status).json({
         message: error.message
@@ -1721,7 +1786,7 @@ router.post("/getCertificate", cors(), (request, response) => {
 router.post("/request_for_service_aman", cors(), (req, res) => {
   console.log("enter into req for aman service");
   var file_name = req.body.filename;
- 
+
   var file1 = file_name;
   var file_path = "./uploads/" + file1;
   console.log(file_path, "filepath");
@@ -1748,7 +1813,7 @@ router.post("/request_for_service_aman", cors(), (req, res) => {
 //====================================FETCH ATTENDANCE LIST============================================//
 //====Fetching the attendance list from attendance table from DB====//
 router.post("/getAttendance", cors(), (request, response) => {
-  certificate.getAttendance(request, function(error, result) {
+  certificate.getAttendance(request, function (error, result) {
     console.log("result", error);
     if (error) {
       response.status(error.status).json({
@@ -1950,7 +2015,7 @@ router.post("/Employee_whole_details_grid_view1", cors(), (req, res) => {
 
 //==============================================================//
 
-router.post("/file_upload_web", upload1.single("file"), function(req, res) {
+router.post("/file_upload_web", upload1.single("file"), function (req, res) {
   // var filepath = "./upload_aman/" + req.file.originalname;
   const file = req.file;
   const filename = file.filename;
@@ -2108,22 +2173,22 @@ router.post("/DeleteBuilding", cors(), async function (req, res) {
   //     result: id
   //   });
   // } else {
-    var buildingobject = req.body;
-  console.log("buildingobject",req.body);
-   delbuilding
-      .buildings(buildingobject)
-      .then(result => {
-        res.send({
-          result: result,
-          message: "Your Building Details Deleted successfully"
-        });
+  var buildingobject = req.body;
+  console.log("buildingobject", req.body);
+  delbuilding
+    .buildings(buildingobject)
+    .then(result => {
+      res.send({
+        result: result,
+        message: "Your Building Details Deleted successfully"
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
       })
-      .catch(err =>
-        res.status(err.status).json({
-          message: err.message
-        })
-      );
- // }
+    );
+  // }
 });
 router.post("/EditBuildingdetails", cors(), async function (req, res) {
   // var id = await check.checkToken(req);
@@ -2134,27 +2199,27 @@ router.post("/EditBuildingdetails", cors(), async function (req, res) {
   //     result: id
   //   });
   // } else {
-    var buildingobject = req.body;
-  console.log("buildingobject",req.body);
-   delbuilding
-      .editbuildings(buildingobject)
-      .then(result => {
-        res.send({
-          result: result,
-          message: "Your Building Details Deleted successfully"
-        });
+  var buildingobject = req.body;
+  console.log("buildingobject", req.body);
+  delbuilding
+    .editbuildings(buildingobject)
+    .then(result => {
+      res.send({
+        result: result,
+        message: "Your Building Details Deleted successfully"
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
       })
-      .catch(err =>
-        res.status(err.status).json({
-          message: err.message
-        })
-      );
- // }
+    );
+  // }
 });
 router.get("/download1", express.static(path.join(__dirname, "../uploads")));
 
 //======================================================================================//
-router.get("/download1/:file(*)", function(req, res, next) {
+router.get("/download1/:file(*)", function (req, res, next) {
   // this routes all types of file
   var path = require("path");
   var file = req.params.file;
@@ -2219,7 +2284,7 @@ router.post("/salama_order", cors(), (req, res) => {
     );
 });
 //===========================================================================//
-router.post("/Payment", cors(), async function(req, res) {
+router.post("/Payment", cors(), async function (req, res) {
   //const token = req.headers.authorization;
   var payment1 = req.body;
   console.log(payment1);
@@ -2239,7 +2304,7 @@ router.post("/Payment", cors(), async function(req, res) {
 });
 //==========================================certificate_issue=============//
 
-router.post("/certificate_issue1", cors(), async function(req, res) {
+router.post("/certificate_issue1", cors(), async function (req, res) {
   //const token = req.headers.authorization;
   var national_id = req.body;
   const token = req.headers.token;
@@ -2262,7 +2327,7 @@ router.post("/certificate_issue1", cors(), async function(req, res) {
 //=============================================
 
 //====================================================
-router.post("/Payment_salama", cors(), async function(req, res) {
+router.post("/Payment_salama", cors(), async function (req, res) {
   const token = req.headers.authorization;
   var payment1 = req.body;
   console.log(payment1);
@@ -2280,7 +2345,7 @@ router.post("/Payment_salama", cors(), async function(req, res) {
     );
 });
 //=====================================================
-router.post("/session_close", cors(), async function(req, res) {
+router.post("/session_close", cors(), async function (req, res) {
   //const token = req.headers.authorization;
   var token = req.headers.authorization;
   console.log(token);
@@ -2299,10 +2364,49 @@ router.post("/session_close", cors(), async function(req, res) {
     );
 });
 //=====================================================
+//---------------------Owner Details------------------------------------
+router.post("/owner_details", cors(), function (req, res) {
+  var owner_details = req.body;
+  console.log("owner_details", owner_details);
+  var token = req.headers.authorization
+  console.log("token", token)
+  cregister
+    .owner_details(owner_details, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=============================================================================
+router.post("/hr_details", cors(), function (req, res) {
+  var hr_details = req.body;
 
+  var token = req.headers.authorization
+  console.log("token", token)
+  cregister
+    .hr_details(hr_details, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//========================================================================
 router.use("/download", express.static(path.join(__dirname, "../upload")));
 //===================================================================================
-router.post("/certificate_issue", cors(), async function(req, res) {
+router.post("/certificate_issue", cors(), async function (req, res) {
   //const token = req.headers.authorization;
   var certificate_issue1 = req.body.national_id;
   var certificate_status_emp = req.body.certificate_status_emp;

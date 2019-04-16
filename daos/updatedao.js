@@ -6,7 +6,7 @@ function updatedao(values){
         return new Promise((resolve, reject)=>{
 
 //=====================================Update Installation Details into Schedules Details==============================================================//
-            var params=[values.FACP,values.CSI,values.BRAND,values.status,values.id]
+            var params=[values.FACP,values.CSI,values.BRAND,values.status,values.email]
            mysqlConnection
        .query_execute(query.installationdetails,params)
        .then(function(result, err) {

@@ -1,3 +1,5 @@
+var log4js = require('log4js');
+const logger = log4js.getLogger('SPSA_project');
 var fs = require('fs');
 const buildingDao = require("../daos/buildingDao");
 var checktoken = require("../utils/checkToken")
