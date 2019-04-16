@@ -210,12 +210,8 @@ module.exports.employee_grid_view =
 module.exports.employee_grid_view2 =
   "update Employee_Profile set certificate_status_emp=? where national_id = ?";
 module.exports.employee_grid_view1 =
-<<<<<<< HEAD
-  "SELECT distinct order_id, id, uid, REPLACE(name_en,'||',' ') AS name_en,REPLACE(name_ar,'||',' ') AS name_ar, national_id,company_trade_license_no,hr_email, category, DATE_FORMAT(date_scheduled, '%Y-%m-%d %T') AS date_scheduled, DATE_FORMAT(date_preferred, '%Y-%m-%d %T') AS date_preferred,payment_type, result,amount,trnx,order_status,certificate_status, certificate_status_emp, DATE_FORMAT(date_created, '%Y-%m-%d') as date_created FROM SHARJAH.Employee_Profile WHERE order_id is not null AND (order_id !='NOInterest' AND order_id !='NULL') AND order_id =?";
-=======
 
   "SELECT distinct order_id, id, uid, REPLACE(name_en,'||',' ') AS name_en,REPLACE(name_ar,'||',' ') AS name_ar, national_id,company_trade_license_no,hr_email, category, DATE_FORMAT(date_scheduled, '%Y-%m-%d') AS date_scheduled, DATE_FORMAT(date_preferred, '%Y-%m-%d') AS date_preferred,payment_type, result,amount,trnx,order_status,certificate_status, certificate_status_emp, DATE_FORMAT(date_created, '%Y-%m-%d') as date_created FROM SHARJAH.Employee_Profile WHERE order_id is not null AND (order_id !='NOInterest' AND order_id !='NULL') AND order_id =?";
->>>>>>> 7dd34994a1f197c9c1b367112ae700ec7a52802b
 //====================================aman and salma=====================================//
 module.exports.sessiondelete =
   "Delete from Session where user_ID =?";
@@ -287,9 +283,5 @@ module.exports.payment_callcenter_salama =
 "select * from Buildings where email_id = ?";
 module.exports.editBuilding = 
 "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";   
-<<<<<<< HEAD
 module.exports.updatecountvalue = 
 "update citizens set countvalue=? where email_id=?";
-=======
-
->>>>>>> 7dd34994a1f197c9c1b367112ae700ec7a52802b
