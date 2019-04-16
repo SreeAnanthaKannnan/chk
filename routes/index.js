@@ -49,6 +49,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   payment_salama = require("../core/payment_salama"),
   verify = require("../core/otpverify");
   var pdf = require("../core/pdf.js");
+  var pdf2=require("../core/pdf.js")
 let moment = require("moment");
 let Appeal = require("../core/Appeal"),
   Employee_profile = require("../core/Employee_profile"),
@@ -959,100 +960,100 @@ router.post('/Convert_Pdf', cors(), async function (req, res) {
   let email=req.body.email;
   let flag=0;
  // let checked3=req.body.SelectedValues3;
-  if(checked1=="1"){
+  if(checked1=="yes"){
      var yesvalue1="checked";
      var novalue1="unchecked";
       
   }
   else{
-      yesvalue1="unchecked";
-      novalue1="checked";
+      var yesvalue1="unchecked";
+      var novalue1="checked";
       flag=1
 
   }
-  if(checked2=="1"){
+  if(checked2=="yes"){
      var yesvalue2="checked";
      var novalue2="unchecked";
       
   }
   else{
-      yesvalue2="unchecked";
-      novalue2="checked";
+    var yesvalue2="unchecked";
+    var novalue2="checked";
       flag=1
   }
-  if(checked3=="1"){
+  if(checked3=="yes"){
      var yesvalue3="checked";
    var novalue3="unchecked"
      
   }
   else{
-      yesvalue3="unchecked";
-      novalue3="checked";
+    var yesvalue3="unchecked";
+    var novalue3="checked";
       flag=1
   }
-  if(checked4=="1"){
+  if(checked4=="yes"){
       var yesvalue4="checked";
       var novalue4="unchecked"
   }
   else{
-      yesvalue4="unchecked";
-      novalue4="checked";
+    var yesvalue4="unchecked";
+    var novalue4="checked";
       flag=1
   }
-  if(checked5=="1"){
+  if(checked5=="yes"){
       var yesvalue5="checked";
       var novalue5="unchecked"
   }
   else{
-      yesvalue5="unchecked";
-      novalue5="checked";
+    var yesvalue5="unchecked";
+    var novalue5="checked";
       flag=1;
   }
-  if(checked6=="1"){
+  if(checked6=="yes"){
       var yesvalue6="checked";
       var novalue6="unchecked"
   }
   else{
-      yesvalue6="unchecked";
-      novalue6="checked";
+    var yesvalue6="unchecked";
+    var novalue6="checked";
       flag=1;
   }
-  if(checked7=="1"){
+  if(checked7=="yes"){
       var yesvalue7="checked";
       var novalue7="unchecked"
   }
   else{
-      yesvalue7="unchecked";
-      novalue7="checked";
+    var yesvalue7="unchecked";
+    var novalue7="checked";
       flag=1;
   }
-  if(checked8=="1"){
+  if(checked8=="yes"){
       var yesvalue8="checked";
        var novalue8="unchecked"
   }
   else{
-      yesvalue8="unchecked";
-      novalue8="checked";
+    var yesvalue8="unchecked";
+    var novalue8="checked";
       flag=1;
   }
-  if(checked9=="1"){
+  if(checked9=="yes"){
       var yesvalue9="checked";
       var novalue9="unchecked"
 
   }
   else{
-      yesvalue9="unchecked";
-      novalue9="checked";
+    var yesvalue9="unchecked";
+    var novalue9="checked";
       flag=1
   }
-  if(checked10=="1"){
+  if(checked10=="yes"){
     var yesvalue10="checked";
     var novalue10="unchecked"
 
 }
 else{
-    yesvalue10="unchecked";
-    novalue10="checked";
+  var yesvalue10="unchecked";
+  var novalue10="checked";
     flag=1
 }
 //    var yesvalue3="checked";
@@ -1060,11 +1061,11 @@ console.log(checked10,"jdfdkljd")
 
  console.log("in 781",flag);
   //console.log("All data===00000==>>", checked1,checked2,checked3);
-  // pdf2.pdf2(checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,email)
 
   pdf.Pdf(yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,yesvalue10,novalue10,email,checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,checked10)
     // pdf.mail(email)
-    
+    // pdf2.citizendao(checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,email)
+
      res.send({
          "message":"success",
          flag:flag
