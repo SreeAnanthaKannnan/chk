@@ -40,8 +40,9 @@ if(result[0].P220V ==null && result[0].FASA==null && result[0].FARS==null && res
   
         }
         // else if(result[0].A2P220V ==null && result[0].A2FASA==null && result[0].A2FARS==null && result[0].A2FAFS==null && result[0].A2TAMS==null && result[0].A2FPPS==null && result[0].A2FPFS==null && result[0].A2SIM==null && result[0].A2TLA==null && result[0].A2FACR==null && result[0].Assessment2==null){
-        else{    
-        var sql= "UPDATE Buildings SET P220V ='"+checked1+"', FASA='"+checked2+"', FARS='"+checked3+"',FAFS='"+checked4+"',TAMS='"+checked5+"', FPPS='"+checked6+"', FPFS='"+checked7+"',SIM='"+checked8+"',TLA='"+checked9+"', FACR='"+checked10+"',Assessment2='yes',Flag='2' where email_id='"+owner_id+"'";
+        //  else if(result[0].P220V !=null && result[0].FASA!=null && result[0].FARS!=null && result[0].FAFS!=null && result[0].TAMS!=null && result[0].FPPS!=null && result[0].FPFS!=null && result[0].SIM!=null && result[0].TLA!=null && result[0].FACR!=null && result[0].Assessment2==null){
+            else if(result[0].Assessment2==null){
+                var sql= "UPDATE Buildings SET P220V ='"+checked1+"', FASA='"+checked2+"', FARS='"+checked3+"',FAFS='"+checked4+"',TAMS='"+checked5+"', FPPS='"+checked6+"', FPFS='"+checked7+"',SIM='"+checked8+"',TLA='"+checked9+"', FACR='"+checked10+"',Assessment2='yes',Flag='2' where email_id='"+owner_id+"'";
            // var sql= "UPDATE Buildings SET A2P220V ='"+checked1+"', A2FASA='"+checked2+"', A2FARS='"+checked3+"',A2FAFS='"+checked4+"',A2TAMS='"+checked5+"', A2FPPS='"+checked6+"', A2FPFS='"+checked7+"',A2SIM='"+checked8+"',A2TLA='"+checked9+"', A2FACR='"+checked10+"',Assessment2='yes',Flag='2' where email_id='"+owner_id+"'";
             con.query(sql,function(err,result)
             {
@@ -57,7 +58,8 @@ if(result[0].P220V ==null && result[0].FASA==null && result[0].FARS==null && res
            }
         //    else if(result[0].A3P220V ==null && result[0].A3FASA==null && result[0].A3FARS==null && result[0].A3FAFS==null && result[0].A3TAMS==null && result[0].A3FPPS==null && result[0].A3FPFS==null && result[0].A3SIM==null && result[0].A3TLA==null && result[0].A3FACR==null && result[0].Assessment3==null){
             // var sql= "UPDATE Buildings SET A3P220V ='"+checked1+"', A3FASA='"+checked2+"', A3FARS='"+checked3+"',A3FAFS='"+checked4+"',A3TAMS='"+checked5+"', A3FPPS='"+checked6+"', A3FPFS='"+checked7+"',A3SIM='"+checked8+"',A3TLA='"+checked9+"', A3FACR='"+checked10+"',Assessment3='yes',Flag='3' where email_id='"+owner_id+"'";
-            var sql= "UPDATE Buildings SET P220V ='"+checked1+"', FASA='"+checked2+"', FARS='"+checked3+"',FAFS='"+checked4+"',TAMS='"+checked5+"', FPPS='"+checked6+"', FPFS='"+checked7+"',SIM='"+checked8+"',TLA='"+checked9+"', FACR='"+checked10+"',Assessment3='yes',Flag='3' where email_id='"+owner_id+"'";
+           else{
+                var sql= "UPDATE Buildings SET P220V ='"+checked1+"', FASA='"+checked2+"', FARS='"+checked3+"',FAFS='"+checked4+"',TAMS='"+checked5+"', FPPS='"+checked6+"', FPFS='"+checked7+"',SIM='"+checked8+"',TLA='"+checked9+"', FACR='"+checked10+"',Assessment3='yes',Flag='3' where email_id='"+owner_id+"'";
             con.query(sql,function(err,result)
             {
              if(err) { console.log("something",err)
@@ -69,7 +71,7 @@ if(result[0].P220V ==null && result[0].FASA==null && result[0].FARS==null && res
              }); 
              console.log(result,"rttuyiy")
      
-        //    }
+    }
         //})
             console.log(!result[0].path)
              if(result[0].path==null){

@@ -169,6 +169,7 @@ async function update(installation) {
     }
        var ass1=result.result[0].Assessment1;
        if(ass1=='yes' && result.result[0].Flag=='1'){
+           var job='1';
            ass1='✓'
        }
        else{
@@ -176,6 +177,7 @@ async function update(installation) {
        }
         var ass2=result.result[0].Assessment2;
        if(ass2=='yes' && result.result[0].Flag=='2'){
+        var job='2';
         ass2='✓'
        }
        else{
@@ -183,6 +185,7 @@ async function update(installation) {
     }
        var ass3=result.result[0].Assessment3;
        if(ass3=='yes' && result.result[0].Flag=='3'){
+        var job='3';
         ass3='✓'
        }
        else{
@@ -255,6 +258,7 @@ async function update(installation) {
         "ass1":ass1,
         "ass2":ass2,
         "ass3":ass3,
+        "job":job,
         "mobile":mobile,
         "lat":lat,                                    
         "lon":lon,
