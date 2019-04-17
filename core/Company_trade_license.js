@@ -40,6 +40,7 @@ exports.company_trading_license = (token, data, lang) =>
         })
         /*=========Error Capturing===========*/
         .catch(async function (err) {
+          logger.fatal(err,"core error while adding company profile")
           return resolve({
             status: 400,
             message: "something went wrong"

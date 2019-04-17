@@ -1,5 +1,8 @@
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
+var log4js = require('log4js');
+const logger = log4js.getLogger("SPSA_project");
+
 
 
 
@@ -48,14 +51,10 @@ function Appeal_insert(param) {
                 status: 200,
                 result: Compliant_NO
             });
-
         }
-
-
     })
 }
 //===============Checking the contact_feedback in the trainer table===start======
-
 async function contact_feedback(
     params,
     params1,
@@ -79,6 +78,7 @@ async function contact_feedback(
       console.log("Res========>>", res)
       if (res.data.errno) {
         //console.log("something", err);
+        logger.fatal(res.data.sqlMessage,"db error while inerting the contact feedback")
         return reject({ status: 400, message: "something went wrong" });
       } else if (res) {
         //console.log(result);

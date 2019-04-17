@@ -8,16 +8,13 @@ var encodedMail = new Buffer(email).toString('base64');
      console.log(otp,"otp");
 var transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
+  port: 465,
+  secure: true,
   auth: {
-    user: "spsaservices@gmail.com",
+    user: "mob.spsa@gmail.com",
     pass: "spsa2019"
   }
  });
-
-  
- 
 var mailOptions = {
   transport: transporter,
   from: "SPSA Services" + "<spsaservices@gmail.com>",
@@ -32,6 +29,7 @@ console.log("after mail options");
  transporter.sendMail(mailOptions, (error, info) => {
   
   if (error) {
+    
     console.log("Mail send error: ", error);
    // return reject({ "status": 400, "body": 'Cannot fetch the data' })}
   }

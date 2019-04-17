@@ -125,6 +125,7 @@ function upload_salama_web(
                   var select_record = await Employee.Employee_select(
                     data[i]["Emirates ID"]
                   );
+
                   // data[i].Empty = "NO";
                   console.log("select_record", select_record);
                   if (select_record.message.data.length == 0) {
@@ -145,7 +146,7 @@ function upload_salama_web(
                     data[i].name_ar = name_ar;
                     data[i].hr_email = hr_email;
                     data[i].trade_license_number = trade_license_number;
-                    
+
                     // data[0].name_ar = name_ar;
                     delete data[i]["First Name"];
                     delete data[i]["Last Name"];
@@ -251,73 +252,76 @@ function upload_salama_web(
                   message: "Something went wrong"
                 };
                 throw error;
-              } else if (data.length != 0) {
+              }
+              else if (data.length != 0) {
                 console.log("length", data.length);
                 for (i = 1; i < data.length - 1; i++) {
-                  console.log("data_select.......", data[i]);
-                  var select_record = await Employee.Employee_select(
-                    data[i]["Emirates ID"]
-                  );
-                  // data[i].Empty = "NO";
-                  console.log("select_record", select_record);
-                  if (select_record.message.data.length == 0) {
-                    console.log(data[i]);
-
-                    // var test = Object.values(data[0]);
-
-                    // console.log(params[0][7],"params====>")
-                    // params[0][7]=params[0][8]
-                    // console.log(params[0][8],"paramsss [8}")
-                    //  params[0][8]="NO"
-                    var name_ar =
-                      data[i]["First Name"] + "||" + data[i]["Last Name"];
-                    var name_english = await translate.translate_en(name_ar);
-                    name_en = name_english.result;
-
-                    data[i].name_en = name_en;
-                    data[i].name_ar = name_ar;
-                    data[i].hr_email = hr_email;
-                    data[i].trade_license_number = trade_license_number;
-                  
-                    // data[0].name_ar = name_ar;
-                    delete data[i]["First Name"];
-                    delete data[i]["Last Name"];
-                    delete data[i]["Type"];
-                    console.log(
-                      "Conversion",
-                      ExcelDateToJSDate(data[i]["Preferred Schedule"])
+                  if (data[i] != undefined) {
+                    console.log("data_select.......", data[i]);
+                    var select_record = await Employee.Employee_select(
+                      data[i]["Emirates ID"]
                     );
-                    data[i]["Preferred Schedule"] = ExcelDateToJSDate(
-                      data[i]["Preferred Schedule"]
-                    );
-                    var date_created = dateFormat("yyyy-mm-dd HH:MM:ss");
+                    // data[i].Empty = "NO";
+                    console.log("select_record", select_record);
+                    if (select_record.message.data.length == 0) {
+                      console.log(data[i]);
 
-                    data[i].date_created = date_created;
-                    // console.log(
-                    //moment(data[i]["Preferred Schedule"]).format("YYYY-MM-DD")
-                    //);
+                      // var test = Object.values(data[0]);
 
-                    // data[i]["trade_license_number"] = trade_license_number;
-                    var test = Object.values(data[i]);
-                    console.log("test", hr_email);
-                    console.log("test", trade_license_number);
-                    console.log("test..........", test);
-                    var insert_employee = await Employee_profileDao.Employee_insert(
-                      test
-                    );
+                      // console.log(params[0][7],"params====>")
+                      // params[0][7]=params[0][8]
+                      // console.log(params[0][8],"paramsss [8}")
+                      //  params[0][8]="NO"
+                      var name_ar =
+                        data[i]["First Name"] + "||" + data[i]["Last Name"];
+                      var name_english = await translate.translate_en(name_ar);
+                      name_en = name_english.result;
 
-                    console.log(
-                      "insert",
-                      insert_employee.message.data.affectedRows
-                    );
-                    // count + 1;
-                    if (insert_employee.message.data.affectedRows != 0) {
-                      count++;
-                      console.log("count numb======>", count);
+                      data[i].name_en = name_en;
+                      data[i].name_ar = name_ar;
+                      data[i].hr_email = hr_email;
+                      data[i].trade_license_number = trade_license_number;
+
+                      // data[0].name_ar = name_ar;
+                      delete data[i]["First Name"];
+                      delete data[i]["Last Name"];
+                      delete data[i]["undefined"];
+                      console.log(
+                        "Conversion",
+                        ExcelDateToJSDate(data[i]["Preferred Schedule"])
+                      );
+                      data[i]["Preferred Schedule"] = ExcelDateToJSDate(
+                        data[i]["Preferred Schedule"]
+                      );
+                      var date_created = dateFormat("yyyy-mm-dd HH:MM:ss");
+
+                      data[i].date_created = date_created;
+                      // console.log(
+                      //moment(data[i]["Preferred Schedule"]).format("YYYY-MM-DD")
+                      //);
+
+                      // data[i]["trade_license_number"] = trade_license_number;
+                      var test = Object.values(data[i]);
+                      console.log("test", hr_email);
+                      console.log("test", trade_license_number);
+                      console.log("test..........", test);
+                      var insert_employee = await Employee_profileDao.Employee_insert(
+                        test
+                      );
+
+                      console.log(
+                        "insert",
+                        insert_employee.message.data.affectedRows
+                      );
+                      // count + 1;
+                      if (insert_employee.message.data.affectedRows != 0) {
+                        count++;
+                        console.log("count numb======>", count);
+                      }
+                    } else if (select_record.message.data.length != 0) {
+                      length++;
+                      console.log("length numb======>", length);
                     }
-                  } else if (select_record.message.data.length != 0) {
-                    length++;
-                    console.log("length numb======>", length);
                   }
                 }
                 return resolve({
@@ -325,15 +329,16 @@ function upload_salama_web(
                   status: 200,
                   message:
                     count +
-                    " employee records were captured and " +
+                    " تم تسجيل سجلات الموظفين و " +
                     length +
-                    " employee records were found to be duplicate."
+                    " تم العثور على سجلات الموظفين لتكون مكررة."
                 });
-              } else {
+              }
+              else {
                 return resolve({
                   // statuscode: "E08",
                   status: 400,
-                  message: "Records not found in Employee List.xlsx File"
+                  message: "السجلات ليست في ملف Employee List.xlsx"
                 });
               }
             }
@@ -349,4 +354,4 @@ function upload_salama_web(
 module.exports = {
   upload_salama_web: upload_salama_web
 };
-``
+

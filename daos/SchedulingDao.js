@@ -1,4 +1,6 @@
 const mysqlConnection = require("../mysql_connection/connection");
+var log4js = require('log4js');
+const logger = log4js.getLogger("SPSA_project");
 
 const query = require("../mysql_connection/queries");
 /*===================Schedule function=================================*/

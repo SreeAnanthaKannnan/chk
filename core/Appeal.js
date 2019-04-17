@@ -6,8 +6,6 @@ const session_time = require("../utils/session_time_difference");
 const translate = require("../utils/translate");
 let moment = require("moment");
 const checktoken = require("../utils/checkToken");
-
-
 // Contactus_comments
 module.exports = {
   Appeal: Appeal,
@@ -153,6 +151,7 @@ function Contactus_comments(contact_feedback) {
     if (select_query_contucUs.message.data.affectedRows == 1) {
 
     } else {
+      
       var select_query_contucUs = {
         status: 400,
         message: "Something went wrong while storing records"

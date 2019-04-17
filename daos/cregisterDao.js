@@ -6,10 +6,12 @@ const cryptr = new Cryptr('myTotalySecretKey');
 const langdetect = require('../utils/languagedetect');
 let now = new Date();
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 module.exports = {
     verify_user: verify_user,
-    insert_user: insert_user
+    insert_user: insert_user,
+    owner_details_name:owner_details_name,
+    hr_details_name:hr_details_name
 
 }
 //Here verify the user already exits or not, if exits through error
@@ -21,8 +23,8 @@ function verify_user(registerobject) {
             .query_execute(query.getlogindetails, param)
             .then(function (result, err) {
                 if (err) {
-                    console.log("something", err);
-                    return resolve({
+                    logger.fatal(err,"db error to verify the user while registering")
+                      return resolve({
                         status: 400,
                         err: err
                     });
@@ -36,6 +38,59 @@ function verify_user(registerobject) {
             });
     })
 }
+
+//=========================================================
+function owner_details_name(employee_name, email_id) {
+    return new Promise(async function (resolve, reject) {
+        var param = [employee_name, email_id]
+        console.log("DAO_reg",param)
+
+        // -----
+        var res = await mysqlConnection.query_execute(
+            query.getownerdetails,
+            param
+          );
+          console.log("response", res)
+          if (res.data.errno) {
+            return reject({
+              status: 400,
+              message: "something went wrong"
+            });
+          } else {
+      console.log("result_dao===========>",res)
+            return resolve({
+              status: 200,
+              message: res
+            });
+          }
+        });
+      }
+//===================================================================================
+function hr_details_name(email_id) {
+    return new Promise(async function (resolve, reject) {
+        var param = [email_id]
+        console.log("DAO_reg",param)
+
+        // -----
+        var res = await mysqlConnection.query_execute(
+            query.gethrdetails,
+            param
+          );
+          console.log("response", res)
+          if (res.data.errno) {
+            return reject({
+              status: 400,
+              message: "something went wrong"
+            });
+          } else {
+      console.log("result_dao===========>",res)
+            return resolve({
+              status: 200,
+              message: res
+            });
+          }
+        });
+      }
 //if new user insert the data into DataBase
 function insert_user(registerobject, otp) {
     return new Promise(async function (resolve, reject) {
@@ -55,9 +110,10 @@ function insert_user(registerobject, otp) {
         var type_description = registerobject.typedescription;
         var firstname_ar, firstname_en, lastname_ar, lastname_en, company_ar, company_en, nationality_ar, nationality_en, address_ar, address_en;
         var value;
-        var verify_email = "Y";
+        var verify_email = "N";
         var verify_mobile = "N";
-        var user_type = "residence"
+        var user_type = "residence";
+        var countvalue = 0;
         var password = cryptr.encrypt(registerobject.password);
         var reg_date = now;
         if (nationality == undefined) {
@@ -138,13 +194,13 @@ function insert_user(registerobject, otp) {
             }
         }
         console.log(user_type, "user_type=====>")
-        var params = [firstname_en, firstname_ar, lastname_en, lastname_ar, company_en, company_ar, nationality_en, nationality_ar, alter_number, address_en, address_ar, emirates_id, po_box, mobile_number, email_id, password, verify_mobile, verify_email, language, newsletter, user_type, reg_date, otp]
+        var params = [firstname_en, firstname_ar, lastname_en, lastname_ar, company_en, company_ar, nationality_en, nationality_ar, alter_number, address_en, address_ar, emirates_id, po_box, mobile_number, email_id, password, verify_mobile, verify_email, language, newsletter, user_type, reg_date, otp,countvalue]
         console.log("params=====>", params)
         await mysqlConnection
             .insert_query(query.resgister, params)
             .then(function (result, err) {
                 if (err) {
-                    logger.fatal("Data Base Err", err);
+                    logger.fatal(err,"db error while intering the data into the citizen table while registering")
                     return resolve({
                         status: 400,
                         err: err

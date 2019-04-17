@@ -1,12 +1,12 @@
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 function updatedao(values){
         return new Promise((resolve, reject)=>{
 
 //=====================================Update Installation Details into Schedules Details==============================================================//
-            var params=[values.FACP,values.CSI,values.BRAND,values.status,values.id]
+            var params=[values.FACP,values.CSI,values.BRAND,values.status,values.email]
            mysqlConnection
        .query_execute(query.installationdetails,params)
        .then(function(result, err) {

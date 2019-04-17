@@ -3,7 +3,6 @@ const uploaddao = require("../daos/uploaddao");
 const checktoken = require("../utils/checkToken");
 let moment = require("moment");
 var dateFormat = require('dateformat');
-var count = 0;
 function upload_aman_web(filename, token, email_id) {
     console.log("body ", token);
     return new Promise(async function (resolve, reject) {
@@ -29,6 +28,7 @@ function upload_aman_web(filename, token, email_id) {
                 if (err) {
                     throw err;
                 }
+
                 var XLSX = require("xlsx");
                 var workbook = XLSX.readFile(filename);
                 var sheet_name_list = workbook.SheetNames;
@@ -75,6 +75,7 @@ function upload_aman_web(filename, token, email_id) {
                                 throw error;
                             } else if (data.length != 0) {
                                 console.log("length", data.length);
+                                var count = data.length
                                 for (i = 0; i < data.length; i++) {
                                     console.log("data_select.......", data[i]);
 
@@ -96,6 +97,13 @@ function upload_aman_web(filename, token, email_id) {
                                     data[i]["Preferred Schedule"] = ExcelDateToJSDate(
                                         data[i]["Preferred Schedule"]
                                     );
+                                    // if (data[i]["Preferred Schedule"] == "Invalid Date") {
+                                    //     return reject({
+                                    //         status: 400,
+                                    //         message: "Please provide a valid date format in the preferred schedule"
+                                    //     })
+                                    // }
+                                    // else {
                                     data[i]["email_id"] = email_id;
                                     var datecreated = dateFormat("yyyy-mm-dd");
                                     data[i].datecreated = datecreated;
@@ -105,6 +113,9 @@ function upload_aman_web(filename, token, email_id) {
                                     var insert_employee = await uploaddao.Building_insert(
                                         test
                                     );
+
+                                    // count = + insert_employee.message.data.affectedRows
+                                    console.log(count, "count====>")
 
                                     // console.log(
                                     //   "insert",
@@ -116,24 +127,27 @@ function upload_aman_web(filename, token, email_id) {
                                     //   console.log("count numb======>", count);
                                     // }
                                     //}
+                                    //}
                                 }
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 200,
                                     message:
                                         count +
-                                        " employee records were captured and "
+                                        + " " + "  Buildings record is captured and saved successfully"
 
                                 });
+
                             } else {
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 400,
-                                    message: "Records not found in Employee List.xlsx File"
+                                    message: "Records not found in Building List.xlsx File"
                                 });
                             }
                         }
                     }
+
                     else if (y == "قوائم المبانى ") {
                         var worksheet = workbook.Sheets[y];
                         var headers = {};
@@ -175,6 +189,7 @@ function upload_aman_web(filename, token, email_id) {
                                 throw error;
                             } else if (data.length != 0) {
                                 console.log("length", data.length);
+                                var count = data.length-1;
                                 for (i = 1; i < data.length; i++) {
                                     console.log("data_select.......", data[i]);
 
@@ -196,35 +211,46 @@ function upload_aman_web(filename, token, email_id) {
                                     data[i]["Preferred Schedule"] = ExcelDateToJSDate(
                                         data[i]["Preferred Schedule"]
                                     );
-                                    data[i]["email_id"] = email_id;
-                                    var datecreated = dateFormat("yyyy-mm-dd");
-                                    data[i].datecreated = datecreated;
-                                    var test = Object.values(data[i]);
+                                    // if (data[i]["Preferred Schedule"] == "Invalid Date") {
+                                    //     return reject({
+                                    //         status: 400,
+                                    //         message: "Please provide a valid date format in the preferred schedule"
+                                    //     })
+                                    // }
+                                    // else {
+                                        data[i]["email_id"] = email_id;
+                                        var datecreated = dateFormat("yyyy-mm-dd");
+                                        data[i].datecreated = datecreated;
+                                        var test = Object.values(data[i]);
 
-                                    console.log("test..........", test);
-                                    var insert_employee = await uploaddao.Building_insert(
-                                        test
-                                    );
+                                        console.log("test..........", test);
+                                        var insert_employee = await uploaddao.Building_insert(
+                                            test
+                                        );
 
 
+                                    //}
                                 }
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 200,
                                     message:
                                         count +
-                                        " employee records were captured and "
+                                        +" " + " يتم التقاط سجل المبنى وحفظه بنجاح "
 
                                 });
+
                             } else {
+
                                 return resolve({
                                     // statuscode: "E08",
                                     status: 400,
-                                    message: "Records not found in Employee List.xlsx File"
+                                    message: "السجلات غير موجودة في ملف بناء قائمة.xlsx"
                                 });
                             }
                         }
                     }
+
                 });
 
                 count = 0;
@@ -232,6 +258,7 @@ function upload_aman_web(filename, token, email_id) {
             });
         }
     });
+
 }
 function ExcelDateToJSDate(serial) {
     var utc_days = Math.floor(serial - 25569);

@@ -1,7 +1,7 @@
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 
 //Here we fetch the Building details of the user
 function buildings(buildingobject) {
@@ -9,10 +9,10 @@ function buildings(buildingobject) {
         console.log(buildingobject, "=>buildingobject");
         mysqlConnection
         .query_execute(query.getbuildings_web,buildingobject)
-        .then(function (result, err) {
+        .then(function (result,err) {
           
             if (err) {
-                logger.fatal("something", err)
+                logger.fatal(err,"db error while inerting the building details into the building table")
                 return reject({ "status": 400, "body": 'Cannot insert the data' })
             }
             else {

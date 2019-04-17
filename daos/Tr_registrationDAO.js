@@ -1,6 +1,6 @@
 const con = require('../mysql_connection/dbConfig');
 const log4js = require('log4js')
-const logger = log4js.getLogger('Salama_project');
+const logger = log4js.getLogger("SPSA_project");
 // const Promise = require('bluebird')
 
 

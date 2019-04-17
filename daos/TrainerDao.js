@@ -1,6 +1,9 @@
 const con = require("../mysql_connection/dbConfig");
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
+var log4js = require('log4js');
+const logger = log4js.getLogger("SPSA_project");
+
 
 
 
@@ -28,11 +31,6 @@ async function Trainer_information(params) {
 
 }
 //===============Checking the trainer email in the trainer table===End======
-
-
-
-
-
 
 function email_otp_update(params1, params2) {
   console.log(params1, "params1");
@@ -79,12 +77,8 @@ async function Trainer_email_otp_verification(params) {
     );
   });
 }
-
 function password_update(params1, params2) {
-  console.log(params1, "params1");
-  console.log(params2, "params2");
-
-  return new Promise(function (resolve, reject) {
+ return new Promise(function (resolve, reject) {
     var sql =
       "UPDATE Trainer SET Password = '" +
       params1 +
@@ -93,7 +87,6 @@ function password_update(params1, params2) {
       "'";
     con.query(sql, function (err, result) {
       if (!result) {
-        //  console.log(result,"achieved")
         console.log("something", err);
         return resolve({
           status: 400,
@@ -102,7 +95,6 @@ function password_update(params1, params2) {
       }
       // callback(false, results);
       else {
-        //  console.log(result,"achieved")
         return resolve({
           result
         });
@@ -114,11 +106,9 @@ function password_update(params1, params2) {
 function Trainer_names_display(language) {
   return new Promise(async function (resolve, reject) {
     console.log("language===>", language)
-
     if (language == "en") {
       await con.query("SELECT id,Name_en FROM Trainer ", (err, result) => {
         if (!result) {
-          //  console.log(result,"achieved")
           console.log("something", err);
           return resolve({
             status: 400,
@@ -129,10 +119,6 @@ function Trainer_names_display(language) {
           let value = [];
           let myobject = new Object();
           for (i = 0; i < result.length; i++) {
-            //    let b= myobject[result[i].name] ;
-            //     // value.push(myobject[result[i].name])
-            //     console.log(b,"value===========>")
-            //     value.push (b)
             var data = {};
             data = {
               id: result[i].id,
@@ -148,8 +134,6 @@ function Trainer_names_display(language) {
         }
       });
     }
-    //  param = moment(param).format("YYYY-MM-DD")
-    //  console.log(param,"date")
     else {
       await con.query("SELECT id,Name_ar FROM Trainer ", (err, result) => {
         if (!result) {

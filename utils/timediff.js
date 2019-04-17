@@ -3,7 +3,6 @@
 let moment = require('moment')
 function Session_time_difference(param1,param2) {
     return new Promise((resolve,reject)=>{
-        console.log(param1,"params")
 let session_created_time = moment(param1,"YYYY-MM-DD HH:mm:ss").format("LT")
      session_created_time = session_created_time.split(' ')[0]
      let Entry_time = moment(param2,"YYYY-MM-DD HH:mm:ss").format("LT")

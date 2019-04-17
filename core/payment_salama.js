@@ -1,6 +1,6 @@
 var pay = require("../daos/Payment_salamaDao");
 var log4js = require("log4js");
-const logger = log4js.getLogger("Aman_project");
+const logger = log4js.getLogger("SPSA_project");
 const SessionDao = require("../daos/SessionDao");
 const session_time = require("../utils/session_time_difference");
 const checktoken = require("../utils/checkToken");
@@ -10,9 +10,11 @@ module.exports = {
 };
 
 async function payment(payment1, token) {
-    console.log(payment1, "payment1");
     return new Promise(async (resolve, reject) => {
         var responseObj = {};
+        
+        
+
         await pay
             .payupdate(payment1)
             .then(data => {

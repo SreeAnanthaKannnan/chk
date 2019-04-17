@@ -5,6 +5,9 @@
 //Here the Data from UI is separated and stored in DATA BASE
 const con = require("../mysql_connection/dbConfig");
 const mysqlConnection = require("../mysql_connection/connection");
+var log4js = require('log4js');
+const logger = log4js.getLogger("SPSA_project");
+
 
 const query = require("../mysql_connection/queries");
 
@@ -83,12 +86,33 @@ function payupdate(param) {
     });
 }
 //==================================Trainer_attendance =============================================================//
+function payment_callcenter_salama(param) {
+    return new Promise(async function (resolve, reject) {
+        var params = [param.order_status, param.certificate_status, param.order_id]
+        /*====================inserting employee's data into employee_Profile table========*/
+       var res=await  mysqlConnection
+            .query_execute(query.payment_callcenter_salama, params)
+            /*==========db error capturing================*/
+            console.log(res,"response===========>>>>>>")
+             if(res.data.errno)   
+            return resolve({
+                status:400,
+                message:res.data.sqlMessage
+            })
+         else {
+            
+            return resolve({ status: 200, message: res});
+        }
+           
 
+    });
+}
 
 module.exports = {
     payment: payment,
     payselect: payselect,
     payupdate: payupdate,
-    payselect1: payselect1
+    payselect1: payselect1,
+    payment_callcenter_salama:payment_callcenter_salama
 
 };

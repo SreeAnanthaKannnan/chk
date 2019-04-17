@@ -1,7 +1,7 @@
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
 var log4js = require('log4js');
-const logger = log4js.getLogger('Aman_project');
+const logger = log4js.getLogger('SPSA_project');
 
 //Here we get the installers details from the DataBase
 async function supplier(){

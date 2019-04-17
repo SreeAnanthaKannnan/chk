@@ -1,6 +1,6 @@
 var pdfviewer = require("../daos/pdfviewerDao.js");
 var log4js = require("log4js");
-const logger = log4js.getLogger("Aman_project");
+const logger = log4js.getLogger("SPSA_project");
 const checktoken = require("../utils/checkToken");
 module.exports = {
   pdf1: pdf1

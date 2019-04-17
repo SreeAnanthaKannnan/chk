@@ -1,5 +1,8 @@
 const con = require("../mysql_connection/dbConfig");
 const mysqlConnection = require("../mysql_connection/connection");
+var log4js = require('log4js');
+
+const logger = log4js.getLogger("SPSA_project");
 
 const query = require("../mysql_connection/queries");
 
@@ -11,6 +14,7 @@ function Employee_insert(params) {
         console.log(res1, "err===>")
         /*==========db error capturing================*/
         if (res1.data.errno) {
+            logger.fatal(res1.data.sqlMessage,"DB error while inserting employee data into the table")
             return reject({
                 status: 400,
                 message: "something went wrong"
@@ -54,6 +58,7 @@ async function Employee_select(params) {
             .query_execute(query.findemployee, [params])
         /*===================db error capturing====================*/
         if (res1.data.errno) {
+            logger.fatal(res1.data.sqlMessage,"db error while existence of employee in the Employee_Profile table")
             return reject({
                 status: 400,
                 message: "something went wrong"
@@ -506,6 +511,7 @@ async function Employee_grid_view() {
         console.log("res123====>", res1)
         /*======================db error catpturing===========================*/
         if (res1.data.errno) {
+            logger.fatal(res1.data.sqlMessage,"Db error while getting the employee details for data grid for calcenter salama")
             return reject({
                 err: "something went wrong"
             })
@@ -527,6 +533,7 @@ async function Employee_grid_view1(order_id) {
         console.log("res1============>>>", res1)
         /*======================db error catpturing===========================*/
         if (res1.data.errno) {
+            logger.fatal(res1.data.sqlMessage,"db error while selecting the employee detail based on order_id for data grid view")
             return reject({
                 err: "something went wrong"
             })
@@ -548,6 +555,7 @@ async function Employee_grid_view2(national_id) {
         console.log("res123====>", res1)
         /*======================db error catpturing===========================*/
         if (res1.data.errno) {
+            logger.fatal(res1.data.sqlMessage,"db error while selecting the employee details for data grid view baed on the national_id")
             return reject({
                 err: "something went wrong"
             })
@@ -569,6 +577,7 @@ async function employeedetails(employeedetails) {
         console.log("res=======>>>", res1)
         /*======================db error catpturing===========================*/
         if (res1.data.errno) {
+            logger.fatal(res1.data.sqlMessage,"db error while fetching employee details for data grid view")
             return reject({
                 err: "something went wrong"
             })
