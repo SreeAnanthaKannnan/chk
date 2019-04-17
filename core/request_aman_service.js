@@ -65,13 +65,14 @@ function request_service_aman(filepath, email_id) {
                                 throw error;
                             } else if (data.length != 0) {
                                 var email_id_array = []
-
                                 console.log("length", data.length);
-
                                 buildingDao.order_id_select_aman()
                                     .then(async function (result) {
                                         console.log(result.result.data[0], "order_id_select=====>")
-                                        var orderid = result.result.data[0].num
+                                        var orderid1 = result.result.data[0].num
+                                        var orderid2 = result.result.data[1].num
+                                        console.log(orderid1,orderid2,"1 and 2");
+                                        var orderid = Math.max(orderid1,orderid2)                                        
                                         console.log(orderid, "ORDER")
                                         console.log(orderid == "null")
                                         if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {

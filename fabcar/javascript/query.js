@@ -56,7 +56,7 @@ const ccp = JSON.parse(ccpJSON);
     }
 })
 }
- function queryallrecords() {
+ function queryallrecords(fun,key) {
     return new Promise(async (resolve, reject) => {
     try {
 
@@ -88,7 +88,7 @@ const ccp = JSON.parse(ccpJSON);
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        var result = await contract.evaluateTransaction('queryAllCars');
+        var result = await contract.evaluateTransaction(fun,key);
         console.log(`Transaction has been evaluated 1, result is: ${result.toString()}`);
         var record=JSON.stringify(result)
        console.log(result)
