@@ -51,14 +51,10 @@ function Appeal_insert(param) {
                 status: 200,
                 result: Compliant_NO
             });
-
         }
-
-
     })
 }
 //===============Checking the contact_feedback in the trainer table===start======
-
 async function contact_feedback(
     params,
     params1,

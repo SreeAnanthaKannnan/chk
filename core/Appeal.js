@@ -6,8 +6,6 @@ const session_time = require("../utils/session_time_difference");
 const translate = require("../utils/translate");
 let moment = require("moment");
 const checktoken = require("../utils/checkToken");
-
-
 // Contactus_comments
 module.exports = {
   Appeal: Appeal,

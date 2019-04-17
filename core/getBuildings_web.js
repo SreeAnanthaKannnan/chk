@@ -2,11 +2,9 @@ var buildings = require('../daos/getBuildings_webDao.js');
 var log4js = require('log4js');
 const logger = log4js.getLogger('SPSA_project');
 const checktoken = require("../utils/checkToken")
-
 module.exports = {
     getbuildings: getbuildings
 }
-
 function getbuildings(buildingobject, token) {
     logger.fatal(buildingobject, "buildingobject");
     return new Promise(async (resolve, reject) => {

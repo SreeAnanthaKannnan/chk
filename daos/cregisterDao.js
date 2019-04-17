@@ -143,7 +143,8 @@ function insert_user(registerobject, otp) {
         var value;
         var verify_email = "N";
         var verify_mobile = "N";
-        var user_type = "residence"
+        var user_type = "residence";
+        var countvalue = 0;
         var password = cryptr.encrypt(registerobject.password);
         var reg_date = now;
         if (nationality == undefined) {
@@ -224,7 +225,7 @@ function insert_user(registerobject, otp) {
             }
         }
         console.log(user_type, "user_type=====>")
-        var params = [firstname_en, firstname_ar, lastname_en, lastname_ar, company_en, company_ar, nationality_en, nationality_ar, alter_number, address_en, address_ar, emirates_id, po_box, mobile_number, email_id, password, verify_mobile, verify_email, language, newsletter, user_type, reg_date, otp]
+        var params = [firstname_en, firstname_ar, lastname_en, lastname_ar, company_en, company_ar, nationality_en, nationality_ar, alter_number, address_en, address_ar, emirates_id, po_box, mobile_number, email_id, password, verify_mobile, verify_email, language, newsletter, user_type, reg_date, otp,countvalue]
         console.log("params=====>", params)
         await mysqlConnection
             .insert_query(query.resgister, params)
