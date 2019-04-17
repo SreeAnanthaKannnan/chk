@@ -24,7 +24,8 @@ var express = require("express"),
 
 var con = require("../mysql_connection/dbConfig.js"),
   login = require("../core/login.js"),
-  feedback = require("../core/Feedback"),
+  admin = require("../core/admin"),
+  feedback = require("../core//Feedback"),
   cregister = require("../core/cregister.js"),
   history = require("../core/history"),
   building = require("../core/building"),
@@ -102,7 +103,7 @@ const Contactus_feedback = require("../core/Appeal"),
 
 let ipAddress = ip.address();
 console.log("ips====>", ipAddress);
-
+const { getInstaller, getMothlyInstallerDetails } = require('../daos/dashboardDetails');
 var file1;
 let date = require("date-and-time");
 let now = new Date();
@@ -600,6 +601,7 @@ router.post("/serviceHistory", cors(), async function (req, res) {
     });
   } else {
     var email_id = id.result;
+    console.log("email===>index", email_id)
     book
       .bookservice(email_id, token)
       .then(result => {
@@ -2502,5 +2504,167 @@ router.post("/certificate_issue", cors(), async function (req, res) {
       })
     );
 });
+
+//=============================================================================
+router.post("/addAdmin", cors(), function (req, res) {
+  var add_admin = req.body;
+  console.log("add_admin", add_admin)
+
+  cregister
+    .add_admin(add_admin)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//========================================================================
+//=============================================================================
+router.post("/getinstalleremployees", cors(), function (req, res) {
+  var installer_employees = req.body;
+  console.log("installer_employees", installer_employees)
+  var token = req.headers.authorization
+  console.log("token", token)
+  login
+    .getinstallereployees(installer_employees, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//========================================================================
+
+//=============Installers DashBoard Details API =======//
+
+router.post('/installers_dashboard', cors(), async (req, res) => {
+  const result = await getInstaller(req.body);
+  console.log(result[0].data);
+  if (result[0].status != 200) {
+    res.status(400).json({
+      status: 400,
+      message: 'Data Cant Fetch'
+    });
+  } else {
+    console.log("active_installer:", result[0].data[0].active_installers);
+    console.log("total_installers:", result[0].data[0].total_installers);
+
+    res.status(200).json({
+      status: 200,
+      active_installer: result[0].data[0].active_installers,
+      total_installers: result[0].data[0].total_installers,
+    });
+  }
+
+
+});
+
+router.get('/installers_dashboard_monthwise', async (req, res) => {
+
+  const installer = await getMothlyInstallerDetails();
+  console.log(installer[0].data);
+  const installerDetails = [];
+  installer[0].data.map(tr => {
+    installerDetails.push({
+      active_installers: tr.active_installers,
+      total_installers: tr.total_installers,
+      month: tr.month,
+      year: tr.year
+    })
+  });
+  if (installer[0].status != 200) {
+    res.status(400).json({
+      status: 400,
+      message: 'Data Cant Fetch'
+    });
+  } else {
+    console.log("active_installer:", installer[0].data[0].active_installers);
+    console.log("total_installers:", installer[0].data[0].total_installers);
+    res.status(200).json({
+      status: 200,
+      installerDetails: installerDetails
+    });
+  }
+
+
+})
+
+//=============Installers DashBoard Details API =======//
+
+//=============================adminApproved================================================
+router.post("/adminApproved", cors(), function (req, res) {
+  var adminApproved = req.body;
+  console.log("adminApproved", adminApproved)
+  var token = req.headers.authorization
+  console.log("token", token)
+  admin
+    .adminapproveddetails(adminApproved, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//=================================adminApproved=======================================
+//=============================adminApproved================================================
+router.post("/adminReject", cors(), function (req, res) {
+  var adminReject = req.body;
+  console.log("adminReject", adminReject)
+  var token = req.headers.authorization
+  console.log("token", token)
+  admin
+    .adminRejectdetails(adminReject, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//=================================adminApproved=======================================
+//=============================adminApproved================================================
+router.post("/adminFreeze", cors(), function (req, res) {
+  var adminFreeze = req.body;
+  console.log("adminFreeze", adminFreeze)
+  var token = req.headers.authorization
+  console.log("token", token)
+  admin
+    .adminFreezedetails(adminFreeze, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//=================================adminApproved=======================================
 
 module.exports = router;

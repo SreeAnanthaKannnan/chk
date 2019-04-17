@@ -12,7 +12,8 @@ const sessionDao = require("../daos/SessionDao");
 
 var dateFormat = require("dateformat");
 module.exports = {
-  loginuser: loginuser
+  loginuser: loginuser,
+  getinstallereployees: getinstallereployees
 };
 //function to check login credentials
 function loginuser(loginobject) {
@@ -93,5 +94,37 @@ function loginuser(loginobject) {
         });
       }
     }
+  });
+}
+async function getinstallereployees(installer_employees, token) {
+  return new Promise(async (resolve, reject) => {
+
+    /*==========Token validation=================*/
+    // var verifytoken = await checktoken.checkToken(token);
+    // if (verifytoken.status == 405) {
+    //   return resolve({
+    //     status: verifytoken.status,
+    //     message: verifytoken.message
+    //   });
+    // } else if (verifytoken.status == 403) {
+    //   return resolve({
+    //     status: verifytoken.status,
+    //     message: verifytoken.message
+    //   });
+    // } else {
+
+    var installer_employees_details = installer_employees.user_type
+    console.log("installer_employees_details", installer_employees_details)
+
+    let employeelist = await login.installer_employees_list(
+
+      installer_employees_details
+    );
+    console.log("employeelist", employeelist)
+    return resolve({
+      status: 200,
+      message: employeelist
+    });
+    // }
   });
 }

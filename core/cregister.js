@@ -7,6 +7,9 @@ const SendOtp = require('sendotp');
 const sendOtp = new SendOtp('254625AbVGrmks5c2c92bd');
 var log4js = require('log4js');
 const logger = log4js.getLogger('SPSA_project');
+const Cryptr = require('cryptr');
+const cryptr = new Cryptr('myTotalySecretKey');
+let now = new Date();
 //Here the verification of user details
 function cregister(registerobject) {
   return new Promise(async (resolve, reject) => {
@@ -49,7 +52,7 @@ function cregister(registerobject) {
   });
 }
 //========================================================
-async function owner_details(owner_details,token) {
+async function owner_details(owner_details, token) {
   return new Promise(async (resolve, reject) => {
     console.log("enter in to core_reg")
     /*==========Token validation=================*/
@@ -65,26 +68,26 @@ async function owner_details(owner_details,token) {
     //     message: verifytoken.message
     //   });
     // } else {
-      /* Fetching the trained employee's National Id from "Employee_profile" table who are all passed in the "Results" table */
-      var employee_name=owner_details.owner_name
-      var email_id = owner_details.email_id
-      console.log("employee_name_core====>>",employee_name)
-      let owner_details_details = await registerform.owner_details_name(
-        employee_name,
-        email_id
-      );
-     console.log("owner_details_details_core===>",owner_details_details)
-      return resolve({
-        status: 200,
-        message: owner_details_details
-      });
+    /* Fetching the trained employee's National Id from "Employee_profile" table who are all passed in the "Results" table */
+    var employee_name = owner_details.owner_name
+    var email_id = owner_details.email_id
+    console.log("employee_name_core====>>", employee_name)
+    let owner_details_details = await registerform.owner_details_name(
+      employee_name,
+      email_id
+    );
+    console.log("owner_details_details_core===>", owner_details_details)
+    return resolve({
+      status: 200,
+      message: owner_details_details
+    });
     // }
   });
 }
 //============================================================================
-async function hr_details(hr_details,token) {
+async function hr_details(hr_details, token) {
   return new Promise(async (resolve, reject) => {
-  
+
     /*==========Token validation=================*/
     // var verifytoken = await checktoken.checkToken(token);
     // if (verifytoken.status == 405) {
@@ -98,24 +101,66 @@ async function hr_details(hr_details,token) {
     //     message: verifytoken.message
     //   });
     // } else {
-      /* Fetching the trained employee's National Id from "Employee_profile" table who are all passed in the "Results" table */
-      //var employee_name=owner_details.owner_name
-      var email_id = hr_details.email_id
- 
-      let hr_details_details = await registerform.hr_details_name(
-        
-        email_id
-      );
-   
-      return resolve({
-        status: 200,
-        message: hr_details_details
-      });
+    /* Fetching the trained employee's National Id from "Employee_profile" table who are all passed in the "Results" table */
+    //var employee_name=owner_details.owner_name
+    var email_id = hr_details.email_id
+
+    let hr_details_details = await registerform.hr_details_name(
+
+      email_id
+    );
+
+    return resolve({
+      status: 200,
+      message: hr_details_details
+    });
     // }
   });
 }
+async function add_admin(add_admin) {
+  return new Promise(async (resolve, reject) => {
+
+    var first_name = add_admin.first_name
+    console.log("first_name", first_name)
+    var last_name = add_admin.last_name
+    console.log("last_name", last_name)
+    var alternate_phone_number = add_admin.alternate_phone_number
+    console.log("alternate_phone_number", alternate_phone_number)
+
+    var emirates_id = add_admin.emirates_id
+    console.log("emirates_id", emirates_id)
+
+    var mobile_number = add_admin.mobile_number
+    console.log("mobile_number", mobile_number)
+    var select_services = add_admin.select_services
+    console.log("select_services", select_services)
+    var email_id = add_admin.email_id
+    console.log("email_id", email_id)
+    var password = cryptr.encrypt(add_admin.password);
+    console.log("pass", password)
+    var user_type = "admin"
+
+    var reg_date = now;
+
+    var select_query = [first_name, last_name, alternate_phone_number, emirates_id, mobile_number, email_id, password, user_type, reg_date, select_services]
+    console.log("select_queery", select_query)
+
+
+    var result = await registerform.add_admin(select_query)
+    console.log("result===>>", result)
+    return resolve({
+      status: 200,
+      message: result
+    });
+
+  });
+}
+
+
 module.exports = {
   cregister: cregister,
-  owner_details:owner_details,
-  hr_details:hr_details
+  owner_details: owner_details,
+  hr_details: hr_details,
+  add_admin: add_admin
+
 }
