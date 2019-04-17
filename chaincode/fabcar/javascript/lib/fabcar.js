@@ -123,6 +123,36 @@ class FabCar extends Contract {
             }
         }
     }
+    async queryHistory2(ctx,carNumber) {
+        // const iterator = await ctx.stub.getHistoryForKey(carNumber);
+        const iterator = await ctx.stub.getHistoryForKey(carNumber)
+         const allResults = [];
+         while (true) {
+             const res = await iterator.next();
+ 
+             if (res.value && res.value.value.toString()) {
+                 console.log(res.value.value.toString('utf8'));
+ 
+                 const Key = res.value.key;
+                 let Record;
+                 try {
+                     Record = JSON.parse(res.value.value.toString('utf8'));
+                 } catch (err) {
+                     console.log(err);
+                     Record = res.value.value.toString('utf8');
+                 }
+                 allResults.push({ Key, Record });
+             }
+             if (res.done) {
+                 console.log('end of data');
+                 await iterator.close();
+                 console.info(allResults);
+                 return JSON.stringify(allResults);
+             }
+         }
+     }
+     
+ 
     
 }
 

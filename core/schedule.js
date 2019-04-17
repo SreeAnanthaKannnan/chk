@@ -7,6 +7,8 @@ var auto = require('../daos/autoDao');
 var t = ["8-10 am", "10-12 am","12-2 pm","2-4 pm","4-6 pm"];
 let moment = require('moment');
 const checktoken = require("../utils/checkToken");
+const buildingDao = require("../daos/buildingDao");
+var orderid;
 async function sup(time, rdate, building_id,token) {
     const idate = rdate;
     let sdate = rdate;
@@ -26,6 +28,40 @@ async function sup(time, rdate, building_id,token) {
     });
   }
   else{
+    var getorder = await buildingDao.order_id_select_aman()
+        console.log(getorder,"getorder");
+        console.log(getorder.result.data[0], "order_id_select=====>")
+        var orderid1 = getorder.result.data[0].num
+        var orderid2 = getorder.result.data[1].num
+        console.log(orderid1,orderid2,"1 and 2");
+        orderid = Math.max(orderid1,orderid2)
+        console.log(orderid, "ORDER")
+        console.log(orderid == "null")
+        if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {
+            orderid = "A0001"
+        }
+        else {
+            console.log(orderid, "inside the loop")
+
+            // orderid = Number(orderid) + 1
+            console.log("orderid" + orderid)
+            orderid = orderid + 1;
+            console.log("orderid=====>" + orderid)
+
+            orderid = orderid.toString()
+            if (orderid.length == 1) {
+                orderid = "A000" + orderid
+            }
+            else if (orderid.length == 2) {
+                orderid = "A00" + orderid
+            }
+            else if (orderid.length == 3) {
+                orderid = "A0" + orderid
+            }
+            else {
+                orderid = "A" + orderid
+            }
+        }
         console.warn("rdate", idate);
         var suparray = [];
         //Here we are fecthing latest installers list from the DataBase and stored in an array
@@ -43,7 +79,7 @@ async function sup(time, rdate, building_id,token) {
             var status1 = "open";
             var countvalue = sup.result[0].countvalue + 1;
             console.log(status1);
-            let data = [schedule_time, requestdate, suplier_id, building_id, status1]
+            let data = [schedule_time, requestdate, suplier_id, building_id, status1,orderid]
             let query = await insertquery.schedule_insert(data);
             console.log("query",query);
             let countstored = await insertquery.update_countvalue(countvalue,sup.result[0].email_id)
@@ -73,7 +109,7 @@ return resolve({
                             console.log("assigned to", suparray[0]);
                             var status1 = "open";
                             console.log("date", sdate);
-                            let data = [schedule_time, requestdate, suplier_id, building_id,status1]
+                            let data = [schedule_time, requestdate, suplier_id, building_id,status1,orderid]
                             let query = await insertquery.schedule_insert(data)
                             let countstored = await insertquery.update_countvalue(countvalue,sup.result[0].email_id)
 			var date22 = moment(requestdate).format("YYYY-MM-DD");                            

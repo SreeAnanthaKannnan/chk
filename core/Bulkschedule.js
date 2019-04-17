@@ -15,27 +15,14 @@ var t = [
   "4-6 pm"
 ];
 let moment = require("moment");
-const checktoken = require("../utils/checkToken");
-async function sup(time, rdate, building_id,token) {
+async function sup(time, rdate, building_id,orderid) {
   const idate = rdate;
   let sdate = rdate;
   console.warn("rdate", rdate);
   return new Promise(async function (resolve, reject) {
     console.warn("rdate", idate);
     /*============================Token Validation========================================*/
-    var verifytoken = await checktoken.checkToken(token);
-    if (verifytoken.status == 405) {
-      return resolve({
-        status: verifytoken.status,
-        message: verifytoken.message
-      });
-    } else if (verifytoken.status == 403) {
-      return resolve({
-        status: verifytoken.status,
-        message: verifytoken.message
-      });
-    } else {
-      var suparray = [];
+        var suparray = [];
       //Here we are fecthing latest installers list from the DataBase and stored in an array*/
       var sup = await supplier.supplier();
       
@@ -50,10 +37,9 @@ async function sup(time, rdate, building_id,token) {
             var schedule_time = time;
             var suplier_id = suparray[0];
             var requestdate = idate;
-            var status = "open";
+            var status1 = "open";
             var countvalue = sup.result[0].countvalue + 1;
-            console.log(status);
-            let data = [schedule_time, requestdate, suplier_id, building_id, status]
+            let data = [schedule_time, requestdate, suplier_id, building_id, status1,orderid]
             let query = await insertquery.schedule_insert(data)
             let countstored = await insertquery.update_countvalue(countvalue,sup.result[0].email_id)
         var date22 = moment(requestdate).format("YYYY-MM-DD");  
@@ -85,7 +71,8 @@ return resolve({
                   requestdate,
                   suplier_id,
                   building_id,
-                  status1
+                  status1,
+                  orderid
                 ];
                 let query = await insertquery.schedule_insert(data);
                 console.log(query,"query from db");
@@ -107,8 +94,7 @@ return resolve({
             }
         }
       }
-    }
-  });
+      });
 }
 //Here the Date increment logic
 async function incrementDate(dateInput, increment) {

@@ -38,7 +38,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   check = require("../utils/checkToken"),
   email = require("../utils/emailbytoken"),
   phone = require("../utils/phonecheck.js"),
-
+  buildingDao = require("../daos/buildingDao"),
   upload = require("../core/upload.js"),
   pdf1 = require("../core/pdfviewer.js"),
   update = require("../core/update"),
@@ -49,11 +49,11 @@ var con = require("../mysql_connection/dbConfig.js"),
   Employee_grid_view = require("../core/Employee_Grid_view"),
   payment_salama = require("../core/payment_salama"),
   bc = require("../fabcar/javascript/invoke"),
-  verify = require("../core/otpverify");
-  var pdf = require("../core/pdf.js");
-  var pdf2=require("../core/pdf.js")
-let moment = require("moment");
-let Appeal = require("../core/Appeal"),
+  verify = require("../core/otpverify"),
+  pdf = require("../core/pdf.js"),
+  pdf2=require("../core/pdf.js");
+let moment = require("moment"),
+   Appeal = require("../core/Appeal"),
   Employee_profile = require("../core/Employee_profile"),
   safety_officer_details = require("../core/Employee_safetyofficer_profile_showup"),
   classroom = require("../core/Classroom"),
@@ -164,7 +164,6 @@ router.post("/login", cors(), function (req, res) {
     );
 });
 //================================================================//
-
 router.post("/request_for_service", cors(), (req, res) => {
   console.log("enter into req for service");
   var file_name = req.body.filename;
@@ -192,20 +191,9 @@ router.post("/request_for_service", cors(), (req, res) => {
         })
     );
 });
-
-//============================================================
 //===================================getbuildings======================================================//
 router.post("/getEmployees", cors(), async function (req, res) {
   const token = req.headers.authorization;
-
-  var id = await email.checkToken(req);
-
-  console.log(id);
-  if (id.status == 400 && id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
     var employeedetails = req.body.email;
     console.log("data", employeedetails);
     getBuildings
@@ -222,7 +210,6 @@ router.post("/getEmployees", cors(), async function (req, res) {
           message: err.message
         })
       );
-  }
 });
 //=========================citizen-registration-start===========================================
 router.post("/citizen-register", cors(), async function (req, res) {
@@ -309,7 +296,22 @@ router.post("/getdetails", cors(), async function(req, res) {
       );
  });
 //=================================Appeal====================================================
-
+router.post("/getdetailsforkey", cors(), async function(req, res) {
+  // const token = req.headers.authorization;
+       var email = req.body.email;
+     history
+       .getHistory1(email)
+       .then(result => {
+         res.send({
+           result: result
+         });
+       })
+       .catch(err =>
+         res.status(err.status).json({
+           message: err.message
+         })
+       );
+  });
 //===================================addbuilding=============================================//
 router.post("/AddsingleBuilding", cors(), async function (req, res) {
   const token = req.headers.authorization;
@@ -1116,6 +1118,41 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
         message: verifytoken.message
       });
     } else {
+      var getorder = await buildingDao.order_id_select_aman()
+      console.log(getorder,"getorder");
+      console.log(getorder.result.data[0], "order_id_select=====>")
+      var orderid1 = getorder.result.data[0].num
+      var orderid2 = getorder.result.data[1].num
+      console.log(orderid1,orderid2,"1 and 2");
+      var orderid = Math.max(orderid1,orderid2)
+      console.log(orderid, "ORDER")
+      console.log(orderid == "null")
+      if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {
+          orderid = "A0001"
+      }
+      else {
+          console.log(orderid, "inside the loop")
+
+          // orderid = Number(orderid) + 1
+          console.log("orderid" + orderid)
+          orderid = orderid + 1;
+          console.log("orderid=====>" + orderid)
+
+          orderid = orderid.toString()
+          if (orderid.length == 1) {
+              orderid = "A000" + orderid
+          }
+          else if (orderid.length == 2) {
+              orderid = "A00" + orderid
+          }
+          else if (orderid.length == 3) {
+              orderid = "A0" + orderid
+          }
+
+          else {
+              orderid = "A" + orderid
+          }
+      }
       /*Here the Bulk Buildings are scheduled one by one*/
       for (let i = 0; i < schedules.schedule.length; i++) {
         console.log(i, "i");
@@ -1126,10 +1163,9 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
           schedules.schedule[i].time,
           rdate,
           schedules.schedule[i].building_id,
-          token
-        );
+          orderid
+          );
       }
-
       res.send({
         status: 200,
         message:
@@ -1144,10 +1180,16 @@ router.post("/blockchain", cors(), async function(req, res) {
   //   name: "ajay",
   //   address: "kerala"
   // };
+  var transaction = req.body.transaction;
+  var name= req.body.name;
+  var data ={
+    name:name,
+    transaction:transaction
+  }
   var params = {
     id: req.body.email,
     fun: "create",
-    data: req.body.transaction
+    data:data
   };
 
   bc.main(params)
