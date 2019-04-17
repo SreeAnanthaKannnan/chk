@@ -85,6 +85,9 @@ let moment = require("moment"),
 var payment_statusupdate_salama = require("../core/payment_statusupdate_salama");
 var certificate_issue1 = require("../core/certificate_issue");
 var getBuildings_web = require("../core/getBuildings_web");
+var Adminmap = require("../core/Adminmap.js");
+var Adminmapactive = require ("../core/Adminmap.js");
+
 var ip = require("ip");
 var emailotpfun = require("../utils/spsaemail");
 var otpfun = require("../utils/otp.js");
@@ -94,6 +97,7 @@ var payment = require("../core/payment");
 let salama_order_details = require("../core/Company_profile");
 let Contactus_comments = require("../core/Appeal");
 const Contactus_feedback = require("../core/Appeal"),
+
   Cryptr = require("cryptr"),
   cryptr = new Cryptr("myTotalySecretKey"),
   nodemailer = require("nodemailer"),
@@ -2445,7 +2449,56 @@ router.post("/hr_details", cors(), function (req, res) {
       })
     );
 });
+//==========================Admin Map (InActive-Yellow)==============================================
+router.get("/AdminMap", cors(), (req, res) => {
+  //let data = req.body;
+  // let request = req.headers;
+  // console.log(data);
+  const token = req.headers.authorization;
+Adminmap.Adminmap(token)
+    .then(result => {
+      console.log(result);
 
+      res.status(result.status).json({
+        message: result.result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+});
+//==============================Admin map( Active-Green)==========================================
+router.get("/AdminMapActive", cors(), (req, res) => {
+  //let data = req.body;
+  // let request = req.headers;
+  // console.log(data);
+  const token = req.headers.authorization;
+Adminmapactive.Adminmapactive(token)
+    .then(result => {
+      console.log(result);
+
+      res.status(result.status).json({
+        message: result.result
+      });
+    })
+    .catch(err =>
+      res
+        .status(err.status)
+        .json({
+          message: err.message
+        })
+        .json({
+          status: err.status
+        })
+    );
+});
 //========================================================================
 router.use("/download", express.static(path.join(__dirname, "../upload")));
 //===================================================================================
