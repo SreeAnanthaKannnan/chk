@@ -112,6 +112,7 @@ const {
   getInstaller,
   getMothlyInstallerDetails
 } = require("../daos/dashboardDetails");
+
 var file1;
 let date = require("date-and-time");
 let now = new Date();
@@ -2623,7 +2624,6 @@ router.post('/installers_dashboard', cors(), async (req, res) => {
     });
   }
 
-
 });
 
 router.get('/installers_dashboard_monthwise', async (req, res) => {
@@ -2721,5 +2721,122 @@ router.post("/adminFreeze", cors(), function (req, res) {
 });
 
 //=================================adminApproved=======================================
+//===================================allbuildings======================================================//
+router.get("/getavgBuildings", cors(), async function (req, res) {
+  admin
+    .getbuildings()
+    .then(result => {
+      res.send({
+        data: result.result,
 
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=================================== ildings======================================================//
+//=============Buildings DashBoard Details API =======//
+
+router.post('/buildings_dashboard', cors(), async (req, res) => {
+  var buildings_month = req.body
+  console.log("buildings==>index==>", buildings_month)
+  var token = req.headers.authorization
+  admin
+    .getbuildings_month(buildings_month, token)
+    .then(result => {
+      res.send({
+        result: result.res_data
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+
+});
+
+//===================================order avg======================================================//
+router.get("/getavgOrder", cors(), async function (req, res) {
+  admin
+    .getavgOrder()
+    .then(result => {
+      res.send({
+        data: result.result,
+
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=================================== order======================================================//
+
+
+//=============Buildings DashBoard Details API =======//
+
+router.post('/order_dashboard', cors(), async (req, res) => {
+  var order_month = req.body
+  console.log("order==>index==>", order_month)
+  var token = req.headers.authorization
+  admin
+    .getorder_month(order_month, token)
+    .then(result => {
+      res.send({
+        result: result.res_data
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+
+});
+
+//===================================allbuildings======================================================//
+//=============Buildings DashBoard Details API =======//
+
+router.post('/admin_month', cors(), async (req, res) => {
+  var adminmonth = req.body
+  console.log("order==>index==>", adminmonth)
+  var token = req.headers.authorization
+  admin
+    .getadmin_month(adminmonth, token)
+    .then(result => {
+      res.send({
+        result: result.res_data
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+
+});
+
+//===================================allbuildings======================================================//
+//===================================order avg======================================================//
+router.get("/getavgadmin", cors(), async function (req, res) {
+  admin
+    .getavgadmin()
+    .then(result => {
+      res.send({
+        data: result.result,
+
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=================================== order======================================================//
 module.exports = router;

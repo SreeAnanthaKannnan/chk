@@ -36,10 +36,142 @@ function adminapproved(
         }
     });
 }
+function getavgbuildings() {
+    return new Promise((resolve, reject) => {
+        mysqlConnection
+            .query_execute(query.getavgbuildings)
+            .then(function (result, err) {
 
+                if (err) {
+                    logger.fatal(err, "db error while getting building details from the building table")
+                    return reject({ "status": 400, "body": 'Cannot insert the data' })
+                }
+                else {
+                    return resolve({ status: 200, result: result.data });
+                }
+            })
+    })
+}
+function getavgorder() {
+    return new Promise((resolve, reject) => {
+        mysqlConnection
+            .query_execute(query.getavgorder)
+            .then(function (result, err) {
+
+                if (err) {
+                    logger.fatal(err, "db error while getting building details from the building table")
+                    return reject({ "status": 400, "body": 'Cannot insert the data' })
+                }
+                else {
+                    return resolve({ status: 200, result: result.data });
+                }
+            })
+    })
+}
+
+function getbuildingsmonth(buildingmonth, buildingyear) {
+    // const params = [date.startDate, date.toDate];
+    return new Promise(async function (resolve, reject) {
+        const response = [];
+        var res = await mysqlConnection.query_execute(
+            query.getbuildingsDetailsForDashBoard,
+            [buildingmonth, buildingyear]
+        );
+        console.log('data from sql', res);
+
+        if (res.status != 200) {
+            return reject({
+                status: res.status,
+                message: 'Cant able to fetch the data'
+            })
+        } else {
+            return resolve({
+                status: res.status,
+                data: res.data,
+            })
+        }
+
+
+    })
+}
+
+function getOrdersMonth(ordermonth, orderyear) {
+    // const params = [date.startDate, date.toDate];
+    return new Promise(async function (resolve, reject) {
+        const response = [];
+        var res = await mysqlConnection.query_execute(
+            query.getOrderDetailsForDashBoard,
+            [ordermonth, orderyear]
+        );
+        console.log('data from sql', res);
+
+        if (res.status != 200) {
+            return reject({
+                status: res.status,
+                message: 'Cant able to fetch the data'
+            })
+        } else {
+            return resolve({
+                status: res.status,
+                data: res.data,
+            })
+        }
+
+
+    })
+}
+
+function getadmin_month(adminmonth_list, adminyear) {
+    // const params = [date.startDate, date.toDate];
+    return new Promise(async function (resolve, reject) {
+        const response = [];
+        var res = await mysqlConnection.query_execute(
+            query.getadminDetailsseperateForDashBoard,
+            [adminmonth_list, adminyear]
+        );
+        console.log('data from sql', res);
+
+        if (res.status != 200) {
+            return reject({
+                status: res.status,
+                message: 'Cant able to fetch the data'
+            })
+        } else {
+            return resolve({
+                status: res.status,
+                data: res.data,
+            })
+        }
+
+
+    })
+}
+function getavgadmin() {
+    return new Promise((resolve, reject) => {
+        mysqlConnection
+            .query_execute(query.getavgadmin)
+            .then(function (result, err) {
+
+                if (err) {
+                    logger.fatal(err, "db error while getting building details from the building table")
+                    return reject({ "status": 400, "body": 'Cannot insert the data' })
+                }
+                else {
+                    return resolve({ status: 200, result: result.data });
+                }
+            })
+    })
+}
 
 module.exports = {
 
-    adminapproved: adminapproved
+    adminapproved: adminapproved,
+    getavgbuildings: getavgbuildings,
+    getbuildingsmonth: getbuildingsmonth,
+    getavgorder: getavgorder,
+    getOrdersMonth: getOrdersMonth,
+    getadmin_month: getadmin_month,
+    getavgadmin: getavgadmin
+
 }
 //====================================================Code End==================================================================//
