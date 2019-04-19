@@ -38,7 +38,7 @@ function cregister(registerobject) {
       else {
         var otp1 = await otpfun.otpgen();
         var otp = otp1.otp
-       // logger.fatal("in core before mail")
+        // logger.fatal("in core before mail")
         await emailotpfun.emailotp(email_id, otp)
         var result = await registerform.insert_user(registerobject, otp)
         //logger.fatal(result, "inserted.......")
@@ -131,7 +131,7 @@ async function add_admin(add_admin) {
 
     var mobile_number = add_admin.mobile_number
     console.log("mobile_number", mobile_number)
-    var select_services = add_admin.select_services
+    var select_services = add_admin.select_services.value
     console.log("select_services", select_services)
     var email_id = add_admin.email_id
     console.log("email_id", email_id)
