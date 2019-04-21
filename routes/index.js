@@ -2839,4 +2839,44 @@ router.get("/getavgadmin", cors(), async function (req, res) {
     );
 });
 //=================================== order======================================================//
+//===================================order avg======================================================//
+router.get("/getapplicationstatistics", cors(), async function (req, res) {
+  admin
+    .getapplicationstatistics()
+    .then(result => {
+      res.send({
+        data: result.result,
+
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=================================== order======================================================//
+
+//=============Buildings DashBoard Details API =======//
+
+router.post('/application_statics_month', cors(), async (req, res) => {
+  var adminmonth = req.body
+  console.log("order==>index==>", adminmonth)
+  var token = req.headers.authorization
+  admin
+    .getadmin_month(adminmonth, token)
+    .then(result => {
+      res.send({
+        result: result.res_data
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+
+});
+
+//===================================allbuildings======================================================//
 module.exports = router;

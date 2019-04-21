@@ -131,7 +131,7 @@ async function add_admin(add_admin) {
 
     var mobile_number = add_admin.mobile_number
     console.log("mobile_number", mobile_number)
-    var select_services = add_admin.select_services.value
+    var select_services = add_admin.select_services
     console.log("select_services", select_services)
     var email_id = add_admin.email_id
     console.log("email_id", email_id)

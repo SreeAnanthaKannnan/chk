@@ -13,7 +13,8 @@ module.exports = {
     getavgOrder: getavgOrder,
     getorder_month: getorder_month,
     getadmin_month: getadmin_month,
-    getavgadmin: getavgadmin
+    getavgadmin: getavgadmin,
+    getapplicationstatistics: getapplicationstatistics
 };
 //===============Fetching the details from the Daos both building and schedule information=========================================//
 function adminapproveddetails(adminApproved, token) {
@@ -150,6 +151,21 @@ function getavgadmin() {
     return new Promise(async (resolve, reject) => {
 
         var result = await admindao.getavgadmin();
+        console.log("add", result);
+        resolve({
+            status: 200,
+            result: result.result,
+
+        })
+
+
+    })
+}
+function getapplicationstatistics() {
+
+    return new Promise(async (resolve, reject) => {
+
+        var result = await admindao.getavgstatistics();
         console.log("add", result);
         resolve({
             status: 200,
