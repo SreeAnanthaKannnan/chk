@@ -27,10 +27,22 @@ exports.payment_statusupdate_salama = (payment1, token) =>
      console.log(payment_callcenter_update,"verify=======<<<<<<<<")
      if(payment_callcenter_update.status ==400){
        return reject({
-         status:401,
+         status:400,
          message:"something went wrong"
        })
      }
+     else if (verifytoken.status == 405) {
+      console.log("core")
+      return resolve({
+          status: verifytoken.status,
+          message: verifytoken.message
+      })
+  } else if (verifytoken.status == 403) {
+      return resolve({
+          status: verifytoken.status,
+          message: verifytoken.message
+      })
+  }
      else{
          return resolve({
              status:200,

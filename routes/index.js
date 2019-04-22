@@ -342,8 +342,9 @@ router.post("/AddsingleBuilding", cors(), async function (req, res) {
 
 //===================================allbuildings======================================================//
 router.post("/allBuildings", cors(), async function (req, res) {
+  const token = req.headers.authorization;
   allBuildings
-    .getbuildings()
+    .getbuildings(token)
     .then(result => {
       res.send({
         result: [result],
@@ -362,12 +363,6 @@ router.post("/getBuildings", cors(), async function (req, res) {
 
   var id = await email.checkToken(req);
 
-  console.log(id);
-  if (id.status == 400 && id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
     var buildingobject = id.result;
     console.log(buildingobject, "data");
     getBuildings
@@ -383,7 +378,7 @@ router.post("/getBuildings", cors(), async function (req, res) {
           message: err.message
         })
       );
-  }
+  
 });
 router.post("/getBuildingsbymail", cors(), async function (req, res) {
   const token = req.headers.authorization;
@@ -406,15 +401,6 @@ router.post("/getBuildingsbymail", cors(), async function (req, res) {
 //=========================buildingwithpayment=============================================//
 router.post("/getBuildings_web", cors(), async function (req, res) {
   const token = req.headers.authorization;
-
-  var id = await email.checkToken(req);
-
-  console.log(id);
-  if (id.status == 400 && id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
     var buildingobject = req.body.orderid;
     console.log(buildingobject, "data");
     getBuildings_web
@@ -430,7 +416,6 @@ router.post("/getBuildings_web", cors(), async function (req, res) {
           message: err.message
         })
       );
-  }
 });
 
 router.post("/getBuildingspayment", cors(), async function (req, res) {
@@ -2517,7 +2502,9 @@ router.get("/AdminMapActive", cors(), (req, res) => {
 router.use("/download", express.static(path.join(__dirname, "../upload")));
 //===================================================================================
 router.post("/certificate_issue", cors(), async function (req, res) {
-  //const token = req.headers.authorization;
+  // const token = req.headers.authorization;
+  var token = req.headers.authorization;
+  console.log("token", token);
   var certificate_issue1 = req.body.national_id;
   var certificate_status_emp = req.body.certificate_status_emp;
   var result = req.body.result;
@@ -2526,7 +2513,7 @@ router.post("/certificate_issue", cors(), async function (req, res) {
   // const language = req.headers.language;
   console.log("front", req.body);
   certificate_issue
-    .certificate_issue(certificate_issue1, certificate_status_emp, result)
+    .certificate_issue(certificate_issue1, certificate_status_emp, result,token)
     .then(result => {
       res.send({
         result: result,

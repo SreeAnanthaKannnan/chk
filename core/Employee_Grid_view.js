@@ -9,48 +9,30 @@ let moment = require("moment");
 const language_detect = require("../utils/language_detect");
 const translate = require("../utils/translate");
 const fs = require("fs");
-
+const checktoken = require("../utils/checkToken")
 exports.Employee_grid_view = (
     token, language,
 ) =>
     new Promise(async (resolve, reject) => {
         console.log("language===>", language)
-        // console.log("email_id Employee grid===>")
-
-        /*============token validation===================*/
-        //console.log(token, "test");
-        //console.log("id==========>>>",id);
-        //let query = await SessionDao.Session_select(token);
-        // if (query.length == 0) {
-        //     resolve({
-        //         status: 402,
-        //         message: "Invalid token"
-        //     });
-        // }
-        // if (dd) {
-        //     /*===================Session validation======================*/
-        //     console.log(query[0].session_created_at);
-        //     let Name_ar, Name_en, query_value;
-        //     let now = new Date();
-
-        //     let Db_time = query[0].session_created_at;
-        //     let time_difference_minutes = await session_time.Session_time_difference(
-        //         Db_time,
-        //         now
-        //     );
-        //     console.log(time_difference_minutes, "session time difference");
-        //     if (time_difference_minutes <= "01:00") {
-        //         return resolve({
-        //             status: 403,
-        //             message: "session expired"
-        //         });
-        //     } else {
-
+        var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else {
         /*==================Checking whether employee already exists or not==============*/
         await Employee_profileDao.Employee_grid_view()
             //console.log("hello")
             .then(async function (result, err) {
                 console.log("result======>", result);
+               
                 if (result) {
 
 
@@ -61,10 +43,11 @@ exports.Employee_grid_view = (
                     });
                 }
 
-
+            
             })
+            
 
-
+        
 
 
 
@@ -79,7 +62,7 @@ exports.Employee_grid_view = (
 
 
 
-        // }
+         }
 
         // }
     });
