@@ -50,6 +50,20 @@ function getbuildings(buildingobject, token) {
 function getemployees(employeedetails, token) {
     console.log(employeedetails, "employeedetails");
     return new Promise(async (resolve, reject) => {
+            var verifytoken = await checktoken.checkToken(token)
+        if (verifytoken.status == 405) {
+            console.log("core")
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            })
+        } else if (verifytoken.status == 403) {
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            })
+        }
+else{
         var info = [];
         console.log("after");
         var result = await employee_details.employeedetails(employeedetails);
@@ -62,7 +76,7 @@ function getemployees(employeedetails, token) {
             status: 200,
             result: info
         })
-        //  }
+       }
 
     })
 }
