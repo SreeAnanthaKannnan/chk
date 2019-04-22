@@ -10,8 +10,9 @@ const logger = log4js.getLogger('SPSA_project');
 module.exports = {
     verify_user: verify_user,
     insert_user: insert_user,
-    owner_details_name:owner_details_name,
-    hr_details_name:hr_details_name
+    owner_details_name: owner_details_name,
+    hr_details_name: hr_details_name,
+    add_admin: add_admin
 
 }
 //Here verify the user already exits or not, if exits through error
@@ -23,8 +24,8 @@ function verify_user(registerobject) {
             .query_execute(query.getlogindetails, param)
             .then(function (result, err) {
                 if (err) {
-                    logger.fatal(err,"db error to verify the user while registering")
-                      return resolve({
+                    logger.fatal(err, "db error to verify the user while registering")
+                    return resolve({
                         status: 400,
                         err: err
                     });
@@ -43,54 +44,84 @@ function verify_user(registerobject) {
 function owner_details_name(employee_name, email_id) {
     return new Promise(async function (resolve, reject) {
         var param = [employee_name, email_id]
-        console.log("DAO_reg",param)
+        console.log("DAO_reg", param)
 
         // -----
         var res = await mysqlConnection.query_execute(
             query.getownerdetails,
             param
-          );
-          console.log("response", res)
-          if (res.data.errno) {
+        );
+        console.log("response", res)
+        if (res.data.errno) {
             return reject({
-              status: 400,
-              message: "something went wrong"
+                status: 400,
+                message: "something went wrong"
             });
-          } else {
-      console.log("result_dao===========>",res)
+        } else {
+            console.log("result_dao===========>", res)
             return resolve({
-              status: 200,
-              message: res
+                status: 200,
+                message: res
             });
-          }
-        });
-      }
+        }
+    });
+}
 //===================================================================================
 function hr_details_name(email_id) {
     return new Promise(async function (resolve, reject) {
         var param = [email_id]
-        console.log("DAO_reg",param)
+        console.log("DAO_reg", param)
 
         // -----
         var res = await mysqlConnection.query_execute(
             query.gethrdetails,
             param
-          );
-          console.log("response", res)
-          if (res.data.errno) {
+        );
+        console.log("response", res)
+        if (res.data.errno) {
             return reject({
-              status: 400,
-              message: "something went wrong"
+                status: 400,
+                message: "something went wrong"
             });
-          } else {
-      console.log("result_dao===========>",res)
+        } else {
+            console.log("result_dao===========>", res)
             return resolve({
-              status: 200,
-              message: res
+                status: 200,
+                message: res
             });
-          }
-        });
-      }
+        }
+    });
+}
+
+//===================================================================================
+function add_admin(select_query) {
+    return new Promise(async function (resolve, reject) {
+        var param = select_query
+        console.log("DAO_reg", param)
+
+        // -----
+        var res = await mysqlConnection.insert_query(
+            query.registeradmin,
+            param
+        );
+        console.log("response", res)
+        if (res.data.errno) {
+            return reject({
+                status: 400,
+                message: "something went wrong"
+            });
+        } else {
+            console.log("result_dao===========>", res)
+            return resolve({
+                status: 200,
+                message: "Detail saved sucessfully"
+            });
+        }
+    });
+}
+
+
+
 //if new user insert the data into DataBase
 function insert_user(registerobject, otp) {
     return new Promise(async function (resolve, reject) {
@@ -200,7 +231,7 @@ function insert_user(registerobject, otp) {
             .insert_query(query.resgister, params)
             .then(function (result, err) {
                 if (err) {
-                    logger.fatal(err,"db error while intering the data into the citizen table while registering")
+                    logger.fatal(err, "db error while intering the data into the citizen table while registering")
                     return resolve({
                         status: 400,
                         err: err

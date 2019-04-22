@@ -24,7 +24,8 @@ var express = require("express"),
 
 var con = require("../mysql_connection/dbConfig.js"),
   login = require("../core/login.js"),
-  feedback = require("../core/Feedback"),
+  admin = require("../core/admin"),
+  feedback = require("../core//Feedback"),
   cregister = require("../core/cregister.js"),
   history = require("../core/history"),
   building = require("../core/building"),
@@ -51,9 +52,9 @@ var con = require("../mysql_connection/dbConfig.js"),
   bc = require("../fabcar/javascript/invoke"),
   verify = require("../core/otpverify"),
   pdf = require("../core/pdf.js"),
-  pdf2=require("../core/pdf.js");
+  pdf2 = require("../core/pdf.js");
 let moment = require("moment"),
-   Appeal = require("../core/Appeal"),
+  Appeal = require("../core/Appeal"),
   Employee_profile = require("../core/Employee_profile"),
   safety_officer_details = require("../core/Employee_safetyofficer_profile_showup"),
   classroom = require("../core/Classroom"),
@@ -86,7 +87,7 @@ var payment_statusupdate_salama = require("../core/payment_statusupdate_salama")
 var certificate_issue1 = require("../core/certificate_issue");
 var getBuildings_web = require("../core/getBuildings_web");
 var Adminmap = require("../core/Adminmap.js");
-var Adminmapactive = require ("../core/Adminmap.js");
+var Adminmapactive = require("../core/Adminmap.js");
 
 var ip = require("ip");
 var emailotpfun = require("../utils/spsaemail");
@@ -97,7 +98,6 @@ var payment = require("../core/payment");
 let salama_order_details = require("../core/Company_profile");
 let Contactus_comments = require("../core/Appeal");
 const Contactus_feedback = require("../core/Appeal"),
-
   Cryptr = require("cryptr"),
   cryptr = new Cryptr("myTotalySecretKey"),
   nodemailer = require("nodemailer"),
@@ -108,6 +108,10 @@ const Contactus_feedback = require("../core/Appeal"),
 
 let ipAddress = ip.address();
 console.log("ips====>", ipAddress);
+const {
+  getInstaller,
+  getMothlyInstallerDetails
+} = require("../daos/dashboardDetails");
 
 var file1;
 let date = require("date-and-time");
@@ -198,22 +202,22 @@ router.post("/request_for_service", cors(), (req, res) => {
 //===================================getbuildings======================================================//
 router.post("/getEmployees", cors(), async function (req, res) {
   const token = req.headers.authorization;
-    var employeedetails = req.body.email;
-    console.log("data", employeedetails);
-    getBuildings
-      .getemployees(employeedetails, token)
-      .then(result => {
-        console.log("res_index", result);
-        res.send({
-          result: result,
-          message: "mock mock"
-        });
+  var employeedetails = req.body.email;
+  console.log("data", employeedetails);
+  getBuildings
+    .getemployees(employeedetails, token)
+    .then(result => {
+      console.log("res_index", result);
+      res.send({
+        result: result,
+        message: "mock mock"
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
       })
-      .catch(err =>
-        res.status(err.status).json({
-          message: err.message
-        })
-      );
+    );
 });
 //=========================citizen-registration-start===========================================
 router.post("/citizen-register", cors(), async function (req, res) {
@@ -294,48 +298,44 @@ router.post("/getdetails", cors(), async function(req, res) {
           result: result
         });
       })
-      .catch(err =>
-        res.status(err.status).json({
-          message: err.message
-        })
-      );
- });
+    
+});
 //=================================Appeal====================================================
-router.post("/getdetailsforkey", cors(), async function(req, res) {
+router.post("/getdetailsforkey", cors(), async function (req, res) {
   // const token = req.headers.authorization;
-       var email = req.body.email;
-     history
-       .getHistory1(email)
-       .then(result => {
-         res.send({
-           result: result
-         });
-       })
-       .catch(err =>
-         res.status(err.status).json({
-           message: err.message
-         })
-       );
-  });
+  var email = req.body.email;
+  history
+    .getHistory1(email)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
 //===================================addbuilding=============================================//
 router.post("/AddsingleBuilding", cors(), async function (req, res) {
   const token = req.headers.authorization;
-    var email_id = req.body.email;
-    var buildingobject = req.body;
-    building
-      .buildings(buildingobject, token, email_id)
-      .then(result => {
-        res.send({
-          result: result,
-          message: "Your Building Details added successfully"
-        });
+  var email_id = req.body.email;
+  var buildingobject = req.body;
+  building
+    .buildings(buildingobject, token, email_id)
+    .then(result => {
+      res.send({
+        result: result,
+        message: "Your Building Details added successfully"
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
       })
-      .catch(err =>
-        res.status(err.status).json({
-          message: err.message
-        })
-      );
-  });
+    );
+});
 
 //===================================allbuildings======================================================//
 router.post("/allBuildings", cors(), async function (req, res) {
@@ -584,22 +584,22 @@ router.post("/image_upload", uploads.single("file"), function (req, res) {
   });
 });
 //==============================Booking-History============================================//
-router.post("/serviceHistory", cors(), async function(req, res) {
-   const token = req.headers.authorization;
-     var email_id = req.body.email;
-    book
-      .bookservice(email_id, token)
-      .then(result => {
-        res.send({
-          result: result
-        });
+router.post("/serviceHistory", cors(), async function (req, res) {
+  const token = req.headers.authorization;
+  var email_id = req.body.email;
+  book
+    .bookservice(email_id, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
       })
-      .catch(err =>
-        res.status(err.status).json({
-          message: err.message
-        })
-      );
-  });
+    );
+});
 //==============================================================================================
 router.post("/Assessment", cors(), async function (req, res) {
   console.log(req.body);
@@ -850,7 +850,6 @@ router.post("/update_installation", cors(), async function (req, res) {
       });
     })
     .catch(err =>
-
       res.status(err.status).json({
         message: err.message
       })
@@ -931,132 +930,148 @@ router.post("/schedules", cors(), async function (req, res) {
 });
 //============================================convert pdf===================================================//
 
-router.post('/Convert_Pdf', cors(), async function (req, res) {
+router.post("/Convert_Pdf", cors(), async function (req, res) {
   //var flag=0;
-  let checked1=req.body.SelectedValues1;
-  let checked2=req.body.SelectedValues2;
-  let checked3=req.body.SelectedValues3;
-  let checked4=req.body.SelectedValues4;
-  let checked5=req.body.SelectedValues5;
-  let checked6=req.body.SelectedValues6;
-  let checked7=req.body.SelectedValues7;
-  let checked8=req.body.SelectedValues8;
-  let checked9=req.body.SelectedValues9;
-  let checked10=req.body.SelectedValues10;
-  let email=req.body.email;
-  let flag=0;
- // let checked3=req.body.SelectedValues3;
-  if(checked1=="yes"){
-     var yesvalue1="checked";
-     var novalue1="unchecked";
-      
+  let checked1 = req.body.SelectedValues1;
+  let checked2 = req.body.SelectedValues2;
+  let checked3 = req.body.SelectedValues3;
+  let checked4 = req.body.SelectedValues4;
+  let checked5 = req.body.SelectedValues5;
+  let checked6 = req.body.SelectedValues6;
+  let checked7 = req.body.SelectedValues7;
+  let checked8 = req.body.SelectedValues8;
+  let checked9 = req.body.SelectedValues9;
+  let checked10 = req.body.SelectedValues10;
+  let email = req.body.email;
+  let flag = 0;
+  // let checked3=req.body.SelectedValues3;
+  if (checked1 == "yes") {
+    var yesvalue1 = "checked";
+    var novalue1 = "unchecked";
+  } else {
+    var yesvalue1 = "unchecked";
+    var novalue1 = "checked";
+    flag = 1;
   }
-  else{
-      var yesvalue1="unchecked";
-      var novalue1="checked";
-      flag=1
+  if (checked2 == "yes") {
+    var yesvalue2 = "checked";
+    var novalue2 = "unchecked";
+  } else {
+    var yesvalue2 = "unchecked";
+    var novalue2 = "checked";
+    flag = 1;
+  }
+  if (checked3 == "yes") {
+    var yesvalue3 = "checked";
+    var novalue3 = "unchecked";
+  } else {
+    var yesvalue3 = "unchecked";
+    var novalue3 = "checked";
+    flag = 1;
+  }
+  if (checked4 == "yes") {
+    var yesvalue4 = "checked";
+    var novalue4 = "unchecked";
+  } else {
+    var yesvalue4 = "unchecked";
+    var novalue4 = "checked";
+    flag = 1;
+  }
+  if (checked5 == "yes") {
+    var yesvalue5 = "checked";
+    var novalue5 = "unchecked";
+  } else {
+    var yesvalue5 = "unchecked";
+    var novalue5 = "checked";
+    flag = 1;
+  }
+  if (checked6 == "yes") {
+    var yesvalue6 = "checked";
+    var novalue6 = "unchecked";
+  } else {
+    var yesvalue6 = "unchecked";
+    var novalue6 = "checked";
+    flag = 1;
+  }
+  if (checked7 == "yes") {
+    var yesvalue7 = "checked";
+    var novalue7 = "unchecked";
+  } else {
+    var yesvalue7 = "unchecked";
+    var novalue7 = "checked";
+    flag = 1;
+  }
+  if (checked8 == "yes") {
+    var yesvalue8 = "checked";
+    var novalue8 = "unchecked";
+  } else {
+    var yesvalue8 = "unchecked";
+    var novalue8 = "checked";
+    flag = 1;
+  }
+  if (checked9 == "yes") {
+    var yesvalue9 = "checked";
+    var novalue9 = "unchecked";
+  } else {
+    var yesvalue9 = "unchecked";
+    var novalue9 = "checked";
+    flag = 1;
+  }
+  if (checked10 == "yes") {
+    var yesvalue10 = "checked";
+    var novalue10 = "unchecked";
+  } else {
+    var yesvalue10 = "unchecked";
+    var novalue10 = "checked";
+    flag = 1;
+  }
+  //    var yesvalue3="checked";
+  console.log(checked10, "jdfdkljd");
 
-  }
-  if(checked2=="yes"){
-     var yesvalue2="checked";
-     var novalue2="unchecked";
-      
-  }
-  else{
-    var yesvalue2="unchecked";
-    var novalue2="checked";
-      flag=1
-  }
-  if(checked3=="yes"){
-     var yesvalue3="checked";
-   var novalue3="unchecked"
-     
-  }
-  else{
-    var yesvalue3="unchecked";
-    var novalue3="checked";
-      flag=1
-  }
-  if(checked4=="yes"){
-      var yesvalue4="checked";
-      var novalue4="unchecked"
-  }
-  else{
-    var yesvalue4="unchecked";
-    var novalue4="checked";
-      flag=1
-  }
-  if(checked5=="yes"){
-      var yesvalue5="checked";
-      var novalue5="unchecked"
-  }
-  else{
-    var yesvalue5="unchecked";
-    var novalue5="checked";
-      flag=1;
-  }
-  if(checked6=="yes"){
-      var yesvalue6="checked";
-      var novalue6="unchecked"
-  }
-  else{
-    var yesvalue6="unchecked";
-    var novalue6="checked";
-      flag=1;
-  }
-  if(checked7=="yes"){
-      var yesvalue7="checked";
-      var novalue7="unchecked"
-  }
-  else{
-    var yesvalue7="unchecked";
-    var novalue7="checked";
-      flag=1;
-  }
-  if(checked8=="yes"){
-      var yesvalue8="checked";
-       var novalue8="unchecked"
-  }
-  else{
-    var yesvalue8="unchecked";
-    var novalue8="checked";
-      flag=1;
-  }
-  if(checked9=="yes"){
-      var yesvalue9="checked";
-      var novalue9="unchecked"
-
-  }
-  else{
-    var yesvalue9="unchecked";
-    var novalue9="checked";
-      flag=1
-  }
-  if(checked10=="yes"){
-    var yesvalue10="checked";
-    var novalue10="unchecked"
-
-}
-else{
-  var yesvalue10="unchecked";
-  var novalue10="checked";
-    flag=1
-}
-//    var yesvalue3="checked";
-console.log(checked10,"jdfdkljd")
-
- console.log("in 781",flag);
+  console.log("in 781", flag);
   //console.log("All data===00000==>>", checked1,checked2,checked3);
 
-  pdf.Pdf(yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,yesvalue10,novalue10,email,checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,checked10)
-    // pdf.mail(email)
-    // pdf2.citizendao(checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,email)
+  pdf.Pdf(
+    yesvalue1,
+    novalue1,
+    yesvalue2,
+    novalue2,
+    yesvalue3,
+    novalue3,
+    yesvalue4,
+    novalue4,
+    yesvalue5,
+    novalue5,
+    yesvalue6,
+    novalue6,
+    yesvalue7,
+    novalue7,
+    yesvalue8,
+    novalue8,
+    yesvalue9,
+    novalue9,
+    yesvalue10,
+    novalue10,
+    email,
+    checked1,
+    checked2,
+    checked3,
+    checked4,
+    checked5,
+    checked6,
+    checked7,
+    checked8,
+    checked9,
+    checked10
+  );
+  // pdf.mail(email)
+  // pdf2.citizendao(checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,email)
 
-     res.send({
-         "message":"success",
-         flag:flag
-     })
-})
+  res.send({
+    message: "success",
+    flag: flag
+  });
+});
 //=========================================pdfviewer=============================================
 
 router.post("/pdfviewer", cors(), async function (req, res) {
@@ -1082,23 +1097,25 @@ router.post("/pdfviewer", cors(), async function (req, res) {
     );
 });
 //================================installationdetails=================================//
-router.post('/installationdetails', cors(), function (req, res) {
+router.post("/installationdetails", cors(), function (req, res) {
   var installation = req.body;
   // var email=req.body.email;
   console.log(installation, "installation");
-  update.update(installation)
+  update
+    .update(installation)
     .then(result => {
       res.send({
-        result: result,
-
-      })
+        result: result
+      });
     })
-    .catch(err => res.status(err.status).json({
-      message: err.message
-    }))
-})
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
 //==================================bulkschedules============================================//
-router.post("/BulkSchedules", cors(), async function(req, res) {
+router.post("/BulkSchedules", cors(), async function (req, res) {
   const token = req.headers.authorization;
   console.log(req.body);
   var schedules = req.body;
@@ -1123,15 +1140,15 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
         message: verifytoken.message
       });
     } else {
-      var getorder = await buildingDao.order_id_select_aman()
-      console.log(getorder,"getorder");
-      console.log(getorder.result.data[0], "order_id_select=====>")
-      var orderid1 = getorder.result.data[0].num
-      var orderid2 = getorder.result.data[1].num
-      console.log(orderid1,orderid2,"1 and 2");
-      var orderid = Math.max(orderid1,orderid2)
-      console.log(orderid, "ORDER")
-      console.log(orderid == "null")
+      var getorder = await buildingDao.order_id_select_aman();
+      console.log(getorder, "getorder");
+      console.log(getorder.result.data[0], "order_id_select=====>");
+      var orderid1 = getorder.result.data[0].num;
+      var orderid2 = getorder.result.data[1].num;
+      console.log(orderid1, orderid2, "1 and 2");
+      var orderid = Math.max(orderid1, orderid2);
+      console.log(orderid, "ORDER");
+      console.log(orderid == "null");
       if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {
           orderid = "A0001"
       }
@@ -1167,7 +1184,7 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
           rdate,
           schedules.schedule[i].building_id,
           orderid
-          );
+        );
       }
       res.send({
         status: 200,
@@ -1192,7 +1209,7 @@ router.post("/blockchain", cors(), async function(req, res) {
   var params = {
     id: req.body.key,
     fun: "create",
-    data:data
+    data: data
   };
 
   bc.main(params)
@@ -1395,9 +1412,7 @@ router.post(
   (req, res) => {
     const EmployeeProfile = req.headers;
     console.log(EmployeeProfile);
-    Employee_profile.Employee_profile(
-      EmployeeProfile
-         )
+    Employee_profile.Employee_profile(EmployeeProfile)
       .then(result => {
         console.log(result);
 
@@ -2412,8 +2427,8 @@ router.post("/session_close", cors(), async function (req, res) {
 router.post("/owner_details", cors(), function (req, res) {
   var owner_details = req.body;
   console.log("owner_details", owner_details);
-  var token = req.headers.authorization
-  console.log("token", token)
+  var token = req.headers.authorization;
+  console.log("token", token);
   cregister
     .owner_details(owner_details, token)
     .then(result => {
@@ -2431,8 +2446,8 @@ router.post("/owner_details", cors(), function (req, res) {
 router.post("/hr_details", cors(), function (req, res) {
   var hr_details = req.body;
 
-  var token = req.headers.authorization
-  console.log("token", token)
+  var token = req.headers.authorization;
+  console.log("token", token);
   cregister
     .hr_details(hr_details, token)
     .then(result => {
@@ -2451,8 +2466,8 @@ router.get("/AdminMap", cors(), (req, res) => {
   //let data = req.body;
   // let request = req.headers;
   // console.log(data);
-  const token = req.headers.authorization;
-Adminmap.Adminmap(token)
+  // const token = req.headers.authorization;
+  Adminmap.Adminmap()
     .then(result => {
       console.log(result);
 
@@ -2473,8 +2488,11 @@ Adminmap.Adminmap(token)
 });
 //==============================Admin map( Active-Green)==========================================
 router.get("/AdminMapActive", cors(), (req, res) => {
-  const token = req.headers.authorization;
-Adminmapactive.Adminmapactive(token)
+  //let data = req.body;
+  // let request = req.headers;
+  // console.log(data);
+  // const token = req.headers.authorization;
+  Adminmapactive.Adminmapactive()
     .then(result => {
       console.log(result);
 
@@ -2519,4 +2537,344 @@ router.post("/certificate_issue", cors(), async function (req, res) {
       })
     );
 });
+//=============Installers DashBoard Details API =======//
+
+router.post("/installers_dashboard", cors(), async (req, res) => {
+  const result = await getInstaller(req.body);
+  console.log(result[0].data);
+  if (result[0].status != 200) {
+    res.status(400).json({
+      status: 400,
+      message: "Data Cant Fetch"
+    });
+  } else {
+    console.log("active_installer:", result[0].data[0].active_installers);
+    console.log("total_installers:", result[0].data[0].total_installers);
+
+    res.status(200).json({
+      status: 200,
+      active_installer: result[0].data[0].active_installers,
+      total_installers: result[0].data[0].total_installers
+    });
+  }
+});
+
+//=============================================================================
+router.post("/addAdmin", cors(), function (req, res) {
+  var add_admin = req.body;
+  console.log("add_admin", add_admin)
+
+  cregister
+    .add_admin(add_admin)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//========================================================================
+//=============================================================================
+router.post("/getinstalleremployees", cors(), function (req, res) {
+  var installer_employees = req.body;
+  console.log("installer_employees", installer_employees)
+  var token = req.headers.authorization
+  console.log("token", token)
+  login
+    .getinstallereployees(installer_employees, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//========================================================================
+
+//=============Installers DashBoard Details API =======//
+
+router.post('/installers_dashboard', cors(), async (req, res) => {
+  const result = await getInstaller(req.body);
+  console.log(result[0].data);
+  if (result[0].status != 200) {
+    res.status(400).json({
+      status: 400,
+      message: 'Data Cant Fetch'
+    });
+  } else {
+    console.log("active_installer:", result[0].data[0].active_installers);
+    console.log("total_installers:", result[0].data[0].total_installers);
+
+    res.status(200).json({
+      status: 200,
+      active_installer: result[0].data[0].active_installers,
+      total_installers: result[0].data[0].total_installers,
+    });
+  }
+
+});
+
+router.get('/installers_dashboard_monthwise', async (req, res) => {
+
+  const installer = await getMothlyInstallerDetails();
+  console.log(installer[0].data);
+  const installerDetails = [];
+  installer[0].data.map(tr => {
+    installerDetails.push({
+      active_installers: tr.active_installers,
+      total_installers: tr.total_installers,
+      month: tr.month,
+      year: tr.year
+    });
+  });
+  if (installer[0].status != 200) {
+    res.status(400).json({
+      status: 400,
+      message: "Data Cant Fetch"
+    });
+  } else {
+    console.log("active_installer:", installer[0].data[0].active_installers);
+    console.log("total_installers:", installer[0].data[0].total_installers);
+    res.status(200).json({
+      status: 200,
+      installerDetails: installerDetails
+    });
+  }
+
+
+})
+
+//=============Installers DashBoard Details API =======//
+
+//=============================adminApproved================================================
+router.post("/adminApproved", cors(), function (req, res) {
+  var adminApproved = req.body;
+  console.log("adminApproved", adminApproved)
+  var token = req.headers.authorization
+  console.log("token", token)
+  admin
+    .adminapproveddetails(adminApproved, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//=================================adminApproved=======================================
+//=============================adminApproved================================================
+router.post("/adminReject", cors(), function (req, res) {
+  var adminReject = req.body;
+  console.log("adminReject", adminReject)
+  var token = req.headers.authorization
+  console.log("token", token)
+  admin
+    .adminRejectdetails(adminReject, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//=================================adminApproved=======================================
+//=============================adminApproved================================================
+router.post("/adminFreeze", cors(), function (req, res) {
+  var adminFreeze = req.body;
+  console.log("adminFreeze", adminFreeze)
+  var token = req.headers.authorization
+  console.log("token", token)
+  admin
+    .adminFreezedetails(adminFreeze, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+
+//=================================adminApproved=======================================
+//===================================allbuildings======================================================//
+router.get("/getavgBuildings", cors(), async function (req, res) {
+  admin
+    .getbuildings()
+    .then(result => {
+      res.send({
+        data: result.result,
+
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=================================== ildings======================================================//
+//=============Buildings DashBoard Details API =======//
+
+router.post('/buildings_dashboard', cors(), async (req, res) => {
+  var buildings_month = req.body
+  console.log("buildings==>index==>", buildings_month)
+  var token = req.headers.authorization
+  admin
+    .getbuildings_month(buildings_month, token)
+    .then(result => {
+      res.send({
+        result: result.res_data
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+
+});
+
+//===================================order avg======================================================//
+router.get("/getavgOrder", cors(), async function (req, res) {
+  admin
+    .getavgOrder()
+    .then(result => {
+      res.send({
+        data: result.result,
+
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=================================== order======================================================//
+
+
+//=============Buildings DashBoard Details API =======//
+
+router.post('/order_dashboard', cors(), async (req, res) => {
+  var order_month = req.body
+  console.log("order==>index==>", order_month)
+  var token = req.headers.authorization
+  admin
+    .getorder_month(order_month, token)
+    .then(result => {
+      res.send({
+        result: result.res_data
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+
+});
+
+//===================================allbuildings======================================================//
+//=============Buildings DashBoard Details API =======//
+
+router.post('/admin_month', cors(), async (req, res) => {
+  var adminmonth = req.body
+  console.log("order==>index==>", adminmonth)
+  var token = req.headers.authorization
+  admin
+    .getadmin_month(adminmonth, token)
+    .then(result => {
+      res.send({
+        result: result.res_data
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+
+});
+
+//===================================allbuildings======================================================//
+//===================================order avg======================================================//
+router.get("/getavgadmin", cors(), async function (req, res) {
+  admin
+    .getavgadmin()
+    .then(result => {
+      res.send({
+        data: result.result,
+
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=================================== order======================================================//
+//===================================order avg======================================================//
+router.get("/getapplicationstatistics", cors(), async function (req, res) {
+  admin
+    .getapplicationstatistics()
+    .then(result => {
+      res.send({
+        data: result.result,
+
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=================================== order======================================================//
+
+//=============Buildings DashBoard Details API =======//
+
+router.post('/application_statics_month', cors(), async (req, res) => {
+  var adminmonth = req.body
+  console.log("order==>index==>", adminmonth)
+  var token = req.headers.authorization
+  admin
+    .getadmin_month(adminmonth, token)
+    .then(result => {
+      res.send({
+        result: result.res_data
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+
+});
+
+//===================================allbuildings======================================================//
 module.exports = router;

@@ -189,7 +189,7 @@ function upload_aman_web(filename, token, email_id) {
                                 throw error;
                             } else if (data.length != 0) {
                                 console.log("length", data.length);
-                                var count = data.length-1;
+                                var count = data.length - 1;
                                 for (i = 1; i < data.length; i++) {
                                     console.log("data_select.......", data[i]);
 
@@ -218,15 +218,15 @@ function upload_aman_web(filename, token, email_id) {
                                     //     })
                                     // }
                                     // else {
-                                        data[i]["email_id"] = email_id;
-                                        var datecreated = dateFormat("yyyy-mm-dd");
-                                        data[i].datecreated = datecreated;
-                                        var test = Object.values(data[i]);
+                                    data[i]["email_id"] = email_id;
+                                    var datecreated = dateFormat("yyyy-mm-dd");
+                                    data[i].datecreated = datecreated;
+                                    var test = Object.values(data[i]);
 
-                                        console.log("test..........", test);
-                                        var insert_employee = await uploaddao.Building_insert(
-                                            test
-                                        );
+                                    console.log("test..........", test);
+                                    var insert_employee = await uploaddao.Building_insert(
+                                        test
+                                    );
 
 
                                     //}
