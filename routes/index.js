@@ -285,9 +285,10 @@ router.post("/emailotpverification1", cors(), function (req, res) {
 //========================================citizen-registration-end=====================================
 router.post("/getdetails", cors(), async function(req, res) {
  // const token = req.headers.authorization;
-      var email = req.body.email;
+      var object = req.body;
+      console.log(object,"object");
     history
-      .getHistory(email)
+      .getHistory(object)
       .then(result => {
         res.send({
           result: result
@@ -1136,8 +1137,6 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
       }
       else {
           console.log(orderid, "inside the loop")
-
-          // orderid = Number(orderid) + 1
           console.log("orderid" + orderid)
           orderid = orderid + 1;
           console.log("orderid=====>" + orderid)
@@ -1178,20 +1177,20 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
     }
   }
 });
-//=============================Blockchain-API's============================================
+//=============================Blockchain-API's============================================//
 router.post("/blockchain", cors(), async function(req, res) {
   // var transaction = {
   //   name: "ajay",
   //   address: "kerala"
   // };
-  var transaction = req.body.transaction;
+  var Buildingdetails = req.body.Buildingdetails;
   var name= req.body.name;
   var data ={
     name:name,
-    transaction:transaction
+    Buildingdetails:Buildingdetails
   }
   var params = {
-    id: req.body.email,
+    id: req.body.key,
     fun: "create",
     data:data
   };
@@ -2371,9 +2370,7 @@ router.post("/certificate_issue1", cors(), async function (req, res) {
       })
     );
 });
-//=============================================
-
-//====================================================
+//===================================================================================
 router.post("/Payment_salama", cors(), async function (req, res) {
   const token = req.headers.authorization;
   var payment1 = req.body;
@@ -2442,7 +2439,7 @@ router.post("/hr_details", cors(), function (req, res) {
       res.send({
         result: result
       });
-    })
+    })    
     .catch(err =>
       res.status(err.status).json({
         message: err.message
@@ -2476,9 +2473,6 @@ Adminmap.Adminmap(token)
 });
 //==============================Admin map( Active-Green)==========================================
 router.get("/AdminMapActive", cors(), (req, res) => {
-  //let data = req.body;
-  // let request = req.headers;
-  // console.log(data);
   const token = req.headers.authorization;
 Adminmapactive.Adminmapactive(token)
     .then(result => {
