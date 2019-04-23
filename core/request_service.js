@@ -96,11 +96,12 @@ function request_service(filepath, filename, token) {
                     console.log("data", data[i]);
                     national_id_array.push(data[i]["Emirates ID"]);
                   }
-                  var employeeprofile = await Employee_profileDao.order_id_select();
-                  console.log(employeeprofile);
-                  if (employeeprofile.result.data != 0) {
-                    console.log(employeeprofile.result.data[0]);
-                    var order_id = employeeprofile.result.data[0].num;
+                  Employee_profileDao.order_id_select()
+                
+                  .then(async function (result) 
+                  {
+                    console.log(result.result.data[0]);
+                    var order_id = result.result.data[0].num;
                     var order_array = [];
 
                     console.log(order_id, "ORDER");
@@ -128,10 +129,24 @@ function request_service(filepath, filename, token) {
                     }
 
                     console.log(national_id_array, "=======>national_id_array");
+                    var res = await Employee_profileDao.emirates(national_id_array[0])
+                    console.log(res.message[0].order_id,"in 133")
+                        if(res.message[0].order_id=="NoInterest" || res.message[0].order_id=="null" || res.message[0].order_id=="NULL")
+                    {
+
                     await Employee_profileDao.update_order_id(
                       order_id,
                       national_id_array
                     );
+                    }
+                    else{
+                      return resolve({
+                        // statuscode: "E08",
+                        status: 400,
+                        message: "Already order raised"
+                      });
+
+                    }
                     return resolve({
                       // statuscode: "E08",
                       status: 200,
@@ -141,21 +156,23 @@ function request_service(filepath, filename, token) {
                     });
 
                     //}
-                  } else {
-                    var err = {
-                      status: 400,
-                      message: err
-                    };
-                    return resolve(err);
-                  }
-                  /*=========Error Capturing===========*/
-
-                  // .catch(async function(err) {
-                  //   return resolve({
+                  } )
+                  // else {
+                  //   var err = {
                   //     status: 400,
                   //     message: err
-                  //   });
-                  // });
+                  //   };
+                  //   return resolve(err);
+                  // }
+                  /*=========Error Capturing===========*/
+
+                  .catch(async function(err) {
+                    return resolve({
+                      status: 400,
+                      message: err
+                    });
+                  })
+                
                 }
               }
             } else if (y == "قائمة الموظفين ") {
@@ -245,10 +262,23 @@ function request_service(filepath, filename, token) {
                       //   order_id += possible.charAt(Math.floor(Math.random() * possible.length));
                       // console.log("order_id" + order_id);
                       //console.log(national_id_array, "=======>national_id_array")
+                      var res = await Employee_profileDao.emirates(national_id_array[1])
+                      console.log(res,"in 266")
+                          if(res.message[0].order_id=="NoInterest" || res.message[0].order_id=="null" || res.message[0].order_id=="NULL")
+                      {
                       await Employee_profileDao.update_order_id(
                         order_id,
                         national_id_array
                       );
+                      }
+                      else{
+                        return resolve({
+                          // statuscode: "E08",
+                          status: 400,
+                          message: "طلب مرفوع بالفعل"
+                        });
+  
+                      }
                       return resolve({
                         // statuscode: "E08",
                         status: 200,
