@@ -21,18 +21,12 @@ function getbuildings(buildingobject, token) {
                 message: verifytoken.message
             })
         }
-        // passing values to Dao to store the Building details
         else {
             var info = [];
             console.log("after");
-
             var result = await buildings.buildings(buildingobject);
-            // console.log()
-            // var first = address.split("||")
             console.log(result, "result in 34")
-            //console.log(length,"result in 35")
-            // var result1 = await buildings.phone(buildingobject);
-            for (var i = 0; i < result.result.length; i++) {
+           for (var i = 0; i < result.result.length; i++) {
                 console.log("in loop");
                 var first = result.result[i].address.split("||");
                 var Building_No = first[0];
@@ -46,16 +40,11 @@ function getbuildings(buildingobject, token) {
                 delete result.result[i]["address"];
             }
             console.log("result", result);
-
-            // logger.fatal("result1", result1);
             info.push(result);
         }
-        // info.push(result1.result[0].mobile_number);
         resolve({
             status: 200,
             result: info
         })
-
-
     })
 }
