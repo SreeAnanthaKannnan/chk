@@ -137,8 +137,17 @@ function upload_salama_web(
                     // params[0][7]=params[0][8]
                     // console.log(params[0][8],"paramsss [8}")
                     //  params[0][8]="NO"
+                    var fname=(data[i]["First Name"])
+                    var lname=(data[i]["Last Name"])
+                    if(fname==undefined || lname==undefined|| fname=="" || lname==""){
+                      var name_en=data[i]["First Name"] + "||" + "";
+                      var name_en=data[i][""+"||"+""]
+                    }
+                    else{
                     var name_en =
                       data[i]["First Name"] + "||" + data[i]["Last Name"];
+
+                    }
                     var name_arabic = await translate.translate_ar(name_en);
                     name_ar = name_arabic.result;
 
