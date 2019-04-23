@@ -300,10 +300,13 @@ module.exports.getbuildingsDetailsForDashBoard =
 module.exports.getavgorder =
   "SELECT round(avg(order_received)) as order_received,round(avg(order_closed)) as order_closed,round(avg(order_pending_closure)) as order_pending_closure,ROUND(avg(call_center)) as call_center, ROUND(avg(self_booking)) as self_booking,ROUND(avg(bulk)) as bulk,ROUND(avg(single_booking)) as single_booking  from SHARJAH.order_details";
 module.exports.getOrderDetailsForDashBoard =
-  "select ROUND(avg(order_recieved)) as order_recieved, ROUND(avg(order_closed)) as order_closed,ROUND(avg(order_pending_closure)) as order_pending_closure ,ROUND(avg(call_center)) as call_center, ROUND(avg(self_booking)) as self_booking,ROUND(avg(bulk)) as bulk,ROUND(avg(single_booking)) as single_booking from order_view where month = ? and year = ?";
+  "select ROUND(avg(order_recieved)) as order_recieved, ROUND(avg(order_closed)) as order_closed,ROUND(avg(order_pending_closure)) as order_pending_closure ,ROUND(avg(call_center)) as call_center, ROUND(avg(self_booking)) as self_booking,ROUND(avg(bulk)) as bulk,ROUND(avg(single_booking)) as single_booking from order_details where month = ? and year = ?";
 module.exports.getavgadmin =
   "select Format(sum(Revenue),'##,##0') as Revenue ,sum(Revenue) as Revenue_amount ,sum(order_to_close) as order_to_close,sum(project_demand) as project_demand,month, year from SHARJAH.vw_admin group by month,year;";
 module.exports.getadminDetailsseperateForDashBoard =
   "select ROUND(avg(Revenue)) as Revenue,ROUND(avg(order_to_close)) as order_to_close,ROUND(avg(project_demand)) as project_demand from vw_admin where month = ? and year = ?";
 module.exports.getavgstatistics =
   "SELECT * FROM SHARJAH.tbl_application_statistics;";
+
+module.exports.getTopPerfomerOfTheMonth =
+  "select installer,sum(number_of_installations) from vw_top_performents where month = ? and year = ? group by installer,number_of_installations order by number_of_installations desc limit 3";

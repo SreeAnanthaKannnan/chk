@@ -16,6 +16,20 @@ function certificate_issue(certificate_issue1,certificate_status_emp,result, tok
     logger.fatal(certificate_issue1, "certificate_issue");
     console.log(certificate_status_emp,"certificate_status")
     return new Promise(async (resolve, reject) => {
+        var verifytoken = await checktoken.checkToken(token)
+        if (verifytoken.status == 405) {
+            console.log("core")
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            })
+        } else if (verifytoken.status == 403) {
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            })
+        }
+       else{
         var responseObj = {};
 
         {
@@ -35,7 +49,7 @@ function certificate_issue(certificate_issue1,certificate_status_emp,result, tok
                     responseObj.errors = [error];
                     responseObj.meta = {};
                 });
-        }
+        }}
     });
 
 }

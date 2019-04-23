@@ -11,10 +11,23 @@ module.exports = {
     getbuildings: getbuildings
 }
 
-function getbuildings() {
+function getbuildings(token) {
 
     return new Promise(async (resolve, reject) => {
-
+        var verifytoken = await checktoken.checkToken(token)
+        if (verifytoken.status == 405) {
+            console.log("core")
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            })
+        } else if (verifytoken.status == 403) {
+            return resolve({
+                status: verifytoken.status,
+                message: verifytoken.message
+            })
+        }
+        else{
         var result = await buildings.buildings();
         console.log("add", result);
         resolve({
@@ -22,7 +35,7 @@ function getbuildings() {
             result: result,
 
         })
-
+    }
 
     })
 }

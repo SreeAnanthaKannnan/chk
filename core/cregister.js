@@ -9,6 +9,7 @@ var log4js = require("log4js");
 const logger = log4js.getLogger("SPSA_project");
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("myTotalySecretKey");
+const checktoken = require("../utils/checkToken");
 let now = new Date();
 //Here the verification of user details
 function cregister(registerobject) {
@@ -53,61 +54,61 @@ async function owner_details(owner_details, token) {
   return new Promise(async (resolve, reject) => {
     console.log("enter in to core_reg");
     /*==========Token validation=================*/
-    // var verifytoken = await checktoken.checkToken(token);
-    // if (verifytoken.status == 405) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else if (verifytoken.status == 403) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else {
-    /* Fetching the trained employee's National Id from "Employee_profile" table who are all passed in the "Results" table */
-    var employee_name = owner_details.owner_name;
-    var email_id = owner_details.email_id;
-    console.log("employee_name_core====>>", employee_name);
-    let owner_details_details = await registerform.owner_details_name(
-      employee_name,
-      email_id
-    );
-    console.log("owner_details_details_core===>", owner_details_details);
-    return resolve({
-      status: 200,
-      message: owner_details_details
-    });
-    // }
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else {
+      /* Fetching the trained employee's National Id from "Employee_profile" table who are all passed in the "Results" table */
+      var employee_name = owner_details.owner_name;
+      var email_id = owner_details.email_id;
+      console.log("employee_name_core====>>", employee_name);
+      let owner_details_details = await registerform.owner_details_name(
+        employee_name,
+        email_id
+      );
+      console.log("owner_details_details_core===>", owner_details_details);
+      return resolve({
+        status: 200,
+        message: owner_details_details
+      });
+    }
   });
 }
 //============================================================================
 async function hr_details(hr_details, token) {
   return new Promise(async (resolve, reject) => {
     /*==========Token validation=================*/
-    // var verifytoken = await checktoken.checkToken(token);
-    // if (verifytoken.status == 405) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else if (verifytoken.status == 403) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else {
-    /* Fetching the trained employee's National Id from "Employee_profile" table who are all passed in the "Results" table */
-    //var employee_name=owner_details.owner_name
-    var email_id = hr_details.email_id;
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else {
+      /* Fetching the trained employee's National Id from "Employee_profile" table who are all passed in the "Results" table */
+      //var employee_name=owner_details.owner_name
+      var email_id = hr_details.email_id;
 
-    let hr_details_details = await registerform.hr_details_name(email_id);
+      let hr_details_details = await registerform.hr_details_name(email_id);
 
-    return resolve({
-      status: 200,
-      message: hr_details_details
-    });
-    // }
+      return resolve({
+        status: 200,
+        message: hr_details_details
+      });
+    }
   });
 }
 async function add_admin(add_admin) {
