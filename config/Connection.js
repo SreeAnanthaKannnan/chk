@@ -1,12 +1,7 @@
 const db = require("../mysql_connection/dbConfig");
-
-//console.log("db",db);
-
 var mysql = require("mysql");
 var config = require("config");
 var dbConfig = config.get("mysqlConnection");
-//var promises = require('es6-promise').Promise;
-
 exports.getConnection = () => {
   return new Promise(resolve => {
     var connection = mysql.createConnection(dbConfig);

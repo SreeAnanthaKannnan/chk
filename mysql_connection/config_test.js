@@ -1,12 +1,4 @@
 var mysql = require("mysql");
-// var config = require('config');
-// var dbConfig = config.get('mysqlConnection');
-//var promises = require('es6-promise').Promise;
-
-
-
-// const con = require("../mysql_connection/dbConfig");
-
 module.exports = mysql.createPool({
   connectionLimit: 100,
   host: '68.183.86.120',
