@@ -310,3 +310,6 @@ module.exports.getavgstatistics =
 
 module.exports.getTopPerfomerOfTheMonth =
   "select installer,sum(number_of_installations) from vw_top_performents where month = ? and year = ? group by installer,number_of_installations order by number_of_installations desc limit 3";
+
+module.exports.employeecheck=
+"select order_id from Employee_Profile where national_id=?";
