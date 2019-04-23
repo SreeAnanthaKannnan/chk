@@ -29,6 +29,29 @@ function Employee_insert(params) {
 
     });
 }
+function emirates(params) {
+    return new Promise(async function (resolve, reject) {
+        /*====================inserting employee's data into employee_Profile table========*/
+        var res1 = await mysqlConnection
+            .insert_query(query.employeecheck, params)
+        console.log(res1, "err===>")
+        /*==========db error capturing================*/
+        if (res1.data.errno) {
+            logger.fatal(res1.data.sqlMessage,"DB error while inserting employee data into the table")
+            return reject({
+                status: 400,
+                message: "something went wrong"
+            })
+        } else {
+             console.log(res1,"in 46 dao");
+            return resolve({
+                status: 200,
+                message: res1.data
+            });
+        }
+
+    });
+}
 /*====================Safety officer details show up==============================*/
 function Safety_officer_details(params) {
     return new Promise(async function (resolve, reject) {
@@ -644,7 +667,8 @@ module.exports = {
     employeedetails: employeedetails,
     not_interested: not_interested,
     order_id_select: order_id_select,
-    update_order_id: update_order_id
+    update_order_id: update_order_id,
+    emirates:emirates
 
 
 };
