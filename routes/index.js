@@ -1831,6 +1831,7 @@ router.post("/getCertificate", cors(), (request, response) => {
 });
 router.post("/request_for_service_aman", cors(), (req, res) => {
   console.log("enter into req for aman service");
+  const token = req.headers.authorization;
   var file_name = req.body.filename;
 
   var file1 = file_name;
@@ -1838,7 +1839,7 @@ router.post("/request_for_service_aman", cors(), (req, res) => {
   console.log(file_path, "filepath");
   var email_id = req.body.email;
   request_service_aman
-    .request_service_aman(file_path, email_id)
+    .request_service_aman(file_path, email_id,token)
     .then(result => {
       console.log(result);
       res.status(result.status).json({
