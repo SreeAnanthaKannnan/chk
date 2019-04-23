@@ -249,11 +249,9 @@ module.exports.findemployeeAttendance =
 /*=========selecting the distinct available date for the number of available seats greater then the selected seats and particular trainerid and course id=======*/
 module.exports.availabledate =
   "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
-
 module.exports.getcoursename =
   "SELECT course_name_en FROM Results where National_Id =?";
-
-module.exports.getinstallers =
+  module.exports.getinstallers =
   "SELECT email_id,countvalue FROM citizens WHERE countvalue = (SELECT MIN(countvalue) FROM citizens where user_type='installer')";
 module.exports.imagepdf = "UPDATE Schedules SET filepath =? WHERE id =?";
 module.exports.pdfviewer =

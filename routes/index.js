@@ -287,21 +287,18 @@ router.post("/emailotpverification1", cors(), function (req, res) {
     );
 });
 //========================================citizen-registration-end=====================================
-router.post("/getdetails", cors(), async function (req, res) {
-  // const token = req.headers.authorization;
-  var email = req.body.email;
-  history
-    .getHistory(email)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+router.post("/getdetails", cors(), async function(req, res) {
+ // const token = req.headers.authorization;
+      var object = req.body;
+      console.log(object,"object");
+    history
+      .getHistory(object)
+      .then(result => {
+        res.send({
+          result: result
+        });
       })
-    );
+    
 });
 //=================================Appeal====================================================
 router.post("/getdetailsforkey", cors(), async function (req, res) {
@@ -342,8 +339,9 @@ router.post("/AddsingleBuilding", cors(), async function (req, res) {
 
 //===================================allbuildings======================================================//
 router.post("/allBuildings", cors(), async function (req, res) {
+  const token = req.headers.authorization;
   allBuildings
-    .getbuildings()
+    .getbuildings(token)
     .then(result => {
       res.send({
         result: [result],
@@ -362,12 +360,6 @@ router.post("/getBuildings", cors(), async function (req, res) {
 
   var id = await email.checkToken(req);
 
-  console.log(id);
-  if (id.status == 400 && id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
     var buildingobject = id.result;
     console.log(buildingobject, "data");
     getBuildings
@@ -383,7 +375,7 @@ router.post("/getBuildings", cors(), async function (req, res) {
           message: err.message
         })
       );
-  }
+  
 });
 router.post("/getBuildingsbymail", cors(), async function (req, res) {
   const token = req.headers.authorization;
@@ -406,15 +398,6 @@ router.post("/getBuildingsbymail", cors(), async function (req, res) {
 //=========================buildingwithpayment=============================================//
 router.post("/getBuildings_web", cors(), async function (req, res) {
   const token = req.headers.authorization;
-
-  var id = await email.checkToken(req);
-
-  console.log(id);
-  if (id.status == 400 && id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
     var buildingobject = req.body.orderid;
     console.log(buildingobject, "data");
     getBuildings_web
@@ -430,7 +413,6 @@ router.post("/getBuildings_web", cors(), async function (req, res) {
           message: err.message
         })
       );
-  }
 });
 
 router.post("/getBuildingspayment", cors(), async function (req, res) {
@@ -1153,25 +1135,28 @@ router.post("/BulkSchedules", cors(), async function (req, res) {
       console.log(orderid, "ORDER");
       console.log(orderid == "null");
       if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {
-        orderid = "A0001";
-      } else {
-        console.log(orderid, "inside the loop");
+          orderid = "A0001"
+      }
+      else {
+          console.log(orderid, "inside the loop")
+          console.log("orderid" + orderid)
+          orderid = orderid + 1;
+          console.log("orderid=====>" + orderid)
 
-        // orderid = Number(orderid) + 1
-        console.log("orderid" + orderid);
-        orderid = orderid + 1;
-        console.log("orderid=====>" + orderid);
+          orderid = orderid.toString()
+          if (orderid.length == 1) {
+              orderid = "A000" + orderid
+          }
+          else if (orderid.length == 2) {
+              orderid = "A00" + orderid
+          }
+          else if (orderid.length == 3) {
+              orderid = "A0" + orderid
+          }
 
-        orderid = orderid.toString();
-        if (orderid.length == 1) {
-          orderid = "A000" + orderid;
-        } else if (orderid.length == 2) {
-          orderid = "A00" + orderid;
-        } else if (orderid.length == 3) {
-          orderid = "A0" + orderid;
-        } else {
-          orderid = "A" + orderid;
-        }
+          else {
+              orderid = "A" + orderid
+          }
       }
       /*Here the Bulk Buildings are scheduled one by one*/
       for (let i = 0; i < schedules.schedule.length; i++) {
@@ -1194,20 +1179,20 @@ router.post("/BulkSchedules", cors(), async function (req, res) {
     }
   }
 });
-//=============================Blockchain-API's============================================
-router.post("/blockchain", cors(), async function (req, res) {
+//=============================Blockchain-API's============================================//
+router.post("/blockchain", cors(), async function(req, res) {
   // var transaction = {
   //   name: "ajay",
   //   address: "kerala"
   // };
-  var transaction = req.body.transaction;
-  var name = req.body.name;
-  var data = {
-    name: name,
-    transaction: transaction
-  };
+  var Buildingdetails = req.body.Buildingdetails;
+  var name= req.body.name;
+  var data ={
+    name:name,
+    Buildingdetails:Buildingdetails
+  }
   var params = {
-    id: req.body.email,
+    id: req.body.key,
     fun: "create",
     data: data
   };
@@ -2385,9 +2370,7 @@ router.post("/certificate_issue1", cors(), async function (req, res) {
       })
     );
 });
-//=============================================
-
-//====================================================
+//===================================================================================
 router.post("/Payment_salama", cors(), async function (req, res) {
   const token = req.headers.authorization;
   var payment1 = req.body;
@@ -2456,7 +2439,7 @@ router.post("/hr_details", cors(), function (req, res) {
       res.send({
         result: result
       });
-    })
+    })    
     .catch(err =>
       res.status(err.status).json({
         message: err.message
@@ -2517,7 +2500,9 @@ router.get("/AdminMapActive", cors(), (req, res) => {
 router.use("/download", express.static(path.join(__dirname, "../upload")));
 //===================================================================================
 router.post("/certificate_issue", cors(), async function (req, res) {
-  //const token = req.headers.authorization;
+  // const token = req.headers.authorization;
+  var token = req.headers.authorization;
+  console.log("token", token);
   var certificate_issue1 = req.body.national_id;
   var certificate_status_emp = req.body.certificate_status_emp;
   var result = req.body.result;
@@ -2526,7 +2511,7 @@ router.post("/certificate_issue", cors(), async function (req, res) {
   // const language = req.headers.language;
   console.log("front", req.body);
   certificate_issue
-    .certificate_issue(certificate_issue1, certificate_status_emp, result)
+    .certificate_issue(certificate_issue1, certificate_status_emp, result,token)
     .then(result => {
       res.send({
         result: result,
