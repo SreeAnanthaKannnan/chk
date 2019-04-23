@@ -14,13 +14,10 @@ module.exports.findemployee =
 module.exports.find_employee =
   "SELECT DISTINCT e.company_trade_license_no, e.hr_email, e.order_id, e.payment_type, e.amount,e.trnx,e.order_status,DATE_FORMAT(e.date_created, '%Y-%m-%d') AS date_created ,e.certificate_status, c.Company_name FROM SHARJAH.Employee_Profile e, SHARJAH.Company_Profile c where (lower(trim(e.order_id)) !='nointerest')AND (lower(trim(e.order_id))!='null') AND e.hr_email=c.Company_Email AND e.hr_email=?";
 
-
-
 module.exports.getownerdetails =
   "SELECT * FROM citizens where firstname_en=? AND email_id= ?";
 
-module.exports.gethrdetails =
-  "SELECT * FROM citizens where email_id = ?";
+module.exports.gethrdetails = "SELECT * FROM citizens where email_id = ?";
 
 // "select distinct order_id, company_trade_license_no,hr_email,payment_type,amount,trnx,order_status,certificate_status FROM SHARJAH.Employee_Profile where hr_email = ? AND order_id is not null AND(order_id != 'NOInterest' AND order_id != 'NULL'); ";
 // "SELECT distinct id, uid, name_en, name_ar, national_id, category, date_scheduled, date_preferred, result FROM Employee_Profile where order_id is not null AND 'NOIntrest' where hr_email =?";
@@ -89,9 +86,9 @@ module.exports.getlogindetails =
 module.exports.getinstalleremployeelist =
   "SELECT * FROM citizens where user_type=? order by firstname_en";
 
-
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
-module.exports.updatestatuslist = "UPDATE citizens SET status = ? WHERE emirates_id = ?";
+module.exports.updatestatuslist =
+  "UPDATE citizens SET status = ? WHERE emirates_id = ?";
 
 /*================fetching the availabledate for the number of available seats greater than the selected seats and particular trainer
 course id========*/
@@ -227,8 +224,8 @@ module.exports.addbuilding =
 module.exports.resgister =
   "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp,countvalue) VALUES ?";
 /*======================update the entry from session for the particular user id======*/
-module.exports.registeradmin = "INSERT INTO citizens (firstname_en,lastname_en,alter_number,emirates_id,mobile_number,email_id,password,verify_email,user_type,reg_date,services) VALUES ?";
-
+module.exports.registeradmin =
+  "INSERT INTO citizens (firstname_en,lastname_en,alter_number,emirates_id,mobile_number,email_id,password,verify_email,user_type,reg_date,services) VALUES ?";
 
 module.exports.sessionupdate =
   "update Session set token=?,session_created_at=? where user_ID = ?";
@@ -251,7 +248,7 @@ module.exports.availabledate =
   "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
 module.exports.getcoursename =
   "SELECT course_name_en FROM Results where National_Id =?";
-  module.exports.getinstallers =
+module.exports.getinstallers =
   "SELECT email_id,countvalue FROM citizens WHERE countvalue = (SELECT MIN(countvalue) FROM citizens where user_type='installer')";
 module.exports.imagepdf = "UPDATE Schedules SET filepath =? WHERE id =?";
 module.exports.pdfviewer =
@@ -280,30 +277,39 @@ module.exports.getbuildings =
   "SELECT DISTINCT orderid,datecreated,paymenttype,trnx,Amount,status FROM Buildings where (lower(trim(orderid)) !='nointerest') AND (lower(trim(orderid))!='null') AND email_id= ?";
 module.exports.getbuildings_web =
   "SELECT Buildingname, address, DATE_FORMAT(preschedule, '%Y-%m-%d') AS preschedule,  REPLACE(alternumber,'||',', ') AS alternumber, installeddate from Buildings where orderid=?";
-module.exports.pay_verify =
-  "SELECT status from Buildings where orderid =?"
+module.exports.pay_verify = "SELECT status from Buildings where orderid =?";
 module.exports.pay_verify_status =
-  "SELECT order_status from Employee_Profile where order_id =?"
+  "SELECT order_status from Employee_Profile where order_id =?";
 module.exports.getbuildingsbyemail =
   "select * from Buildings where email_id = ?";
 module.exports.payment_callcenter_salama =
-  "UPDATE Employee_Profile SET order_status=?, certificate_status=? where order_id =?"
-"select * from Buildings where email_id = ?";
+  "UPDATE Employee_Profile SET order_status=?, certificate_status=? where order_id =?";
+("select * from Buildings where email_id = ?");
 module.exports.editBuilding =
   "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";
 
-module.exports.getinstallersDetailsForDashBoard = "select ROUND(sum(active)) as active_installers, ROUND(sum(installations)) as total_installers from vw_installer_trend  where month = ? and year = ?";
-module.exports.getinstallerDetailsMonthWise = 'select ROUND(sum(`active`)) as active_installers, ROUND(sum(installations)) as total_installers,month,year from vw_installer_trend group by month,year';
+module.exports.getinstallersDetailsForDashBoard =
+  "select active as active_installers, total  as total_installers from vw_installer_details where month=? and year=?";
+module.exports.getinstallerDetailsMonthWise =
+  "select ROUND(avg(active)) as active_installers, ROUND(avg(total)) as total_installers,month,year from vw_installer_details group by month,year";
+module.exports.getavgbuildings =
+  "SELECT round(sum(number_of_buildings)) as number_of_buildings,round(sum(number_of_building_complaint)) as number_of_building_complaint,round(sum(number_of_building_progress)) as number_of_building_progress from vw_building_details;";
+module.exports.getbuildingsDetailsForDashBoard =
+  "select ROUND(sum(number_of_buildings)) as number_of_buildings, ROUND(sum(number_of_building_complaint)) as number_of_building_complaint, ROUND(sum(number_of_building_progress)) as number_of_building_progress from vw_building_details  where month = ? and year = ?";
 
-module.exports.getavgbuildings = 'SELECT round(sum(number_of_buildings)) as number_of_buildings,round(sum(number_of_building_complaint)) as number_of_building_complaint,round(sum(number_of_building_progress)) as number_of_building_progress from Buildings_view;';
-module.exports.getbuildingsDetailsForDashBoard = "select ROUND(sum(number_of_buildings)) as number_of_buildings, ROUND(sum(number_of_building_complaint)) as number_of_building_complaint, ROUND(sum(number_of_building_progress)) as number_of_building_progress from Buildings_view  where month = ? and year = ?";
+module.exports.getavgorder =
+  "SELECT round(avg(order_received)) as order_received,round(avg(order_closed)) as order_closed,round(avg(order_pending_closure)) as order_pending_closure,ROUND(avg(call_center)) as call_center, ROUND(avg(self_booking)) as self_booking,ROUND(avg(bulk)) as bulk,ROUND(avg(single_booking)) as single_booking  from SHARJAH.order_details";
+module.exports.getOrderDetailsForDashBoard =
+  "select ROUND(avg(order_recieved)) as order_recieved, ROUND(avg(order_closed)) as order_closed,ROUND(avg(order_pending_closure)) as order_pending_closure ,ROUND(avg(call_center)) as call_center, ROUND(avg(self_booking)) as self_booking,ROUND(avg(bulk)) as bulk,ROUND(avg(single_booking)) as single_booking from order_details where month = ? and year = ?";
+module.exports.getavgadmin =
+  "select Format(sum(Revenue),'##,##0') as Revenue ,sum(Revenue) as Revenue_amount ,sum(order_to_close) as order_to_close,sum(project_demand) as project_demand,month, year from SHARJAH.vw_admin group by month,year;";
+module.exports.getadminDetailsseperateForDashBoard =
+  "select ROUND(avg(Revenue)) as Revenue,ROUND(avg(order_to_close)) as order_to_close,ROUND(avg(project_demand)) as project_demand from vw_admin where month = ? and year = ?";
+module.exports.getavgstatistics =
+  "SELECT * FROM SHARJAH.tbl_application_statistics;";
 
-module.exports.getavgorder = "SELECT round(sum(order_recieved)) as order_recieved,round(sum(order_closed)) as order_closed,round(sum(order_pending_closure)) as order_pending_closure,ROUND(sum(call_center)) as call_center, ROUND(sum(self_booking)) as self_booking,ROUND(sum(bulk)) as bulk,ROUND(sum(single_booking)) as single_booking  from SHARJAH.order_view";
-module.exports.getOrderDetailsForDashBoard = "select ROUND(sum(order_recieved)) as order_recieved, ROUND(sum(order_closed)) as order_closed,ROUND(sum(order_pending_closure)) as order_pending_closure ,ROUND(sum(call_center)) as call_center, ROUND(sum(self_booking)) as self_booking,ROUND(sum(bulk)) as bulk,ROUND(sum(single_booking)) as single_booking from order_view where month = ? and year = ?";
+module.exports.getTopPerfomerOfTheMonth =
+  "select installer,sum(number_of_installations) from vw_top_performents where month = ? and year = ? group by installer,number_of_installations order by number_of_installations desc limit 3";
 
-module.exports.getavgadmin = "select Format(sum(Revenue),'##,##0') as Revenue ,sum(Revenue) as Revenue_amount ,sum(order_to_close) as order_to_close,sum(project_demand) as project_demand,month, year from SHARJAH.vw_admin group by month,year;"
-module.exports.getadminDetailsseperateForDashBoard = "select Format(sum(Revenue),'##,##0') as Revenue ,sum(Revenue) as Revenue_amount,ROUND(sum(order_to_close)) as order_to_close,ROUND(sum(project_demand)) as project_demand from vw_admin where month = ? and year = ?";
-
-module.exports.getavgstatistics = "SELECT * FROM SHARJAH.tbl_application_statistics;"
-
-module.exports.getTopPerfomerOfTheMonth = 'select installer,sum(number_of_installations) from vw_top_performents where month = ? and year = ? group by installer,number_of_installations order by number_of_installations desc limit 3';
+module.exports.employeecheck=
+"select order_id from Employee_Profile where national_id=?";
