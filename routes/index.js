@@ -235,7 +235,7 @@ router.post("/citizen-register", cors(), async function (req, res) {
       message: "Please check Your Mobile number"
     });
   } else {
-    await cregister
+     cregister
       .cregister(registerobject)
       .then(result => {
         console.log("result", result);
@@ -298,8 +298,12 @@ router.post("/getdetails", cors(), async function(req, res) {
           result: result
         });
       })
-    
-});
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+    });
 //=================================Appeal====================================================
 router.post("/getdetailsforkey", cors(), async function (req, res) {
   // const token = req.headers.authorization;
@@ -403,23 +407,14 @@ router.post("/getBuildingsbymail", cors(), async function (req, res) {
 //=========================buildingwithpayment=============================================//
 router.post("/getBuildings_web", cors(), async function (req, res) {
   const token = req.headers.authorization;
-
-  var id = await email.checkToken(req);
-
-  console.log(id);
-  if (id.status == 400 && id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
-    var buildingobject = req.body.orderid;
+   var buildingobject = req.body.orderid;
     console.log(buildingobject, "data");
     getBuildings_web
       .getbuildings(buildingobject, token)
       .then(result => {
         res.send({
           result: result,
-          message: "mock mock"
+          message: "Buildings"
         });
       })
       .catch(err =>
@@ -427,20 +422,10 @@ router.post("/getBuildings_web", cors(), async function (req, res) {
           message: err.message
         })
       );
-  }
-});
+  });
 
 router.post("/getBuildingspayment", cors(), async function (req, res) {
   const token = req.headers.authorization;
-
-  var id = await email.checkToken(req);
-
-  console.log(id);
-  if (id.status == 400 && id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
     var buildingobject = req.body.email_id;
     console.log(buildingobject, "data");
     getbuildpay
@@ -456,7 +441,6 @@ router.post("/getBuildingspayment", cors(), async function (req, res) {
           message: err.message
         })
       );
-  }
 });
 //=======================================================================================================
 router.post("/installationdetails", cors(), function (req, res) {
@@ -477,15 +461,7 @@ router.post("/installationdetails", cors(), function (req, res) {
 });
 //==============================Residentsdetails===========================================//
 router.post("/profile", cors(), async function (req, res) {
-  var id = await check.checkToken(req);
-  const token = req.headers["authorization"];
-  if (id.status == 400 || id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
-    var buildingobject = id.result;
-    //var buildingobject=req.body.email;
+    var buildingobject=req.body.email;
     console.log(buildingobject, "data");
     profile
       .getbuildings(buildingobject, token)
@@ -500,8 +476,7 @@ router.post("/profile", cors(), async function (req, res) {
           message: err.message
         })
       );
-  }
-});
+  });
 //=======================================================================================================
 router.post("/installationdetails", cors(), function (req, res) {
   var installation = req.body;
@@ -580,11 +555,11 @@ router.post("/image_upload", uploads.single("file"), function (req, res) {
             message: err.message
           })
         );
-    }
+      }
   });
 });
 //==============================Booking-History============================================//
-router.post("/serviceHistory", cors(), async function (req, res) {
+router.post("/serviceHistory", cors(), async function (req,res) {
   const token = req.headers.authorization;
   var email_id = req.body.email;
   book
@@ -669,13 +644,11 @@ router.get("/assesser-view", cors(), async function (req, res) {
         message: err.message
       })
     );
-  // }
 });
 
 router.post("/textimage", cors(), (req, res, next) => {
   const uploadFile = req.files.file;
   const fileName = req.files.file.name;
-  //   console.log(Appeal_Object)
   const Image = uploadFile.mv(
     `${__dirname}/public/files/${fileName}`,
     image
@@ -704,7 +677,6 @@ router.post("/forgetpassword", async (req, res) => {
   console.log("body", forgetpassword);
   let username = req.body.email;
   console.log("forgot_email=>", username);
-  // let password = req.body.password;
   var otp1 = await otpfun.otpgen();
   var otp = otp1.otp;
   console.log(otp);
@@ -855,9 +827,6 @@ router.post("/update_installation", cors(), async function (req, res) {
       })
     );
 });
-
-//=====================================================
-
 //========================forgetpassword-otp===========================================//
 router.post("/forgetotpverification", cors(), (req, res) => {
   var otp = req.body.otp;
