@@ -2543,20 +2543,15 @@ router.post("/certificate_issue", cors(), async function (req, res) {
 
 router.post("/installers_dashboard", cors(), async (req, res) => {
   const result = await getInstaller(req.body);
-  console.log(result[0].data);
-  if (result[0].status != 200) {
-    res.status(400).json({
-      status: 400,
+  console.log("result", result);
+  if (result.status != 200) {
+    res.status(result.status).json({
+      status: result.status,
       message: "Data Cant Fetch"
     });
   } else {
-    console.log("active_installer:", result[0].data[0].active_installers);
-    console.log("total_installers:", result[0].data[0].total_installers);
-
-    res.status(200).json({
-      status: 200,
-      active_installer: result[0].data[0].active_installers,
-      total_installers: result[0].data[0].total_installers
+    res.status(result.status).json({
+      Data: result,
     });
   }
 });
@@ -2605,26 +2600,26 @@ router.post("/getinstalleremployees", cors(), function (req, res) {
 
 //=============Installers DashBoard Details API =======//
 
-router.post('/installers_dashboard', cors(), async (req, res) => {
-  const result = await getInstaller(req.body);
-  console.log(result[0].data);
-  if (result[0].status != 200) {
-    res.status(400).json({
-      status: 400,
-      message: 'Data Cant Fetch'
-    });
-  } else {
-    console.log("active_installer:", result[0].data[0].active_installers);
-    console.log("total_installers:", result[0].data[0].total_installers);
+// router.post('/installers_dashboard', cors(), async (req, res) => {
+//   const result = await getInstaller(req.body);
+//   console.log("result",result);
+//   if (result[0].status != 200) {
+//     res.status(400).json({
+//       status: 400,
+//       message: 'Data Cant Fetch'
+//     });
+//   } else {
+//     console.log("active_installer:", result[0].data[0].active_installers);
+//     console.log("total_installers:", result[0].data[0].total_installers);
 
-    res.status(200).json({
-      status: 200,
-      active_installer: result[0].data[0].active_installers,
-      total_installers: result[0].data[0].total_installers,
-    });
-  }
+//     res.status(200).json({
+//       status: 200,
+//       active_installer: result[0].data[0].active_installers,
+//       total_installers: result[0].data[0].total_installers,
+//     });
+//   }
 
-});
+// });
 
 router.get('/installers_dashboard_monthwise', async (req, res) => {
 

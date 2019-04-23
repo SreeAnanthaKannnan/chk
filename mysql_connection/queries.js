@@ -227,7 +227,7 @@ module.exports.addbuilding =
 module.exports.resgister =
   "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp,countvalue) VALUES ?";
 /*======================update the entry from session for the particular user id======*/
-module.exports.registeradmin = "INSERT INTO citizens (firstname_en,lastname_en,alter_number,emirates_id,mobile_number,email_id,password,user_type,reg_date,services) VALUES ?";
+module.exports.registeradmin = "INSERT INTO citizens (firstname_en,lastname_en,alter_number,emirates_id,mobile_number,email_id,password,verify_email,user_type,reg_date,services) VALUES ?";
 
 
 module.exports.sessionupdate =
@@ -294,8 +294,8 @@ module.exports.payment_callcenter_salama =
 module.exports.editBuilding =
   "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";
 
-module.exports.getinstallersDetailsForDashBoard = "select ROUND(avg(active_installers)) as active_installers, ROUND(avg(installer_count)) as total_installers from installers  where month = ? and year = ?";
-module.exports.getinstallerDetailsMonthWise = 'select ROUND(avg(active_installers)) as active_installers, ROUND(avg(installer_count)) as total_installers,month,year from installers group by month,year';
+module.exports.getinstallersDetailsForDashBoard = "select ROUND(sum(active)) as active_installers, ROUND(sum(installations)) as total_installers from vw_installer_trend  where month = ? and year = ?";
+module.exports.getinstallerDetailsMonthWise = 'select ROUND(sum(`active`)) as active_installers, ROUND(sum(installations)) as total_installers,month,year from vw_installer_trend group by month,year';
 
 module.exports.getavgbuildings = 'SELECT round(sum(number_of_buildings)) as number_of_buildings,round(sum(number_of_building_complaint)) as number_of_building_complaint,round(sum(number_of_building_progress)) as number_of_building_progress from Buildings_view;';
 module.exports.getbuildingsDetailsForDashBoard = "select ROUND(sum(number_of_buildings)) as number_of_buildings, ROUND(sum(number_of_building_complaint)) as number_of_building_complaint, ROUND(sum(number_of_building_progress)) as number_of_building_progress from Buildings_view  where month = ? and year = ?";
@@ -307,3 +307,5 @@ module.exports.getavgadmin = "select Format(sum(Revenue),'##,##0') as Revenue ,s
 module.exports.getadminDetailsseperateForDashBoard = "select Format(sum(Revenue),'##,##0') as Revenue ,sum(Revenue) as Revenue_amount,ROUND(sum(order_to_close)) as order_to_close,ROUND(sum(project_demand)) as project_demand from vw_admin where month = ? and year = ?";
 
 module.exports.getavgstatistics = "SELECT * FROM SHARJAH.tbl_application_statistics;"
+
+module.exports.getTopPerfomerOfTheMonth = 'select installer,sum(number_of_installations) from vw_top_performents where month = ? and year = ? group by installer,number_of_installations order by number_of_installations desc limit 3';

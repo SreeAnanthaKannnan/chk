@@ -138,10 +138,10 @@ async function add_admin(add_admin) {
     var password = cryptr.encrypt(add_admin.password);
     console.log("pass", password)
     var user_type = "admin"
-
+    var verify_email = "Y"
     var reg_date = now;
 
-    var select_query = [first_name, last_name, alternate_phone_number, emirates_id, mobile_number, email_id, password, user_type, reg_date, select_services]
+    var select_query = [first_name, last_name, alternate_phone_number, emirates_id, mobile_number, email_id, password, verify_email, user_type, reg_date, select_services]
     console.log("select_queery", select_query)
 
 
