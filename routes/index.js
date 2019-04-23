@@ -343,8 +343,9 @@ router.post("/AddsingleBuilding", cors(), async function (req, res) {
 
 //===================================allbuildings======================================================//
 router.post("/allBuildings", cors(), async function (req, res) {
+  const token = req.headers.authorization;
   allBuildings
-    .getbuildings()
+    .getbuildings(token)
     .then(result => {
       res.send({
         result: [result],
@@ -363,12 +364,6 @@ router.post("/getBuildings", cors(), async function (req, res) {
 
   var id = await email.checkToken(req);
 
-  console.log(id);
-  if (id.status == 400 && id.status == 403) {
-    res.send({
-      result: id
-    });
-  } else {
     var buildingobject = id.result;
     console.log(buildingobject, "data");
     getBuildings
@@ -384,7 +379,7 @@ router.post("/getBuildings", cors(), async function (req, res) {
           message: err.message
         })
       );
-  }
+  
 });
 router.post("/getBuildingsbymail", cors(), async function (req, res) {
   const token = req.headers.authorization;
@@ -2484,7 +2479,9 @@ router.get("/AdminMapActive", cors(), (req, res) => {
 router.use("/download", express.static(path.join(__dirname, "../upload")));
 //===================================================================================
 router.post("/certificate_issue", cors(), async function (req, res) {
-  //const token = req.headers.authorization;
+  // const token = req.headers.authorization;
+  var token = req.headers.authorization;
+  console.log("token", token);
   var certificate_issue1 = req.body.national_id;
   var certificate_status_emp = req.body.certificate_status_emp;
   var result = req.body.result;
@@ -2493,7 +2490,7 @@ router.post("/certificate_issue", cors(), async function (req, res) {
   // const language = req.headers.language;
   console.log("front", req.body);
   certificate_issue
-    .certificate_issue(certificate_issue1, certificate_status_emp, result)
+    .certificate_issue(certificate_issue1, certificate_status_emp, result,token)
     .then(result => {
       res.send({
         result: result,
@@ -2510,20 +2507,15 @@ router.post("/certificate_issue", cors(), async function (req, res) {
 
 router.post("/installers_dashboard", cors(), async (req, res) => {
   const result = await getInstaller(req.body);
-  console.log(result[0].data);
-  if (result[0].status != 200) {
-    res.status(400).json({
-      status: 400,
+  console.log("result", result);
+  if (result.status != 200) {
+    res.status(result.status).json({
+      status: result.status,
       message: "Data Cant Fetch"
     });
   } else {
-    console.log("active_installer:", result[0].data[0].active_installers);
-    console.log("total_installers:", result[0].data[0].total_installers);
-
-    res.status(200).json({
-      status: 200,
-      active_installer: result[0].data[0].active_installers,
-      total_installers: result[0].data[0].total_installers
+    res.status(result.status).json({
+      Data: result,
     });
   }
 });
@@ -2572,26 +2564,26 @@ router.post("/getinstalleremployees", cors(), function (req, res) {
 
 //=============Installers DashBoard Details API =======//
 
-router.post('/installers_dashboard', cors(), async (req, res) => {
-  const result = await getInstaller(req.body);
-  console.log(result[0].data);
-  if (result[0].status != 200) {
-    res.status(400).json({
-      status: 400,
-      message: 'Data Cant Fetch'
-    });
-  } else {
-    console.log("active_installer:", result[0].data[0].active_installers);
-    console.log("total_installers:", result[0].data[0].total_installers);
+// router.post('/installers_dashboard', cors(), async (req, res) => {
+//   const result = await getInstaller(req.body);
+//   console.log("result",result);
+//   if (result[0].status != 200) {
+//     res.status(400).json({
+//       status: 400,
+//       message: 'Data Cant Fetch'
+//     });
+//   } else {
+//     console.log("active_installer:", result[0].data[0].active_installers);
+//     console.log("total_installers:", result[0].data[0].total_installers);
 
-    res.status(200).json({
-      status: 200,
-      active_installer: result[0].data[0].active_installers,
-      total_installers: result[0].data[0].total_installers,
-    });
-  }
+//     res.status(200).json({
+//       status: 200,
+//       active_installer: result[0].data[0].active_installers,
+//       total_installers: result[0].data[0].total_installers,
+//     });
+//   }
 
-});
+// });
 
 router.get('/installers_dashboard_monthwise', async (req, res) => {
 

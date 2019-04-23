@@ -9,6 +9,7 @@ var log4js = require('log4js');
 const logger = log4js.getLogger('SPSA_project');
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
+const checktoken = require("../utils/checkToken")
 let now = new Date();
 //Here the verification of user details
 function cregister(registerobject) {
@@ -55,18 +56,18 @@ async function owner_details(owner_details, token) {
   return new Promise(async (resolve, reject) => {
     console.log("enter in to core_reg")
     /*==========Token validation=================*/
-    // var verifytoken = await checktoken.checkToken(token);
-    // if (verifytoken.status == 405) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else if (verifytoken.status == 403) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else {
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else {
     /* Fetching the trained employee's National Id from "Employee_profile" table who are all passed in the "Results" table */
     var employee_name = owner_details.owner_name
     var email_id = owner_details.email_id
@@ -80,7 +81,7 @@ async function owner_details(owner_details, token) {
       status: 200,
       message: owner_details_details
     });
-    // }
+    }
   });
 }
 //============================================================================
@@ -88,18 +89,18 @@ async function hr_details(hr_details, token) {
   return new Promise(async (resolve, reject) => {
 
     /*==========Token validation=================*/
-    // var verifytoken = await checktoken.checkToken(token);
-    // if (verifytoken.status == 405) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else if (verifytoken.status == 403) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else {
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else {
     /* Fetching the trained employee's National Id from "Employee_profile" table who are all passed in the "Results" table */
     //var employee_name=owner_details.owner_name
     var email_id = hr_details.email_id
@@ -113,7 +114,7 @@ async function hr_details(hr_details, token) {
       status: 200,
       message: hr_details_details
     });
-    // }
+    }
   });
 }
 async function add_admin(add_admin) {
@@ -138,10 +139,10 @@ async function add_admin(add_admin) {
     var password = cryptr.encrypt(add_admin.password);
     console.log("pass", password)
     var user_type = "admin"
-
+    var verify_email = "Y"
     var reg_date = now;
 
-    var select_query = [first_name, last_name, alternate_phone_number, emirates_id, mobile_number, email_id, password, user_type, reg_date, select_services]
+    var select_query = [first_name, last_name, alternate_phone_number, emirates_id, mobile_number, email_id, password, verify_email, user_type, reg_date, select_services]
     console.log("select_queery", select_query)
 
 
