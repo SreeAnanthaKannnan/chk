@@ -84,7 +84,7 @@ module.exports.getdatedetails =
 module.exports.getlogindetails =
   "SELECT * FROM citizens where email_id =?  AND verify_email='Y'";
 module.exports.getinstalleremployeelist =
-  "SELECT * FROM citizens where user_type=?";
+  "SELECT * FROM citizens where user_type=? order by firstname_en";
 
 module.exports.updatestatus = "UPDATE Schedules SET status = ? WHERE id = ?";
 module.exports.updatestatuslist =
@@ -226,6 +226,7 @@ module.exports.resgister =
 /*======================update the entry from session for the particular user id======*/
 module.exports.registeradmin =
   "INSERT INTO citizens (firstname_en,lastname_en,alter_number,emirates_id,mobile_number,email_id,password,verify_email,user_type,reg_date,services) VALUES ?";
+
 module.exports.sessionupdate =
   "update Session set token=?,session_created_at=? where user_ID = ?";
 module.exports.addbuilding =
@@ -245,10 +246,8 @@ module.exports.findemployeeAttendance =
 /*=========selecting the distinct available date for the number of available seats greater then the selected seats and particular trainerid and course id=======*/
 module.exports.availabledate =
   "SELECT distinct available_date FROM Classroom where number_of_available_seats >=?and trainer_id=? and course_id =?";
-
 module.exports.getcoursename =
   "SELECT course_name_en FROM Results where National_Id =?";
-
 module.exports.getinstallers =
   "SELECT email_id,countvalue FROM citizens WHERE countvalue = (SELECT MIN(countvalue) FROM citizens where user_type='installer')";
 module.exports.imagepdf = "UPDATE Schedules SET filepath =? WHERE id =?";
@@ -290,20 +289,21 @@ module.exports.editBuilding =
   "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";
 
 module.exports.getinstallersDetailsForDashBoard =
-  "select (active) as active_installers, (total) as total_installers from vw_installer_details  where month = ? and year = ?";
+  "select active as active_installers, total  as total_installers from vw_installer_details where month=? and year=?";
 module.exports.getinstallerDetailsMonthWise =
-  "select ROUND(avg(active)) as active_installers, ROUND(avg(installer_count)) as total_installers,month,year from vw_installer_details group by month,year";
+  "select ROUND(avg(active)) as active_installers, ROUND(avg(total)) as total_installers,month,year from vw_installer_details group by month,year";
 module.exports.getavgbuildings =
   "SELECT round(sum(number_of_buildings)) as number_of_buildings,round(sum(number_of_building_complaint)) as number_of_building_complaint,round(sum(number_of_building_progress)) as number_of_building_progress from vw_building_details;";
 module.exports.getbuildingsDetailsForDashBoard =
   "select ROUND(sum(number_of_buildings)) as number_of_buildings, ROUND(sum(number_of_building_complaint)) as number_of_building_complaint, ROUND(sum(number_of_building_progress)) as number_of_building_progress from vw_building_details  where month = ? and year = ?";
 
 module.exports.getavgorder =
-  "SELECT round(avg(order_recieved)) as order_recieved,round(avg(order_closed)) as order_closed,round(avg(order_pending_closure)) as order_pending_closure,ROUND(avg(call_center)) as call_center, ROUND(avg(self_booking)) as self_booking,ROUND(avg(bulk)) as bulk,ROUND(avg(single_booking)) as single_booking  from SHARJAH.order_view";
+  "SELECT round(avg(order_received)) as order_received,round(avg(order_closed)) as order_closed,round(avg(order_pending_closure)) as order_pending_closure,ROUND(avg(call_center)) as call_center, ROUND(avg(self_booking)) as self_booking,ROUND(avg(bulk)) as bulk,ROUND(avg(single_booking)) as single_booking  from SHARJAH.order_details";
 module.exports.getOrderDetailsForDashBoard =
   "select ROUND(avg(order_recieved)) as order_recieved, ROUND(avg(order_closed)) as order_closed,ROUND(avg(order_pending_closure)) as order_pending_closure ,ROUND(avg(call_center)) as call_center, ROUND(avg(self_booking)) as self_booking,ROUND(avg(bulk)) as bulk,ROUND(avg(single_booking)) as single_booking from order_view where month = ? and year = ?";
 module.exports.getavgadmin =
-  "select ROUND(avg(Revenue)) as Revenue,ROUND(avg(order_to_close)) as order_to_close,ROUND(avg(project_demand)) as project_demand,month, year from SHARJAH.vw_admin group by month,year;";
-
+  "select Format(sum(Revenue),'##,##0') as Revenue ,sum(Revenue) as Revenue_amount ,sum(order_to_close) as order_to_close,sum(project_demand) as project_demand,month, year from SHARJAH.vw_admin group by month,year;";
 module.exports.getadminDetailsseperateForDashBoard =
   "select ROUND(avg(Revenue)) as Revenue,ROUND(avg(order_to_close)) as order_to_close,ROUND(avg(project_demand)) as project_demand from vw_admin where month = ? and year = ?";
+module.exports.getavgstatistics =
+  "SELECT * FROM SHARJAH.tbl_application_statistics;";

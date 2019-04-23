@@ -287,21 +287,18 @@ router.post("/emailotpverification1", cors(), function (req, res) {
     );
 });
 //========================================citizen-registration-end=====================================
-router.post("/getdetails", cors(), async function (req, res) {
-  // const token = req.headers.authorization;
-  var email = req.body.email;
-  history
-    .getHistory(email)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+router.post("/getdetails", cors(), async function(req, res) {
+ // const token = req.headers.authorization;
+      var object = req.body;
+      console.log(object,"object");
+    history
+      .getHistory(object)
+      .then(result => {
+        res.send({
+          result: result
+        });
       })
-    );
+    
 });
 //=================================Appeal====================================================
 router.post("/getdetailsforkey", cors(), async function (req, res) {
@@ -1153,25 +1150,28 @@ router.post("/BulkSchedules", cors(), async function (req, res) {
       console.log(orderid, "ORDER");
       console.log(orderid == "null");
       if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {
-        orderid = "A0001";
-      } else {
-        console.log(orderid, "inside the loop");
+          orderid = "A0001"
+      }
+      else {
+          console.log(orderid, "inside the loop")
+          console.log("orderid" + orderid)
+          orderid = orderid + 1;
+          console.log("orderid=====>" + orderid)
 
-        // orderid = Number(orderid) + 1
-        console.log("orderid" + orderid);
-        orderid = orderid + 1;
-        console.log("orderid=====>" + orderid);
+          orderid = orderid.toString()
+          if (orderid.length == 1) {
+              orderid = "A000" + orderid
+          }
+          else if (orderid.length == 2) {
+              orderid = "A00" + orderid
+          }
+          else if (orderid.length == 3) {
+              orderid = "A0" + orderid
+          }
 
-        orderid = orderid.toString();
-        if (orderid.length == 1) {
-          orderid = "A000" + orderid;
-        } else if (orderid.length == 2) {
-          orderid = "A00" + orderid;
-        } else if (orderid.length == 3) {
-          orderid = "A0" + orderid;
-        } else {
-          orderid = "A" + orderid;
-        }
+          else {
+              orderid = "A" + orderid
+          }
       }
       /*Here the Bulk Buildings are scheduled one by one*/
       for (let i = 0; i < schedules.schedule.length; i++) {
@@ -1194,20 +1194,20 @@ router.post("/BulkSchedules", cors(), async function (req, res) {
     }
   }
 });
-//=============================Blockchain-API's============================================
-router.post("/blockchain", cors(), async function (req, res) {
+//=============================Blockchain-API's============================================//
+router.post("/blockchain", cors(), async function(req, res) {
   // var transaction = {
   //   name: "ajay",
   //   address: "kerala"
   // };
-  var transaction = req.body.transaction;
-  var name = req.body.name;
-  var data = {
-    name: name,
-    transaction: transaction
-  };
+  var Buildingdetails = req.body.Buildingdetails;
+  var name= req.body.name;
+  var data ={
+    name:name,
+    Buildingdetails:Buildingdetails
+  }
   var params = {
-    id: req.body.email,
+    id: req.body.key,
     fun: "create",
     data: data
   };
@@ -2385,9 +2385,7 @@ router.post("/certificate_issue1", cors(), async function (req, res) {
       })
     );
 });
-//=============================================
-
-//====================================================
+//===================================================================================
 router.post("/Payment_salama", cors(), async function (req, res) {
   const token = req.headers.authorization;
   var payment1 = req.body;
@@ -2456,7 +2454,7 @@ router.post("/hr_details", cors(), function (req, res) {
       res.send({
         result: result
       });
-    })
+    })    
     .catch(err =>
       res.status(err.status).json({
         message: err.message
@@ -2839,4 +2837,44 @@ router.get("/getavgadmin", cors(), async function (req, res) {
     );
 });
 //=================================== order======================================================//
+//===================================order avg======================================================//
+router.get("/getapplicationstatistics", cors(), async function (req, res) {
+  admin
+    .getapplicationstatistics()
+    .then(result => {
+      res.send({
+        data: result.result,
+
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=================================== order======================================================//
+
+//=============Buildings DashBoard Details API =======//
+
+router.post('/application_statics_month', cors(), async (req, res) => {
+  var adminmonth = req.body
+  console.log("order==>index==>", adminmonth)
+  var token = req.headers.authorization
+  admin
+    .getadmin_month(adminmonth, token)
+    .then(result => {
+      res.send({
+        result: result.res_data
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+
+});
+
+//===================================allbuildings======================================================//
 module.exports = router;

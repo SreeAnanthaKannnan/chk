@@ -162,6 +162,24 @@ function getavgadmin() {
             })
     })
 }
+function getavgstatistics() {
+    return new Promise((resolve, reject) => {
+        mysqlConnection
+            .query_execute(query.getavgstatistics)
+            .then(function (result, err) {
+
+                if (err) {
+                    logger.fatal(err, "db error while getting building details from the building table")
+                    return reject({ "status": 400, "body": 'Cannot insert the data' })
+                }
+                else {
+                    return resolve({ status: 200, result: result.data });
+                }
+            })
+    })
+}
+
+
 
 module.exports = {
 
@@ -171,7 +189,8 @@ module.exports = {
     getavgorder: getavgorder,
     getOrdersMonth: getOrdersMonth,
     getadmin_month: getadmin_month,
-    getavgadmin: getavgadmin
+    getavgadmin: getavgadmin,
+    getavgstatistics: getavgstatistics
 
 }
 //====================================================Code End==================================================================//
