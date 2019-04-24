@@ -303,3 +303,8 @@ module.exports.getOrderDetailsForDashBoard = "select ROUND(avg(order_recieved)) 
 module.exports.getavgadmin = "select ROUND(avg(Revenue)) as Revenue,ROUND(avg(order_to_close)) as order_to_close,ROUND(avg(project_demand)) as project_demand,month, year from SHARJAH.vw_admin group by month,year;"
 
 module.exports.getadminDetailsseperateForDashBoard = "select ROUND(avg(Revenue)) as Revenue,ROUND(avg(order_to_close)) as order_to_close,ROUND(avg(project_demand)) as project_demand from vw_admin where month = ? and year = ?";
+// module.exports.checkorder_id = "SELECT exists(SELECT * FROM Employee_Profile WHERE national_id = ?) as checked"
+module.exports.checkorder_id = "SELECT  order_id FROM Employee_Profile WHERE national_id = ?"
+module.exports.employeecheck=
+"select order_id from Employee_Profile where national_id=?";
+module.exports.forgetPasswordOTPUpdation = 'update citizens SET otp = ? WHERE email_id =?';
