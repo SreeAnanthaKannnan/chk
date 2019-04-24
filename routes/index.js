@@ -90,7 +90,7 @@ var Adminmap = require("../core/Adminmap.js");
 var Adminmapactive = require("../core/Adminmap.js");
 
 var ip = require("ip");
-var emailotpfun = require("../utils/spsaemail");
+var { emailotp} = require("../utils/spsaemail");
 var otpfun = require("../utils/otp.js");
 const trainer_attendance = require("../core/Trainer_attendance");
 var session_delete = require("../core/session_delete");
@@ -684,6 +684,9 @@ router.post("/forgetpassword", async (req, res) => {
       status:result.status
     });
   }
+
+  const sendMail = await emailotp(username,otp);
+
   res.status(result.status).json({
     message: result.message,
     status:result.status,
