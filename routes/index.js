@@ -112,7 +112,7 @@ const {
   getInstaller,
   getMothlyInstallerDetails
 } = require("../daos/dashboardDetails");
-
+const { forgetPasswordOTPAdditon} =  require('../daos/otpverifydao');
 var file1;
 let date = require("date-and-time");
 let now = new Date();
@@ -667,70 +667,79 @@ router.post("/textimage", cors(), (req, res, next) => {
 });
 //===============================forgetpassword==============================================//
 router.post("/forgetpassword", async (req, res) => {
-  let forgetpassword = req.body;
-  console.log("body", forgetpassword);
-  let username = req.body.email;
-  console.log("forgot_email=>", username);
-  var otp1 = await otpfun.otpgen();
-  var otp = otp1.otp;
-  console.log(otp);
-  var finalotp = await emailotpfun.emailotp(username, otp);
-
+  const username = req.body.email;
   if (!username) {
-    res.send({
+    res.status(400).json({
+      status: 400,
       message: "Please fill all the details"
     });
-  } else {
-    console.log("username=>", username);
-    // console.log("password======>>", password);
-
-    // let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
-    // console.log("sql==>", sql)
-    // =========email==============
-    await con.query(
-      "SELECT * FROM citizens where email_id ='" + username + "'",
-      async function(error, results, fields) {
-        if (error) {
-          res.send({
-            status: false,
-            message: "error"
-          });
-        } else {
-          if (results.length > 0) {
-            console.log("email=====>>>", username);
-            //  console.log("password=====>>>", otp);
-            console.log("results=>", results.length);
-            console.log("results=======>", results);
-            if (results[0].email_id == username) {
-              console.log("enter in to the if condition==>>>", username);
-              // console.log("password=====>>>", password);
-              var data = await con.query(
-                "UPDATE citizens SET otp = '" +
-                  otp +
-                  "' WHERE email_id = '" +
-                  username +
-                  "'",
-                function(error, results1, fields) {
-                  console.log("result,", results1);
-                  console.log("error", error);
-                }
-              );
-              // console.log("data", data),
-              //console.log("table_results", results1)
-              console.log(otp);
-              res.send({
-                status: "true",
-                results: otp
-                // message: "Password updated successfully",
-                // رسالة:
-                //   "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
-              });
-            }
-          }
-        }
-      }
-    );
   }
+  let otp = await otpfun.otpgen();
+  otp = otp.otp;
+
+  const result = await forgetPasswordOTPAdditon(otp, username);
+  if(result.status != 200){
+    res.status(result.status).json({
+      message: result.message,
+      status:result.status
+    });
+  }
+  res.status(result.status).json({
+    message: result.message,
+    status:result.status,
+    otp : otp
+  });
+  //  else {
+  //   console.log("username=>", username);
+  //   // console.log("password======>>", password);
+
+  //   // let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
+  //   // console.log("sql==>", sql)
+  //   // =========email==============
+  //   await con.query(
+  //     "SELECT * FROM citizens where email_id ='" + username + "'",
+  //     async function (error, results, fields) {
+  //       if (error) {
+  //         res.send({
+  //           status: false,
+  //           message: "error"
+  //         });
+  //       } else {
+  //         if (results.length > 0) {
+  //           console.log("email=====>>>", username);
+  //           //  console.log("password=====>>>", otp);
+  //           console.log("results=>", results.length);
+  //           console.log("results=======>", results);
+  //           if (results[0].email_id == username) {
+  //             console.log("enter in to the if condition==>>>", username);
+  //             // console.log("password=====>>>", password);
+  //             var data = await con.query(
+  //               "UPDATE citizens SET otp = '" +
+  //               otp +
+  //               "' WHERE email_id = '" +
+  //               username +
+  //               "'",
+  //               function (error, results1, fields) {
+  //                 console.log("result,", results1);
+  //                 console.log("error", error);
+  //               }
+  //             );
+  //             // console.log("data", data),
+  //             //console.log("table_results", results1)
+  //             console.log(otp);
+  //             res.send({
+  //               status: "true",
+  //               results: otp
+  //               // message: "Password updated successfully",
+  //               // رسالة:
+  //               //   "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
+  //             });
+  //           }
+  //         }
+  //       }
+  //     }
+  //   );
+  // }
 });
 
 router.post("/Payment", cors(), async function(req, res) {
@@ -1804,6 +1813,7 @@ router.post("/getCertificate", cors(), (request, response) => {
 });
 router.post("/request_for_service_aman", cors(), (req, res) => {
   console.log("enter into req for aman service");
+  const token = req.headers.authorization;
   var file_name = req.body.filename;
 
   var file1 = file_name;
@@ -1811,7 +1821,7 @@ router.post("/request_for_service_aman", cors(), (req, res) => {
   console.log(file_path, "filepath");
   var email_id = req.body.email;
   request_service_aman
-    .request_service_aman(file_path, email_id)
+    .request_service_aman(file_path, email_id,token)
     .then(result => {
       console.log(result);
       res.status(result.status).json({

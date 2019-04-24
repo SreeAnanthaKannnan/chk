@@ -44,8 +44,14 @@ function updateotp(otpobject){
                  }
                });
             })
+}
 
-
+module.exports.forgetPasswordOTPAdditon = async (otp, username) => {
+  const response = {};
+  const result = await mysqlConnection.query_execute(query.forgetPasswordOTPUpdation, [otp, username]);
+  response['status'] = result.status;
+  response['message'] = result.message;
+  return response;
 }
 
 
