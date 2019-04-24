@@ -743,7 +743,7 @@ router.post("/forgetpassword", async (req, res) => {
 });
 
 router.post("/Payment", cors(), async function(req, res) {
-  //const token = req.headers.authorization;
+ 
   var payment1 = req.body;
   console.log(payment1);
   payment
