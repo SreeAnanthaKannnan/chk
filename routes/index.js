@@ -2778,8 +2778,9 @@ router.get("/getavgadmin", cors(), async function(req, res) {
   admin
     .getavgadmin()
     .then(result => {
+      console.log("result", result);
       res.send({
-        data: result.result
+        data: result
       });
     })
     .catch(err =>

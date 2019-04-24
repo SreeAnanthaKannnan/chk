@@ -298,15 +298,24 @@ module.exports.getbuildingsDetailsForDashBoard =
   "select ROUND(sum(number_of_buildings)) as number_of_buildings, ROUND(sum(number_of_building_complaint)) as number_of_building_complaint, ROUND(sum(number_of_building_progress)) as number_of_building_progress from vw_building_details  where month = ? and year = ?";
 
 module.exports.getavgorder =
-  "SELECT round(avg(order_received)) as order_received,round(avg(order_closed)) as order_closed,round(avg(order_pending_closure)) as order_pending_closure,ROUND(avg(call_center)) as call_center, ROUND(avg(self_booking)) as self_booking,ROUND(avg(bulk)) as bulk,ROUND(avg(single_booking)) as single_booking  from SHARJAH.order_details";
+  "SELECT round(sum(number_of_orders_received)) as order_received,round(sum(number_of_orders_closed)) as order_closed,round(sum(number_of_orders_pendingclosure)) as order_pending_closure from SHARJAH.vw_order_stats";
 module.exports.getOrderDetailsForDashBoard =
-  "select ROUND(avg(order_recieved)) as order_recieved, ROUND(avg(order_closed)) as order_closed,ROUND(avg(order_pending_closure)) as order_pending_closure ,ROUND(avg(call_center)) as call_center, ROUND(avg(self_booking)) as self_booking,ROUND(avg(bulk)) as bulk,ROUND(avg(single_booking)) as single_booking from order_details where month = ? and year = ?";
+  " SELECT round(sum(number_of_orders_received)) as order_received,round(sum(number_of_orders_closed)) as order_closed,round(sum(number_of_orders_pendingclosure)) as order_pending_closure from SHARJAH.vw_order_stats where month =? and year=?";
+module.exports.getbookingtype =
+  "select order_id,booking_source,booking_type from vw_order_details where order_received_date group by order_id,booking_source,booking_type";
 module.exports.getavgadmin =
-  "select Format(sum(Revenue),'##,##0') as Revenue ,sum(Revenue) as Revenue_amount ,sum(order_to_close) as order_to_close,sum(project_demand) as project_demand,month, year from SHARJAH.vw_admin group by month,year;";
+  "select Format(sum(Revenue),'##,##0') as Revenue  from SHARJAH.vw_admin ";
+module.exports.getprojected_demand =
+  "select round(avg(projected_demand),2) as projected_demand from vw_projected_demand_by_month ";
+module.exports.getduration =
+  "select round(avg(duration),2) as duration from vw_average_duration_by_month  ";
 module.exports.getadminDetailsseperateForDashBoard =
-  "select ROUND(avg(Revenue)) as Revenue,ROUND(avg(order_to_close)) as order_to_close,ROUND(avg(project_demand)) as project_demand from vw_admin where month = ? and year = ?";
+  "select ROUND(avg(Revenue)) as Revenue from vw_admin where month = ? and year = ?";
 module.exports.getavgstatistics =
   "SELECT * FROM SHARJAH.tbl_application_statistics;";
+module.exports.getRevenue = "SELECT * FROM SHARJAH.vw_admin";
 
+module.exports.getdurationbymonth =
+  "select round((duration),2) as duration,month,year from vw_average_duration_by_month order by month,year";
 module.exports.getTopPerfomerOfTheMonth =
   "select installer,sum(number_of_installations) from vw_top_performents where month = ? and year = ? group by installer,number_of_installations order by number_of_installations desc limit 3";
