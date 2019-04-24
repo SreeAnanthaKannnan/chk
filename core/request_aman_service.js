@@ -3,7 +3,7 @@ const logger = log4js.getLogger('SPSA_project');
 var fs = require('fs');
 const buildingDao = require("../daos/buildingDao");
 var checktoken = require("../utils/checkToken")
-function request_service_aman(filepath, email_id) {
+function request_service_aman(filepath, email_id,token) {
     console.log("body ", email_id);
     return new Promise(async function (resolve, reject) {
         console.log("in core");
@@ -55,8 +55,20 @@ function request_service_aman(filepath, email_id) {
                             data.shift();
                             data.shift();
                             var params = []
-
-                            if (err) {
+                            var verifytoken = await checktoken.checkToken(token)
+                            if (verifytoken.status == 405) {
+                                console.log("core")
+                                return resolve({
+                                    status: verifytoken.status,
+                                    message: verifytoken.message
+                                })
+                            } else if (verifytoken.status == 403) {
+                                return resolve({
+                                    status: verifytoken.status,
+                                    message: verifytoken.message
+                                })
+                            }
+                            else if (err) {
                                 var error = {
                                     // statuscode: "E08",
                                     status: 500,
@@ -158,8 +170,20 @@ function request_service_aman(filepath, email_id) {
                             data.shift();
                             data.shift();
                             var params = []
-
-                            if (err) {
+                            var verifytoken = await checktoken.checkToken(token)
+                            if (verifytoken.status == 405) {
+                                console.log("core")
+                                return resolve({
+                                    status: verifytoken.status,
+                                    message: verifytoken.message
+                                })
+                            } else if (verifytoken.status == 403) {
+                                return resolve({
+                                    status: verifytoken.status,
+                                    message: verifytoken.message
+                                })
+                            }
+                            else if (err) {
                                 var error = {
                                     // statuscode: "E08",
                                     status: 500,
@@ -172,7 +196,10 @@ function request_service_aman(filepath, email_id) {
                                 await buildingDao.order_id_select_aman()
                                     .then(async function (result) {
                                         console.log(result.result.data[0])
-                                        var orderid = result.result.data[0].num
+                                        var orderid1 = result.result.data[0].num
+                                        var orderid2 = result.result.data[1].num
+                                        console.log(orderid1,orderid2,"1 and 2");
+                                        var orderid = Math.max(orderid1,orderid2) 
                                         console.log(orderid, "ORDER")
                                         console.log(orderid == "null")
                                         if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {

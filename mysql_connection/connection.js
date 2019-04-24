@@ -2,9 +2,6 @@ const db = require('./dbConfig.js');
 var mysql = require("mysql");
 var config = require("config");
 var dbConfig = config.get("mysqlConnection");
-// const connection= require('./dbConfig.js');
-
-
 function connectionCheck() {
     return new Promise((resolve, reject) => {
         db.getConnection(function(err, connection) {
@@ -152,7 +149,4 @@ module.exports = {
    getConnection : getConnection,
    query_execute : query_execute,
    insert_query : insert_query,
-
-
-
 }

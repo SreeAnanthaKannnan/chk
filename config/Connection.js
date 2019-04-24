@@ -1,16 +1,11 @@
 const db = require("../mysql_connection/dbConfig");
-
-//console.log("db",db);
-
 var mysql = require("mysql");
 var config = require("config");
 var dbConfig = config.get("mysqlConnection");
-//var promises = require('es6-promise').Promise;
-
 exports.getConnection = () => {
   return new Promise(resolve => {
     var connection = mysql.createConnection(dbConfig);
-    connection.connect(function(err) {
+    connection.connect(function (err) {
       if (err) {
         console.log(err);
         return resolve({
@@ -27,7 +22,7 @@ exports.query_execute = (query, params, connection = "") => {
   return new Promise(resolve => {
     if (connection) {
       console.log(connection.threadId);
-      connection.query(query, params, function(error, result, fields) {
+      connection.query(query, params, function (error, result, fields) {
         if (error) {
           resolve({
             status: 401,
@@ -43,7 +38,7 @@ exports.query_execute = (query, params, connection = "") => {
       });
     } else {
       connection = mysql.createConnection(dbConfig);
-      connection.connect(function(err) {
+      connection.connect(function (err) {
         if (err) {
           console.log(err);
           return resolve({
@@ -53,7 +48,7 @@ exports.query_execute = (query, params, connection = "") => {
           });
         }
         console.log(query, params);
-        connection.query(query, params, function(error, result, fields) {
+        connection.query(query, params, function (error, result, fields) {
           if (error) {
             resolve({
               status: 401,
@@ -76,7 +71,7 @@ exports.query_execute = (query, params, connection = "") => {
 exports.insert_query = (query, params, connection = "") => {
   return new Promise((resolve, reject) => {
     if (connection) {
-      connection.query(query, [[params]], function(error, result, fields) {
+      connection.query(query, [params], function (error, result, fields) {
         if (error) {
           resolve({
             status: 401,
@@ -92,7 +87,7 @@ exports.insert_query = (query, params, connection = "") => {
       });
     } else {
       connection = mysql.createConnection(dbConfig);
-      connection.connect(function(err) {
+      connection.connect(function (err) {
         if (err) {
           console.log(err);
           return resolve({
@@ -102,7 +97,7 @@ exports.insert_query = (query, params, connection = "") => {
           });
         }
         console.log(query, params);
-        connection.query(query, [[params]], function(error, result, fields) {
+        connection.query(query, [[params]], function (error, result, fields) {
           if (error) {
             resolve({
               status: 401,
