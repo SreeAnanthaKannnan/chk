@@ -50,20 +50,40 @@ function getavgbuildings() {
   });
 }
 function getavgorder() {
-  return new Promise((resolve, reject) => {
-    mysqlConnection
-      .query_execute(query.getavgorder)
-      .then(function(result, err) {
-        if (err) {
-          logger.fatal(
-            err,
-            "db error while getting building details from the building table"
-          );
-          return reject({ status: 400, body: "Cannot insert the data" });
-        } else {
-          return resolve({ status: 200, result: result.data });
-        }
+  let data = [];
+  return new Promise(async (resolve, reject) => {
+    var result = await mysqlConnection.query_execute(query.getavgorder);
+    data.push(result.data[0]);
+    if (result.data.length != 0) {
+      var getcallcentre = await mysqlConnection.query_execute(
+        query.getcallcentre
+      );
+      data.push(getcallcentre.data[0]);
+    }
+    if (getcallcentre.data.length != 0) {
+      var getselfbooking = await mysqlConnection.query_execute(
+        query.getselfbooking
+      );
+      data.push(getselfbooking.data[0]);
+    }
+    if (getselfbooking.data.length != 0) {
+      var getsinglebooking = await mysqlConnection.query_execute(
+        query.getsinglebooking
+      );
+      data.push(getsinglebooking.data[0]);
+    }
+    if (getsinglebooking.data.length != 0) {
+      var getbulkbooking = await mysqlConnection.query_execute(
+        query.getbulkbooking
+      );
+      data.push(getbulkbooking.data[0]);
+      return resolve({
+        status: 200,
+        message: data
       });
+    } else {
+      return resolve({ status: 200, result: result.data });
+    }
   });
 }
 
@@ -99,20 +119,42 @@ function getOrdersMonth(ordermonth, orderyear) {
       query.getOrderDetailsForDashBoard,
       [ordermonth, orderyear]
     );
+    response.push(res.data[0]);
     if (res.data.length != 0) {
+      var res1 = await mysqlConnection.query_execute(
+        query.getcallcentrebymonth,
+        [ordermonth, orderyear]
+      );
+      response.push(res1.data[0]);
     }
-
-    console.log("data from sql", res);
-
-    if (res.status != 200) {
+    if (res1.data.length != 0) {
+      var res2 = await mysqlConnection.query_execute(
+        query.getselfbookingbymonth,
+        [ordermonth, orderyear]
+      );
+      response.push(res2.data[0]);
+    }
+    if (res2.data.length != 0) {
+      var res3 = await mysqlConnection.query_execute(
+        query.getsinglebookingbymonth,
+        [ordermonth, orderyear]
+      );
+      response.push(res3.data[0]);
+    }
+    if (res3.data.length != 0) {
+      var res4 = await mysqlConnection.query_execute(
+        query.getbulkbookingbymonth,
+        [ordermonth, orderyear]
+      );
+      response.push(res4.data[0]);
+      return resolve({
+        status: 200,
+        message: response
+      });
+    } else {
       return reject({
         status: res.status,
         message: "Cant able to fetch the data"
-      });
-    } else {
-      return resolve({
-        status: res.status,
-        data: res.data
       });
     }
   });

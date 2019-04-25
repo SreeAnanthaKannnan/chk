@@ -129,7 +129,7 @@ function getavgOrder() {
     console.log("add", result);
     resolve({
       status: 200,
-      result: result.result
+      result: result.message
     });
   });
 }
@@ -293,7 +293,7 @@ function getorder_month(order_month, token) {
         message: "Data Cant Fetch"
       });
     } else {
-      var res_data = result.data;
+      var res_data = result.message;
       // console.log("number_of_buildings===>:", result.data[0].number_of_buildings);
       // console.log("number_of_building_complaint===>:", result.data[0].number_of_building_complaint);
       // console.log("number_of_building_progress===>:", result.data[0].number_of_building_progress);

@@ -90,7 +90,7 @@ var Adminmap = require("../core/Adminmap.js");
 var Adminmapactive = require("../core/Adminmap.js");
 
 var ip = require("ip");
-var { emailotp} = require("../utils/spsaemail");
+var { emailotp } = require("../utils/spsaemail");
 var otpfun = require("../utils/otp.js");
 const trainer_attendance = require("../core/Trainer_attendance");
 var session_delete = require("../core/session_delete");
@@ -112,7 +112,7 @@ const {
   getInstaller,
   getMothlyInstallerDetails
 } = require("../daos/dashboardDetails");
-const { forgetPasswordOTPAdditon} =  require('../daos/otpverifydao');
+const { forgetPasswordOTPAdditon } = require("../daos/otpverifydao");
 var file1;
 let date = require("date-and-time");
 let now = new Date();
@@ -678,19 +678,19 @@ router.post("/forgetpassword", async (req, res) => {
   otp = otp.otp;
 
   const result = await forgetPasswordOTPAdditon(otp, username);
-  if(result.status != 200){
+  if (result.status != 200) {
     res.status(result.status).json({
       message: result.message,
-      status:result.status
+      status: result.status
     });
   }
 
-  const sendMail = await emailotp(username,otp);
+  const sendMail = await emailotp(username, otp);
 
   res.status(result.status).json({
     message: result.message,
-    status:result.status,
-    otp : otp
+    status: result.status,
+    otp: otp
   });
   //  else {
   //   console.log("username=>", username);
@@ -746,7 +746,6 @@ router.post("/forgetpassword", async (req, res) => {
 });
 
 router.post("/Payment", cors(), async function(req, res) {
- 
   var payment1 = req.body;
   console.log(payment1);
   payment
@@ -1824,7 +1823,7 @@ router.post("/request_for_service_aman", cors(), (req, res) => {
   console.log(file_path, "filepath");
   var email_id = req.body.email;
   request_service_aman
-    .request_service_aman(file_path, email_id,token)
+    .request_service_aman(file_path, email_id, token)
     .then(result => {
       console.log(result);
       res.status(result.status).json({
@@ -2729,9 +2728,10 @@ router.post("/buildings_dashboard", cors(), async (req, res) => {
 
 //===================================order avg======================================================//
 router.get("/getavgOrder", cors(), async function(req, res) {
-  admin
+  await admin
     .getavgOrder()
     .then(result => {
+      console.log(result);
       res.send({
         data: result.result
       });

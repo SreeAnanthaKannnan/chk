@@ -301,8 +301,22 @@ module.exports.getavgorder =
   "SELECT round(sum(number_of_orders_received)) as order_received,round(sum(number_of_orders_closed)) as order_closed,round(sum(number_of_orders_pendingclosure)) as order_pending_closure from SHARJAH.vw_order_stats";
 module.exports.getOrderDetailsForDashBoard =
   " SELECT round(sum(number_of_orders_received)) as order_received,round(sum(number_of_orders_closed)) as order_closed,round(sum(number_of_orders_pendingclosure)) as order_pending_closure from SHARJAH.vw_order_stats where month =? and year=?";
-module.exports.getbookingtype =
-  "select order_id,booking_source,booking_type from vw_order_details where order_received_date group by order_id,booking_source,booking_type";
+module.exports.getcallcentre =
+  "select count(booking_source) as call_centre from vw_order_booking_count  where booking_source='call_centre'";
+module.exports.getselfbooking =
+  "select count(booking_source) as self_booking from vw_order_booking_count where booking_source='self_booking'";
+module.exports.getsinglebooking =
+  "select count(booking_type) as single from vw_order_booking_count where booking_type='single'";
+module.exports.getbulkbooking =
+  "select count(booking_type) as bulk from vw_order_booking_count where booking_type='bulk'";
+module.exports.getcallcentrebymonth =
+  "select count(booking_source) as call_centre from vw_order_booking_count  where booking_source='call_centre' and month=? and year =?";
+module.exports.getselfbookingbymonth =
+  "select count(booking_source) as self_booking from vw_order_booking_count where booking_source='self_booking' and month=? and year =?";
+module.exports.getsinglebookingbymonth =
+  "select count(booking_type) as single from vw_order_booking_count where booking_type='single' and month=? and year =?";
+module.exports.getbulkbookingbymonth =
+  "select count(booking_type) as bulk from vw_order_booking_count where booking_type='bulk' and month=? and year =?";
 module.exports.getavgadmin =
   "select Format(sum(Revenue),'##,##0') as Revenue  from SHARJAH.vw_admin ";
 module.exports.getprojected_demand =
@@ -320,5 +334,5 @@ module.exports.getdurationbymonth =
 module.exports.getTopPerfomerOfTheMonth =
   "select installer,sum(number_of_installations) from vw_top_performents where month = ? and year = ? group by installer,number_of_installations order by number_of_installations desc limit 3";
 
-module.exports.employeecheck=
-"select order_id from Employee_Profile where national_id=?";
+module.exports.employeecheck =
+  "select order_id from Employee_Profile where national_id=?";
