@@ -666,84 +666,84 @@ router.post("/textimage", cors(), (req, res, next) => {
   );
 });
 //===============================forgetpassword==============================================//
-router.post("/forgetpassword", async (req, res) => {
-  const username = req.body.email;
-  if (!username) {
-    res.status(400).json({
-      status: 400,
-      message: "Please fill all the details"
-    });
-  }
-  let otp = await otpfun.otpgen();
-  otp = otp.otp;
+// router.post("/forgetpassword", async (req, res) => {
+//   const username = req.body.email;
+//   if (!username) {
+//     res.status(400).json({
+//       status: 400,
+//       message: "Please fill all the details"
+//     });
+//   }
+//   let otp = await otpfun.otpgen();
+//   otp = otp.otp;
 
-  const result = await forgetPasswordOTPAdditon(otp, username);
-  if (result.status != 200) {
-    res.status(result.status).json({
-      message: result.message,
-      status: result.status
-    });
-  }
+//   const result = await forgetPasswordOTPAdditon(otp, username);
+//   if (result.status != 200) {
+//     res.status(result.status).json({
+//       message: result.message,
+//       status: result.status
+//     });
+//   }
 
-  const sendMail = await emailotp(username, otp);
+//   const sendMail = await emailotp(username, otp);
 
-  res.status(result.status).json({
-    message: result.message,
-    status: result.status,
-    otp: otp
-  });
-  //  else {
-  //   console.log("username=>", username);
-  //   // console.log("password======>>", password);
+//   res.status(result.status).json({
+//     message: result.message,
+//     status: result.status,
+//     otp: otp
+//   });
+//   //  else {
+//   //   console.log("username=>", username);
+//   //   // console.log("password======>>", password);
 
-  //   // let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
-  //   // console.log("sql==>", sql)
-  //   // =========email==============
-  //   await con.query(
-  //     "SELECT * FROM citizens where email_id ='" + username + "'",
-  //     async function (error, results, fields) {
-  //       if (error) {
-  //         res.send({
-  //           status: false,
-  //           message: "error"
-  //         });
-  //       } else {
-  //         if (results.length > 0) {
-  //           console.log("email=====>>>", username);
-  //           //  console.log("password=====>>>", otp);
-  //           console.log("results=>", results.length);
-  //           console.log("results=======>", results);
-  //           if (results[0].email_id == username) {
-  //             console.log("enter in to the if condition==>>>", username);
-  //             // console.log("password=====>>>", password);
-  //             var data = await con.query(
-  //               "UPDATE citizens SET otp = '" +
-  //               otp +
-  //               "' WHERE email_id = '" +
-  //               username +
-  //               "'",
-  //               function (error, results1, fields) {
-  //                 console.log("result,", results1);
-  //                 console.log("error", error);
-  //               }
-  //             );
-  //             // console.log("data", data),
-  //             //console.log("table_results", results1)
-  //             console.log(otp);
-  //             res.send({
-  //               status: "true",
-  //               results: otp
-  //               // message: "Password updated successfully",
-  //               // رسالة:
-  //               //   "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
-  //             });
-  //           }
-  //         }
-  //       }
-  //     }
-  //   );
-  // }
-});
+//   //   // let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
+//   //   // console.log("sql==>", sql)
+//   //   // =========email==============
+//   //   await con.query(
+//   //     "SELECT * FROM citizens where email_id ='" + username + "'",
+//   //     async function (error, results, fields) {
+//   //       if (error) {
+//   //         res.send({
+//   //           status: false,
+//   //           message: "error"
+//   //         });
+//   //       } else {
+//   //         if (results.length > 0) {
+//   //           console.log("email=====>>>", username);
+//   //           //  console.log("password=====>>>", otp);
+//   //           console.log("results=>", results.length);
+//   //           console.log("results=======>", results);
+//   //           if (results[0].email_id == username) {
+//   //             console.log("enter in to the if condition==>>>", username);
+//   //             // console.log("password=====>>>", password);
+//   //             var data = await con.query(
+//   //               "UPDATE citizens SET otp = '" +
+//   //               otp +
+//   //               "' WHERE email_id = '" +
+//   //               username +
+//   //               "'",
+//   //               function (error, results1, fields) {
+//   //                 console.log("result,", results1);
+//   //                 console.log("error", error);
+//   //               }
+//   //             );
+//   //             // console.log("data", data),
+//   //             //console.log("table_results", results1)
+//   //             console.log(otp);
+//   //             res.send({
+//   //               status: "true",
+//   //               results: otp
+//   //               // message: "Password updated successfully",
+//   //               // رسالة:
+//   //               //   "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
+//   //             });
+//   //           }
+//   //         }
+//   //       }
+//   //     }
+//   //   );
+//   // }
+// });
 
 router.post("/Payment", cors(), async function(req, res) {
   var payment1 = req.body;
@@ -832,6 +832,76 @@ router.post("/update_installation", cors(), async function(req, res) {
       })
     );
 });
+//=============================forgetpassword============================================//
+router.post("/forgetpassword", async (req, res) => {
+  let forgetpassword = req.body;
+  console.log("body", forgetpassword);
+  let username = req.body.email;
+  console.log("forgot_email=>", username);
+  // let password = req.body.password;
+  var otp1 = await otpfun.otpgen();
+  var otp = otp1.otp;
+  console.log(otp);
+  var finalotp = await emailotpfun.emailotp(username, otp);
+
+  if (!username) {
+    res.send({
+      status: 400,
+      message: "Please fill all the details"
+    });
+  } else {
+    console.log("username=>", username);
+    // console.log("password======>>", password);
+
+    // let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
+    // console.log("sql==>", sql)
+    // =========email==============
+    await con.query(
+      "SELECT * FROM citizens where email_id ='" + username + "'",
+      async function(error, results, fields) {
+        if (error) {
+          res.send({
+            status: 401,
+            message: "error"
+          });
+        } else {
+          if (results.length > 0) {
+            console.log("email=====>>>", username);
+            //  console.log("password=====>>>", otp);
+            console.log("results=>", results.length);
+            console.log("results=======>", results);
+            if (results[0].email_id == username) {
+              console.log("enter in to the if condition==>>>", username);
+              // console.log("password=====>>>", password);
+              var data = await con.query(
+                "UPDATE citizens SET otp = '" +
+                  otp +
+                  "' WHERE email_id = '" +
+                  username +
+                  "'",
+                function(error, results1, fields) {
+                  console.log("result,", results1);
+                  console.log("error", error);
+                }
+              );
+              // console.log("data", data),
+              //console.log("table_results", results1)
+              console.log(otp);
+              res.send({
+                status: 200,
+                results: otp
+                // message: "Password updated successfully",
+                // رسالة:
+                //   "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
+              });
+            }
+          }
+        }
+      }
+    );
+  }
+});
+
 //========================forgetpassword-otp===========================================//
 router.post("/forgetotpverification", cors(), (req, res) => {
   var otp = req.body.otp;
