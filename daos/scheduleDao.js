@@ -22,6 +22,24 @@ function schedule_insert(values) {
       });
   });
 }
+function schedule_insert_temp(values) {
+  return new Promise(function(resolve, reject) {
+    //values = [values];
+    logger.fatal("values", values);
+      mysqlConnection
+      .query_execute(query.scheduleinfo_temp,values)
+      .then(function(result, err) {
+        if (err) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          console.log(result);
+          return resolve({ status: 200, message: result });
+        }
+      });
+  });
+}
 function update_countvalue(v1,v2) {
   return new Promise(function(resolve, reject) {
     var values = [v1,v2];
@@ -135,5 +153,6 @@ module.exports = {
   Schedule: Schedule,
   schedule_summary_value: schedule_summary_value,
   Schedule_select: Schedule_select,
-  update_countvalue:update_countvalue
+  update_countvalue:update_countvalue,
+  schedule_insert_temp:schedule_insert_temp
 };

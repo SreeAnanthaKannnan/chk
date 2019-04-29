@@ -19,11 +19,12 @@ function pdf_insert(path,email,checked1,checked2,checked3,checked4,checked5,chec
         var sql = "SELECT * FROM Buildings where email_id ='" + owner_id + "'";
     
         con.query(sql,function(err,result){
+            console.log(err,"err")
          if(err){
              throw err;
              
          } 
-    
+    console.log(result[0],"value 220")
 
 if(result[0].P220V ==null && result[0].FASA==null && result[0].FARS==null && result[0].FAFS==null && result[0].TAMS==null && result[0].FPPS==null && result[0].FPFS==null && result[0].SIM==null && result[0].TLA==null && result[0].FACR==null && result[0].Assessment1==null){
          var sql= "UPDATE Buildings SET P220V ='"+checked1+"', FASA='"+checked2+"', FARS='"+checked3+"',FAFS='"+checked4+"',TAMS='"+checked5+"', FPPS='"+checked6+"', FPFS='"+checked7+"',SIM='"+checked8+"',TLA='"+checked9+"', FACR='"+checked10+"',Assessment1='yes',Flag='1' where email_id='"+owner_id+"'";

@@ -1,59 +1,87 @@
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
-var log4js = require('log4js');
-const logger = log4js.getLogger('SPSA_project');
+var log4js = require("log4js");
+const logger = log4js.getLogger("SPSA_project");
+const checktoken = require("../utils/checkToken");
 
-
-getInstallerDetailsForDashBoard = async (data) => {
+getInstallerDetailsForDashBoard = async (data, token) => {
+  var verifytoken = await checktoken.checkToken(token);
+  console.log(verifytoken);
+  if (verifytoken.status == 405) {
+    return resolve({
+      status: verifytoken.status,
+      message: verifytoken.message
+    });
+  } else if (verifytoken.status == 403) {
+    return resolve({
+      status: verifytoken.status,
+      message: verifytoken.message
+    });
+  } else {
     const response = {};
     const installerReport = await mysqlConnection.query_execute(
-        query.getinstallersDetailsForDashBoard,
-        [data.month, data.year]
+      query.getinstallersDetailsForDashBoard,
+      [data.month, data.year]
     );
     if (installerReport.status != 200) {
-        response['status'] = installerReport.status;
-        response['message'] = 'Cant able to fetch the data';
-        return response;
+      response["status"] = installerReport.status;
+      response["message"] = "Cant able to fetch the data";
+      return response;
     }
     const topPerformer = await mysqlConnection.query_execute(
-        query.getTopPerfomerOfTheMonth,
-        [data.month, data.year]
-
+      query.getTopPerfomerOfTheMonth,
+      [data.month, data.year]
     );
     if (topPerformer.status != 200) {
-        response['status'] = topPerformer.status;
-        response['message'] = 'Cant able to fetch the data';
-        return response;
+      response["status"] = topPerformer.status;
+      response["message"] = "Cant able to fetch the data";
+      return response;
     }
-    response['status'] = 200;
-    response['installers_details'] = {};
-    response['installers_details']['active_installers'] = installerReport.data[0].active_installers;
-    response['installers_details']['total_installers'] = installerReport.data[0].total_installers;
-    response['topPerfomer'] = topPerformer.data;
+    response["status"] = 200;
+    response["installers_details"] = {};
+    response["installers_details"]["active_installers"] =
+      installerReport.data[0].active_installers;
+    response["installers_details"]["total_installers"] =
+      installerReport.data[0].total_installers;
+    response["topPerfomer"] = topPerformer.data;
     return response;
-}
+  }
+};
 
-getMonthlyDetailsOfInsatallers = async () => {
+getMonthlyDetailsOfInsatallers = async token => {
+  var verifytoken = await checktoken.checkToken(token);
+  console.log(verifytoken);
+  if (verifytoken.status == 405) {
+    return resolve({
+      status: verifytoken.status,
+      message: verifytoken.message
+    });
+  } else if (verifytoken.status == 403) {
+    return resolve({
+      status: verifytoken.status,
+      message: verifytoken.message
+    });
+  } else {
     const response = [];
     const res = await mysqlConnection.query_execute(
-        query.getinstallerDetailsMonthWise
+      query.getinstallerDetailsMonthWise
     );
-    console.log('result', res);
+    console.log("result", res);
     if (res.status != 200) {
-        response.push({
-            status: res.status,
-            message: 'Cant able to fetch the data'
-        })
+      response.push({
+        status: res.status,
+        message: "Cant able to fetch the data"
+      });
     } else {
-        response.push({
-            status: res.status,
-            data: res.data,
-        })
+      response.push({
+        status: res.status,
+        data: res.data
+      });
     }
+
     return response;
-
-}
-
+  }
+};
 
 module.exports.getInstaller = getInstallerDetailsForDashBoard;
 module.exports.getMothlyInstallerDetails = getMonthlyDetailsOfInsatallers;
