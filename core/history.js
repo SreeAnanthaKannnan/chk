@@ -2,7 +2,7 @@ var log4js = require("log4js");
 const logger = log4js.getLogger("SPSA_project");
 const checktoken = require("../utils/checkToken");
 var bcSdk = require('../fabcar/javascript/query')
-exports.getHistory = (object) => {
+exports.getHistory = (object,token) => {
   return new Promise(async (resolve, reject) => {
     //var id = "{\"selector\":{\"name\":\"" +email+"\"}}";
     console.log("object",object);
@@ -18,18 +18,18 @@ exports.getHistory = (object) => {
       var id = "{\"selector\":{\"Buildingdetails.buildingname\": \""+ object.buildingname +"\"}}";
     }
     //var id ="sharjah"
-    // var verifytoken = await checktoken.checkToken(token);
-    // if (verifytoken.status == 405) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else if (verifytoken.status == 403) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else 
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else 
     {
       var fun = "queryHistory";
       //Retrieve data from block chain
@@ -58,18 +58,18 @@ exports.getHistory = (object) => {
 exports.getHistory1 = (id) => {
   return new Promise(async (resolve, reject) => {
    // var id = "{\"selector\":{\"name\":\"" +email+"\"}}"
-    // var verifytoken = await checktoken.checkToken(token);
-    // if (verifytoken.status == 405) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else if (verifytoken.status == 403) {
-    //   return resolve({
-    //     status: verifytoken.status,
-    //     message: verifytoken.message
-    //   });
-    // } else 
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else 
     {
       var fun = "queryHistory2";
       //Retrieve data from block chain

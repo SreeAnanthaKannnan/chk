@@ -132,7 +132,7 @@ async function add_admin(add_admin) {
     var password = cryptr.encrypt(add_admin.password);
     console.log("pass", password);
     var user_type = "super_admin";
-    var verify_email = "Y";
+    var verify_email = "N";
     var reg_date = now;
 
     var select_query = [

@@ -7,7 +7,7 @@ async function sup_temp(time, rdate, building_id, token) {
   return new Promise(async function(resolve, reject) {
     //verification of token
     var verifytoken = await checktoken.checkToken(token);
-    if (verifytoken.status == 402) {
+    if (verifytoken.status == 405) {
       return resolve({
         status: verifytoken.status,
         message: verifytoken.message
@@ -62,7 +62,41 @@ async function sup_temp(time, rdate, building_id, token) {
     }
   });
 }
-
+async function sup_bulk_temp(time, rdate, building_id, orderid) {
+  console.warn("rdate", rdate);
+  return new Promise(async function(resolve, reject) {
+    //verification of token
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else {
+      var preschedule = rdate + " " + time;
+      var status1 = "Order Raised";
+      var data = [preschedule, orderid, status1, building_id];
+      let query = await insertquery.schedule_insert_temp(data);
+      if (query.affectedRows != 0) {
+        return resolve({
+          orderid: orderid,
+          message: "Order Placed Successfully"
+        });
+      } else {
+        return reject({
+          status: 500,
+          message: "Internal server error!"
+        });
+      }
+    }
+  });
+}
 module.exports = {
-  sup_temp: sup_temp
+  sup_temp: sup_temp,
+  sup_bulk_temp: sup_bulk_temp
 };

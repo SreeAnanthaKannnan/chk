@@ -136,6 +136,46 @@ function pay_verify_status(params) {
 
     });
 }
+function payment_aman_pref(param,pushcount) {
+    console.log("in dao", param);
+    return new Promise(async function (resolve, reject) {
+        var params = [param.preschedule, pushcount,param.email_id, param.Buildingname]
+        /*====================inserting employee's data into employee_Profile table========*/
+        mysqlConnection
+            .query_execute(query.payment_aman_pref, params)
+            /*==========db error capturing================*/
+            .then(function (result, err) {
+                if (err) {
+                    logger.fatal(err,"Db error while update the payment details for aman order book")
+                    return resolve({ status: 400, err: err });
+                } else {
+                    console.log(result);
+                    return resolve({ status: 200, message: result });
+                }
+            });
+
+    });
+}
+function pushnotifycount(param) {
+    console.log("in dao", param);
+    return new Promise(async function (resolve, reject) {
+        var params = [param.email_id]
+        /*====================inserting employee's data into employee_Profile table========*/
+        mysqlConnection
+            .query_execute(query.pushnotifycount, params)
+            /*==========db error capturing================*/
+            .then(function (result, err) {
+                if (err) {
+                    logger.fatal(err,"Db error while update the payment details for aman order book")
+                    return resolve({ status: 400, err: err });
+                } else {
+                    console.log(result);
+                    return resolve({ status: 200, message: result });
+                }
+            });
+
+    });
+}
 
 module.exports = {
     payment: payment,
@@ -143,6 +183,9 @@ module.exports = {
     payment_aman_install: payment_aman_install,
     pay_verify : pay_verify,
     payment_aman_statusdao:payment_aman_statusdao,
-    pay_verify_status:pay_verify_status
+    pay_verify_status:pay_verify_status,
+    payment_aman_pref:payment_aman_pref,
+    pushnotifycount:pushnotifycount
+  
 
 };
