@@ -159,7 +159,7 @@ function payment_aman_pref(param,pushcount) {
 function pushnotifycount(param) {
     console.log("in dao", param);
     return new Promise(async function (resolve, reject) {
-        var params = [param.email_id, param.Buildingname]
+        var params = [param.email_id]
         /*====================inserting employee's data into employee_Profile table========*/
         mysqlConnection
             .query_execute(query.pushnotifycount, params)

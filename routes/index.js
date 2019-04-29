@@ -1285,6 +1285,77 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
     }
   }
 });
+//=============================bulkschedules_temp============================
+router.post("/BulkSchedules_temp", cors(), async function(req, res) {
+  const token = req.headers.authorization;
+  console.log(req.body);
+  var schedules = req.body;
+  console.log("length of data from UI", schedules.schedule.length);
+  /*If data from UI is empty Error Message will be sent*/
+  if (schedules.schedule.length == 0) {
+    res.send({
+      message: "Please Schedule the selected Buildings",
+      flag: 1
+    });
+  } else {
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      res.send({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      res.send({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else {
+      var getorder = await buildingDao.order_id_select_aman();
+      console.log(getorder, "getorder");
+      console.log(getorder.result.data[0], "order_id_select=====>");
+      var orderid = getorder.result.data[0].num;
+      console.log(orderid, "ORDER");
+      console.log(orderid == "null");
+      if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {
+        orderid = "A0001";
+      } else {
+        console.log(orderid, "inside the loop");
+        console.log("orderid" + orderid);
+        orderid = orderid + 1;
+        console.log("orderid=====>" + orderid);
+
+        orderid = orderid.toString();
+        if (orderid.length == 1) {
+          orderid = "A000" + orderid;
+        } else if (orderid.length == 2) {
+          orderid = "A00" + orderid;
+        } else if (orderid.length == 3) {
+          orderid = "A0" + orderid;
+        } else {
+          orderid = "A" + orderid;
+        }
+      }
+      /*Here the Bulk Buildings are scheduled one by one*/
+      for (let i = 0; i < schedules.schedule.length; i++) {
+        console.log(i, "i");
+        let uidate = schedules.schedule[i].selectedStartDate;
+        var date = moment(new Date(uidate.substr(0, 16)));
+        var rdate = date.format("YYYY-MM-DD");
+        await schedule_temp.sup_bulk_temp(
+          schedules.schedule[i].time,
+          rdate,
+          schedules.schedule[i].building_id,
+          orderid
+        );
+      }
+      res.send({
+        status: 200,
+        message:
+          "Your Buildings are scheduled for service. Please visit booking history for details"
+      });
+    }
+  }
+});
 //=============================Blockchain-API's============================================//
 router.post("/blockchain", cors(), async function(req, res) {
   var Buildingdetails = req.body.Buildingdetails;
