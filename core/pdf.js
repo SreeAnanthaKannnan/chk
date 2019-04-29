@@ -417,7 +417,7 @@ var path = require('path');
 
 //Load the docx file as a binary
 var content = fs
-  .readFileSync(path.resolve(__dirname, "/home/bahirathy/saned_spsa_backend/report/AMANPrerequisiteReport.docx"), 'binary');
+  .readFileSync(path.resolve(__dirname, "./report/AMANPrerequisiteReport.docx"), 'binary');
 
 var zip = new JSZip(content);
 
@@ -487,11 +487,11 @@ var buf = doc.getZip()
            .generate({type: 'nodebuffer'});
 
 // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-fs.writeFileSync(path.resolve(__dirname, "/home/bahirathy/saned_spsa_backend/report/outprerequist.docx"), buf);
+fs.writeFileSync(path.resolve(__dirname, "./report/outprerequist.docx"), buf);
 
-await unoconv.convert('/home/bahirathy/saned_spsa_backend/report/outprerequist.docx', 'pdf', async function (err, result) {
+await unoconv.convert('./report/outprerequist.docx', 'pdf', async function (err, result) {
 // result is returned as a Buffer
-await fs.writeFile('/home/bahirathy/saned_spsa_backend/report/outprerequist.docx'+datetime+email+'.pdf', result);
+await fs.writeFile('./report/outprerequist.docx'+datetime+email+'.pdf', result);
 });
 
 //==============================================================================================    
