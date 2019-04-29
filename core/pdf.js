@@ -512,7 +512,7 @@ await fs.writeFile('./report/outprerequist.docx'+datetime+email+'.pdf', result);
             subject: 'Saned Services',
             attachments: [{   // filename and content type is derived from path
             // filename and content type is derived from path
-          path: '/home/bahirathy/saned_spsa_backend/report/outprerequist.docx'+datetime+email+'.pdf'
+          path: './report/outprerequist.docx'+datetime+email+'.pdf'
       },
           ],
           
