@@ -298,7 +298,7 @@ module.exports.getbuildingsDetailsForDashBoard =
   "select ROUND(sum(number_of_buildings)) as number_of_buildings, ROUND(sum(number_of_building_complaint)) as number_of_building_complaint, ROUND(sum(number_of_building_progress)) as number_of_building_progress from vw_building_details  where month = ? and year = ?";
 
 module.exports.getavgorder =
-  "SELECT round(sum(number_of_orders_received)) as order_received,round(sum(number_of_orders_closed)) as order_closed,round(sum(number_of_orders_pendingclosure)) as order_pending_closure from SHARJAH.vw_order_stats";
+  "select a.order_received,a.order_closed,b.order_pending_closure  from (SELECT sum(number_of_orders_received) as order_received, sum(number_of_orders_closed) as order_closed from SHARJAH.vw_order_stats) a  join(select number_of_orders_pendingclosure as order_pending_closure from SHARJAH.vw_order_stats where month(str_to_date(concat('2019-',month,'-1'),'%Y-%b-%e')) = month(now())) b";
 module.exports.getOrderDetailsForDashBoard =
   " SELECT round(sum(number_of_orders_received)) as order_received,round(sum(number_of_orders_closed)) as order_closed,round(sum(number_of_orders_pendingclosure)) as order_pending_closure from SHARJAH.vw_order_stats where month =? and year=?";
 module.exports.getcallcentre =
@@ -336,3 +336,6 @@ module.exports.getTopPerfomerOfTheMonth =
 
 module.exports.employeecheck =
   "select order_id from Employee_Profile where national_id=?";
+
+module.exports.scheduleinfo_temp =
+  "update Buildings set preschedule=?,orderid=?,status=? where id=?";
