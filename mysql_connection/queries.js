@@ -170,7 +170,7 @@ module.exports.payment_aman =
 module.exports.payment_aman_install =
   "UPDATE Buildings SET installeddate = ? WHERE email_id = ? AND Buildingname=?";
   module.exports.pushnotifycount = 
-  "select push_notify_count,preschedule from Buildings WHERE email_id = ?";
+  "select push_notify_count,preschedule,id from Buildings WHERE email_id = ?";
   module.exports.payment_aman_pref =
   "UPDATE Buildings SET preschedule = ?, push_notify_count = ? WHERE email_id = ? AND Buildingname=?";
 // ===========================salama Payment======================//

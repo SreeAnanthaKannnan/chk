@@ -811,6 +811,23 @@ router.post("/Payment_statusupdate_salama", cors(), async function(req, res) {
       })
     );
 });
+router.post("/pushcount", cors(), async function(req, res) {
+  const token = req.headers.authorization;
+  var details= req.body;
+  console.log(details);
+  payment
+    .getpushcount(details, token)
+    .then(result => {
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
 //=============================================
 router.post("/update_installation", cors(), async function(req, res) {
   const token = req.headers.authorization;
@@ -846,7 +863,7 @@ router.post("/update_preschedule", cors(), async function(req, res) {
       })
     );
 });
-router.post("/pushcount", cors(), async (req, res) => {
+router.post("/pushcount_1", cors(), async (req, res) => {
   var details= req.body;
   console.log("buildings==>index==>", details);
   var token = req.headers.authorization;

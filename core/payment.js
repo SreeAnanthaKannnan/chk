@@ -302,12 +302,13 @@ function getpushcount(details, token) {
 
       {
         var pushcount = await pay.pushnotifycount(details)
-        console.log(pushcount.message.data[0].push_notify_count,"count===>=");
-       var push_count = pushcount.message.data[0];
+        console.log(pushcount.message.data[0],"count===>=");
+       var push_count = pushcount.message;
         if (pushcount.status == 200) {
           return resolve({
-            count:push_count.push_notify_count,
-            message:"Your Building is scheduled for service on "+push_count.preschedule+""
+            status:200,
+            count:push_count,
+            // message:"Your Building is scheduled for service on "+push_count.preschedule+""
           })
       }
         else {
