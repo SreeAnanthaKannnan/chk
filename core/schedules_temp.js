@@ -8,7 +8,7 @@ async function sup_temp(time, rdate, building_id,token) {
     return new Promise(async function(resolve, reject) {
       //verification of token
       var verifytoken = await checktoken.checkToken(token);
-  if (verifytoken.status == 402) {
+  if (verifytoken.status == 405) {
     return resolve({
       status: verifytoken.status,
       message: verifytoken.message
@@ -71,12 +71,12 @@ async function sup_temp(time, rdate, building_id,token) {
     }
 })
 } 
-async function sup_bulk_temp(time, rdate, building_id,token) {
+async function sup_bulk_temp(time, rdate, building_id,orderid) {
     console.warn("rdate", rdate);
     return new Promise(async function(resolve, reject) {
       //verification of token
       var verifytoken = await checktoken.checkToken(token);
-  if (verifytoken.status == 402) {
+  if (verifytoken.status == 405) {
     return resolve({
       status: verifytoken.status,
       message: verifytoken.message
