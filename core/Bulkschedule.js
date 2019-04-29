@@ -26,12 +26,13 @@ async function sup(time, rdate, building_id,orderid) {
       //Here we are fecthing latest installers list from the DataBase and stored in an array*/
       var sup = await supplier.supplier();
       
-        logger.fatal("supplier list", sup.result[0].email_id);
+       console.log("supplier list", sup.result[0].email_id);
         suparray.push(sup.result[0].email_id);
       
-      logger.fatal("supplier", suparray);
+      console.log("supplier", suparray);
       //Here we check the preferred time slot is available for the Building owner*/
       var result2 = await auto.auto(time,suparray[0],idate)
+      console.log(result2,"in 35 of core bulk");
         if (result2.result == 0) {
             console.log("assigned req date");
             var schedule_time = time;
@@ -54,10 +55,12 @@ return resolve({
    else {
         //if preferred time slot unavilable we assign the next available slot for the Building*/
         for (var i = 0; i < t.length; i++) {
+          
             logger.fatal(t[i]);
             var result = await auto.auto(t[i], suparray[0], sdate);
-            if (result.length == 0) {
-              if (result.length != suparray.length) {
+            
+            if (result.result.length == 0) {
+              if (result.result.length != suparray.length) {
                 logger.fatal("assigned time", t[i]);
                 var schedule_time = t[i];
                 var suplier_id = suparray[0];

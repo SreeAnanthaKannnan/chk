@@ -288,11 +288,11 @@ router.post("/emailotpverification1", cors(), function (req, res) {
 });
 //========================================citizen-registration-end=====================================
 router.post("/getdetails", cors(), async function(req, res) {
- // const token = req.headers.authorization;
+  const token = req.headers.authorization;
       var object = req.body;
       console.log(object,"object");
     history
-      .getHistory(object)
+      .getHistory(object,token)
       .then(result => {
         res.send({
           result: result
@@ -306,10 +306,10 @@ router.post("/getdetails", cors(), async function(req, res) {
     });
 //=================================Appeal====================================================
 router.post("/getdetailsforkey", cors(), async function (req, res) {
-  // const token = req.headers.authorization;
+   const token = req.headers.authorization;
   var email = req.body.email;
   history
-    .getHistory1(email)
+    .getHistory1(email,token)
     .then(result => {
       res.send({
         result: result
@@ -1083,7 +1083,6 @@ router.post("/BulkSchedules", cors(), async function (req, res) {
   const token = req.headers.authorization;
   console.log(req.body);
   var schedules = req.body;
-
   console.log("length of data from UI", schedules.schedule.length);
   /*If data from UI is empty Error Message will be sent*/
   if (schedules.schedule.length == 0) {
@@ -1160,10 +1159,6 @@ router.post("/BulkSchedules", cors(), async function (req, res) {
 });
 //=============================Blockchain-API's============================================//
 router.post("/blockchain", cors(), async function(req, res) {
-  // var transaction = {
-  //   name: "ajay",
-  //   address: "kerala"
-  // };
   var Buildingdetails = req.body.Buildingdetails;
   var name= req.body.name;
   var data ={
@@ -1224,8 +1219,7 @@ router.post("/Appeal", cors(), (req, res) => {
       );
   }
 });
-
-//=============================================Trainer account creation============
+//=============================================Trainer account creation========================
 router.post("/Trainer_account_creation", cors(), (req, res) => {
   const trainer_Object = req.body;
   console.log(trainer_Object, "initialtest");
