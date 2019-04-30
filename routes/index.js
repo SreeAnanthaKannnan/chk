@@ -32,6 +32,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   delbuilding = require("../core/DeleteBuilding"),
   assesserview = require("../core/assesserview"),
   schedule = require("../core/schedule"),
+  schedule_temp = require("../core/schedules_temp"),
   schedulefun = require("../core/Bulkschedule"),
   getBuildings = require("../core/getBuildings"),
   getbuildpay = require("../core/buildpayments"),
@@ -89,8 +90,10 @@ var getBuildings_web = require("../core/getBuildings_web");
 var Adminmap = require("../core/Adminmap.js");
 var Adminmapactive = require("../core/Adminmap.js");
 var updateprofile = require("../core/updateProfile")
+var schedule_temp = require("../core/schedules_temp");
+
 var ip = require("ip");
-var emailotpfun = require("../utils/spsaemail");
+var { emailotp } = require("../utils/spsaemail");
 var otpfun = require("../utils/otp.js");
 const trainer_attendance = require("../core/Trainer_attendance");
 var session_delete = require("../core/session_delete");
@@ -112,7 +115,7 @@ const {
   getInstaller,
   getMothlyInstallerDetails
 } = require("../daos/dashboardDetails");
-
+const { forgetPasswordOTPAdditon } = require("../daos/otpverifydao");
 var file1;
 let date = require("date-and-time");
 let now = new Date();
@@ -197,6 +200,29 @@ router.post("/request_for_service", cors(), (req, res) => {
         .json({
           status: err.status
         })
+    );
+});
+
+router.post("/schedules_temp", cors(), async function(req, res) {
+  console.log(req.body);
+  const token = req.headers.authorization;
+  var time = req.body.schedule_time;
+  var reqdate = req.body.requestdate;
+  var building_id = req.body.building_id;
+  console.log("building_id", building_id);
+  var date = moment(new Date(reqdate.substr(0, 16)));
+  var rdate = date.format("YYYY-MM-DD");
+  schedule_temp
+    .sup_temp(time, rdate, building_id, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
     );
 });
 //===================================getbuildings======================================================//
@@ -288,28 +314,24 @@ router.post("/emailotpverification1", cors(), function(req, res) {
 });
 //========================================citizen-registration-end=====================================
 router.post("/getdetails", cors(), async function(req, res) {
-  // const token = req.headers.authorization;
-  var object = req.body;
-  console.log(object, "object");
-  history
-    .getHistory(object)
-    .then(result => {
-      res.send({
-        result: result
-      });
-    })
-    .catch(err =>
-      res.status(err.status).json({
-        message: err.message
+  const token = req.headers.authorization;
+      var object = req.body;
+      console.log(object,"object");
+    history
+      .getHistory(object,token)
+      .then(result => {
+        res.send({
+          result: result
+        });
       })
-    );
+  
 });
 //=================================Appeal====================================================
-router.post("/getdetailsforkey", cors(), async function(req, res) {
-  // const token = req.headers.authorization;
+router.post("/getdetailsforkey", cors(), async function (req, res) {
+   const token = req.headers.authorization;
   var email = req.body.email;
   history
-    .getHistory1(email)
+    .getHistory1(email,token)
     .then(result => {
       res.send({
         result: result
@@ -668,75 +690,86 @@ router.post("/textimage", cors(), (req, res, next) => {
   );
 });
 //===============================forgetpassword==============================================//
-router.post("/forgetpassword", async (req, res) => {
-  let forgetpassword = req.body;
-  console.log("body", forgetpassword);
-  let username = req.body.email;
-  console.log("forgot_email=>", username);
-  var otp1 = await otpfun.otpgen();
-  var otp = otp1.otp;
-  console.log(otp);
-  var finalotp = await emailotpfun.emailotp(username, otp);
+// router.post("/forgetpassword", async (req, res) => {
+//   const username = req.body.email;
+//   if (!username) {
+//     res.status(400).json({
+//       status: 400,
+//       message: "Please fill all the details"
+//     });
+//   }
+//   let otp = await otpfun.otpgen();
+//   otp = otp.otp;
 
-  if (!username) {
-    res.send({
-      message: "Please fill all the details"
-    });
-  } else {
-    console.log("username=>", username);
-    // console.log("password======>>", password);
+//   const result = await forgetPasswordOTPAdditon(otp, username);
+//   if (result.status != 200) {
+//     res.status(result.status).json({
+//       message: result.message,
+//       status: result.status
+//     });
+//   }
 
-    // let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
-    // console.log("sql==>", sql)
-    // =========email==============
-    await con.query(
-      "SELECT * FROM citizens where email_id ='" + username + "'",
-      async function(error, results, fields) {
-        if (error) {
-          res.send({
-            status: false,
-            message: "error"
-          });
-        } else {
-          if (results.length > 0) {
-            console.log("email=====>>>", username);
-            //  console.log("password=====>>>", otp);
-            console.log("results=>", results.length);
-            console.log("results=======>", results);
-            if (results[0].email_id == username) {
-              console.log("enter in to the if condition==>>>", username);
-              // console.log("password=====>>>", password);
-              var data = await con.query(
-                "UPDATE citizens SET otp = '" +
-                  otp +
-                  "' WHERE email_id = '" +
-                  username +
-                  "'",
-                function(error, results1, fields) {
-                  console.log("result,", results1);
-                  console.log("error", error);
-                }
-              );
-              // console.log("data", data),
-              //console.log("table_results", results1)
-              console.log(otp);
-              res.send({
-                status: "true",
-                results: otp
-                // message: "Password updated successfully",
-                // رسالة:
-                //   "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
-              });
-            }
-          }
-        }
-      }
-    );
-  }
-});
+//   const sendMail = await emailotp(username, otp);
+
+//   res.status(result.status).json({
+//     message: result.message,
+//     status: result.status,
+//     otp: otp
+//   });
+//   //  else {
+//   //   console.log("username=>", username);
+//   //   // console.log("password======>>", password);
+
+//   //   // let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
+//   //   // console.log("sql==>", sql)
+//   //   // =========email==============
+//   //   await con.query(
+//   //     "SELECT * FROM citizens where email_id ='" + username + "'",
+//   //     async function (error, results, fields) {
+//   //       if (error) {
+//   //         res.send({
+//   //           status: false,
+//   //           message: "error"
+//   //         });
+//   //       } else {
+//   //         if (results.length > 0) {
+//   //           console.log("email=====>>>", username);
+//   //           //  console.log("password=====>>>", otp);
+//   //           console.log("results=>", results.length);
+//   //           console.log("results=======>", results);
+//   //           if (results[0].email_id == username) {
+//   //             console.log("enter in to the if condition==>>>", username);
+//   //             // console.log("password=====>>>", password);
+//   //             var data = await con.query(
+//   //               "UPDATE citizens SET otp = '" +
+//   //               otp +
+//   //               "' WHERE email_id = '" +
+//   //               username +
+//   //               "'",
+//   //               function (error, results1, fields) {
+//   //                 console.log("result,", results1);
+//   //                 console.log("error", error);
+//   //               }
+//   //             );
+//   //             // console.log("data", data),
+//   //             //console.log("table_results", results1)
+//   //             console.log(otp);
+//   //             res.send({
+//   //               status: "true",
+//   //               results: otp
+//   //               // message: "Password updated successfully",
+//   //               // رسالة:
+//   //               //   "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
+//   //             });
+//   //           }
+//   //         }
+//   //       }
+//   //     }
+//   //   );
+//   // }
+// });
 
 router.post("/Payment", cors(), async function(req, res) {
-  //const token = req.headers.authorization;
   var payment1 = req.body;
   console.log(payment1);
   payment
@@ -805,6 +838,23 @@ router.post("/Payment_statusupdate_salama", cors(), async function(req, res) {
       })
     );
 });
+router.post("/pushcount", cors(), async function(req, res) {
+  const token = req.headers.authorization;
+  var details= req.body;
+  console.log(details);
+  payment
+    .getpushcount(details, token)
+    .then(result => {
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
 //=============================================
 router.post("/update_installation", cors(), async function(req, res) {
   const token = req.headers.authorization;
@@ -823,6 +873,111 @@ router.post("/update_installation", cors(), async function(req, res) {
       })
     );
 });
+router.post("/update_preschedule", cors(), async function(req, res) {
+  const token = req.headers.authorization;
+  var payment1 = req.body;
+  console.log(payment1);
+  payment
+    .payment_aman_pref(payment1, token)
+    .then(result => {
+      res.status(result.status).json({
+        message: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+router.post("/pushcount_1", cors(), async (req, res) => {
+  var details= req.body;
+  console.log("buildings==>index==>", details);
+  var token = req.headers.authorization;
+  payment
+    .getpushcount(details, token)
+    .then(result => {
+      res.send({
+        result: result
+       
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+//=============================forgetpassword============================================//
+router.post("/forgetpassword", async (req, res) => {
+  let forgetpassword = req.body;
+  console.log("body", forgetpassword);
+  let username = req.body.email;
+  console.log("forgot_email=>", username);
+  // let password = req.body.password;
+  var otp1 = await otpfun.otpgen();
+  var otp = otp1.otp;
+  console.log(otp);
+  var finalotp = await emailotpfun.emailotp(username, otp);
+
+  if (!username) {
+    res.send({
+      status: 400,
+      message: "Please fill all the details"
+    });
+  } else {
+    console.log("username=>", username);
+    // console.log("password======>>", password);
+
+    // let sql = "SELECT * FROM citizens where email_id ='" + username + "'";
+    // console.log("sql==>", sql)
+    // =========email==============
+    await con.query(
+      "SELECT * FROM citizens where email_id ='" + username + "'",
+      async function(error, results, fields) {
+        if (error) {
+          res.send({
+            status: 401,
+            message: "error"
+          });
+        } else {
+          if (results.length > 0) {
+            console.log("email=====>>>", username);
+            //  console.log("password=====>>>", otp);
+            console.log("results=>", results.length);
+            console.log("results=======>", results);
+            if (results[0].email_id == username) {
+              console.log("enter in to the if condition==>>>", username);
+              // console.log("password=====>>>", password);
+              var data = await con.query(
+                "UPDATE citizens SET otp = '" +
+                  otp +
+                  "' WHERE email_id = '" +
+                  username +
+                  "'",
+                function(error, results1, fields) {
+                  console.log("result,", results1);
+                  console.log("error", error);
+                }
+              );
+              // console.log("data", data),
+              //console.log("table_results", results1)
+              console.log(otp);
+              res.send({
+                status: 200,
+                results: otp
+                // message: "Password updated successfully",
+                // رسالة:
+                //   "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
+              });
+            }
+          }
+        }
+      }
+    );
+  }
+});
+
 //========================forgetpassword-otp===========================================//
 router.post("/forgetotpverification", cors(), (req, res) => {
   var otp = req.body.otp;
@@ -891,7 +1046,28 @@ router.post("/schedules", cors(), async function(req, res) {
         message: err.message
       })
     );
-  //}
+});
+router.post("/schedules_temp", cors(), async function(req, res) {
+  console.log(req.body);
+  const token = req.headers.authorization;
+  var time = req.body.schedule_time;
+  var reqdate = req.body.requestdate;
+  var building_id = req.body.building_id;
+  console.log("building_id", building_id);
+  var date = moment(new Date(reqdate.substr(0, 16)));
+  var rdate = date.format("YYYY-MM-DD");
+  schedule_temp
+    .sup_temp(time, rdate, building_id, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
 });
 //============================================convert pdf===================================================//
 
@@ -1084,7 +1260,6 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
   const token = req.headers.authorization;
   console.log(req.body);
   var schedules = req.body;
-
   console.log("length of data from UI", schedules.schedule.length);
   /*If data from UI is empty Error Message will be sent*/
   if (schedules.schedule.length == 0) {
@@ -1154,12 +1329,79 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
     }
   }
 });
+//=============================bulkschedules_temp============================
+router.post("/BulkSchedules_temp", cors(), async function(req, res) {
+  const token = req.headers.authorization;
+  console.log(req.body);
+  var schedules = req.body;
+  console.log("length of data from UI", schedules.schedule.length);
+  /*If data from UI is empty Error Message will be sent*/
+  if (schedules.schedule.length == 0) {
+    res.send({
+      message: "Please Schedule the selected Buildings",
+      flag: 1
+    });
+  } else {
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      res.send({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      res.send({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else {
+      var getorder = await buildingDao.order_id_select_aman();
+      console.log(getorder, "getorder");
+      console.log(getorder.result.data[0], "order_id_select=====>");
+      var orderid = getorder.result.data[0].num;
+      console.log(orderid, "ORDER");
+      console.log(orderid == "null");
+      if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {
+        orderid = "A0001";
+      } else {
+        console.log(orderid, "inside the loop");
+        console.log("orderid" + orderid);
+        orderid = orderid + 1;
+        console.log("orderid=====>" + orderid);
+
+        orderid = orderid.toString();
+        if (orderid.length == 1) {
+          orderid = "A000" + orderid;
+        } else if (orderid.length == 2) {
+          orderid = "A00" + orderid;
+        } else if (orderid.length == 3) {
+          orderid = "A0" + orderid;
+        } else {
+          orderid = "A" + orderid;
+        }
+      }
+      /*Here the Bulk Buildings are scheduled one by one*/
+      for (let i = 0; i < schedules.schedule.length; i++) {
+        console.log(i, "i");
+        let uidate = schedules.schedule[i].selectedStartDate;
+        var date = moment(new Date(uidate.substr(0, 16)));
+        var rdate = date.format("YYYY-MM-DD");
+        await schedule_temp.sup_bulk_temp(
+          schedules.schedule[i].time,
+          rdate,
+          schedules.schedule[i].building_id,
+          orderid
+        );
+      }
+      res.send({
+        status: 200,
+        message:
+          "Your Buildings are scheduled for service. Please visit booking history for details"
+      });
+    }
+  }
+});
 //=============================Blockchain-API's============================================//
 router.post("/blockchain", cors(), async function(req, res) {
-  // var transaction = {
-  //   name: "ajay",
-  //   address: "kerala"
-  // };
   var Buildingdetails = req.body.Buildingdetails;
   var name = req.body.name;
   var data = {
@@ -1220,8 +1462,7 @@ router.post("/Appeal", cors(), (req, res) => {
       );
   }
 });
-
-//=============================================Trainer account creation============
+//=============================================Trainer account creation========================
 router.post("/Trainer_account_creation", cors(), (req, res) => {
   const trainer_Object = req.body;
   console.log(trainer_Object, "initialtest");
@@ -1806,6 +2047,7 @@ router.post("/getCertificate", cors(), (request, response) => {
 });
 router.post("/request_for_service_aman", cors(), (req, res) => {
   console.log("enter into req for aman service");
+  const token = req.headers.authorization;
   var file_name = req.body.filename;
 
   var file1 = file_name;
@@ -1813,7 +2055,7 @@ router.post("/request_for_service_aman", cors(), (req, res) => {
   console.log(file_path, "filepath");
   var email_id = req.body.email;
   request_service_aman
-    .request_service_aman(file_path, email_id)
+    .request_service_aman(file_path, email_id, token)
     .then(result => {
       console.log(result);
       res.status(result.status).json({
@@ -2759,9 +3001,10 @@ router.post("/buildings_dashboard", cors(), async (req, res) => {
 
 //===================================order avg======================================================//
 router.get("/getavgOrder", cors(), async function(req, res) {
-  admin
+  await admin
     .getavgOrder()
     .then(result => {
+      console.log(result);
       res.send({
         data: result.result
       });
@@ -2821,8 +3064,9 @@ router.get("/getavgadmin", cors(), async function(req, res) {
   admin
     .getavgadmin()
     .then(result => {
+      console.log("result", result);
       res.send({
-        data: result.result
+        data: result
       });
     })
     .catch(err =>

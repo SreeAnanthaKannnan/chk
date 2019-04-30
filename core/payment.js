@@ -10,7 +10,10 @@ module.exports = {
   payment: payment,
   payment_aman: payment_aman,
   payment_aman_install: payment_aman_install,
-  payment_aman_status:payment_aman_status
+  payment_aman_status:payment_aman_status,
+  payment_aman_pref:payment_aman_pref,
+  getpushcount:getpushcount
+
 };
 
 
@@ -232,6 +235,82 @@ function payment_aman_install(payment1, token) {
         if (user.status == 200) {
           return resolve(user)
         }
+        else {
+          return resolve({
+            status: 400,
+            message: "something went wrong"
+          })
+        }
+      }
+    }
+  });
+}
+function payment_aman_pref(payment1, token) {
+  logger.fatal(payment1, "payment1");
+  return new Promise(async (resolve, reject) => {
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    }
+    else {
+      var responseObj = {};
+
+      {
+        var count = await pay.pushnotifycount(payment1)
+        console.log(count.message.data[0].push_notify_count,"count===>=");
+        var pushcount = count.message.data[0].push_notify_count+1;
+        var user = await pay
+          .payment_aman_pref(payment1,pushcount)
+        if (user.status == 200) {
+          return resolve(user)
+        }
+        else {
+          return resolve({
+            status: 400,
+            message: "something went wrong"
+          })
+        }
+      }
+    }
+  });
+}
+function getpushcount(details, token) {
+  logger.fatal(details, "details");
+  return new Promise(async (resolve, reject) => {
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    }
+    else {
+      var responseObj = {};
+
+      {
+        var pushcount = await pay.pushnotifycount(details)
+        console.log(pushcount.message.data[0],"count===>=");
+       var push_count = pushcount.message;
+        if (pushcount.status == 200) {
+          return resolve({
+            status:200,
+            count:push_count,
+            // message:"Your Building is scheduled for service on "+push_count.preschedule+""
+          })
+      }
         else {
           return resolve({
             status: 400,
