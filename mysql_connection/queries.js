@@ -170,7 +170,7 @@ module.exports.payment_aman =
 module.exports.payment_aman_install =
   "UPDATE Buildings SET installeddate = ? WHERE email_id = ? AND Buildingname=?";
   module.exports.pushnotifycount = 
-  "select push_notify_count,preschedule,id from Buildings WHERE email_id = ?";
+  "select push_notify_count,preschedule,id from Buildings WHERE email_id = ? AND push_notify_count!=0";
   module.exports.payment_aman_pref =
   "UPDATE Buildings SET preschedule = ?, push_notify_count = ? WHERE email_id = ? AND Buildingname=?";
 // ===========================salama Payment======================//
@@ -242,7 +242,7 @@ module.exports.scheduleinfo =
 module.exports.scheduleinfo_temp = 
  "update Buildings set preschedule=?,orderid=?,status=? where id=?";
   module.exports.servicehistory =
-  "SELECT * Buildings where email_id=?";
+  "SELECT * from Buildings where email_id=?";
 module.exports.installationdetails =
   "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ?  WHERE email_id= ?";
 module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
