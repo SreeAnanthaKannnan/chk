@@ -89,6 +89,7 @@ var certificate_issue1 = require("../core/certificate_issue");
 var getBuildings_web = require("../core/getBuildings_web");
 var Adminmap = require("../core/Adminmap.js");
 var Adminmapactive = require("../core/Adminmap.js");
+var schedule_temp = require("../core/schedules_temp");
 
 var ip = require("ip");
 var { emailotp } = require("../utils/spsaemail");
@@ -198,6 +199,29 @@ router.post("/request_for_service", cors(), (req, res) => {
         .json({
           status: err.status
         })
+    );
+});
+
+router.post("/schedules_temp", cors(), async function(req, res) {
+  console.log(req.body);
+  const token = req.headers.authorization;
+  var time = req.body.schedule_time;
+  var reqdate = req.body.requestdate;
+  var building_id = req.body.building_id;
+  console.log("building_id", building_id);
+  var date = moment(new Date(reqdate.substr(0, 16)));
+  var rdate = date.format("YYYY-MM-DD");
+  schedule_temp
+    .sup_temp(time, rdate, building_id, token)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
     );
 });
 //===================================getbuildings======================================================//

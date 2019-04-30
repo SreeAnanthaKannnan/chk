@@ -8,8 +8,8 @@ function schedule_insert(values) {
   return new Promise(function(resolve, reject) {
     //values = [values];
     logger.fatal("values", values);
-      mysqlConnection
-      .insert_query(query.scheduleinfo,values)
+    mysqlConnection
+      .insert_query(query.scheduleinfo, values)
       .then(function(result, err) {
         if (err) {
           //  console.log(result,"achieved")
@@ -26,8 +26,8 @@ function schedule_insert_temp(values) {
   return new Promise(function(resolve, reject) {
     //values = [values];
     logger.fatal("values", values);
-      mysqlConnection
-      .query_execute(query.scheduleinfo_temp,values)
+    mysqlConnection
+      .query_execute(query.scheduleinfo_temp, values)
       .then(function(result, err) {
         if (err) {
           //  console.log(result,"achieved")
@@ -40,12 +40,12 @@ function schedule_insert_temp(values) {
       });
   });
 }
-function update_countvalue(v1,v2) {
+function update_countvalue(v1, v2) {
   return new Promise(function(resolve, reject) {
-    var values = [v1,v2];
+    var values = [v1, v2];
     console.log("values", values);
-      mysqlConnection
-      .query_execute(query.updatecountvalue,values)
+    mysqlConnection
+      .query_execute(query.updatecountvalue, values)
       .then(function(result, err) {
         if (err) {
           //  console.log(result,"achieved")
@@ -145,7 +145,25 @@ function Schedule_select(classroom_id, Emirates_id, Company_Trade_Lincense_No) {
         return resolve({ result: value });
       }
     }
-    });
+  });
+}
+function schedule_insert_temp(values) {
+  return new Promise(function(resolve, reject) {
+    //values = [values];
+    logger.fatal("values", values);
+    mysqlConnection
+      .query_execute(query.scheduleinfo_temp, values)
+      .then(function(result, err) {
+        if (err) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          console.log(result);
+          return resolve({ status: 200, message: result });
+        }
+      });
+  });
 }
 
 module.exports = {
@@ -153,6 +171,6 @@ module.exports = {
   Schedule: Schedule,
   schedule_summary_value: schedule_summary_value,
   Schedule_select: Schedule_select,
-  update_countvalue:update_countvalue,
-  schedule_insert_temp:schedule_insert_temp
+  update_countvalue: update_countvalue,
+  schedule_insert_temp: schedule_insert_temp
 };
