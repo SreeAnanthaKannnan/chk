@@ -287,7 +287,9 @@ module.exports.payment_callcenter_salama =
 ("select * from Buildings where email_id = ?");
 module.exports.editBuilding =
   "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";
-
+  module.exports.updateprofile =
+  "update citizens set firstname_en=?,lastname_en=?,alter_number=?,emirates_id=?,mobile_number=?,email_id=?,nationality_en=?,address_en=?,company_en=? where email_id =?";
+  
 module.exports.getinstallersDetailsForDashBoard =
   "select active as active_installers, total  as total_installers from vw_installer_details where month=? and year=?";
 module.exports.getinstallerDetailsMonthWise =
@@ -313,3 +315,6 @@ module.exports.getTopPerfomerOfTheMonth =
 
 module.exports.employeecheck=
 "select order_id from Employee_Profile where national_id=?";
+
+module.exports.profile=
+"select * from citizens where email_id=?";

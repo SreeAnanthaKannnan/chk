@@ -56,8 +56,8 @@ return resolve({
         for (var i = 0; i < t.length; i++) {
             logger.fatal(t[i]);
             var result = await auto.auto(t[i], suparray[0], sdate);
-            if (result.length == 0) {
-              if (result.length != suparray.length) {
+            if (result.result.length == 0) {
+              if (result.result.length != suparray.length) {
                 logger.fatal("assigned time", t[i]);
                 var schedule_time = t[i];
                 var suplier_id = suparray[0];

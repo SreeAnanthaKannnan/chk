@@ -24,9 +24,26 @@ function buildings(buildingobject) {
         })
   })
 }
-
+function phone(buildingobject) {
+  return new Promise((resolve, reject) => {
+ 
+    mysqlConnection
+        .query_execute(query.profile,buildingobject)
+        .then(function (result, err) {
+          
+            if (err) {
+              logger.fatal(err,"db error while getting distinct orderid for the buildings in the building table")
+                return reject({ "status": 400, "body": 'Cannot insert the data' })
+            }
+            else {
+                console.log(result, "achieved")
+                return resolve({ status:200, result:result.data});
+            }
+        })
+  })
+}
 module.exports = {
   buildings: buildings,
-  //  phone:phone,
+    phone:phone,
   //  date:date
 }

@@ -417,7 +417,7 @@ var path = require('path');
 
 //Load the docx file as a binary
 var content = fs
-  .readFileSync(path.resolve(__dirname, "/home/bahirathy/saned_spsa_backend/report/AMANPrerequisiteReport.docx"), 'binary');
+  .readFileSync(path.resolve(__dirname, "./report/AMANPrerequisiteReport.docx"), 'binary');
 
 var zip = new JSZip(content);
 
