@@ -477,9 +477,28 @@ router.post("/installationdetails", cors(), function(req, res) {
 //==============================Residentsdetails===========================================//
 router.post("/profile", cors(), async function(req, res) {
   var buildingobject = req.body.email;
+  const token = req.headers.authorization;
   console.log(buildingobject, "data");
   profile
     .getbuildings(buildingobject, token)
+    .then(result => {
+      res.send({
+        result: result,
+        message: "mock mock"
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+router.post("/clearnote", cors(), async function(req, res) {
+  var buildingobject = req.body.email;
+  const token = req.headers.authorization;
+  console.log(buildingobject, "data");
+  payment
+    .clearnotify(buildingobject, token)
     .then(result => {
       res.send({
         result: result,

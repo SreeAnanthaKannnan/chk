@@ -176,6 +176,26 @@ function pushnotifycount(param) {
 
     });
 }
+function pushnotifycountclear(param) {
+    console.log("in dao", param);
+    return new Promise(async function (resolve, reject) {
+        var params = [param]
+        /*====================inserting employee's data into employee_Profile table========*/
+        mysqlConnection
+            .query_execute(query.pushnotifycountclear, params)
+            /*==========db error capturing================*/
+            .then(function (result, err) {
+                if (err) {
+                    logger.fatal(err,"Db error while update the payment details for aman order book")
+                    return resolve({ status: 400, err: err });
+                } else {
+                    console.log(result);
+                    return resolve({ status: 200, message: result });
+                }
+            });
+
+    });
+}
 
 module.exports = {
     payment: payment,
@@ -185,7 +205,8 @@ module.exports = {
     payment_aman_statusdao:payment_aman_statusdao,
     pay_verify_status:pay_verify_status,
     payment_aman_pref:payment_aman_pref,
-    pushnotifycount:pushnotifycount
+    pushnotifycount:pushnotifycount,
+    pushnotifycountclear:pushnotifycountclear
   
 
 };

@@ -12,7 +12,8 @@ module.exports = {
   payment_aman_install: payment_aman_install,
   payment_aman_status:payment_aman_status,
   payment_aman_pref:payment_aman_pref,
-  getpushcount:getpushcount
+  getpushcount:getpushcount,
+  clearnotify:clearnotify
 
 };
 
@@ -309,6 +310,43 @@ function getpushcount(details, token) {
             status:200,
             count:push_count,
             // message:"Your Building is scheduled for service on "+push_count.preschedule+""
+          })
+      }
+        else {
+          return resolve({
+            status: 400,
+            message: "something went wrong"
+          })
+        }
+      }
+    }
+  });
+}
+function clearnotify(details, token) {
+  logger.fatal(details, "details");
+  return new Promise(async (resolve, reject) => {
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    }
+    else {
+      var responseObj = {};
+
+      {
+        var pushcount = await pay.pushnotifycountclear(details)
+        if (pushcount.status == 200) {
+          return resolve({
+            status:200,
+            //count:push_count,
+             message:"notification set to zero"
           })
       }
         else {
