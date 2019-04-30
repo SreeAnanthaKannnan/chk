@@ -242,7 +242,7 @@ module.exports.scheduleinfo =
 module.exports.scheduleinfo_temp = 
  "update Buildings set preschedule=?,orderid=?,status=? where id=?";
   module.exports.servicehistory =
-  "SELECT * Buildings where email_id=?";
+  "SELECT * from Buildings where email_id=?";
 module.exports.installationdetails =
   "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ?  WHERE email_id= ?";
 module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
