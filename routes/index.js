@@ -89,8 +89,9 @@ var certificate_issue1 = require("../core/certificate_issue");
 var getBuildings_web = require("../core/getBuildings_web");
 var Adminmap = require("../core/Adminmap.js");
 var Adminmapactive = require("../core/Adminmap.js");
-var updateprofile = require("../core/updateProfile")
+var updateprofile = require("../core/updateProfile");
 var schedule_temp = require("../core/schedules_temp");
+var receipt_upload = require("../core/image_upload");
 
 var ip = require("ip");
 var { emailotp } = require("../utils/spsaemail");
@@ -315,23 +316,20 @@ router.post("/emailotpverification1", cors(), function(req, res) {
 //========================================citizen-registration-end=====================================
 router.post("/getdetails", cors(), async function(req, res) {
   const token = req.headers.authorization;
-      var object = req.body;
-      console.log(object,"object");
-    history
-      .getHistory(object,token)
-      .then(result => {
-        res.send({
-          result: result
-        });
-      })
-  
+  var object = req.body;
+  console.log(object, "object");
+  history.getHistory(object, token).then(result => {
+    res.send({
+      result: result
+    });
+  });
 });
 //=================================Appeal====================================================
-router.post("/getdetailsforkey", cors(), async function (req, res) {
-   const token = req.headers.authorization;
+router.post("/getdetailsforkey", cors(), async function(req, res) {
+  const token = req.headers.authorization;
   var email = req.body.email;
   history
-    .getHistory1(email,token)
+    .getHistory1(email, token)
     .then(result => {
       res.send({
         result: result
@@ -858,7 +856,7 @@ router.post("/Payment_statusupdate_salama", cors(), async function(req, res) {
 });
 router.post("/pushcount", cors(), async function(req, res) {
   const token = req.headers.authorization;
-  var details= req.body;
+  var details = req.body;
   console.log(details);
   payment
     .getpushcount(details, token)
@@ -909,7 +907,7 @@ router.post("/update_preschedule", cors(), async function(req, res) {
     );
 });
 router.post("/pushcount_1", cors(), async (req, res) => {
-  var details= req.body;
+  var details = req.body;
   console.log("buildings==>index==>", details);
   var token = req.headers.authorization;
   payment
@@ -917,7 +915,6 @@ router.post("/pushcount_1", cors(), async (req, res) => {
     .then(result => {
       res.send({
         result: result
-       
       });
     })
     .catch(err =>
@@ -1407,14 +1404,14 @@ router.post("/BulkSchedules_temp", cors(), async function(req, res) {
           schedules.schedule[i].time,
           rdate,
           schedules.schedule[i].building_id,
-          orderid,
+          orderid
         );
       }
       res.send({
         status: 200,
         message:
           "Your Buildings are scheduled for service. Please visit booking history for details",
-          orderid:orderid
+        orderid: orderid
       });
     }
   }
@@ -2499,9 +2496,8 @@ router.post("/EditBuildingdetails", cors(), async function(req, res) {
   // }
 });
 
-
 router.post("/updateProfile", cors(), async function(req, res) {
-  var updateProf= req.body;
+  var updateProf = req.body;
   console.log("updateProfile", req.body);
   updateprofile
     .updateprofile(updateProf)
@@ -3131,6 +3127,36 @@ router.post("/application_statics_month", cors(), async (req, res) => {
       })
     );
 });
-
+// ===================================receiptupload======================================================//
+router.post("/receipt_upload", uploads.single("file"), function(req, res) {
+  var file = "var/www/html/" + "/" + req.file.filename;
+  console.log("file", req.file);
+  console.log("body", req.body);
+  console.log("body", req.headers.authorization);
+  var order_id = req.body.id;
+  var filepath = req.file.path;
+  var token = req.headers.authorization;
+  fs.rename(filepath, file, function(err) {
+    if (err) {
+      console.log(err);
+      res.send(500);
+    } else {
+      receipt_upload
+        .receipt_upload(filepath, order_id, token)
+        .then((result, error) => {
+          console.log("result", result);
+          if (result) {
+            res.status(result.status).json({
+              message: result
+            });
+          } else {
+            res.status(error.status).json({
+              message: error
+            });
+          }
+        });
+    }
+  });
+});
 //===================================allbuildings======================================================//
 module.exports = router;
