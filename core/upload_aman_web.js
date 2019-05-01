@@ -94,9 +94,9 @@ function upload_aman_web(filename, token, email_id) {
                                     delete data[i]["Alternate Contact Phone Number 1"];
                                     delete data[i]["Alternate Contact Phone Number 2"];
                                     data[i].alternumber = alternumber;
-                                    data[i]["Preferred Schedule"] = ExcelDateToJSDate(
-                                        data[i]["Preferred Schedule"]
-                                    );
+                                    // data[i]["Preferred Schedule"] = ExcelDateToJSDate(
+                                    //     data[i]["Preferred Schedule"]
+                                    // );
                                     // if (data[i]["Preferred Schedule"] == "Invalid Date") {
                                     //     return reject({
                                     //         status: 400,
@@ -110,9 +110,18 @@ function upload_aman_web(filename, token, email_id) {
                                     var test = Object.values(data[i]);
 
                                     console.log("test..........", test);
-                                    var insert_employee = await uploaddao.Building_insert(
-                                        test
-                                    );
+                                    if(test.length===6){
+                                        var insert_employee = await uploaddao.Building_insert(
+                                            test
+                                        );
+
+                                    }
+                                    else{
+                                        return resolve({
+                                            status:400,
+                                            "message":"Please Enter all the Details"
+                                        })
+                                    }
 
                                     // count = + insert_employee.message.data.affectedRows
                                     console.log(count, "count====>")
@@ -208,9 +217,9 @@ function upload_aman_web(filename, token, email_id) {
                                     delete data[i]["Alternate Contact Phone Number 1"];
                                     delete data[i]["Alternate Contact Phone Number 2"];
                                     data[i].alternumber = alternumber;
-                                    data[i]["Preferred Schedule"] = ExcelDateToJSDate(
-                                        data[i]["Preferred Schedule"]
-                                    );
+                                    // data[i]["Preferred Schedule"] = ExcelDateToJSDate(
+                                    //     data[i]["Preferred Schedule"]
+                                    // );
                                     // if (data[i]["Preferred Schedule"] == "Invalid Date") {
                                     //     return reject({
                                     //         status: 400,
@@ -223,10 +232,20 @@ function upload_aman_web(filename, token, email_id) {
                                     data[i].datecreated = datecreated;
                                     var test = Object.values(data[i]);
 
-                                    console.log("test..........", test);
-                                    var insert_employee = await uploaddao.Building_insert(
-                                        test
-                                    );
+                                    console.log("test..........", test.length);
+                                    if(test.length===6){
+                                        var insert_employee = await uploaddao.Building_insert(
+                                            test
+                                        );
+
+                                    }
+                                    else{
+                                        return resolve({
+                                            status:400,
+                                            "message":"Please Enter all the Details"
+                                        })
+                                    }
+                                   
 
 
                                     //}
