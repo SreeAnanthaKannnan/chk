@@ -1,31 +1,52 @@
-var con = require('../mysql_connection/dbConfig.js');
-var dbFunc = require('../mysql_connection/connection.js');
+var con = require("../mysql_connection/dbConfig.js");
+var dbFunc = require("../mysql_connection/connection.js");
 const mysqlConnection = require("../config/Connection");
 const query = require("../mysql_connection/queries");
-var log4js = require('log4js');
-const logger = log4js.getLogger('SPSA_project');
+var log4js = require("log4js");
+const logger = log4js.getLogger("SPSA_project");
 
-async function image_path(filepath,id) {
-    console.log("in dao",filepath,id)
-   return new Promise( async function (resolve,reject){
-    var params=[filepath,id]
-     console.log(params,"in line 12")
-//====================================================Insert pdf file path into Buildings Table====================================================//   
+async function image_path(filepath, id) {
+  console.log("in dao", filepath, id);
+  return new Promise(async function(resolve, reject) {
+    var params = [filepath, id];
+    console.log(params, "in line 12");
+    //====================================================Insert pdf file path into Buildings Table====================================================//
     mysqlConnection
-    .query_execute(query.imagepdf,params)
-    .then(function(result, err) {
-      if (err) {
-        //  console.log(result,"achieved")
-        console.log("something", err);
-        return resolve({ status: 400, err: err });
-      } else {
-        console.log(result);
-        return resolve({ status: 200, message: result });
-      }
-    });
-   })
+      .query_execute(query.imagepdf, params)
+      .then(function(result, err) {
+        if (err) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          console.log(result);
+          return resolve({ status: 200, message: result });
+        }
+      });
+  });
 }
-module.exports={
-   image_path : image_path
+async function receipt_path(filepath, order_id) {
+  console.log("in dao", filepath, order_id);
+  return new Promise(async function(resolve, reject) {
+    var params = [filepath, order_id];
+    console.log(params, "in line 12");
+    //====================================================Insert pdf file path into Buildings Table====================================================//
+    mysqlConnection
+      .query_execute(query.receipt, params)
+      .then(function(result, err) {
+        if (err) {
+          //  console.log(result,"achieved")
+          console.log("something", err);
+          return resolve({ status: 400, err: err });
+        } else {
+          console.log(result);
+          return resolve({ status: 200, message: result });
+        }
+      });
+  });
 }
-//====================================================Code End====================================================//   
+module.exports = {
+  image_path: image_path,
+  receipt_path: receipt_path
+};
+//====================================================Code End====================================================//
