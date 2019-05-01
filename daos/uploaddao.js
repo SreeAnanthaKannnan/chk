@@ -30,6 +30,26 @@ function Building_insert(params) {
 
     });
 }
+insertBuildingOwner = async(params) => {
+    return new Promise( async (resolve,reject) => {
+        console.log('params===>',params);
+    
+        const response = {};
+        const sql = "INSERT INTO Buildings(email_id ,type,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN,address,alternumber) VALUES ?";
+        const result = await mysqlConnection.insert_query(sql,params);
+        console.log(result);
+        response['status'] = result.status;
+        return resolve({
+            response : response,
+        })
+        
+        return response;
+
+
+
+    });
+}
 module.exports = {
-    Building_insert: Building_insert
+    Building_insert: Building_insert,
+    insertBuildingOwner :insertBuildingOwner 
 }
