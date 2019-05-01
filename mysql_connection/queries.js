@@ -19,7 +19,8 @@ module.exports.gethrdetails = "SELECT * FROM citizens where email_id = ?";
 ("SELECT * FROM citizens where firstname_en=? AND email_id= ?");
 
 module.exports.gethrdetails = "SELECT * FROM citizens where email_id = ?";
-
+module.exports.feedback =
+  "INSERT INTO Feedback(Company_Email,comments_en,comments_ar,created_at) VALUES ? ";
 // "select distinct order_id, company_trade_license_no,hr_email,payment_type,amount,trnx,order_status,certificate_status FROM SHARJAH.Employee_Profile where hr_email = ? AND order_id is not null AND(order_id != 'NOInterest' AND order_id != 'NULL'); ";
 // "SELECT distinct id, uid, name_en, name_ar, national_id, category, date_scheduled, date_preferred, result FROM Employee_Profile where order_id is not null AND 'NOIntrest' where hr_email =?";
 // "SELECT distinct order_id, id, uid, name_en, name_ar, national_id,company_trade_licence_no,hr_email, category, date_scheduled, date_preferred,date_prefered,payment_type,result,amount,trnx,order_status result FROM SHARJAH.Employee_Profile where hr_email=? AND order_id is not null AND (order_id !='NoInterest'AND order_id !='NULL')";
@@ -61,6 +62,10 @@ module.exports.session = "SELECT * FROM Session where user_ID =?";
 /*=============inserting appeal data in to appeal table=========*/
 module.exports.Appeal =
   "INSERT INTO Appeal (service_en,service_ar,Description_en,Description_ar,Appeal_date,Compliant_NO) VALUES ?";
+
+  module.exports.appealpdf = "UPDATE Appeal SET appeal_file_path =? WHERE email_id =?";
+module.exports.appealpdfinsert = "insert into Appeal (appeal_file_path,email_id) VALUES ?";
+module.exports.appealpdfcheck = "select email_id from Appeal where email_id=?";
 /*=============selecting trainer id for the particular trainer name(english)=========*/
 module.exports.trainerid = "SELECT id FROM Trainer where Name_en = ?";
 /*=====================selecting trainer id for the particular trainer name(Arabic)======*/

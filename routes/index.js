@@ -1812,13 +1812,20 @@ router.post("/Classroom_available_date", cors(), (req, res) => {
 // });
 
 //============================================//
-router.post("/Feedback", cors(), function(req, res) {
+//============================================//
+router.post("/Feedback", cors(), function (req, res) {
   // var id= req.body.id
-  var Company_Email = req.body.Company_Email;
-  var comments = req.body.comments;
+
   var token = req.headers.authorization;
+  console.log("token_index", token)
   var language = req.headers.language;
-  console.log(Company_Email, "fhdkhfd");
+
+  var Company_Email = req.body.email_id;
+  console.log("emaili_d_index", Company_Email);
+  var comments = req.body.comments;
+  console.log("comment_index", comments)
+
+
   if (!Company_Email || !comments.trim()) {
     res.status(400).json({
       message: "Please enter the details completely !"
@@ -3155,6 +3162,34 @@ router.post("/receipt_upload", uploads.single("file"), function(req, res) {
             });
           }
         });
+    }
+  });
+});
+//=======================================================Appeal_file_upload===================================
+router.post("/file_upload_Appeal", uploads.single("file"), function(req, res) {
+  var file = "var/www/html/" + "/" + req.file.filename;
+  console.log(req.file);
+  console.log(req.body);
+  var email_id = req.body.email_id;
+  var filepath = req.file.path;
+  fs.rename(filepath, file, function(err) {
+    if (err) {
+      console.log(err);
+      res.send(500);
+    } else {
+      image_upload
+        .image_upload_Appeal(filepath, email_id)
+        .then(result => {
+          res.send({
+            message: "file uploaded successfully",
+            result: req.file.filename
+          });
+        })
+        .catch(err =>
+          res.status(err.status).json({
+            message: err.message
+          })
+        );
     }
   });
 });
