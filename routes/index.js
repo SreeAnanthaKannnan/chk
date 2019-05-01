@@ -1407,13 +1407,14 @@ router.post("/BulkSchedules_temp", cors(), async function(req, res) {
           schedules.schedule[i].time,
           rdate,
           schedules.schedule[i].building_id,
-          orderid
+          orderid,
         );
       }
       res.send({
         status: 200,
         message:
-          "Your Buildings are scheduled for service. Please visit booking history for details"
+          "Your Buildings are scheduled for service. Please visit booking history for details",
+          orderid:orderid
       });
     }
   }

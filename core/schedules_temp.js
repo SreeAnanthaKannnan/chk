@@ -66,18 +66,20 @@ async function sup_bulk_temp(time, rdate, building_id, orderid) {
   console.warn("rdate", rdate);
   return new Promise(async function(resolve, reject) {
     //verification of token
-    var verifytoken = await checktoken.checkToken(token);
-    if (verifytoken.status == 405) {
-      return resolve({
-        status: verifytoken.status,
-        message: verifytoken.message
-      });
-    } else if (verifytoken.status == 403) {
-      return resolve({
-        status: verifytoken.status,
-        message: verifytoken.message
-      });
-    } else {
+    // var verifytoken = await checktoken.checkToken(token);
+    // if (verifytoken.status == 405) {
+    //   return resolve({
+    //     status: verifytoken.status,
+    //     message: verifytoken.message
+    //   });
+    // } else if (verifytoken.status == 403) {
+    //   return resolve({
+    //     status: verifytoken.status,
+    //     message: verifytoken.message
+    //   });
+    // } 
+    // else
+     {
       var preschedule = rdate + " " + time;
       var status1 = "Order Raised";
       var data = [preschedule, orderid, status1, building_id];

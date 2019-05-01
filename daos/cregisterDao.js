@@ -117,7 +117,7 @@ function insert_user(registerobject, otp) {
     var firstname = registerobject.firstname;
     var lastname = registerobject.lastname;
     var company = registerobject.company;
-    var nationality = registerobject.nationality.value;
+    var nationality = registerobject.nationality;
     var alter_number = registerobject.phone;
     var mobile_number = registerobject.mobile;
     var address = registerobject.address;
@@ -144,12 +144,8 @@ function insert_user(registerobject, otp) {
     var countvalue = 0;
     var password = cryptr.encrypt(registerobject.password);
     var reg_date = now;
-    if (nationality == undefined) {
-      var nationality = "united arab emirates";
-    } else {
-      var nationality = registerobject.nationality.value;
-    }
-    //Here the Registration Details converted into both arabic and english languages and stored in Data Base
+        var nationality = registerobject.nationality;
+        //Here the Registration Details converted into both arabic and english languages and stored in Data Base
     value = await langdetect.languageDetect(firstname);
     language = value.result;
     if (firstname == "") {
