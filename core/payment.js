@@ -6,13 +6,15 @@ const SessionDao = require("../daos/SessionDao");
 const session_time = require("../utils/session_time_difference");
 const checktoken = require("../utils/checkToken");
 var bc = require("../fabcar/javascript/invoke");
+var mail = require("../utils/spsaemail");
 module.exports = {
   payment: payment,
   payment_aman: payment_aman,
   payment_aman_install: payment_aman_install,
   payment_aman_status:payment_aman_status,
   payment_aman_pref:payment_aman_pref,
-  getpushcount:getpushcount
+  getpushcount:getpushcount,
+  clearnotify:clearnotify
 
 };
 
@@ -184,6 +186,10 @@ function payment_aman_status(payment1, token) {
 
         var user = await pay
           .payment_aman_statusdao(payment1)
+          if(payment1.status=="Work Scheduled")
+          {
+            await mail.acceptmailsendto(payment1)
+          }
           console.log(user,"user=======<<<<<<")
         console.log("payment added", payment1)
         if(user.message.data.affectedRows ==0){
@@ -267,6 +273,7 @@ function payment_aman_pref(payment1, token) {
         var count = await pay.pushnotifycount(payment1)
         console.log(count.message.data[0].push_notify_count,"count===>=");
         var pushcount = count.message.data[0].push_notify_count+1;
+        var emailoutput = mail.mailsendto(payment1);
         var user = await pay
           .payment_aman_pref(payment1,pushcount)
         if (user.status == 200) {
@@ -309,6 +316,43 @@ function getpushcount(details, token) {
             status:200,
             count:push_count,
             // message:"Your Building is scheduled for service on "+push_count.preschedule+""
+          })
+      }
+        else {
+          return resolve({
+            status: 400,
+            message: "something went wrong"
+          })
+        }
+      }
+    }
+  });
+}
+function clearnotify(details, token) {
+  logger.fatal(details, "details");
+  return new Promise(async (resolve, reject) => {
+    var verifytoken = await checktoken.checkToken(token);
+    if (verifytoken.status == 405) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    } else if (verifytoken.status == 403) {
+      return resolve({
+        status: verifytoken.status,
+        message: verifytoken.message
+      });
+    }
+    else {
+      var responseObj = {};
+
+      {
+        var pushcount = await pay.pushnotifycountclear(details)
+        if (pushcount.status == 200) {
+          return resolve({
+            status:200,
+            //count:push_count,
+             message:"notification set to zero"
           })
       }
         else {

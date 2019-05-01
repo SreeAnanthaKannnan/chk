@@ -170,7 +170,10 @@ module.exports.payment_aman =
 module.exports.payment_aman_install =
   "UPDATE Buildings SET installeddate = ? WHERE email_id = ? AND Buildingname=?";
 module.exports.pushnotifycount =
-  "select push_notify_count,preschedule,id from Buildings WHERE email_id = ?";
+  "select push_notify_count,preschedule,id from Buildings WHERE email_id = ? AND push_notify_count!=0";
+module.exports.pushnotifycountclear =
+  "update Buildings set push_notify_count='0'  WHERE email_id = ?";
+
 module.exports.payment_aman_pref =
   "UPDATE Buildings SET preschedule = ?, push_notify_count = ? WHERE email_id = ? AND Buildingname=?";
 // ===========================salama Payment======================//
@@ -241,7 +244,7 @@ module.exports.scheduleinfo =
   "INSERT INTO Schedules(schedule_time,requestdate,suplier_id,building_id,status,orderid) VALUES ? ";
 module.exports.scheduleinfo_temp =
   "update Buildings set preschedule=?,orderid=?,status=? where id=?";
-module.exports.servicehistory = "SELECT * Buildings where email_id=?";
+module.exports.servicehistory = "SELECT * from Buildings where email_id=?";
 module.exports.installationdetails =
   "UPDATE Schedules SET FACP = ?,CSI = ?,BRAND = ?,status = ?  WHERE email_id= ?";
 module.exports.otpverify = "SELECT otp FROM citizens where email_id = ?";
@@ -299,6 +302,8 @@ module.exports.payment_callcenter_salama =
 ("select * from Buildings where email_id = ?");
 module.exports.editBuilding =
   "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";
+module.exports.updateprofile =
+  "update citizens set firstname_en=?,lastname_en=?,alter_number=?,emirates_id=?,mobile_number=?,email_id=?,nationality_en=?,address_en=?,company_en=? where email_id =?";
 
 module.exports.getinstallersDetailsForDashBoard =
   "select active as active_installers, total  as total_installers from vw_installer_details where month=? and year=?";
@@ -352,4 +357,5 @@ module.exports.employeecheck =
 module.exports.scheduleinfo_temp =
   "update Buildings set preschedule=?,orderid=?,status=? where id=?";
 module.exports.receipt =
-  "UPDATE Buildings SET receipt_path=? where order_id =? ";
+  "UPDATE Buildings SET receipt_path=? where orderid =? ";
+module.exports.profile = "select * from citizens where email_id=?";

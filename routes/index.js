@@ -89,6 +89,7 @@ var certificate_issue1 = require("../core/certificate_issue");
 var getBuildings_web = require("../core/getBuildings_web");
 var Adminmap = require("../core/Adminmap.js");
 var Adminmapactive = require("../core/Adminmap.js");
+var updateprofile = require("../core/updateProfile");
 var schedule_temp = require("../core/schedules_temp");
 var receipt_upload = require("../core/image_upload");
 
@@ -475,9 +476,29 @@ router.post("/installationdetails", cors(), function(req, res) {
 //==============================Residentsdetails===========================================//
 router.post("/profile", cors(), async function(req, res) {
   var buildingobject = req.body.email;
-  console.log(buildingobject, "data");
+  console.log(req.body.email, "profile EMAIL from UI");
+  var token = req.headers.authorization;
+  console.log(req.headers.authorization, "profile token from UI");
   profile
     .getbuildings(buildingobject, token)
+    .then(result => {
+      res.send({
+        result: result,
+        message: "mock mock"
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+});
+router.post("/clearnote", cors(), async function(req, res) {
+  var buildingobject = req.body.email;
+  const token = req.headers.authorization;
+  console.log(buildingobject, "data");
+  payment
+    .clearnotify(buildingobject, token)
     .then(result => {
       res.send({
         result: result,
@@ -1389,7 +1410,8 @@ router.post("/BulkSchedules_temp", cors(), async function(req, res) {
       res.send({
         status: 200,
         message:
-          "Your Buildings are scheduled for service. Please visit booking history for details"
+          "Your Buildings are scheduled for service. Please visit booking history for details",
+        orderid: orderid
       });
     }
   }
@@ -1424,7 +1446,7 @@ router.post("/blockchain", cors(), async function(req, res) {
 //=======================Appeal===============================================//
 router.post("/Appeal", cors(), (req, res) => {
   const Appeal_Object = req.body;
-  const token = req.headers.token;
+  const token = req.headers.authorization;
   const language = req.headers.language;
   console.log(Appeal_Object);
   console.log(token, "token");
@@ -2473,6 +2495,26 @@ router.post("/EditBuildingdetails", cors(), async function(req, res) {
     );
   // }
 });
+
+router.post("/updateProfile", cors(), async function(req, res) {
+  var updateProf = req.body;
+  console.log("updateProfile", req.body);
+  updateprofile
+    .updateprofile(updateProf)
+    .then(result => {
+      res.send({
+        result: result,
+        message: "Updated successfully"
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
+  // }
+});
+
 router.get("/download1", express.static(path.join(__dirname, "../uploads")));
 
 //======================================================================================//
@@ -2799,7 +2841,27 @@ router.post("/getinstalleremployees", cors(), function(req, res) {
 });
 
 //========================================================================
+//=============================================================================
+// router.post("/getownerprofile", cors(), function(req, res) {
+//   var ownerprofile = req.body;
+//   console.log("ownerprofile", ownerprofile);
+//   var token = req.headers.authorization;
+//   console.log("token", token);
+//   ownerprofile
+//     .getownerprofile(ownerprofile, token)
+//     .then(result => {
+//       res.send({
+//         result: result
+//       });
+//     })
+//     .catch(err =>
+//       res.status(err.status).json({
+//         message: err.message
+//       })
+//     );
+// });
 
+//========================================================================
 //=============Installers DashBoard Details API =======//
 
 // router.post('/installers_dashboard', cors(), async (req, res) => {
@@ -3068,28 +3130,31 @@ router.post("/application_statics_month", cors(), async (req, res) => {
 // ===================================receiptupload======================================================//
 router.post("/receipt_upload", uploads.single("file"), function(req, res) {
   var file = "var/www/html/" + "/" + req.file.filename;
-  console.log(req.file);
-  console.log(req.body);
-  var order_id = req.body.order_id;
+  console.log("file", req.file);
+  console.log("body", req.body);
+  console.log("body", req.headers.authorization);
+  var order_id = req.body.id;
   var filepath = req.file.path;
+  var token = req.headers.authorization;
   fs.rename(filepath, file, function(err) {
     if (err) {
       console.log(err);
       res.send(500);
     } else {
       receipt_upload
-        .receipt_upload(filepath, order_id)
-        .then(result => {
-          res.send({
-            message: "file uploaded successfully",
-            result: req.file.filename
-          });
-        })
-        .catch(err =>
-          res.status(err.status).json({
-            message: err.message
-          })
-        );
+        .receipt_upload(filepath, order_id, token)
+        .then((result, error) => {
+          console.log("result", result);
+          if (result) {
+            res.status(result.status).json({
+              message: result
+            });
+          } else {
+            res.status(error.status).json({
+              message: error
+            });
+          }
+        });
     }
   });
 });

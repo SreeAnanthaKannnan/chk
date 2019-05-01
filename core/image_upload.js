@@ -59,20 +59,13 @@ async function receipt_upload(filepath, order_id, token) {
         message: verifytoken.message
       });
     }
-    await receipt_path
-      .receipt_path(filepath, order_id)
-      .then(data => {
-        responseObj.data = data;
-        responseObj.errors = [];
-        responseObj.meta = {};
-
-        return resolve(data);
-      })
-      .catch(error => {
-        responseObj.data = [];
-        responseObj.errors = [error];
-        responseObj.meta = {};
-      });
+    var result = await receipt_path.receipt_path(filepath, order_id);
+    console.log(result);
+    if (result.message.data.affectedRows == 1) {
+      return resolve({ status: 200, message: "Receipt successfully Uploaded" });
+    } else {
+      return resolve({ status: 400, message: "Receipt not uploaded" });
+    }
   });
 }
 //============================================================Code End===================================================//
