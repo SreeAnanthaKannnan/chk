@@ -12,13 +12,16 @@ module.exports = {
   insert_user: insert_user,
   owner_details_name: owner_details_name,
   hr_details_name: hr_details_name,
-  add_admin: add_admin
+  add_admin: add_admin,
+  delete_user_name : delete_user_name,
+  delete_user_entry : delete_user_entry
 };
 //Here verify the user already exits or not, if exits through error
 function verify_user(registerobject) {
   return new Promise(async function(resolve, reject) {
     var email_id = registerobject.email;
     var param = [email_id];
+
     mysqlConnection
       .query_execute(query.getlogindetails, param)
       .then(function(result, err) {
@@ -30,6 +33,7 @@ function verify_user(registerobject) {
           });
         } else {
           console.log(result, "in  dao 33");
+         
           return resolve({
             status: 200,
             result: result
@@ -63,6 +67,52 @@ function owner_details_name(employee_name, email_id) {
   });
 }
 //===================================================================================
+function delete_user_name(registerobject) {
+  return new Promise(async function(resolve, reject) {
+    var email_id = registerobject.email;
+    var param = [email_id];
+    console.log("DAO_reg", param);
+
+    // -----
+    var res = await mysqlConnection.query_execute(query.delete_user_name, param);
+    console.log("response", res);
+    if (res.data.errno) {
+      return reject({
+        status: 400,
+        message: "something went wrong"
+      });
+    } else {
+      console.log("result_dao===========>", res);
+      return resolve({
+        status: 200,
+        message: res
+      });
+    }
+  });
+}
+function delete_user_entry(registerobject) {
+  return new Promise(async function(resolve, reject) {
+    var email_id = registerobject.email;
+    var param = [email_id];
+    console.log("DAO_reg", param);
+
+    // -----
+    var res = await mysqlConnection.query_execute(query.delete_user_entry, param);
+    console.log("response", res);
+    if (res.data.errno) {
+      return reject({
+        status: 400,
+        message: "something went wrong"
+      });
+    } else {
+      console.log("result_dao-delete===========>", res);
+      return resolve({
+        status: 200,
+        message: res
+      });
+    }
+  });
+}
 function hr_details_name(email_id) {
   return new Promise(async function(resolve, reject) {
     var param = [email_id];
@@ -245,6 +295,7 @@ function insert_user(registerobject, otp) {
       countvalue
     ];
     console.log("params=====>", params);
+    
     await mysqlConnection
       .insert_query(query.resgister, params)
       .then(function(result, err) {

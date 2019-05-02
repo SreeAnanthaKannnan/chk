@@ -72,10 +72,14 @@ module.exports.trainerid = "SELECT id FROM Trainer where Name_en = ?";
 module.exports.trainerid_ar = "SELECT id FROM Trainer where Name_ar = ?";
 /*=======finding the row count from the Appeal table for compliant no=========*/
 module.exports.appealidcount = "SELECT count(id) as count FROM Appeal";
+ module.exports.delete_user_name = "SELECT * FROM citizens where email_id =?"
+ module.exports.delete_user_entry ="DELETE  FROM citizens where email_id =? and verify_email ='N'"
 
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
 module.exports.getlogindetails =
+// "SELECT * FROM citizens where email_id =?";
+
   "SELECT * FROM citizens where email_id =?  AND verify_email='Y'";
 module.exports.getinstalleremployeelist =
   "SELECT * FROM citizens where user_type=? order by firstname_en";
