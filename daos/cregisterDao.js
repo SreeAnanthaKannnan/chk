@@ -146,13 +146,13 @@ function insert_user(registerobject, otp) {
     var reg_date = now;
         var nationality = registerobject.nationality;
         //Here the Registration Details converted into both arabic and english languages and stored in Data Base
-    value = await langdetect.languageDetect(firstname);
-    language = value.result;
+    // value = await langdetect.languageDetect(firstname);
+    // language = value.result;
     if (firstname == "") {
       firstname_ar = firstname;
       firstname_en = firstname;
     } else {
-      if (value.result == "ar") {
+      if (language == "ar") {
         var temp = await translate.translate_en(firstname);
         firstname_en = temp.result;
         firstname_ar = firstname;
@@ -166,7 +166,7 @@ function insert_user(registerobject, otp) {
       lastname_ar = lastname;
       lastname_en = lastname;
     } else {
-      if (value.result == "ar") {
+      if (language == "ar") {
         var temp = await translate.translate_en(lastname);
         lastname_en = temp.result;
         lastname_ar = lastname;
@@ -180,7 +180,7 @@ function insert_user(registerobject, otp) {
       address_en = address;
       address_ar = address;
     } else {
-      if (value.result == "ar") {
+      if (language == "ar") {
         var temp = await translate.translate_en(address);
         address_en = temp.result;
         address_ar = address;
@@ -194,7 +194,7 @@ function insert_user(registerobject, otp) {
       company_ar = company;
       company_en = company;
     } else {
-      if (value.result == "ar") {
+      if (language == "ar") {
         var temp = await translate.translate_en(company);
         company_en = temp.result;
       } else {
@@ -207,7 +207,7 @@ function insert_user(registerobject, otp) {
       nationality_ar = nationality;
       nationality_en = nationality;
     } else {
-      if (value.result == "ar") {
+      if (language == "ar") {
         var temp = await translate.translate_en(nationality);
         nationality_en = temp.result;
         nationality_ar = nationality;
