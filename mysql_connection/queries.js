@@ -192,6 +192,7 @@ module.exports.Payment =
   "UPDATE Employee_Profile SET payment_type = ?,Amount = ?, trnx = ?,order_status = ?,certificate_status=? WHERE order_id = ? ";
 module.exports.payment_check =
   "SELECT payment_type,amount,trnx,order_status FROM Employee_Profile where order_id=?";
+
 module.exports.not_interested_aman =
   "UPDATE Buildings SET orderid=? where orderid IS NULL AND email_id=?";
 module.exports.not_interested =
@@ -201,8 +202,8 @@ module.exports.update_order_id =
 module.exports.order_id_select =
   "SELECT max(convert(substring(order_id FROM 2),UNSIGNED INTEGER)) as num FROM Employee_Profile where order_id !='NULL' and order_id is not null and order_id !='NoInterest'";
 module.exports.order_id_select_aman =
-  "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings  where orderid !='NULL' and orderid is not null and orderid !='NoInterest' union SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Schedules  where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
-//"SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
+ // "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings  where orderid !='NULL' and orderid is not null and orderid !='NoInterest' union SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Schedules  where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
+"SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
 module.exports.update_order_id_aman =
   "UPDATE Buildings SET orderid=? where email_id =? AND orderid IS NULL";
 module.exports.insertbulkbuilding =
@@ -261,6 +262,8 @@ module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
 module.exports.checktoken = "SELECT * FROM Session where token =?";
 module.exports.updateotp = "UPDATE citizens SET verify_email = ? WHERE otp = ?";
 module.exports.deleteBuilding = "Delete from Buildings where id = ?";
+module.exports.getownerdetails =
+  "select * from citizens where firstname_en =? AND email_id=?";
 module.exports.certificate_issue =
   " UPDATE Employee_Profile SET certificate_issue = ? WHERE national_id = ?";
 module.exports.deletetoken = "Delete from Session where token=?";
