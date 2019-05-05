@@ -38,15 +38,11 @@ insertBuildingOwner = async(params) => {
         const sql = "INSERT INTO Buildings(email_id ,type,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN,address,alternumber) VALUES ?";
         const result = await mysqlConnection.insert_query(sql,params);
         console.log(result);
-        response['status'] = result.status;
-        return resolve({
-            response : response,
+               return resolve({
+                result : result,
         })
         
         return response;
-
-
-
     });
 }
 module.exports = {

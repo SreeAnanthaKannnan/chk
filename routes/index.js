@@ -53,6 +53,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   bc = require("../fabcar/javascript/invoke"),
   verify = require("../core/otpverify"),
   pdf = require("../core/pdf.js"),
+  emailotpfun = require("../utils/spsaemail"),
   pdf2 = require("../core/pdf.js");
 let moment = require("moment"),
   Appeal = require("../core/Appeal"),
@@ -549,14 +550,13 @@ router.post("/file_upload", uploads.single("file"), function(req, res) {
       upload
         .upload(filepath, token)
         .then(result => {
-          res.send({
-            message: "file uploaded successfully",
-            result: req.file.filename
-          });
+          res.status(result.status).json({
+            message: result.Message
+          })
         })
         .catch(err =>
           res.status(err.status).json({
-            message: err.message
+            message: err.Message
           })
         );
     }
@@ -986,6 +986,13 @@ router.post("/forgetpassword", async (req, res) => {
                 //   "كلمة مرور مرة واحدة تم التحقق من كلمة المرور وتحديثها بنجاح"
               });
             }
+          }
+          else{
+            res.send({
+              status: 400,
+              message: "Invalid username"
+            });
+
           }
         }
       }

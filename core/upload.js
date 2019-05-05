@@ -154,6 +154,10 @@ fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
     csvParser(csvData, { delimiter: ',' }, async(err, data) => {
         if (err){
             console.log(err);
+            return reject({
+                status:400,
+                Message:"Invalid file format"
+            })
         }else{  
         const csvParams = [];
         for(let i=1;i<data.length;i++){
@@ -179,20 +183,27 @@ fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
                 params.push(alternateNumber);
                 csvParams.push(params);
         }
-    for(let i=0;i<csvParams.length;i++){
-        const response =  await insertBuildingOwner(csvParams[i]);
-        console.log('upload js Response===>',response)
-        if(response.response.status != 200){
-            reject({ "Status": response.response.status, "Message": 'Cannot Insert the  the File'});
-        }
-    }
-    response['status'] = 200;
-    return resolve({
-        response : response
-    });
-        
-          
+        console.log("length",csvParams.length)
+        if(csvParams.length===0){
+            return resolve({
+                status:400,
+                Message :"Please upload buildings data"
+            });
 
+        }
+        else{
+    for(let i=0;i<csvParams.length;i++){
+        const result =  await insertBuildingOwner(csvParams[i]);
+        console.log('upload js Response===>',result)
+        if(result.result.data.affectedRows == 0){
+            reject({ "Status": 400, "Message": 'Cannot Insert the  the File'});
+        }
+    }    
+    return resolve({
+        status:200,
+        Message :"file upload successfully"
+    });
+}
         }
     });
 });
