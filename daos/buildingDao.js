@@ -35,8 +35,8 @@ function buildingbyemail(email_id) {
           logger.fatal(err,"db error while inserting building details into building table")
           return resolve({ status: 400, err: err });
         } else {
-          console.log(result);
-          return resolve({ status: 200, message: result });
+          console.log(result,"in daos 38");
+          return resolve({ status: 200, result:result.data });
         }
       });
   })
