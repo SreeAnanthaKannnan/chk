@@ -6,7 +6,7 @@ const query = require("../mysql_connection/queries");
 function updateprofile(updateProf) {
     return new Promise(async (resolve, reject) => {
         // console.log("update prof core===>",updateprof.lastname_en, updateProf.company_en, updateProf.nationality_en, updateProf.address_en,updateProf.mobile_number,updateProf.alter_number,updateProf.email_id,updateProf.emirates_id)
-        var params =[updateProf.firstname_en,updateProf.lastname_en,updateProf.alter_number,updateProf.emirates_id,updateProf.mobile_number,updateProf.email_id,updateProf.nationality_en,updateProf.address_en,updateProf.company_en,updateProf.email_id]
+        var params =[updateProf.firstname_en,updateProf.firstname_ar,updateProf.lastname_en,updateProf.lastname_ar,updateProf.alter_number,updateProf.emirates_id,updateProf.mobile_number,updateProf.email_id,updateProf.nationality_en,updateProf.nationality_ar,updateProf.address_en,updateProf.address_ar,updateProf.company_en,updateProf.company_ar,updateProf.email_id]
         console.log("params dao====>",params)
         logger.fatal(updateProf, "=>updateProf");
         mysqlConnection
