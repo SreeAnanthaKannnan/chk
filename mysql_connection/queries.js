@@ -315,7 +315,7 @@ module.exports.payment_callcenter_salama =
 module.exports.editBuilding =
   "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";
 module.exports.updateprofile =
-  "update citizens set firstname_en=?,lastname_en=?,alter_number=?,emirates_id=?,mobile_number=?,email_id=?,nationality_en=?,address_en=?,company_en=? where email_id =?";
+  "update citizens set firstname_en=?,firstname_ar=?,lastname_en=?,lastname_ar=?,alter_number=?,emirates_id=?,mobile_number=?,email_id=?,nationality_en=?,nationality_ar=?,address_en=?,address_ar=?,company_en=?,company_ar=? where email_id =?";
 
 module.exports.getinstallersDetailsForDashBoard =
   "select active as active_installers, total  as total_installers from vw_installer_details where month=? and year=?";
