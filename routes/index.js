@@ -495,7 +495,7 @@ router.post("/profile", cors(), async function(req, res) {
     );
 });
 router.post("/clearnote", cors(), async function(req, res) {
-  var buildingobject = req.body.id;
+  var buildingobject = req.body.email_id;
   //const token = req.headers.authorization;
   console.log(buildingobject, "data");
   payment
