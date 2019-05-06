@@ -71,7 +71,7 @@ function buildingsbymail(email_id, token) {
                       result.result[i].address = address;
                       var plot_no = first[2];
                       result.result[i].plot_no = plot_no;
-                      delete result.result[i]["address"];
+                      //delete result.result[i]["address"];
                   }
                   console.log("result", result);
                   info.push(result);

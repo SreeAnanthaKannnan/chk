@@ -179,9 +179,9 @@ module.exports.payment_aman =
 module.exports.payment_aman_install =
   "UPDATE Buildings SET installeddate = ? WHERE email_id = ? AND Buildingname=?";
 module.exports.pushnotifycount =
-  "select push_notify_count,preschedule,id from Buildings WHERE email_id = ? AND push_notify_count!=0";
+  "select push_notify_count,preschedule,id,Buildingname from Buildings WHERE email_id = ? AND push_notify_count!=0";
 module.exports.pushnotifycountclear =
-  "update Buildings set push_notify_count='0'  WHERE email_id = ?";
+  "update Buildings set push_notify_count='0' WHERE id = ?";
 
 module.exports.payment_aman_pref =
   "UPDATE Buildings SET preschedule = ?, push_notify_count = ? WHERE email_id = ? AND Buildingname=?";

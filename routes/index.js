@@ -495,11 +495,11 @@ router.post("/profile", cors(), async function(req, res) {
     );
 });
 router.post("/clearnote", cors(), async function(req, res) {
-  var buildingobject = req.body.email;
-  const token = req.headers.authorization;
+  var buildingobject = req.body.id;
+  //const token = req.headers.authorization;
   console.log(buildingobject, "data");
   payment
-    .clearnotify(buildingobject, token)
+    .clearnotify(buildingobject)
     .then(result => {
       res.send({
         result: result,
@@ -855,11 +855,11 @@ router.post("/Payment_statusupdate_salama", cors(), async function(req, res) {
     );
 });
 router.post("/pushcount", cors(), async function(req, res) {
-  const token = req.headers.authorization;
+  //const token = req.headers.authorization;
   var details = req.body;
   console.log(details);
   payment
-    .getpushcount(details, token)
+    .getpushcount(details)
     .then(result => {
       res.status(result.status).json({
         message: result
