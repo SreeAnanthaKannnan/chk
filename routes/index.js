@@ -347,6 +347,7 @@ router.post("/AddsingleBuilding", cors(), async function(req, res) {
   const token = req.headers.authorization;
   var email_id = req.body.email;
   var buildingobject = req.body;
+  console.log("ui o/p====>",req.body)
   building
     .buildings(buildingobject, token, email_id)
     .then(result => {

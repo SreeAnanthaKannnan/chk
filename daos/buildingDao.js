@@ -7,7 +7,7 @@ function building(buildingobject, email_id) {
   return new Promise(async (resolve, reject) => {
 
     logger.fatal(buildingobject, "=>buildingobject");
-    const address = `${buildingobject.Building_no} || ${buildingobject.address} || ${buildingobject.Plot_no}`;
+    const address = `${buildingobject.Building_no} || ${buildingobject.address} || ${buildingobject.plot_no}`;
    console.log('address====>',address);
     var params = [email_id, buildingobject.type, address, buildingobject.Buildingname, buildingobject.lat, buildingobject.lon, buildingobject.cdccn, buildingobject.AMC, buildingobject.NSP, buildingobject.SPCN]
     mysqlConnection
