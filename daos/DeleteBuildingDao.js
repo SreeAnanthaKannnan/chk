@@ -33,7 +33,7 @@ function editbuilding(buildingobject) {
     return new Promise(async (resolve, reject) => {
         var address = `${buildingobject.Building_no} || ${buildingobject.address} || ${buildingobject.plot_no}`;
 
-        var params =[buildingobject.Buildingname, address,  buildingobject.lat, buildingobject.lon, buildingobject.cdccn, buildingobject.AMC, buildingobject.NSP, buildingobject.SPCN,buildingobject.id]
+        var params =[buildingobject.Buildingname, address,  buildingobject.lat, buildingobject.lon, buildingobject.cdccn, buildingobject.AMC, buildingobject.NSP, buildingobject.SPCN,buildingobject.alternumber,buildingobject.id]
         logger.fatal(buildingobject, "=>buildingobject");
         mysqlConnection
             .query_execute(query.editBuilding, params)

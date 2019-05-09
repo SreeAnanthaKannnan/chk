@@ -218,8 +218,8 @@ module.exports.employee_grid_view1 =
 //====================================aman and salma=====================================//
 module.exports.sessiondelete = "Delete from Session where user_ID =?";
 module.exports.addbuilding =
-  "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
-module.exports.resgister =
+  "INSERT INTO Buildings(email_id ,type,address,alternumber,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
+module.exports.resgister 
   "INSERT INTO citizens (firstname_en, firstname_ar,lastname_en,lastname_ar,company_en,company_ar,nationality_en,nationality_ar,alter_number,address_en,address_ar,emirates_id,po_box,mobile_number,email_id,password,verify_mobile,verify_email,language,newsletter,user_type,reg_date,otp,countvalue) VALUES ?";
 /*======================update the entry from session for the particular user id======*/
 module.exports.registeradmin =
@@ -227,8 +227,7 @@ module.exports.registeradmin =
 
 module.exports.sessionupdate =
   "update Session set token=?,session_created_at=? where user_ID = ?";
-module.exports.addbuilding =
-  "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
+
 // /* Fetching the list of trained employees from "Results" table */
 module.exports.trained_employees =
   "select * from Employee_Profile where Company_Trade_Lincense_No=? and National_Id in (select National_Id from Results where result_en=?) ";
@@ -286,7 +285,7 @@ module.exports.payment_callcenter_salama =
   "UPDATE Employee_Profile SET order_status=?, certificate_status=? where order_id =?";
 ("select * from Buildings where email_id = ?");
 module.exports.editBuilding =
-  "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";
+  "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=?,alternumber=? where id =?";
 module.exports.getinstallersDetailsForDashBoard =
   "select ROUND(sum(active)) as active_installers, ROUND(sum(installations)) as total_installers from vw_installer_trend  where month = ? and year = ?";
 module.exports.getinstallerDetailsMonthWise =
@@ -312,8 +311,8 @@ module.exports.updatecountvalue =
 module.exports.payment_callcenter_salama =
   "UPDATE Employee_Profile SET order_status=?, certificate_status=? where order_id =?";
 ("select * from Buildings where email_id = ?");
-module.exports.editBuilding =
-  "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";
+// module.exports.editBuilding =
+//   "update Buildings set Buildingname=?,address=?,lat=?,lon=?,cdccn=?,AMC=?,NSP=?,SPCN=? where id =?";
 module.exports.updateprofile =
   "update citizens set firstname_en=?,firstname_ar=?,lastname_en=?,lastname_ar=?,alter_number=?,emirates_id=?,mobile_number=?,email_id=?,nationality_en=?,nationality_ar=?,address_en=?,address_ar=?,company_en=?,company_ar=? where email_id =?";
 
