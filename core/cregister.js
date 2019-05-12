@@ -25,16 +25,13 @@ function cregister(registerobject) {
         رسالة: "يرجى تقديم حقول إلزامية"
       });
     } else {
-      var result = await registerform.verify_user(registerobject);
-      logger.fatal(result.result.data.length != 0);
-      dbFunc.connectionRelease;
-      if (result.result.data.length != 0) {
-        return reject({
-          status: 409,
-          message: "User Already Registered",
-          الرسالة: "مستخدم مسجل بالفعل"
-        });
-      } else {
+      var verify = await registerform.delete_user_name(registerobject)
+      console.log(verify.message.data.length,"delete result======>")
+
+      if(verify.message.data.length !=0){
+      if(verify.message.data[0].verify_email =="N"){
+        var verification = await registerform.delete_user_entry(registerobject)
+        console.log(verification,"verification=========================>")
         var otp1 = await otpfun.otpgen();
         var otp = otp1.otp;
         // logger.fatal("in core before mail")
@@ -46,7 +43,37 @@ function cregister(registerobject) {
           message: "Please check your mail for otp verification"
         });
       }
+      else {
+       
+          return reject({
+            status: 409,
+            message: "User Already Registered",
+            الرسالة: "مستخدم مسجل بالفعل"
+          });
+      }
     }
+    //}
+  
+      
+    
+    
+    else {
+      var otp1 = await otpfun.otpgen();
+      var otp = otp1.otp;
+      // logger.fatal("in core before mail")
+      await emailotpfun.emailotp(email_id, otp);
+      var result = await registerform.insert_user(registerobject, otp);
+      //logger.fatal(result, "inserted.......")
+      return resolve({
+        status: 200,
+        message: "Please check your mail for otp verification"
+      });
+    }
+
+      
+      
+
+  }  
   });
 }
 //========================================================

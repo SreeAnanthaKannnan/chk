@@ -4,7 +4,7 @@
   "description": "Backend for Saned's SPSA project",
   "main": "./routes/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nyc mocha",
     "start": "node ./bin/spsa"
   },
   "repository": {
@@ -27,6 +27,9 @@
     "base64-to-image": "^1.0.2",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "commander": "^2.20.0",
     "config": "^3.0.1",
     "connect-multiparty": "^2.2.0",
     "cookie-parser": "^1.4.4",
@@ -48,10 +51,13 @@
     "hh-mm-ss": "^1.2.0",
     "http-errors": "^1.7.2",
     "ip": "^1.1.5",
+    "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.4.0",
     "langdetect": "^0.2.1",
     "lib-unoconv": "^0.1.2",
     "log4js": "^4.0.2",
+    "mocha": "^6.1.4",
+    "mocha-logger": "^1.0.6",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "multer": "^1.4.1",
@@ -63,10 +69,15 @@
     "nodemailer": "^4.7.0",
     "nodeman": "^1.1.2",
     "nodemon": "^1.18.9",
+    "nyc": "^14.0.0",
     "pm2": "^3.3.1",
     "pug": "^2.0.3",
     "puppeteer": "^1.12.2",
+    "save": "^2.3.3",
     "sendotp": "^1.2.9",
+    "should": "^13.2.3",
+    "sinon": "^7.3.2",
+    "supertest": "^4.0.2",
     "swagger-jsdoc": "^3.2.7",
     "xlsx": "^0.14.1"
   }

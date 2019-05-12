@@ -292,19 +292,20 @@ function payment_aman_pref(payment1, token) {
 function getpushcount(details, token) {
   logger.fatal(details, "details");
   return new Promise(async (resolve, reject) => {
-    var verifytoken = await checktoken.checkToken(token);
-    if (verifytoken.status == 405) {
-      return resolve({
-        status: verifytoken.status,
-        message: verifytoken.message
-      });
-    } else if (verifytoken.status == 403) {
-      return resolve({
-        status: verifytoken.status,
-        message: verifytoken.message
-      });
-    }
-    else {
+    // var verifytoken = await checktoken.checkToken(token);
+    // if (verifytoken.status == 405) {
+    //   return resolve({
+    //     status: verifytoken.status,
+    //     message: verifytoken.message
+    //   });
+    // } else if (verifytoken.status == 403) {
+    //   return resolve({
+    //     status: verifytoken.status,
+    //     message: verifytoken.message
+    //   });
+    // }
+    // else
+     {
       var responseObj = {};
 
       {
@@ -328,22 +329,10 @@ function getpushcount(details, token) {
     }
   });
 }
-function clearnotify(details, token) {
+function clearnotify(details) {
   logger.fatal(details, "details");
   return new Promise(async (resolve, reject) => {
-    var verifytoken = await checktoken.checkToken(token);
-    if (verifytoken.status == 405) {
-      return resolve({
-        status: verifytoken.status,
-        message: verifytoken.message
-      });
-    } else if (verifytoken.status == 403) {
-      return resolve({
-        status: verifytoken.status,
-        message: verifytoken.message
-      });
-    }
-    else {
+   {
       var responseObj = {};
 
       {

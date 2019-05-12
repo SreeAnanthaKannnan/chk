@@ -7,9 +7,11 @@ function building(buildingobject, email_id) {
   return new Promise(async (resolve, reject) => {
 
     logger.fatal(buildingobject, "=>buildingobject");
-    const address = `${buildingobject.Building_no} || ${buildingobject.address} || ${buildingobject.Plot_no}`;
+    const address = `${buildingobject.Building_no} || ${buildingobject.address} || ${buildingobject.plot_no}`;
    console.log('address====>',address);
-    var params = [email_id, buildingobject.type, address, buildingobject.Buildingname, buildingobject.lat, buildingobject.lon, buildingobject.cdccn, buildingobject.AMC, buildingobject.NSP, buildingobject.SPCN]
+
+   console.log(buildingobject.alternumber, "=>buildingobject");
+    var params = [email_id, buildingobject.type, address,buildingobject.alternumber,buildingobject.Buildingname, buildingobject.lat, buildingobject.lon, buildingobject.cdccn, buildingobject.AMC, buildingobject.NSP, buildingobject.SPCN]
     mysqlConnection
       .insert_query(query.addbuilding, params)
       .then(function (result,err) {
@@ -35,8 +37,8 @@ function buildingbyemail(email_id) {
           logger.fatal(err,"db error while inserting building details into building table")
           return resolve({ status: 400, err: err });
         } else {
-          console.log(result);
-          return resolve({ status: 200, message: result });
+          console.log(result,"in daos 38");
+          return resolve({ status: 200, result:result.data });
         }
       });
   })

@@ -10,7 +10,72 @@ var log4js = require('log4js');
 const logger = log4js.getLogger('SPSA_project');
 var xlsx = require('node-xlsx');
 var app = express();
+const {insertBuildingOwner } = require('./../daos/uploaddao');
 
+
+
+
+
+// function upload(filepath){    // console.log("body " + req.body);
+// return new Promise( function (resolve,reject){
+
+// console.log(filepath)
+   
+
+// fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
+
+//     if (err) 
+//     {
+//         console.log(err);
+//     }
+
+
+//     csvParser(csvData, { delimiter: ',' }, function(err, data) {
+//         var params=[]; 
+//         if (err)
+//         {
+//             console.log(err);
+//         } 
+//         else 
+//         {  
+               
+//         console.log(data.length);  
+//         for(var i=1;i<data.length;i++){
+//             params.push(data[i])
+
+//         } 
+//         console.log(params); 
+//        // var owner_id=email_id
+//             var sql = "INSERT INTO Buildings(email_id ,type,address,Buildingname,lat,lon,cdccn,AMC,NSP,SPCN) VALUES ?";
+//             // con.query(sql, [params], function(result,err) {
+//             //     if(err) { logger.fatal("something",err)
+//             //     return reject({ "status": 400, "body": 'Cannot insert the data' })}
+//             //     else{
+                    
+//             //     return resolve({ result});
+//             //     }
+//             // });   
+//             con.query(sql,[params],function(err,result)
+//             {
+//              if(err) { console.log("something",err)
+//                  return reject({ "status": 400, "body": 'Cannot insert the data' })}
+//                  else{
+//                  return resolve({ result});
+     
+//                  }
+//              }); 
+
+//         }
+//     });
+// });
+// })
+// };
+
+
+// module.exports={
+    
+//    upload:upload
+//  }
 // async function upload(filepath, email_id) {
 //     return new Promise(function(resolve, reject) {
 //         var XLSX = require('xlsx');
@@ -89,6 +154,10 @@ fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
     csvParser(csvData, { delimiter: ',' }, async(err, data) => {
         if (err){
             console.log(err);
+            return reject({
+                status:400,
+                Message:"Invalid file format"
+            })
         }else{  
         const csvParams = [];
         for(let i=1;i<data.length;i++){
@@ -114,21 +183,27 @@ fs.readFile(filepath, { encoding: 'utf-8' }, function(err, csvData) {
                 params.push(alternateNumber);
                 csvParams.push(params);
         }
-        console.log('csvParams===>',csvParams[1].length);  
-    for(let i=0;i<csvParams.length;i++){
-        const response =  await insertBuildingOwner(csvParams[i]);
-        console.log('upload js Response===>',response)
-        if(response.response.status != 200){
-            reject({ "Status": response.response.status, "Message": 'Cannot Insert the  the File'});
-        }
-    }
-    response['status'] = 200;
-    return resolve({
-        response : response
-    });
-        
-          
+        console.log("length",csvParams.length)
+        if(csvParams.length===0){
+            return resolve({
+                status:400,
+                Message :"Please upload buildings data"
+            });
 
+        }
+        else{
+    for(let i=0;i<csvParams.length;i++){
+        const result =  await insertBuildingOwner(csvParams[i]);
+        console.log('upload js Response===>',result)
+        if(result.result.data.affectedRows == 0){
+            reject({ "Status": 400, "Message": 'Cannot Insert the  the File'});
+        }
+    }    
+    return resolve({
+        status:200,
+        Message :"file upload successfully"
+    });
+}
         }
     });
 });

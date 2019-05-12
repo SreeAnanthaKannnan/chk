@@ -1,10 +1,11 @@
-
-
 {
   "mysqlConnection": {
     "host": "68.183.86.120",
     "user": "rapiduser",
     "password": "Rpqb$2018",
     "database": "SHARJAH"
+  },
+  "TestIp": {
+    "host": "127.0.0.1"
   }
- }
+}

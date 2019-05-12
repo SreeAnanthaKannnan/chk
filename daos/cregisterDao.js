@@ -12,13 +12,16 @@ module.exports = {
   insert_user: insert_user,
   owner_details_name: owner_details_name,
   hr_details_name: hr_details_name,
-  add_admin: add_admin
+  add_admin: add_admin,
+  delete_user_name : delete_user_name,
+  delete_user_entry : delete_user_entry
 };
 //Here verify the user already exits or not, if exits through error
 function verify_user(registerobject) {
   return new Promise(async function(resolve, reject) {
     var email_id = registerobject.email;
     var param = [email_id];
+
     mysqlConnection
       .query_execute(query.getlogindetails, param)
       .then(function(result, err) {
@@ -30,6 +33,7 @@ function verify_user(registerobject) {
           });
         } else {
           console.log(result, "in  dao 33");
+         
           return resolve({
             status: 200,
             result: result
@@ -63,6 +67,52 @@ function owner_details_name(employee_name, email_id) {
   });
 }
 //===================================================================================
+function delete_user_name(registerobject) {
+  return new Promise(async function(resolve, reject) {
+    var email_id = registerobject.email;
+    var param = [email_id];
+    console.log("DAO_reg", param);
+
+    // -----
+    var res = await mysqlConnection.query_execute(query.delete_user_name, param);
+    console.log("response", res);
+    if (res.data.errno) {
+      return reject({
+        status: 400,
+        message: "something went wrong"
+      });
+    } else {
+      console.log("result_dao===========>", res);
+      return resolve({
+        status: 200,
+        message: res
+      });
+    }
+  });
+}
+function delete_user_entry(registerobject) {
+  return new Promise(async function(resolve, reject) {
+    var email_id = registerobject.email;
+    var param = [email_id];
+    console.log("DAO_reg", param);
+
+    // -----
+    var res = await mysqlConnection.query_execute(query.delete_user_entry, param);
+    console.log("response", res);
+    if (res.data.errno) {
+      return reject({
+        status: 400,
+        message: "something went wrong"
+      });
+    } else {
+      console.log("result_dao-delete===========>", res);
+      return resolve({
+        status: 200,
+        message: res
+      });
+    }
+  });
+}
 function hr_details_name(email_id) {
   return new Promise(async function(resolve, reject) {
     var param = [email_id];
@@ -146,13 +196,13 @@ function insert_user(registerobject, otp) {
     var reg_date = now;
         var nationality = registerobject.nationality;
         //Here the Registration Details converted into both arabic and english languages and stored in Data Base
-    value = await langdetect.languageDetect(firstname);
-    language = value.result;
+    // value = await langdetect.languageDetect(firstname);
+    // language = value.result;
     if (firstname == "") {
       firstname_ar = firstname;
       firstname_en = firstname;
     } else {
-      if (value.result == "ar") {
+      if (language == "ar") {
         var temp = await translate.translate_en(firstname);
         firstname_en = temp.result;
         firstname_ar = firstname;
@@ -166,7 +216,7 @@ function insert_user(registerobject, otp) {
       lastname_ar = lastname;
       lastname_en = lastname;
     } else {
-      if (value.result == "ar") {
+      if (language == "ar") {
         var temp = await translate.translate_en(lastname);
         lastname_en = temp.result;
         lastname_ar = lastname;
@@ -180,7 +230,7 @@ function insert_user(registerobject, otp) {
       address_en = address;
       address_ar = address;
     } else {
-      if (value.result == "ar") {
+      if (language == "ar") {
         var temp = await translate.translate_en(address);
         address_en = temp.result;
         address_ar = address;
@@ -194,7 +244,7 @@ function insert_user(registerobject, otp) {
       company_ar = company;
       company_en = company;
     } else {
-      if (value.result == "ar") {
+      if (language == "ar") {
         var temp = await translate.translate_en(company);
         company_en = temp.result;
       } else {
@@ -207,7 +257,7 @@ function insert_user(registerobject, otp) {
       nationality_ar = nationality;
       nationality_en = nationality;
     } else {
-      if (value.result == "ar") {
+      if (language == "ar") {
         var temp = await translate.translate_en(nationality);
         nationality_en = temp.result;
         nationality_ar = nationality;
@@ -245,6 +295,7 @@ function insert_user(registerobject, otp) {
       countvalue
     ];
     console.log("params=====>", params);
+    
     await mysqlConnection
       .insert_query(query.resgister, params)
       .then(function(result, err) {
