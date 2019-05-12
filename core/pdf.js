@@ -11,6 +11,7 @@ var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
 var dateFormat = require('dateformat');
 var citizen = require('../daos/loginDao');
+var service=require('../daos/loginDao');
 var dateFormat = require("dateformat");
 // var docxConverter = require('docx-pdf');
 // var unoconv = require('unoconv');
@@ -18,12 +19,12 @@ var dateFormat = require("dateformat");
 // var office2pdf = require('office2pdf');
 var unoconv = require('lib-unoconv')
 
-function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,yesvalue10,novalue10,email,checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,checked10)  {
+function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue4,novalue4,yesvalue5,novalue5,yesvalue6,novalue6,yesvalue7,novalue7,yesvalue8,novalue8,yesvalue9,novalue9,email,checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9)  {
   // var yesValue = checked == "yes" ? "checked" : ""
   // var noValue = checked === "no" ? "checked" : ""
 
   return new Promise(async function(resolve,reject){
-  console.log(yesvalue1,novalue1,yesvalue2,novalue2,"kieue=============")
+  console.log(checked1,checked2,checked3,checked4,"kieue=============")
     try{
       // var yesvalue1 = checked1 == "yes" ? "checked" : ""
       // var novalue1 = checked1== "no" ? "checked" : ""
@@ -136,21 +137,10 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
            <input type="checkbox" ${novalue9}>No </input>
           </div>
       
-          <div style='border-bottom: solid black 1px; margin-right:30px;'></div>
-        </div>
-        <div>
-        <p>FA Company Representative Available?  </p>
-        <div style='margin-bottom:1px'>
-        <input type="checkbox" ${yesvalue10}>Yes </input>
-         <input type="checkbox" ${novalue10}>No </input>
-        </div>
-    
-        <div style='border-bottom: solid black 1px; margin-right:30px;'></div>
       </div>
       
       </div>
-      
-      
+          
       
       
       
@@ -240,14 +230,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
            <input type="checkbox" ${novalue9}>لا </input>
           </div>
       
-          <div style='border-bottom: solid black 1px; margin-right:1px;'></div>
-        </div>
-        <div>
-        <p>ممثل شركة FA متاح؟</p>
-        <div style='margin-bottom:1px'>
-        <input type="checkbox" ${yesvalue10} >نعم </input>
-         <input type="checkbox" ${novalue10}>لا </input>
-        </div>
+        
     
         <div style='border-bottom: solid black 1px; margin-right:1px;'></div>
       </div>
@@ -266,6 +249,7 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
       </body>
       </html>
       `);
+
       // <input type="checkbox" style="margin-right=293px" name="vehicle1" value="Bike" ${yesvalue3}><p style="text-align:justify;margin:3px;margin-left: 20px;
       // margin-top: -18px;">All the information provided above is true <br>the best of my knowledge.I understand I will be<br>levied a penality if found to be incorrect
       //   <div style="margin-top: 53px;
@@ -277,9 +261,10 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
       console.log(datetime);
       var  path='/pdf'+datetime+email+'.pdf';
 
-      let query= await insertquery.pdf_insert(path,email,checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,checked10)
+      let query= await insertquery.pdf_insert(path,email,checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9)
       console.log(query !=0,"data inserted")
        console.log("guess done");
+
       await page.pdf({
        
         path: './uploads/pdf'+datetime+email+'.pdf',
@@ -295,13 +280,14 @@ function Pdf  (yesvalue1,novalue1,yesvalue2,novalue2,yesvalue3,novalue3,yesvalue
           return resolve({
           message:"pdf conversion done",
           result: (new Buffer(result)).toString('base64')
-         
+        
       })
+
   })
 //==========================================================================================================
 
 var result = await citizen.citizendao(email);
-  var _mobile=result.result[0].mobile_number;
+  // var mobile_number=result.result[0].mobile_number;
   var lat=result.result[0].lat;
   var lon=result.result[0].lon;
   var buildname=result.result[0].Buildingname;
@@ -311,102 +297,128 @@ var result = await citizen.citizendao(email);
   var scp=result.result[0].NSP;
   var scn=result.result[0].SPCN;
   var fac=result.result[0].FAC;
+  var _mobile=result.result[0].mobile_number
+  console.log("mobileeeeeee",_mobile)
+  console.log(lat,lon,buildname,plot,loc,simno,scp,scn,fac,_mobile,"dataaaaaaaaaaaaaaa")
 
+  var result=await service.service(email)
   var p220v=result.result[0].P220V;
-     if(p220v=="yes"){
+  console.log(result.result[0].P220V,"ppp2220v")
+  console.log(result,"result")
+
+     if(p220v=="Y"){
          yes1='✓';
-         no1='x'
+          no1=''
      }
      else{
-         yes1='x';
+        //  yes1='x';
          no1='✓'
      }
-   
+   console.log("p220v",p220v)
      var fasa=result.result[0].FASA;
-     if(fasa=='yes'){
+     if(fasa=='Y'){
       yes2='✓';
-      no2='x'
+       no2=''
      }
      else{
-      yes2='x';
+     yes2='';
       no2='✓'
      }
+     console.log("fasa",fasa)
      var fars=result.result[0].FARS;
-     if(fars=='yes'){
+     if(fars=='Y'){
       yes3='✓';
-      no3='x'
+      no3=''
      }
      else{
-      yes3='x';
+      yes3='';
       no3='✓'
   }
+  console.log("fars",fars)
+
      var fafs=result.result[0].FAFS;
-     if(fafs=='yes'){
+     if(fafs=='Y'){
       yes4='✓';
-      no4='x'
+       no4=''
      }
      else{
-      yes4='x';
+     yes4='';
       no4='✓'
      }
+     console.log("fafs",fafs)
+
      var tams=result.result[0].TAMS;
-     if(tams=='yes'){
+     if(tams=='Y'){
       yes5='✓';
-      no5='x'
+       no5=''
      }
      else{
-      yes5='x';
+       yes5='';
       no5='✓'
      }
+     console.log("tams",tams)
+
      var fpps=result.result[0].FPPS;
-     if(fpps=='yes'){
+     if(fpps=='Y'){
       yes6='✓';
-      no6='x'
+       no6=''
      }
      else{
-      yes6='x';
+       yes6='';
       no6='✓'
      }
+     console.log("fpps",fpps)
+
+
      var fpfs=result.result[0].FPFS;
-     if(fpfs=='yes'){
+     if(fpfs=='Y'){
       yes7='✓';
-      no7='x'
+       no7=''
   }
   else{
-      yes7='x';
+      yes7='';
       no7='✓'
   }
+
+  console.log("fpfs",fpfs)
+
      var sim=result.result[0].SIM;
-     if(sim=='yes'){
+     if(sim=='Y'){
       yes8='✓';
-      no8='x'
+     no8=''
   }
   else{
-      yes8='x';
+      yes8='';
       no8='✓'
   }
+
+  console.log("sim",sim)
+
      var tla=result.result[0].TLA;
-     if(tla=='yes'){
+     if(tla=='Y'){
       yes9='✓';
-      no9='x'
+       no9=''
   }
   else{
-      yes9='x';
+       yes9='';
       no9='✓'
   }
-     var facr=result.result[0].FACR;
-     if(facr=='yes'){
-      yes10='✓';
-      no10='x'
-  }
-  else{
-      yes10='x';
-      no10='✓'
-  }
+  console.log("tla",tla)
+
+
+  //    var facr=result.result[0].FACR;
+  //    if(facr=='Y'){
+  //     yes10='✓';
+  //     no10='x'
+  // }
+  // else{
+  //     yes10='x';
+  //     no10='✓'
+  // }
     
 
   dateFormat("yyyy-mm-dd HH:MM:ss")
-  console.log(_mobile,lat,lon,"login"); 
+  // console.log(_mobile,lat,lon,"login"); 
  
 
 var zip = new require('node-zip')
@@ -417,7 +429,7 @@ var path = require('path');
 
 //Load the docx file as a binary
 var content = fs
-  .readFileSync(path.resolve(__dirname, "./report/AMANPrerequisiteReport.docx"), 'binary');
+  .readFileSync(path.resolve(__dirname, "/home/bahirathy/Videos/saned_spsa_backend/report/Aman Assessment.docx"), 'binary');
 
 var zip = new JSZip(content);
 
@@ -434,24 +446,24 @@ await doc.setData({
   
     "yes1":yes1,
     "no1":no1,
-    "yes2":yes2,
+     "yes2":yes2,
     "no2":no2,
-    "yes3":yes3,
+     "yes3":yes3,
     "no3":no3,
-    "yes4":yes4,
+   "yes4":yes4,
     "no4":no4,
-    "yes5":yes5,
+     "yes5":yes5,
     "no5":no5,
-    "yes6":yes6,
+     "yes6":yes6,
     "no6":no6,
-    "yes7":yes7,
+     "yes7":yes7,
     "no7":no7,
-    "yes8":yes8,
+   "yes8":yes8,
     "no8":no8,
-    "yes9":yes9,
+     "yes9":yes9,
     "no9":no9,
-    "yes10":yes10,
-    "no10":no10,
+  //  "yes10":yes10,
+    // "no10":no10,
         
     "mobile":_mobile,
     "lat":lat,                                    
@@ -487,11 +499,11 @@ var buf = doc.getZip()
            .generate({type: 'nodebuffer'});
 
 // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-fs.writeFileSync(path.resolve(__dirname, "./report/outprerequist.docx"), buf);
+fs.writeFileSync(path.resolve(__dirname, "/home/bahirathy/Videos/saned_spsa_backend/report/outAman Assessment.docx"), buf);
 
-await unoconv.convert('./report/outprerequist.docx', 'pdf', async function (err, result) {
+await unoconv.convert('/home/bahirathy/Videos/saned_spsa_backend/report/outAman Assessment.docx', 'pdf', async function (err, result) {
 // result is returned as a Buffer
-await fs.writeFile('./report/outprerequist.docx'+datetime+email+'.pdf', result);
+await fs.writeFile('/home/bahirathy/Videos/saned_spsa_backend/report/outAman Assessment.docx'+datetime+email+'.pdf', result);
 });
 
 //==============================================================================================    
@@ -512,7 +524,7 @@ await fs.writeFile('./report/outprerequist.docx'+datetime+email+'.pdf', result);
             subject: 'Saned Services',
             attachments: [{   // filename and content type is derived from path
             // filename and content type is derived from path
-          path: './report/outprerequist.docx'+datetime+email+'.pdf'
+          path: '/home/bahirathy/Videos/saned_spsa_backend/report/outAman Assessment.docx'+datetime+email+'.pdf'
       },
           ],
           
@@ -541,8 +553,6 @@ await fs.writeFile('./report/outprerequist.docx'+datetime+email+'.pdf', result);
         })
     }
  
- 
-      
         })
     }
 

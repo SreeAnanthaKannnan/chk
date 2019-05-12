@@ -1091,7 +1091,8 @@ router.post("/schedules_temp", cors(), async function(req, res) {
 
 router.post("/Convert_Pdf", cors(), async function(req, res) {
   //var flag=0;
-  let checked1 = req.body.SelectedValues1;
+  console.log("ui",req.body);
+  let checked1 = req.body.SelectedValues1;                                                                                       
   let checked2 = req.body.SelectedValues2;
   let checked3 = req.body.SelectedValues3;
   let checked4 = req.body.SelectedValues4;
@@ -1100,95 +1101,89 @@ router.post("/Convert_Pdf", cors(), async function(req, res) {
   let checked7 = req.body.SelectedValues7;
   let checked8 = req.body.SelectedValues8;
   let checked9 = req.body.SelectedValues9;
-  let checked10 = req.body.SelectedValues10;
+  // let checked10 = req.body.SelectedValues10;
   let email = req.body.email;
-  let flag = 0;
+  let flag = 'Y';
+  console.log(flag,"initilal flag");
   // let checked3=req.body.SelectedValues3;
-  if (checked1 == "yes") {
+  if (checked1 == "Y") {
     var yesvalue1 = "checked";
     var novalue1 = "unchecked";
   } else {
     var yesvalue1 = "unchecked";
     var novalue1 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked2 == "yes") {
+  if (checked2 == "Y") {
     var yesvalue2 = "checked";
     var novalue2 = "unchecked";
   } else {
     var yesvalue2 = "unchecked";
     var novalue2 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked3 == "yes") {
+  if (checked3 == "Y") {
     var yesvalue3 = "checked";
     var novalue3 = "unchecked";
   } else {
     var yesvalue3 = "unchecked";
     var novalue3 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked4 == "yes") {
+  if (checked4 == "Y") {
     var yesvalue4 = "checked";
     var novalue4 = "unchecked";
   } else {
     var yesvalue4 = "unchecked";
     var novalue4 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked5 == "yes") {
+  if (checked5 == "Y") {
     var yesvalue5 = "checked";
     var novalue5 = "unchecked";
   } else {
     var yesvalue5 = "unchecked";
     var novalue5 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked6 == "yes") {
+  if (checked6 == "Y") {
     var yesvalue6 = "checked";
     var novalue6 = "unchecked";
   } else {
     var yesvalue6 = "unchecked";
     var novalue6 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked7 == "yes") {
+  if (checked7 == "Y") {
     var yesvalue7 = "checked";
     var novalue7 = "unchecked";
   } else {
     var yesvalue7 = "unchecked";
     var novalue7 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked8 == "yes") {
+  if (checked8 == "Y") {
     var yesvalue8 = "checked";
     var novalue8 = "unchecked";
   } else {
     var yesvalue8 = "unchecked";
     var novalue8 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked9 == "yes") {
+  if (checked9 == "Y") {
     var yesvalue9 = "checked";
     var novalue9 = "unchecked";
   } else {
     var yesvalue9 = "unchecked";
     var novalue9 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked10 == "yes") {
-    var yesvalue10 = "checked";
-    var novalue10 = "unchecked";
-  } else {
-    var yesvalue10 = "unchecked";
-    var novalue10 = "checked";
-    flag = 1;
-  }
+  
   //    var yesvalue3="checked";
-  console.log(checked10, "jdfdkljd");
+ // console.log(checked10, "jdfdkljd");
 
   console.log("in 781", flag);
-  //console.log("All data===00000==>>", checked1,checked2,checked3);
+  console.log("All data===00000==>>", checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9);
 
   pdf.Pdf(
     yesvalue1,
@@ -1209,9 +1204,7 @@ router.post("/Convert_Pdf", cors(), async function(req, res) {
     novalue8,
     yesvalue9,
     novalue9,
-    yesvalue10,
-    novalue10,
-    email,
+       email,
     checked1,
     checked2,
     checked3,
@@ -1220,8 +1213,8 @@ router.post("/Convert_Pdf", cors(), async function(req, res) {
     checked6,
     checked7,
     checked8,
-    checked9,
-    checked10
+    checked9
+    
   );
   // pdf.mail(email)
   // pdf2.citizendao(checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,email)
