@@ -3201,5 +3201,90 @@ router.post("/file_upload_Appeal", uploads.single("file"), function(req, res) {
     }
   });
 });
+
+// ========================Payment Gateway Integration==========================================
+router.post("/payment_hash", cors(), (req, res) => {
+  payment.payment_hash(req).then((result, error) => {
+    if (result) {
+      res.status(result.status).json({
+        message: result
+      });
+    } else {
+      res.status(error.status).json({
+        message: error
+      });
+    }
+
+    console.log("result", result);
+  });
+});
+router.post("/tahsheel_payment", cors(), (req, res) => {
+  payment.tahsheel_payment(req).then((result, error) => {
+    console.log("result", result);
+    if (result) {
+      res.status(result.status).json({
+        message: result
+      });
+    } else {
+      res.status(error.status).json({
+        message: error
+      });
+    }
+
+    console.log("result", result);
+  });
+});
+// ==================================GetResponse=====================================================
+router.get("/getResponse", cors(), async (req, res) => {
+  // console.log("response from gateway", req.url);
+
+  let q = req.url.split("?"),
+    result = {};
+  if (q.length >= 2) {
+    q[1].split("&").forEach(item => {
+      try {
+        result[item.split("=")[0]] = item.split("=")[1];
+      } catch (e) {
+        result[item.split("=")[0]] = "";
+      }
+    });
+  }
+  var TP_Extrafees = decodeURIComponent(result.TP_ExtraFees);
+  var TP_Paymentdate1 = decodeURIComponent(result.TP_PaymentDate);
+  var TP_Paymentdate = TP_Paymentdate1.replace("+", " ");
+  var Taxfees = decodeURIComponent(result.TP_TaxFees);
+
+  (result["TP_Extrafees"] = TP_Extrafees),
+    (result["TP_Paymentdate"] = TP_Paymentdate),
+    (result["Taxfees"] = Taxfees);
+  console.log("result", result);
+  var res_payment = await payment.payment_res(result);
+  console.log("res", res_payment);
+  if (res_payment == true&&result.TP_ResultCode==0) {
+    res.render("index", {
+      title:
+        "Your payment has been successfully proccessed.Kindly note down the below ",
+      result: result
+    });
+    // res.send({ status: 200, result: result });
+  } else if (res_payment == false&&result.TP_ResultCode==-11) {
+    res.render("main", {
+      refNo: result.TP_RefNo,
+      title:
+        "Your payment was not processed successfully your order id " +
+        result.TP_RefNo +
+        " is cancelled kindly contact call centre for further details "
+    });
+  } else if  (res_payment == true&&result.TP_ResultCode==-4) {
+      res.render("index", {
+        title:
+          "Your payment for the order id "+ result.TP_RefNo+" already done",
+        result: result
+      });
+  }
+   else {
+    res.send({ result: "Data not saved" });
+  }
+});
 //===================================allbuildings======================================================//
 module.exports = router;

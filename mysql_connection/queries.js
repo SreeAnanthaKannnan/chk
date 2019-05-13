@@ -63,8 +63,10 @@ module.exports.session = "SELECT * FROM Session where user_ID =?";
 module.exports.Appeal =
   "INSERT INTO Appeal (service_en,service_ar,Description_en,Description_ar,Appeal_date,Compliant_NO) VALUES ?";
 
-  module.exports.appealpdf = "UPDATE Appeal SET appeal_file_path =? WHERE email_id =?";
-module.exports.appealpdfinsert = "insert into Appeal (appeal_file_path,email_id) VALUES ?";
+module.exports.appealpdf =
+  "UPDATE Appeal SET appeal_file_path =? WHERE email_id =?";
+module.exports.appealpdfinsert =
+  "insert into Appeal (appeal_file_path,email_id) VALUES ?";
 module.exports.appealpdfcheck = "select email_id from Appeal where email_id=?";
 /*=============selecting trainer id for the particular trainer name(english)=========*/
 module.exports.trainerid = "SELECT id FROM Trainer where Name_en = ?";
@@ -72,13 +74,14 @@ module.exports.trainerid = "SELECT id FROM Trainer where Name_en = ?";
 module.exports.trainerid_ar = "SELECT id FROM Trainer where Name_ar = ?";
 /*=======finding the row count from the Appeal table for compliant no=========*/
 module.exports.appealidcount = "SELECT count(id) as count FROM Appeal";
- module.exports.delete_user_name = "SELECT * FROM citizens where email_id =?"
- module.exports.delete_user_entry ="DELETE  FROM citizens where email_id =? and verify_email ='N'"
+module.exports.delete_user_name = "SELECT * FROM citizens where email_id =?";
+module.exports.delete_user_entry =
+  "DELETE  FROM citizens where email_id =? and verify_email ='N'";
 
 module.exports.getdatedetails =
   "SELECT DISTINCT Scheduled_date,start_time,end_time from SHARJAH.Schedule where Trainer_id=? ";
 module.exports.getlogindetails =
-// "SELECT * FROM citizens where email_id =?";
+  // "SELECT * FROM citizens where email_id =?";
 
   "SELECT * FROM citizens where email_id =?  AND verify_email='Y'";
 module.exports.getinstalleremployeelist =
@@ -202,8 +205,8 @@ module.exports.update_order_id =
 module.exports.order_id_select =
   "SELECT max(convert(substring(order_id FROM 2),UNSIGNED INTEGER)) as num FROM Employee_Profile where order_id !='NULL' and order_id is not null and order_id !='NoInterest'";
 module.exports.order_id_select_aman =
- // "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings  where orderid !='NULL' and orderid is not null and orderid !='NoInterest' union SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Schedules  where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
-"SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
+  // "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings  where orderid !='NULL' and orderid is not null and orderid !='NoInterest' union SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Schedules  where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
+  "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
 module.exports.update_order_id_aman =
   "UPDATE Buildings SET orderid=? where email_id =? AND orderid IS NULL";
 module.exports.insertbulkbuilding =
@@ -371,3 +374,9 @@ module.exports.scheduleinfo_temp =
 module.exports.receipt =
   "UPDATE Buildings SET receipt_path=? where orderid =? ";
 module.exports.profile = "select * from citizens where email_id=?";
+// ========================Tahseel payment update==========================================
+
+module.exports.payment_req =
+  "UPDATE Buildings SET rq_TP_BranchId = ?,rq_TP_InternalDep= ?,rq_TP_Language= ?,rq_TP_Merchant= ?,rq_TP_PayerName= ?,rq_TP_RefNo= ?,rq_TP_ReturnURL= ?,rq_TP_ServiceInfo= ? where  orderid = ?";
+module.exports.payment_res =
+  "UPDATE Buildings SET res_TP_Amount = ?,res_TP_ExtraFees= ?,res_TP_PaymentDate= ?,res_TP_PayMethod= ?,res_TP_ReceiptNo= ?,res_TP_RefNo= ?,res_TP_ResultCode= ?,res_TP_TaxFees= ? WHERE  orderid = ?";
