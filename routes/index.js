@@ -205,7 +205,7 @@ router.post("/request_for_service", cors(), (req, res) => {
     );
 });
 
-router.post("/schedules_temp", cors(), async function(req, res) {
+router.post("/schedules_temp_123", cors(), async function(req, res) {
   console.log(req.body);
   const token = req.headers.authorization;
   var time = req.body.schedule_time;
@@ -1101,7 +1101,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
   });
 });
 
-router.post("/schedules", cors(), async function(req, res) {
+router.post("/schedules_temp", cors(), async function(req, res) {
   console.log(req.body);
   const token = req.headers.authorization;
   var time = req.body.schedule_time;
@@ -1110,8 +1110,9 @@ router.post("/schedules", cors(), async function(req, res) {
   console.log("building_id", building_id);
   var date = moment(new Date(reqdate.substr(0, 16)));
   var rdate = date.format("YYYY-MM-DD");
-  schedule
-    .sup(time, rdate, building_id, token)
+  console.log(rdate,"rdate");
+ schedule
+    .supply(time, rdate, building_id, token)
     .then(result => {
       res.send({
         result: result
@@ -1123,7 +1124,7 @@ router.post("/schedules", cors(), async function(req, res) {
       })
     );
 });
-router.post("/schedules_temp", cors(), async function(req, res) {
+router.post("/schedules_temp123", cors(), async function(req, res) {
   console.log(req.body);
   const token = req.headers.authorization;
   var time = req.body.schedule_time;
@@ -1149,7 +1150,8 @@ router.post("/schedules_temp", cors(), async function(req, res) {
 
 router.post("/Convert_Pdf", cors(), async function(req, res) {
   //var flag=0;
-  let checked1 = req.body.SelectedValues1;
+  console.log("ui",req.body);
+  let checked1 = req.body.SelectedValues1;                                                                                       
   let checked2 = req.body.SelectedValues2;
   let checked3 = req.body.SelectedValues3;
   let checked4 = req.body.SelectedValues4;
@@ -1158,95 +1160,89 @@ router.post("/Convert_Pdf", cors(), async function(req, res) {
   let checked7 = req.body.SelectedValues7;
   let checked8 = req.body.SelectedValues8;
   let checked9 = req.body.SelectedValues9;
-  let checked10 = req.body.SelectedValues10;
+  // let checked10 = req.body.SelectedValues10;
   let email = req.body.email;
-  let flag = 0;
+  let flag = 'Y';
+  console.log(flag,"initilal flag");
   // let checked3=req.body.SelectedValues3;
-  if (checked1 == "yes") {
+  if (checked1 == "Y") {
     var yesvalue1 = "checked";
     var novalue1 = "unchecked";
   } else {
     var yesvalue1 = "unchecked";
     var novalue1 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked2 == "yes") {
+  if (checked2 == "Y") {
     var yesvalue2 = "checked";
     var novalue2 = "unchecked";
   } else {
     var yesvalue2 = "unchecked";
     var novalue2 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked3 == "yes") {
+  if (checked3 == "Y") {
     var yesvalue3 = "checked";
     var novalue3 = "unchecked";
   } else {
     var yesvalue3 = "unchecked";
     var novalue3 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked4 == "yes") {
+  if (checked4 == "Y") {
     var yesvalue4 = "checked";
     var novalue4 = "unchecked";
   } else {
     var yesvalue4 = "unchecked";
     var novalue4 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked5 == "yes") {
+  if (checked5 == "Y") {
     var yesvalue5 = "checked";
     var novalue5 = "unchecked";
   } else {
     var yesvalue5 = "unchecked";
     var novalue5 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked6 == "yes") {
+  if (checked6 == "Y") {
     var yesvalue6 = "checked";
     var novalue6 = "unchecked";
   } else {
     var yesvalue6 = "unchecked";
     var novalue6 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked7 == "yes") {
+  if (checked7 == "Y") {
     var yesvalue7 = "checked";
     var novalue7 = "unchecked";
   } else {
     var yesvalue7 = "unchecked";
     var novalue7 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked8 == "yes") {
+  if (checked8 == "Y") {
     var yesvalue8 = "checked";
     var novalue8 = "unchecked";
   } else {
     var yesvalue8 = "unchecked";
     var novalue8 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked9 == "yes") {
+  if (checked9 == "Y") {
     var yesvalue9 = "checked";
     var novalue9 = "unchecked";
   } else {
     var yesvalue9 = "unchecked";
     var novalue9 = "checked";
-    flag = 1;
+    flag = 'N';
   }
-  if (checked10 == "yes") {
-    var yesvalue10 = "checked";
-    var novalue10 = "unchecked";
-  } else {
-    var yesvalue10 = "unchecked";
-    var novalue10 = "checked";
-    flag = 1;
-  }
+  
   //    var yesvalue3="checked";
-  console.log(checked10, "jdfdkljd");
+ // console.log(checked10, "jdfdkljd");
 
   console.log("in 781", flag);
-  //console.log("All data===00000==>>", checked1,checked2,checked3);
+  console.log("All data===00000==>>", checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9);
 
   pdf.Pdf(
     yesvalue1,
@@ -1267,9 +1263,7 @@ router.post("/Convert_Pdf", cors(), async function(req, res) {
     novalue8,
     yesvalue9,
     novalue9,
-    yesvalue10,
-    novalue10,
-    email,
+       email,
     checked1,
     checked2,
     checked3,
@@ -1278,8 +1272,8 @@ router.post("/Convert_Pdf", cors(), async function(req, res) {
     checked6,
     checked7,
     checked8,
-    checked9,
-    checked10
+    checked9
+    
   );
   // pdf.mail(email)
   // pdf2.citizendao(checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,email)
@@ -1332,7 +1326,7 @@ router.post("/installationdetails", cors(), function(req, res) {
     );
 });
 //==================================bulkschedules============================================//
-router.post("/BulkSchedules", cors(), async function(req, res) {
+router.post("/BulkSchedules_temp", cors(), async function(req, res) {
   const token = req.headers.authorization;
   console.log(req.body);
   var schedules = req.body;
@@ -1406,7 +1400,7 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
   }
 });
 //=============================bulkschedules_temp============================
-router.post("/BulkSchedules_temp", cors(), async function(req, res) {
+router.post("/BulkSchedules_temp12", cors(), async function(req, res) {
   const token = req.headers.authorization;
   console.log(req.body);
   var schedules = req.body;
@@ -3253,6 +3247,91 @@ router.post("/file_upload_Appeal", uploads.single("file"), function(req, res) {
         );
     }
   });
+});
+
+// ========================Payment Gateway Integration==========================================
+router.post("/payment_hash", cors(), (req, res) => {
+  payment.payment_hash(req).then((result, error) => {
+    if (result) {
+      res.status(result.status).json({
+        message: result
+      });
+    } else {
+      res.status(error.status).json({
+        message: error
+      });
+    }
+
+    console.log("result", result);
+  });
+});
+// router.post("/tahsheel_payment", cors(), (req, res) => {
+//   payment.tahsheel_payment(req).then((result, error) => {
+//     console.log("result", result);
+//     if (result) {
+//       res.status(result.status).json({
+//         message: result
+//       });
+//     } else {
+//       res.status(error.status).json({
+//         message: error
+//       });
+//     }
+
+//     console.log("result", result);
+//   });
+// });
+// ==================================GetResponse=====================================================
+router.get("/getResponse", cors(), async (req, res) => {
+  // console.log("response from gateway", req.url);
+
+  let q = req.url.split("?"),
+    result = {};
+  if (q.length >= 2) {
+    q[1].split("&").forEach(item => {
+      try {
+        result[item.split("=")[0]] = item.split("=")[1];
+      } catch (e) {
+        result[item.split("=")[0]] = "";
+      }
+    });
+  }
+  var TP_Extrafees = decodeURIComponent(result.TP_ExtraFees);
+  var TP_Paymentdate1 = decodeURIComponent(result.TP_PaymentDate);
+  var TP_Paymentdate = TP_Paymentdate1.replace("+", " ");
+  var Taxfees = decodeURIComponent(result.TP_TaxFees);
+
+  (result["TP_Extrafees"] = TP_Extrafees),
+    (result["TP_Paymentdate"] = TP_Paymentdate),
+    (result["Taxfees"] = Taxfees);
+  console.log("result", result);
+  var res_payment = await payment.payment_res(result);
+  console.log("res", res_payment);
+  if (res_payment == true&&result.TP_ResultCode==0) {
+    res.render("index", {
+      title:
+        "Your payment has been successfully proccessed.Kindly note down the below ",
+      result: result
+    });
+    // res.send({ status: 200, result: result });
+  } else if (res_payment == false&&result.TP_ResultCode==-11) {
+    res.render("main", {
+      refNo: result.TP_RefNo,
+      title:
+        "Your payment was not processed successfully your order id " +
+        result.TP_RefNo +
+        " is cancelled kindly contact call centre for further details "
+    });
+  } else if  (res_payment == true&&result.TP_ResultCode==-4) {
+      res.render("index", {
+        title:
+          "Your payment for the order id "+ result.TP_RefNo+" already done",
+        result: result
+      });
+  }
+   else {
+    res.send({ result: "Data not saved" });
+  }
 });
 //===================================allbuildings======================================================//
 module.exports = router;

@@ -7,5 +7,10 @@
   },
   "TestIp": {
     "host": "127.0.0.1"
+  },
+  "tahseel_gateway": {
+    "url": "https://staging.tahseel.gov.ae/TahseelTestWebApp/Public/Services/Pay.aspx?",
+    "username": "1imDypK2M",
+    "password": "3Xoxp5nRPox86Yw"
   }
 }

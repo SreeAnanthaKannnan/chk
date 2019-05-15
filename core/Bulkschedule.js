@@ -6,6 +6,8 @@ var supplier = require("../daos/getsupplierlist");
 var auto = require("../daos/autoDao");
 var log4js = require("log4js");
 const logger = log4js.getLogger("Aman_project");
+const buildingDao = require("../daos/buildingDao");
+var bc = require("../fabcar/javascript/invoke");
 //Here the time slots which are available stored in an array
 var t = [
   "8-10 am",
@@ -41,9 +43,24 @@ async function sup(time, rdate, building_id,orderid) {
             var status1 = "open";
             var countvalue = sup.result[0].countvalue + 1;
             let data = [schedule_time, requestdate, suplier_id, building_id, status1,orderid]
-            let query = await insertquery.schedule_insert(data)
+            let data2 = [requestdate,orderid,status1,building_id]
+            console.log(data2,"data2");
+            let query = await insertquery.schedule_insert(data);
+            console.log("query",query);
+            let query1 = await insertquery.schedule_insert_temp(data2);
             let countstored = await insertquery.update_countvalue(countvalue,sup.result[0].email_id)
-        var date22 = moment(requestdate).format("YYYY-MM-DD");  
+            let mysqldata = await buildingDao.mysqlinfo(orderid);
+            console.log(mysqldata,"mysqldata");
+            console.log(orderid,"mysqldata");
+                            var key =orderid;
+                            var params = {
+                                id:key,
+                                fun: "create",
+                                data: mysqldata.result[0]
+                              };
+                              var blockchainresponse = await bc.main(params)
+                              console.log(blockchainresponse,"blockchainres");
+            var date22 = moment(requestdate).format("YYYY-MM-DD");  
 return resolve({
                 result: {
         "message":"Your Building is Scheduled for service on" + " " + date22 + " " + schedule_time +"   As requested slot is available"
@@ -77,10 +94,25 @@ return resolve({
                   status1,
                   orderid
                 ];
+                let data2 = [requestdate,orderid,status1,building_id]
+                console.log(data2,"data2");
                 let query = await insertquery.schedule_insert(data);
+                console.log("query",query);
+                let query1 = await insertquery.schedule_insert_temp(data2);
                 console.log(query,"query from db");
                 let countstored = await insertquery.update_countvalue(countvalue,sup.result[0].email_id)
                 console.log(countstored,"countstored from db");
+                let mysqldata = await buildingDao.mysqlinfo(orderid);
+                console.log(mysqldata,"mysqldata");
+                console.log(orderid,"mysqldata");
+                                var key =orderid;
+                                var params = {
+                                    id:key,
+                                    fun: "create",
+                                    data: mysqldata.result[0]
+                                  };
+                                  var blockchainresponse = await bc.main(params)
+                                  console.log(blockchainresponse,"blockchainres");
                 var date22 = moment(requestdate).format("YYYY-MM-DD");
                 return resolve({
                   result: {
