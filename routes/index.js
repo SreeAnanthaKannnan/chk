@@ -93,7 +93,7 @@ var Adminmapactive = require("../core/Adminmap.js");
 var updateprofile = require("../core/updateProfile");
 var schedule_temp = require("../core/schedules_temp");
 var receipt_upload = require("../core/image_upload");
-
+var Reschedule = require("../core/Reschedule");
 var ip = require("ip");
 var { emailotp } = require("../utils/spsaemail");
 var otpfun = require("../utils/otp.js");
@@ -664,6 +664,59 @@ router.get("/Schedule_summary", cors(), (req, res) => {
         })
     );
 });
+//=======================================================================================
+// router.get("/Reschedule", cors(), (req, res) => {
+//   //let data = req.body;
+//   // let request = req.headers;
+// console.log("data");
+
+//   Reschedule
+//     .Rescheduleadmin()
+//     .then(result => {
+//       console.log(result);
+
+//       res.status(result.status).json({
+//         message: result
+//       });
+//     })
+//     .catch(err =>
+//       res
+//         .status(err.status)
+//         .json({
+//           message: err.message
+//         })
+//         .json({
+//           status: err.status
+//         })
+//     );
+// });
+
+
+
+router.post("/Reschedule", cors(), async function(req, res) {
+  console.log(req.body);
+
+  var email_id = req.body.email_id;
+ 
+  
+    Reschedule
+      .Rescheduleadmin(email_id)
+      .then(result => {
+        res.send({
+          message: "success",
+          status: true,
+          result: result
+        });
+      })
+      .catch(err =>
+        res.status(err.status).json({
+          message: err.message
+        })
+      );
+ 
+});
+
+
 //==========================assesser-view=====================================================//
 router.get("/assesser-view", cors(), async function(req, res) {
   const token = req.headers.authorization;
