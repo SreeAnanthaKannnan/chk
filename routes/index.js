@@ -3211,22 +3211,6 @@ router.post("/payment_hash", cors(), (req, res) => {
     console.log("result", result);
   });
 });
-router.post("/tahsheel_payment", cors(), (req, res) => {
-  payment.tahsheel_payment(req).then((result, error) => {
-    console.log("result", result);
-    if (result) {
-      res.status(result.status).json({
-        message: result
-      });
-    } else {
-      res.status(error.status).json({
-        message: error
-      });
-    }
-
-    console.log("result", result);
-  });
-});
 // ==================================GetResponse=====================================================
 router.get("/getResponse", cors(), async (req, res) => {
   // console.log("response from gateway", req.url);
