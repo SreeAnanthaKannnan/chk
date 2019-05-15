@@ -205,8 +205,8 @@ module.exports.update_order_id =
 module.exports.order_id_select =
   "SELECT max(convert(substring(order_id FROM 2),UNSIGNED INTEGER)) as num FROM Employee_Profile where order_id !='NULL' and order_id is not null and order_id !='NoInterest'";
 module.exports.order_id_select_aman =
-  // "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings  where orderid !='NULL' and orderid is not null and orderid !='NoInterest' union SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Schedules  where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
-  "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
+   "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings  where orderid !='NULL' and orderid is not null and orderid !='NoInterest' union SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Schedules  where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
+ // "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
 module.exports.update_order_id_aman =
   "UPDATE Buildings SET orderid=? where email_id =? AND orderid IS NULL";
 module.exports.insertbulkbuilding =
@@ -379,3 +379,5 @@ module.exports.payment_req =
   "UPDATE Buildings SET rq_TP_BranchId = ?,rq_TP_InternalDep= ?,rq_TP_Language= ?,rq_TP_Merchant= ?,rq_TP_PayerName= ?,rq_TP_RefNo= ?,rq_TP_ReturnURL= ?,rq_TP_ServiceInfo= ? where  orderid = ?";
 module.exports.payment_res =
   "UPDATE Buildings SET res_TP_Amount = ?,res_TP_ExtraFees= ?,res_TP_PaymentDate= ?,res_TP_PayMethod= ?,res_TP_ReceiptNo= ?,res_TP_RefNo= ?,res_TP_ResultCode= ?,res_TP_TaxFees= ? WHERE  orderid = ?";
+  module.exports.getemail= "select orderid from Buildings where id =?";
+module.exports.get_bc_view= "select * from blockchain where orderid = ?"

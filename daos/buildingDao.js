@@ -66,6 +66,23 @@ async function not_interested_aman(email_id) {
     //});
   });
 }
+function mysqlinfo(building_id) {
+  return new Promise(async (resolve, reject) => {
+    //var params = [email_id]
+    mysqlConnection
+      .query_execute(query.get_bc_view, building_id)
+      .then(function (result,err) {
+        if (err) {
+          console.log("something", err);
+          logger.fatal(err,"db error while inserting building details into building table")
+          return resolve({ status: 400, err: err });
+        } else {
+          console.log(result,"in daos 38");
+          return resolve({ status: 200, result:result.data });
+        }
+      });
+  })
+}
 function order_id_select_aman() {
   return new Promise(async function (resolve, reject) {
     /*===============selecting saftery officer category=====================*/
@@ -117,7 +134,8 @@ module.exports = {
   not_interested_aman: not_interested_aman,
   order_id_select_aman: order_id_select_aman,
   update_order_id_aman: update_order_id_aman,
-  buildingbyemail:buildingbyemail
+  buildingbyemail:buildingbyemail,
+  mysqlinfo:mysqlinfo
 
 }
 

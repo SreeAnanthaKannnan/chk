@@ -205,7 +205,7 @@ router.post("/request_for_service", cors(), (req, res) => {
     );
 });
 
-router.post("/schedules_temp", cors(), async function(req, res) {
+router.post("/schedules_temp_123", cors(), async function(req, res) {
   console.log(req.body);
   const token = req.headers.authorization;
   var time = req.body.schedule_time;
@@ -1048,7 +1048,7 @@ router.post("/forgetotpverification", cors(), (req, res) => {
   });
 });
 
-router.post("/schedules", cors(), async function(req, res) {
+router.post("/schedules_temp", cors(), async function(req, res) {
   console.log(req.body);
   const token = req.headers.authorization;
   var time = req.body.schedule_time;
@@ -1057,8 +1057,9 @@ router.post("/schedules", cors(), async function(req, res) {
   console.log("building_id", building_id);
   var date = moment(new Date(reqdate.substr(0, 16)));
   var rdate = date.format("YYYY-MM-DD");
-  schedule
-    .sup(time, rdate, building_id, token)
+  console.log(rdate,"rdate");
+ schedule
+    .supply(time, rdate, building_id, token)
     .then(result => {
       res.send({
         result: result
@@ -1070,7 +1071,7 @@ router.post("/schedules", cors(), async function(req, res) {
       })
     );
 });
-router.post("/schedules_temp", cors(), async function(req, res) {
+router.post("/schedules_temp123", cors(), async function(req, res) {
   console.log(req.body);
   const token = req.headers.authorization;
   var time = req.body.schedule_time;
@@ -1272,7 +1273,7 @@ router.post("/installationdetails", cors(), function(req, res) {
     );
 });
 //==================================bulkschedules============================================//
-router.post("/BulkSchedules", cors(), async function(req, res) {
+router.post("/BulkSchedules_temp", cors(), async function(req, res) {
   const token = req.headers.authorization;
   console.log(req.body);
   var schedules = req.body;
@@ -1346,7 +1347,7 @@ router.post("/BulkSchedules", cors(), async function(req, res) {
   }
 });
 //=============================bulkschedules_temp============================
-router.post("/BulkSchedules_temp", cors(), async function(req, res) {
+router.post("/BulkSchedules_temp12", cors(), async function(req, res) {
   const token = req.headers.authorization;
   console.log(req.body);
   var schedules = req.body;
@@ -3211,22 +3212,22 @@ router.post("/payment_hash", cors(), (req, res) => {
     console.log("result", result);
   });
 });
-router.post("/tahsheel_payment", cors(), (req, res) => {
-  payment.tahsheel_payment(req).then((result, error) => {
-    console.log("result", result);
-    if (result) {
-      res.status(result.status).json({
-        message: result
-      });
-    } else {
-      res.status(error.status).json({
-        message: error
-      });
-    }
+// router.post("/tahsheel_payment", cors(), (req, res) => {
+//   payment.tahsheel_payment(req).then((result, error) => {
+//     console.log("result", result);
+//     if (result) {
+//       res.status(result.status).json({
+//         message: result
+//       });
+//     } else {
+//       res.status(error.status).json({
+//         message: error
+//       });
+//     }
 
-    console.log("result", result);
-  });
-});
+//     console.log("result", result);
+//   });
+// });
 // ==================================GetResponse=====================================================
 router.get("/getResponse", cors(), async (req, res) => {
   // console.log("response from gateway", req.url);
