@@ -33,10 +33,10 @@ async function supply(time, rdate, building_id,token) {
     var getorder = await buildingDao.order_id_select_aman()
         console.log(getorder,"getorder");
         console.log(getorder.result.data[0], "order_id_select=====>")
-        var orderid1 = getorder.result.data[0].num
-        var orderid2 = getorder.result.data[1].num
-        console.log(orderid1,orderid2,"1 and 2");
-        orderid = Math.max(orderid1,orderid2)
+        var orderid = getorder.result.data[0].num
+        //var orderid2 = getorder.result.data[1].num
+       // console.log(orderid1,orderid2,"1 and 2");
+        //orderid = Math.max(orderid1,orderid2)
         console.log(orderid, "ORDER")
         console.log(orderid == "null")
         if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {
@@ -89,20 +89,21 @@ async function supply(time, rdate, building_id,token) {
             let query1 = await insertquery.schedule_insert_temp(data2);
             let countstored = await insertquery.update_countvalue(countvalue,sup.result[0].email_id)
             console.log("countstored",countstored);
-            let mysqldata = await buildingDao.mysqlinfo(orderid);
-            console.log(mysqldata,"mysqldata");
-            console.log(orderid,"mysqldata");
-                            var key =orderid;
-                            var params = {
-                                id:key,
-                                fun: "create",
-                                data: mysqldata.result[0]
-                              };
-                              var blockchainresponse = await bc.main(params)
-                              console.log(blockchainresponse,"blockchainres");
+            // let mysqldata = await buildingDao.mysqlinfo(orderid);
+            // console.log(mysqldata,"mysqldata");
+            // console.log(orderid,"mysqldata");
+            //                 var key =orderid;
+            //                 var params = {
+            //                     id:key,
+            //                     fun: "create",
+            //                     data: mysqldata.result[0]
+            //                   };
+            //                   var blockchainresponse = await bc.main(params)
+            //                   console.log(blockchainresponse,"blockchainres");
             var date22 = moment(requestdate).format("YYYY-MM-DD");  
 return resolve({
                 result: {
+                    orderid:orderid,
         "message":"Your Building is Scheduled for service on" + " " + date22 + " " + schedule_time +"   As requested slot is available"
 
                 }
@@ -134,20 +135,21 @@ return resolve({
                             console.log(query1,"query1")
                             let countstored = await insertquery.update_countvalue(countvalue,sup.result[0].email_id)
                             console.log(countstored,"countstored");
-                            let mysqldata = await buildingDao.mysqlinfo(orderid);
-                            console.log(mysqldata,"mysqldata");
-                            console.log(orderid,"mysqldata");
-                                            var key =orderid;
-                                            var params = {
-                                                id:key,
-                                                fun: "create",
-                                                data: mysqldata.result[0]
-                                              };
-                                              var blockchainresponse = await bc.main(params)
-                                              console.log(blockchainresponse,"blockchainres");
+                            // let mysqldata = await buildingDao.mysqlinfo(orderid);
+                            // console.log(mysqldata,"mysqldata");
+                            // console.log(orderid,"mysqldata");
+                            //                 var key =orderid;
+                            //                 var params = {
+                            //                     id:key,
+                            //                     fun: "create",
+                            //                     data: mysqldata.result[0]
+                            //                   };
+                            //                   var blockchainresponse = await bc.main(params)
+                            //                   console.log(blockchainresponse,"blockchainres");
                             var date22 = moment(requestdate).format("YYYY-MM-DD");                            
                 return resolve({
             result: {
+                orderid: orderid,
         "message":"Your Building is Scheduled for service on" + " " + date22 + " " + schedule_time +"   As requested slot is unavailable"
                     }
                             });

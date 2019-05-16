@@ -49,17 +49,17 @@ async function sup(time, rdate, building_id,orderid) {
             console.log("query",query);
             let query1 = await insertquery.schedule_insert_temp(data2);
             let countstored = await insertquery.update_countvalue(countvalue,sup.result[0].email_id)
-            let mysqldata = await buildingDao.mysqlinfo(orderid);
-            console.log(mysqldata,"mysqldata");
-            console.log(orderid,"mysqldata");
-                            var key =orderid;
-                            var params = {
-                                id:key,
-                                fun: "create",
-                                data: mysqldata.result[0]
-                              };
-                              var blockchainresponse = await bc.main(params)
-                              console.log(blockchainresponse,"blockchainres");
+            // let mysqldata = await buildingDao.mysqlinfo(orderid);
+            // console.log(mysqldata,"mysqldata");
+            // console.log(orderid,"mysqldata");
+            //                 var key =orderid;
+            //                 var params = {
+            //                     id:key,
+            //                     fun: "create",
+            //                     data: mysqldata.result[0]
+            //                   };
+            //                   var blockchainresponse = await bc.main(params)
+            //                   console.log(blockchainresponse,"blockchainres");
             var date22 = moment(requestdate).format("YYYY-MM-DD");  
 return resolve({
                 result: {
@@ -102,17 +102,17 @@ return resolve({
                 console.log(query,"query from db");
                 let countstored = await insertquery.update_countvalue(countvalue,sup.result[0].email_id)
                 console.log(countstored,"countstored from db");
-                let mysqldata = await buildingDao.mysqlinfo(orderid);
-                console.log(mysqldata,"mysqldata");
-                console.log(orderid,"mysqldata");
-                                var key =orderid;
-                                var params = {
-                                    id:key,
-                                    fun: "create",
-                                    data: mysqldata.result[0]
-                                  };
-                                  var blockchainresponse = await bc.main(params)
-                                  console.log(blockchainresponse,"blockchainres");
+                // let mysqldata = await buildingDao.mysqlinfo(orderid);
+                // console.log(mysqldata,"mysqldata");
+                // console.log(orderid,"mysqldata");
+                //                 var key =orderid;
+                //                 var params = {
+                //                     id:key,
+                //                     fun: "create",
+                //                     data: mysqldata.result[0]
+                //                   };
+                //                   var blockchainresponse = await bc.main(params)
+                //                   console.log(blockchainresponse,"blockchainres");
                 var date22 = moment(requestdate).format("YYYY-MM-DD");
                 return resolve({
                   result: {

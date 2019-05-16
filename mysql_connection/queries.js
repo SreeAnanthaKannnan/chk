@@ -205,8 +205,8 @@ module.exports.update_order_id =
 module.exports.order_id_select =
   "SELECT max(convert(substring(order_id FROM 2),UNSIGNED INTEGER)) as num FROM Employee_Profile where order_id !='NULL' and order_id is not null and order_id !='NoInterest'";
 module.exports.order_id_select_aman =
-   "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings  where orderid !='NULL' and orderid is not null and orderid !='NoInterest' union SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Schedules  where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
- // "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
+  // "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings  where orderid !='NULL' and orderid is not null and orderid !='NoInterest' union SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Schedules  where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
+  "SELECT max(convert(substring(orderid FROM 2),UNSIGNED INTEGER)) as num FROM Buildings where orderid !='NULL' and orderid is not null and orderid !='NoInterest'";
 module.exports.update_order_id_aman =
   "UPDATE Buildings SET orderid=? where email_id =? AND orderid IS NULL";
 module.exports.insertbulkbuilding =

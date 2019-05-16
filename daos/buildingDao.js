@@ -96,6 +96,7 @@ function order_id_select_aman() {
         err: "something went wrong"
       })
     } else {
+      console.log(res1.data[0].num,"in dao")
       return resolve({
         result: res1
       });

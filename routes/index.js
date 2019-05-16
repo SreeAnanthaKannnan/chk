@@ -1300,10 +1300,10 @@ router.post("/BulkSchedules_temp", cors(), async function(req, res) {
       var getorder = await buildingDao.order_id_select_aman();
       console.log(getorder, "getorder");
       console.log(getorder.result.data[0], "order_id_select=====>");
-      var orderid1 = getorder.result.data[0].num;
-      var orderid2 = getorder.result.data[1].num;
-      console.log(orderid1, orderid2, "1 and 2");
-      var orderid = Math.max(orderid1, orderid2);
+      var orderid = getorder.result.data[0].num;
+      //var orderid2 = getorder.result.data[1].num;
+      //console.log(orderid1, orderid2, "1 and 2");
+      //var orderid = Math.max(orderid1, orderid2);
       console.log(orderid, "ORDER");
       console.log(orderid == "null");
       if (orderid == "null" || orderid == "NULL" || orderid == "NoInterest") {
@@ -1340,6 +1340,7 @@ router.post("/BulkSchedules_temp", cors(), async function(req, res) {
       }
       res.send({
         status: 200,
+        orderid: orderid,
         message:
           "Your Buildings are scheduled for service. Please visit booking history for details"
       });
