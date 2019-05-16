@@ -284,6 +284,8 @@ module.exports.pay_verify_status =
   "SELECT order_status from Employee_Profile where order_id =?";
 module.exports.getbuildingsbyemail =
   "select * from Buildings where email_id = ?";
+module.exports.Reschedule =
+  "select email_id from citizens where user_type = 'installer' ";
 module.exports.payment_callcenter_salama =
   "UPDATE Employee_Profile SET order_status=?, certificate_status=? where order_id =?";
 ("select * from Buildings where email_id = ?");
