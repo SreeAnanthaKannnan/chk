@@ -103,6 +103,7 @@ var payment = require("../core/payment");
 let salama_order_details = require("../core/Company_profile");
 let Contactus_comments = require("../core/Appeal");
 const Contactus_feedback = require("../core/Appeal"),
+building_reschedule = require("../core/building_rechedule"),
 pdf1 = require("../core/pdf1.js"),
   pdf1_ar = require("../core/pdf1_ar.js"),
   Cryptr = require("cryptr"),
@@ -3493,6 +3494,41 @@ FAR,
     message: "success",
     flag: flag
   });
+});
+router.post("/building_reschedule", function(req, res) {
+  console.log(req.body);
+  var time_slot = req.body.time_slot;
+  var token = req.headers.authorization;
+ var reschedule_date = req.body.reschedule_date;
+ var schedule_id = req.body.schedule_id;
+ building_reschedule
+ .building_reschedule(time_slot,reschedule_date,schedule_id, token)
+ .then(result => {
+  res.send({
+    result: "Successfully rescheduled"
+  });
+ })
+ .catch(err =>
+  res.status(err.status).json({
+    message: err.message
+  })
+ );
+ });
+ router.post("/assesser-view", cors(), async function(req, res) {
+  const token = req.headers.authorization;
+  const supplier_email_id = req.body.supplier_email_id
+  assesserview
+    .assesserview(token,supplier_email_id)
+    .then(result => {
+      res.send({
+        result: result
+      });
+    })
+    .catch(err =>
+      res.status(err.status).json({
+        message: err.message
+      })
+    );
 });
 //===================================allbuildings======================================================//
 module.exports = router;

@@ -399,3 +399,8 @@ module.exports.building_owner_name=
 
 module.exports.status_update =
 "UPDATE Schedules set status='installed' where id=?";
+module.exports.building_reschedule =
+"UPDATE Schedules SET schedule_time =?,requestdate =?, status =? where id =?"
+
+module.exports.supplier_building_list =
+"SELECT s.status,b.Buildingname as buildingname,s.suplier_id as supplier_id,b.id as building_id,s.id as schedule_id,s.schedule_time,s.requestdate,b.id,b.address,b.email_id FROM Schedules as s inner join Buildings as b on s.building_id = b.id  where s.suplier_id =?"
