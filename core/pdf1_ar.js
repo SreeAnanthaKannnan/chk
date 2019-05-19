@@ -391,6 +391,7 @@ async function pdf1_ar(
         }
         //=======================================installation completes===============//
         else {
+            var status_update = await buildingDao.status_update(schedule_id)
             var JSZip = require('jszip');
             var Docxtemplater = require('docxtemplater');
 

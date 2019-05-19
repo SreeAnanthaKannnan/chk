@@ -190,6 +190,26 @@ function supplier_name(supplier_id) {
   });
 
 }
+function status_update(schedule_id) {
+  return new Promise(async function (resolve, reject) {
+    /*===============selecting saftery officer category=====================*/
+    var res1 = await mysqlConnection
+      .query_execute(query.status_update, [schedule_id])
+
+    /*======================db error catpturing===========================*/
+    if (res1.data.errno) {
+      logger.fatal(res1.data.sqlMessage,"db error while selecting the order_id")
+      return reject({
+        err: "something went wrong"
+      })
+    } else {
+      return resolve({
+        result: res1
+      });
+    }
+  });
+
+}
 function pdf_insert1(supplier_id,
   schedule_id,
   building_id,
@@ -275,7 +295,8 @@ module.exports = {
   building_owner_email_id : building_owner_email_id,
   pdf_insert1 : pdf_insert1,
   supplier_name :supplier_name,
-  building_owner_name : building_owner_name
+  building_owner_name : building_owner_name,
+  status_update :status_update
 
 }
 

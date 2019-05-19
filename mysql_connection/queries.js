@@ -395,4 +395,7 @@ module.exports.supplier_name =
 "SELECT firstname_en,firstname_ar from citizens where email_id =?";
 
 module.exports.building_owner_name=
-"SELECT firstname_en,firstname_ar from citizens where email_id =?"
+"SELECT firstname_en,firstname_ar from citizens where email_id =?";
+
+module.exports.status_update =
+"UPDATE Schedules set status='installed' where id=?";
