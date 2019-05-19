@@ -130,14 +130,154 @@ async function update_order_id_aman(order_id, email_id) {
 
 }
 
+function building_owner_email_id(building_id) {
+  return new Promise(async function (resolve, reject) {
+    /*===============selecting saftery officer category=====================*/
+    var res1 = await mysqlConnection
+      .query_execute(query.building_owner_email_id, [building_id])
+
+    /*======================db error catpturing===========================*/
+    if (res1.data.errno) {
+      logger.fatal(res1.data.sqlMessage,"db error while selecting the order_id")
+      return reject({
+        err: "something went wrong"
+      })
+    } else {
+      return resolve({
+        result: res1
+      });
+    }
+  });
+
+}
+function building_owner_name(email) {
+  return new Promise(async function (resolve, reject) {
+    /*===============selecting saftery officer category=====================*/
+    var res1 = await mysqlConnection
+      .query_execute(query.building_owner_name, [email])
+
+    /*======================db error catpturing===========================*/
+    if (res1.data.errno) {
+      logger.fatal(res1.data.sqlMessage,"db error while selecting the order_id")
+      return reject({
+        err: "something went wrong"
+      })
+    } else {
+      return resolve({
+        result: res1
+      });
+    }
+  });
+
+}
+function supplier_name(supplier_id) {
+  return new Promise(async function (resolve, reject) {
+    /*===============selecting saftery officer category=====================*/
+    var res1 = await mysqlConnection
+      .query_execute(query.supplier_name, [supplier_id])
+
+    /*======================db error catpturing===========================*/
+    if (res1.data.errno) {
+      logger.fatal(res1.data.sqlMessage,"db error while selecting the order_id")
+      return reject({
+        err: "something went wrong"
+      })
+    } else {
+      return resolve({
+        result: res1
+      });
+    }
+  });
+
+}
+function pdf_insert1(supplier_id,
+  schedule_id,
+  building_id,
+  PC,
+FA,
+SC,
+TS,  
+TL,  
+FPP, 
+FAS,
+FPF, 
+FAR,
+D1v,
+  D2v,
+  D3v,
+  D4v,
+  D5v,
+  D6v,
+  D7v,
+  D8v,
+  D9v,
+  signalcheckedv,
+  timesignalcheckedv,
+  timearrivedv,
+  timeleftv,
+  BRAND,
+  telno,
+  simno) {
+  return new Promise(async function (resolve, reject) {
+    /*===============selecting saftery officer category=====================*/
+    var res1 = await mysqlConnection
+      .query_execute(query.pdf_values_insert, [
+        PC,
+FA,
+SC,
+TS,  
+TL,  
+FPP, 
+FAS,
+FPF, 
+FAR,
+        D1v,
+        D2v,
+        D3v,
+        D4v,
+        D5v,
+        D6v,
+        D7v,
+        D8v,
+        D9v,
+        signalcheckedv,
+        timesignalcheckedv,
+        timearrivedv,
+        timeleftv,
+        BRAND,
+        telno,
+        simno,
+        schedule_id])
+        console.log(res1,"---------------")
+
+    /*======================db error catpturing===========================*/
+    if (res1.data.errno) {
+      logger.fatal(res1.data.sqlMessage,"db error while selecting the order_id")
+      return reject({
+        err: "something went wrong"
+      })
+    } else {
+      console.log(res1,"inside dao")
+      return resolve({
+        result: res1
+      });
+    }
+  });
+
+}
+
 module.exports = {
   building: building,
   not_interested_aman: not_interested_aman,
   order_id_select_aman: order_id_select_aman,
   update_order_id_aman: update_order_id_aman,
   buildingbyemail:buildingbyemail,
-  mysqlinfo:mysqlinfo
+  building_owner_email_id : building_owner_email_id,
+  pdf_insert1 : pdf_insert1,
+  supplier_name :supplier_name,
+  building_owner_name : building_owner_name
 
 }
+
 
 

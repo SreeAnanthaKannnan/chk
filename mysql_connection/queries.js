@@ -382,4 +382,17 @@ module.exports.payment_req =
 module.exports.payment_res =
   "UPDATE Buildings SET res_TP_Amount = ?,res_TP_ExtraFees= ?,res_TP_PaymentDate= ?,res_TP_PayMethod= ?,res_TP_ReceiptNo= ?,res_TP_RefNo= ?,res_TP_ResultCode= ?,res_TP_TaxFees= ? WHERE  orderid = ?";
   module.exports.getemail= "select orderid from Buildings where id =?";
-module.exports.get_bc_view= "select * from blockchain where orderid = ?"
+module.exports.get_bc_view= "select * from blockchain where orderid = ?";
+module.exports.building_owner_email_id =
+
+"SELECT email_id from Buildings where id =?"
+
+module.exports.pdf_values_insert =
+
+"UPDATE Schedules set PC=?,FA=?,SC=?,TS=?,TL=?,FPP=?,FAS=?,FPF=?,FAR=?,D1=?,D2=?,D3=?,D4=?,D5=?,D6=?,D7=?,D8=?,D9=?,signalchecked=?,timesignalchecked=?,timearrived=?,timeleft=?,BRAND =?,telno=?,simno=? WHERE id =? "
+module.exports.supplier_name =
+
+"SELECT firstname_en,firstname_ar from citizens where email_id =?";
+
+module.exports.building_owner_name=
+"SELECT firstname_en,firstname_ar from citizens where email_id =?"

@@ -40,7 +40,7 @@ function citizendao(email) {
         console.log("in dao", email_id);
         //var password=loginobject.password;
         //var sql = "SELECT  * FROM Residents where email_id ='" + email_id + "'";
-        var sql = "SELECT citizens.mobile_number,Buildings.Buildingname,Buildings.lat,Buildings.lon,Buildings.plotno,Buildings.location,Buildings.simnumber,Buildings.NSP,Buildings.SPCN,Buildings.FAC FROM citizens inner join Buildings on Buildings.email_id = citizens.email_id And Buildings.email_id='" + email_id + "'";
+        var sql = "select distinct(b.email_id),b.P220V,b.FASA,b.FARS,b.TAMS,b.FPPS,b.FPFS,b.SIM,b.FAFS,b.address,b.D1,b.D2,b.D3,b.D4,b.D5,b.D6,b.D7,b.D8,b.D9,b.TLA,b.FACR,b.orderid,b.Ass_No,b.lat,b.lon,b.lat,b.plotno,b.alternumber,b.address,b.simnumber,b.NSP,b.SPCN,b.FAC,s.BRAND,b.Buildingname,s.timearrived,s.timeleft,s.timesignalchecked,s.signalchecked,b.id from Buildings as b inner join Schedules as s on s.building_id = b.id inner join citizens as c on c.email_id = b.email_id where s.id = '" + email + "'";
         //var sql="SELECT citizens.mobile_number,Buildings.lat,Buildings.lon FROM citizens,Buildings where Buildins.email_id ='"+ email_id+"'";
         //var sql = "select * from citizens where email_id ='"+ email_id +"'";
         con.query(sql, function (err, result) {

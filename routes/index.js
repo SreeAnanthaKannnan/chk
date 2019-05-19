@@ -42,7 +42,7 @@ var con = require("../mysql_connection/dbConfig.js"),
   phone = require("../utils/phonecheck.js"),
   buildingDao = require("../daos/buildingDao"),
   upload = require("../core/upload.js"),
-  pdf1 = require("../core/pdfviewer.js"),
+  //pdf1 = require("../core/pdfviewer.js"),
   update = require("../core/update"),
   assessment = require("../core/assessment"),
   book = require("../core/servicehistory"),
@@ -103,6 +103,8 @@ var payment = require("../core/payment");
 let salama_order_details = require("../core/Company_profile");
 let Contactus_comments = require("../core/Appeal");
 const Contactus_feedback = require("../core/Appeal"),
+pdf1 = require("../core/pdf1.js"),
+  pdf1_ar = require("../core/pdf1_ar.js"),
   Cryptr = require("cryptr"),
   cryptr = new Cryptr("myTotalySecretKey"),
   nodemailer = require("nodemailer"),
@@ -3333,6 +3335,164 @@ router.get("/getResponse", cors(), async (req, res) => {
    else {
     res.send({ result: "Data not saved" });
   }
+});
+router.post("/Convert_Pdf1", cors(), async function(req, res) {
+  //var flag=0;
+  
+  // let checked10 = req.body.SelectedValues10;
+  let PC = req.body.SelectedValues1;                                                                                       
+  let FAS = req.body.SelectedValues2;
+  let FA  = req.body.SelectedValues3;
+  let FPP = req.body.SelectedValues4;
+  let FPF = req.body.SelectedValues5;
+  let TS = req.body.SelectedValues6;
+  let TL = req.body.SelectedValues7;
+  let SC = req.body.SelectedValues8;
+  let FAR = req.body.SelectedValues9;
+  let D1v = req.body.D1;
+  let D2v = req.body.D2;
+  let D3v = req.body.D3;
+  let D4v = req.body.D4;
+  let D5v = req.body.D5;
+  let D7v = req.body.D7;
+  let D8v = req.body.D8;
+  let D9v = req.body.D9;
+  let D6v = req.body.D6;
+
+  let building_id = req.body.building_id;
+  let schedule_id = req.body.schedule_id;
+  let supplier_id = req.body.supplier_id;
+  let timearrivedv = req.body.timearrived;
+  let timeleftv = req.body.timeleft;
+  let timesignalcheckedv = req.body.timesignalchecked;
+  let signalcheckedv = req.body.signalchecked;
+  let BRAND = req.body.brand;
+  let simno = req.body.simno;
+  let telno = req.body.telno;
+
+  let flag = 'Y';
+ 
+  await pdf1.pdf1(
+    supplier_id,
+    schedule_id,
+    building_id,
+    PC,
+    FA,
+SC,
+TS,  
+TL,  
+FPP, 
+FAS,
+FPF, 
+FAR, 
+    D1v,
+    D2v,
+    D3v,
+    D4v,
+    D5v,
+    D6v,
+    D7v,
+    D8v,
+    D9v,
+    signalcheckedv,
+    timesignalcheckedv,
+    timearrivedv,
+    timeleftv,
+    BRAND,
+    telno,
+    simno
+
+    
+
+
+    
+  );
+
+  // pdf2.citizendao(checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,email)
+
+  res.send({
+    message: "success",
+    flag: flag
+  });
+});
+router.post("/Convert_Pdf1_ar", cors(), async function(req, res) {
+  //var flag=0;
+  
+  // let checked10 = req.body.SelectedValues10;
+  let PC = req.body.SelectedValues1;                                                                                       
+  let FAS = req.body.SelectedValues2;
+  let FA  = req.body.SelectedValues3;
+  let FPP = req.body.SelectedValues4;
+  let FPF = req.body.SelectedValues5;
+  let TS = req.body.SelectedValues6;
+  let TL = req.body.SelectedValues7;
+  let SC = req.body.SelectedValues8;
+  let FAR = req.body.SelectedValues9;
+  let D1v = req.body.D1;
+  let D2v = req.body.D2;
+  let D3v = req.body.D3;
+  let D4v = req.body.D4;
+  let D5v = req.body.D5;
+  let D7v = req.body.D7;
+  let D8v = req.body.D8;
+  let D9v = req.body.D9;
+  let D6v = req.body.D6;
+
+  let building_id = req.body.building_id;
+  let schedule_id = req.body.schedule_id;
+  let supplier_id = req.body.supplier_id;
+  let timearrivedv = req.body.timearrived;
+  let timeleftv = req.body.timeleft;
+  let timesignalcheckedv = req.body.timesignalchecked;
+  let signalcheckedv = req.body.signalchecked;
+  let BRAND = req.body.brand;
+  let simno = req.body.simno;
+  let telno = req.body.telno;
+
+  let flag = 'Y';
+ 
+  await pdf1_ar.pdf1_ar(
+    supplier_id,
+    schedule_id,
+    building_id,
+    PC,
+    FA,
+SC,
+TS,  
+TL,  
+FPP, 
+FAS,
+FPF, 
+FAR, 
+    D1v,
+    D2v,
+    D3v,
+    D4v,
+    D5v,
+    D6v,
+    D7v,
+    D8v,
+    D9v,
+    signalcheckedv,
+    timesignalcheckedv,
+    timearrivedv,
+    timeleftv,
+    BRAND,
+    telno,
+    simno
+
+    
+
+
+    
+  );
+
+  // pdf2.citizendao(checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,email)
+
+  res.send({
+    message: "success",
+    flag: flag
+  });
 });
 //===================================allbuildings======================================================//
 module.exports = router;
